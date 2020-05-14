@@ -161,7 +161,8 @@ keywords|仅用于 meta 标签和 Open Graph 的关键词（不推荐使用）|
 Hexo默认主题为`landscape`，若感觉不好看，可以到官网主题中选择一个喜欢的主题进行修改。官网主题：[https://hexo.io/themes/](https://hexo.io/themes/)
 我选择的是：`hexo-theme-Anatole-Core`
 效果如下：
-![effect](使用Hexo安装GitHub个人博客/2020-05-14_16-15-03-hexo-01.png)
+![effect](使用Hexo安装GitHub个人博客/2020-05-14_16-15-03-hexo-01.png)  
+
 git地址如下：[https://github.com/mrcore/hexo-theme-Anatole-Core](https://github.com/mrcore/hexo-theme-Anatole-Core)
 ### 更换主题步骤：
 #### 1. 安装
@@ -223,13 +224,14 @@ git push
 
 ## 添加本地图片  
 1. 把主页配置文件`_config.yml`里的`post_asset_folder`选项设置为`true`  
-2. 在hexo目录下执行`npm install hexo-asset-image --save`安装一个可以上传本地图片的插件  
+2. 在hexo目录下执行`npm install https://github.com/CodeFalling/hexo-asset-image --save`安装一个可以上传本地图片的插件  
 3. 之后运行`hexo n mdFileName`来生成md文件，文件位置为`/source/_posts`,文件夹内除了mdFileName.md文件还有一个同名的文件夹
 4. 之后若在mdFileName.md中引入图片，要先把图片复制到mdFileName这个文件夹中，然后只需要在mdFileName.md中按照markdown的格式引入图片：`![你想输入的替代文字](mdFileName/图片名.jpg)`
 
 5. 最后检查一下，运行`hexo g`生成页面后，进入public\年\月\日\mdFileName.html文件中查看相关字段，若html标签内的语句是`<img src="年/月/日/mdFileName/图片名.png">`，则网页可以正常加载图片。
 
-**注意：** mdFileName是这个md文件的名字，也是同名文件夹的名字。只需要有文件夹名字即可，不需要绝对路径。  
+**注意：** mdFileName是这个md文件的名字，也是同名文件夹的名字。只需要有文件夹名字即可，不需要绝对路径。
+*参考：[http://wonder4.me/2017/02/20/Using-Local-Image-in-Hexo/](http://wonder4.me/2017/02/20/Using-Local-Image-in-Hexo/)*  
 
 # 五、遇到的问题
 ## 1. 部署失败
@@ -280,4 +282,4 @@ date: 2013/7/13 20:46:25
 
 ---
 *搭建Hexo参考文章：[https://blog.csdn.net/sinat_37781304/article/details/82729029](https://blog.csdn.net/sinat_37781304/article/details/82729029)*
-*Hexo常用命令参考：[https://www.jianshu.com/p/a2d298e26dcd](https://www.jianshu.com/p/a2d298e26dcd)
+*Hexo常用命令参考：[https://www.jianshu.com/p/a2d298e26dcd](https://www.jianshu.com/p/a2d298e26dcd)*
