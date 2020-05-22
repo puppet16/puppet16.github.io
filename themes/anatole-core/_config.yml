@@ -48,7 +48,7 @@ live2d:
   debug: false
   model:
     use: live2d-widget-model-koharu
-    scale: 1.5
+    scale: 1
   display:
     superSample: 2
     width: 150
