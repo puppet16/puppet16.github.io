@@ -365,6 +365,7 @@ toc:
     symbol: '#'
     style: header-anchor
 ```
+之后，在md文件开头添加`<!-- toc -->`，解析成网页后会自动生成文章目录
 
 >***详解见：*** [https://www.npmjs.com/package/hexo-toc](https://www.npmjs.com/package/hexo-toc)
 
