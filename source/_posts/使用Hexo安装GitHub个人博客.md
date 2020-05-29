@@ -1,6 +1,8 @@
 ---
 title: 使用 Hexo 安装 GitHub 个人博客
 date: 2020/5/14 16:31:25
+tag: 杂项
+summary: Hexo安装个人博客，包含安装Hexo，安装插件，遇到的一些问题等
 ---
 
 <!-- toc -->
@@ -69,8 +71,8 @@ npm install -g hexo-cli
   之后` cd bolgName`进入这个`blogName`文件夹。
 
   ```
-  hexo g | hexo generate
-  hexo s | hexo server
+  hexo generate
+  hexo server
   ```
 
   最后可以使用如上命令打开 hexo 服务，在浏览器里输入`localhost:4000`就可以看到生成的博客了。最后使用`ctrl+c`关闭服务。
@@ -101,16 +103,19 @@ npm install hexo-deployer-git --save
 然后
 
 ```
-hexo d | hexo deploy
+hexo deploy
 ```
 
 hexo 基本命令：
 
-命令|功能
-:---|:---
-hexo clean|清除之前生成的静态文章等
-hexo generate|生成静态文章
-hexo deploy|部署文章
+命令|功能|参数说明
+:---|:---|:---
+hexo init [folder]|用于初始化本地文件夹为网站的根目录|folder可选参数，不选默认当前目录
+hexo new [layout] < title>|用于新建文章，可以简写为 `hexo n`|  layout 可选参数，用以指定文章类型，若无指定则默认由配置文件中的 default_layout 选项决定 <br>  title 必填参数，用以指定文章标题，如果参数值中含有空格，则需要使用双引号包围
+hexo clean|清除之前生成的静态文章等|
+hexo generate|生成静态文章，可以简写为 `hexo g`|
+hexo deploy|部署文章，可以简写为 `hexo d`|
+hexo server|命令用于启动本地服务器，可以简写为 `hexo s`|
 
 过一会儿之后就可以`https://yourName.github.io`这个网站看到你的博客了！
 
@@ -302,7 +307,7 @@ git地址如下：[https://github.com/mrcore/hexo-theme-Anatole-Core](https://gi
         npm un hexo-renderer-marked --save
         ```
 
-    2. 安装 hexo-renderer-markdown-it 插件
+  2. 安装 hexo-renderer-markdown-it 插件
 
         ```
         npm i hexo-renderer-markdown-it --save
