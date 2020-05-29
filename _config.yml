@@ -166,3 +166,9 @@ toc:
     position: after
     symbol: '#'
     style: header-anchor
+
+archive_generator:
+  per_page: 0  
+  yearly: false
+  monthly: false
+  daily: false
