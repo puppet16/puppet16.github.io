@@ -1,7 +1,7 @@
 ---
 title: 使用 Hexo 安装 GitHub 个人博客
 date: 2020/5/14 16:31:25
-tag: 杂项
+tag: blog
 summary: Hexo 安装个人博客，包含安装 Hexo，安装插件，遇到的一些问题等  
 academia: true
 ---
