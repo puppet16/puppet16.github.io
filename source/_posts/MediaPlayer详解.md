@@ -1,7 +1,7 @@
 ---
 title: MediaPlayer 详解
 date: 2020-05-22 15:50:15
-tags: Android
+tags: [Android, MediaPlayer]
 summary: MediaPlayer详细介绍，及使用中遇到的问题汇总
 academia: true
 ---

@@ -1,7 +1,7 @@
 ---
 title: 使用IntDef注解代替ENUM
 date: 2020-05-31 21:01:29
-tags: Android
+tags: [Android, 注解]
 summary: 注解代替枚举
 ---
 

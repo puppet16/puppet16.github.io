@@ -1,7 +1,7 @@
 ---
 title: 小米5sPlus安装原生系统
 date: 2020-05-31 21:20:42
-tags: Android 
+tags: [Android, 小米, Lineageos] 
 summary: 小米5s Plus安装原生系统
 ---
 

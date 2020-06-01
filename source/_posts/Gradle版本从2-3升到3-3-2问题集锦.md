@@ -1,7 +1,7 @@
 ---
 title: Gradle版本从2.3升到3.3.2问题集锦
 date: 2020-05-31 21:39:36
-tags: Gradle 
+tags: [Android, Gradle] 
 summary: Gradle版本从2.3升到3.3.2问题集锦
 ---
 
