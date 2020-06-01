@@ -212,14 +212,6 @@ summary: MontionLayout 初体验一
 * `app:currentState="reference"`可以指定特定的`ConstraintSet`。
 * `app:motionDebug`可以显示有关动作的其他调试信息。值可为`“ SHOW_PROGRESS”`，`“ SHOW_PATH”`或`“ SHOW_ALL”`。
 
-
-
-
-
-
-
-
-
 >参考：
 >* [https://developer.android.com/reference/androidx/constraintlayout/motion/widget/MotionLayout](https://developer.android.com/reference/androidx/constraintlayout/motion/widget/MotionLayout)
 >* [https://developer.android.com/training/constraint-layout/motionlayout#androidx](https://developer.android.com/training/constraint-layout/motionlayout#androidx)
