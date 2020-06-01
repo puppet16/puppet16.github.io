@@ -1,7 +1,7 @@
 ---
-title: index.md
+title: 留言
 date: 2020-05-29 16:36:58
 tags:
 ---
 
-# guestbook
+# 欢迎大家留言讨论，共同进步!

@@ -15,13 +15,13 @@ QQ: http://sighttp.qq.com/authd?IDKEY=
   
 # Valine 评论，如何配置请看官网 https://valine.js.org
 valine:
-  enable: false # if you want use valine, please set enable: true
-  appid: 
-  appkey: 
+  enable: true # if you want use valine, please set enable: true
+  appid: xpSQCFiXzEQnCBUKrP6EHIUF-gzGzoHsz
+  appkey: Ev5N03MrqLzS683mu92hf4RO
   notify: false # true/false:mail notify !!!Test,Caution. https://github.com/xCss/Valine/wiki/Valine-%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E9%82%AE%E4%BB%B6%E6%8F%90%E9%86%92%E8%AE%BE%E7%BD%AE
   verify: false # true/false:verify code
   avatar: mp # avatar style https://github.com/xCss/Valine/wiki/avatar-setting-for-valine
-  placeholder: 念念不忘，必有回响... # comment box placeholder
+  placeholder: 行至水穷处，坐看云起时... # comment box placeholder
   serverURLs: 
 
 # 百度统计设置
