@@ -1,20 +1,22 @@
 ---
-title: MontionLayout 初体验一
+title: MotionLayout 初体验一
 date: 2020-06-01 16:39:21
 tags: [Android, MotionLayout, ConstraintLayout, Animate]
-summary: MontionLayout 初体验一
+summary: MotionLayout 初体验一
 ---
 
 <!-- toc -->
 
 # 前言
 
-`MotionLayout`是一种布局类型，为`ConstraintLayout`子类，可以帮助管理应用程序中的运动和组件动画。他缩小了布局切换和复杂动作处理之间的距离，提供了具有两者混合特征的属性动画框架`TransitionManager`和`CoordinatorLayout`。
-除了描述布局切换之间的过渡外，`MotionLayout`还可以为布局属性设置动画。而且还支持可定位的过渡，这意味着可以根据某些条件（例如触摸输入）立即显示过渡中的任何点。
+`MotionLayout`是一种布局类型，为`ConstraintLayout`子类，可以帮助管理应用程序中的运动和组件动画。 `MotionLayout`是为了弥合布局过渡和复杂运动处理之间的差距。可以根据功能将其视为具有`TransitionManager`和`CoordinatorLayout`混合特征的**属性动画框架**。
+除了描述布局切换之间的过渡外（例如TransitionManager），`MotionLayout`还可以为任何属性设置动画（不仅是布局属性）。而且还支持可定位的过渡，这意味着可以根据某些条件（例如触摸输入）立即过渡到任何点，它支持触摸处理和关键帧。  
+
 **注意：**
 
-1. MotionLayout 只支持第一层包裹的 View，不支持再深层嵌套的布局层次结构或 activity 转换。
-2. Android API 要大于等于**14**，即android4.0。
+1. MotionLayout 将仅为其直接子级提供功能，不支持再深层嵌套的布局层次结构或 activity 转换。
+2. MotionLayout是完全声明式的，即可以用XML完全描述一个复杂的过渡-不需要代码。
+3. Android API 要大于等于**14**，即android4.0。
 
 # 使用
 
@@ -24,7 +26,7 @@ summary: MontionLayout 初体验一
 
 * 如果使用的是`AndroidX`，请添加以下依赖项：
 
-    ```java
+    ```Groovy
     dependencies {
         implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta6'
     }
@@ -32,7 +34,7 @@ summary: MontionLayout 初体验一
 
 * 如果不使用 AndroidX，请添加以下支持库依赖项：
 
-    ```java
+    ```Groovy
     dependencies {
         implementation 'com.android.support.constraint:constraint-layout:2.0.0-beta6'
     }
@@ -40,11 +42,15 @@ summary: MontionLayout 初体验一
 
 ***以下示例均为`AndroidX`版本***  
 
+
+MotionLayout示意图如下：
+![示意图](MotionLayout初体验一/motionlayout_1.png)
+
 ## 2. 创建MotionLayout布局  
 
 1. `MotionLayout`是`ConstraintLayout`的子类，所以你可以将任何现有的`ConstraintLayout`换成`MotionLayout`,如下：
 
-    ```java
+    ```Groovy
     <!-- before: ConstraintLayout -->
     <androidx.constraintlayout.widget.ConstraintLayout .../>
     <!-- after: MotionLayout -->
@@ -75,7 +81,7 @@ summary: MontionLayout 初体验一
     </androidx.constraintlayout.motion.widget.MotionLayout>
     ```
 
-    其中，`app:layoutDescription`属性引用一个`MotionScene`。`MotionScene`是XML资源文件，其中包含相应布局的所有运动描述。为了使布局信息与动作描述分开，每个动作都`MotionLayout`引用一个单独的`MotionScene`。请注意，`MotionScene`中的定义优先于中的任何类似定义`MotionLayout`。
+    其中，`app:layoutDescription`属性引用一个`MotionScene`。`MotionScene`是XML资源文件，其中包含相应布局的所有运动描述。为了使布局信息与动作描述分开，每个动作都`MotionLayout`引用一个单独的`MotionScene`。请注意，`MotionScene`中的定义优先于布局文件中的任何类似定义。
     完整`MotionScene`示例如下：
 
     ```xml
