@@ -107,7 +107,7 @@ npm install hexo-deployer-git --save
 hexo deploy
 ```
 
-hexo 基本命令：
+**hexo 基本命令：**
 
 命令|功能|参数说明
 :---|:---|:---
@@ -116,7 +116,7 @@ hexo new [layout] < title>|用于新建文章，可以简写为 `hexo n`|  layou
 hexo clean|清除之前生成的静态文章等|
 hexo generate|生成静态文章，可以简写为 `hexo g`|
 hexo deploy|部署文章，可以简写为 `hexo d`|
-hexo server|命令用于启动本地服务器，可以简写为 `hexo s`|
+hexo server|命令用于启动本地服务器，可以简写为 `hexo s`|  
 
 过一会儿之后就可以`https://yourName.github.io`这个网站看到你的博客了！
 
@@ -379,7 +379,17 @@ MD 正常语法`[TOC]`，解析器解析不了，需要下载一个插件`hexo-t
 
 >***详解见：*** [https://www.npmjs.com/package/hexo-toc](https://www.npmjs.com/package/hexo-toc)
 
-----
+## 7. Hexo 引用本站文章  
+
+在编写文章的过程中，有时需要引用本站内的其他文章。此时可以通过内置的标签插件`post_link`来实现引用。
+**语法：** `{％ post_link 文章文件名（不需要后缀） 文章标题（可选项） %}`
+**说明：** 符号都是英文状态下的，文章标题不写默认显示的是文章文件名
+**举例：** 引用文章 ADB常用命令，则语句如下：  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`{％ post_link ADB常用命令 %}`
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;或者修改显示标题
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`{％ post_link ADB常用命令 ADB %}`
+
+-----
 
 # 五、遇到的问题
 
