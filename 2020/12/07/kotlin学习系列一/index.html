@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="Ltt"><title>Kotlin 系列一：内置类型 · Puppet</title><meta name="description" content="一、前言
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="Ltt"><title>Kotlin 学习系列一：内置类型 · Puppet</title><meta name="description" content="一、前言
 二、基本类型
 
 1. Kotlin 与 java 基本类型对比
@@ -17,7 +17,7 @@
 3. 数组读写
 4. 数组遍历
 
-1. java 中的 forea"><meta name="keywords" content="技术博客,Hexo,Android,Linux,HTML,Java"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><script src="/js/jquery.js"></script><meta name="generator" content="Hexo 4.2.0"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/logo@2x.png" style="width:127px;"><h3 title=""><a href="/">Puppet</a></h3><div class="description"><p>心之所愿，无事不成。<br> Nothing is impossible to a willing heart.</p></div></div></div><ul class="social-links"><li><a href="https://github.com/puppet16" target="_blank" rel="noopener"><i class="fa fa-github"></i></a></li><li><a href="mailto:2542469086@qq.com"><i class="fa fa-envelope"></i></a></li><li><a href="http://sighttp.qq.com/authd?IDKEY=" target="_blank" rel="noopener"><i class="fa fa-qq"></i></a></li><li><a href="https://zhihu.com/" target="_blank" rel="noopener"><i class="fa fa-mortar-board"></i></a></li></ul><div class="footer"><div class="p"> <span>© 2020 - 2050 </span><i class="fa fa-star"></i><span> Ltt</span></div><div class="by_farbox"><span>Powered by </span><a href="https://hexo.io/zh-cn/" target="_blank">Hexo </a><span> & </span><a href="https://github.com/mrcore/hexo-theme-Anatole-Core" target="_blank">Anatole-Core.  </a><a href="http://www.beian.miit.gov.cn/" target="_blank">&nbsp;粤ICP备15011643号</a></div></div></div><div class="main"><div class="page-top animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li><li><a href="/tags">标签</a></li><li><a href="/about">关于</a></li><li><a href="/guestbook">留言</a></li></div><div class="information"><div class="back_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div></div></div><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>Kotlin 系列一：内置类型</a></h3></div><div class="post-content"><div class="toc">
+1. java 中的 forea"><meta name="keywords" content="技术博客,Hexo,Android,Linux,HTML,Java"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><script src="/js/jquery.js"></script><meta name="generator" content="Hexo 4.2.0"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/logo@2x.png" style="width:127px;"><h3 title=""><a href="/">Puppet</a></h3><div class="description"><p>心之所愿，无事不成。<br> Nothing is impossible to a willing heart.</p></div></div></div><ul class="social-links"><li><a href="https://github.com/puppet16" target="_blank" rel="noopener"><i class="fa fa-github"></i></a></li><li><a href="mailto:2542469086@qq.com"><i class="fa fa-envelope"></i></a></li><li><a href="http://sighttp.qq.com/authd?IDKEY=" target="_blank" rel="noopener"><i class="fa fa-qq"></i></a></li><li><a href="https://zhihu.com/" target="_blank" rel="noopener"><i class="fa fa-mortar-board"></i></a></li></ul><div class="footer"><div class="p"> <span>© 2020 - 2050 </span><i class="fa fa-star"></i><span> Ltt</span></div><div class="by_farbox"><span>Powered by </span><a href="https://hexo.io/zh-cn/" target="_blank">Hexo </a><span> & </span><a href="https://github.com/mrcore/hexo-theme-Anatole-Core" target="_blank">Anatole-Core.  </a><a href="http://www.beian.miit.gov.cn/" target="_blank">&nbsp;粤ICP备15011643号</a></div></div></div><div class="main"><div class="page-top animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li><li><a href="/tags">标签</a></li><li><a href="/about">关于</a></li><li><a href="/guestbook">留言</a></li></div><div class="information"><div class="back_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div></div></div><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>Kotlin 学习系列一：内置类型</a></h3></div><div class="post-content"><div class="toc">
 <!-- toc -->
 <ul>
 <li><a href="#yi-qian-yan">一、前言</a></li>
@@ -89,18 +89,32 @@
 </li>
 </ul>
 </li>
-<li><a href="#fu-lu">附录</a></li>
+<li><a href="#liu-han-shu-ji-ben-gai-nian">六、函数基本概念</a>
+<ul>
+<li><a href="#1-han-shu-ding-yi">1. 函数定义</a></li>
+<li><a href="#2-han-shu-yu-fang-fa-guan-xi">2. 函数与方法关系</a></li>
+<li><a href="#3-han-shu-lei-xing">3. 函数类型</a></li>
+<li><a href="#4-han-shu-de-yin-yong">4. 函数的引用</a></li>
+<li><a href="#5-bian-chang-can-shu">5. 变长参数</a></li>
+<li><a href="#6-duo-fan-hui-zhi">6. 多返回值</a></li>
+<li><a href="#7-mo-ren-can-shu">7. 默认参数</a></li>
+<li><a href="#8-ju-ming-can-shu">8. 具名参数</a></li>
+</ul>
+</li>
+<li><a href="#qi-ying-yong">七、应用</a></li>
+<li><a href="#ba-fu-lu">八、附录</a></li>
 </ul>
 <!-- tocstop -->
 </div>
 <h1><span id="yi-qian-yan">一、前言</span><a href="#yi-qian-yan" class="header-anchor">#</a></h1>
 <ol>
-<li>本文主要讲述<strong>Kotlin 基本数据类型</strong></li>
-<li><strong>Kotlin官网：<a href="https://kotlinlang.org/" target="_blank" rel="noopener">https://kotlinlang.org/</a></strong></li>
+<li>本文主要讲述<strong>Kotlin 内置类型即本身已被Kotlin集成的类型</strong></li>
+<li><strong>Kotlin英文官网：<a href="https://kotlinlang.org/" target="_blank" rel="noopener">https://kotlinlang.org/</a></strong></li>
+<li><strong>Kotlin中文官网：<a href="https://www.kotlincn.net/" target="_blank" rel="noopener">https://www.kotlincn.net/</a></strong></li>
 <li>Kotlin 学习系列文章：
 <ul>
 <li>
-<a href="/2020/12/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%BA%8C/" title="kotlin学习系列二：kotlin函数">kotlin学习系列二：kotlin函数</a>
+<a href="/2020/12/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%BA%8C/" title="Kotlin学习系列二：类型进阶">Kotlin学习系列二：类型进阶</a>
 </li>
 </ul>
 </li>
@@ -488,9 +502,149 @@
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> (x, y, z) = triple</span><br><span class="line"></span><br><span class="line">println(x)</span><br><span class="line">println(y)</span><br><span class="line">println(z)</span><br></pre></td></tr></table></figure>
 <p>打印结果为：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Hello</span><br><span class="line">3</span><br><span class="line">4.0</span><br></pre></td></tr></table></figure>
-<h1><span id="fu-lu">附录</span><a href="#fu-lu" class="header-anchor">#</a></h1>
-<p>参考文章：<a href="https://kotlinlang.org/docs/reference/basic-types.html" target="_blank" rel="noopener">https://kotlinlang.org/docs/reference/basic-types.html</a></p>
-</div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2020-12-07</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Kotlin/" title="Kotlin">Kotlin </a><a class="tag" href="/tags/类型/" title="类型">类型 </a><span class="leancloud_visitors"></span></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="" onclick="javascript:join_favorite()" ref="sidebar"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" href="http://twitter.com/home?status=,http://puppet16.github.io/2020/12/07/kotlin学习系列一/,Puppet,Kotlin 系列一：内置类型,;" target="_blank" rel="noopener"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2020/12/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%BA%8C/" title="Kotlin学习系列二：函数">上一篇</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2020/11/27/%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97%E5%9B%9B/" title="源码系列四：事件分发机制">下一篇</a></li></ul></div><script src="/js/visitors.js"></script><a id="comments"></a><div id="vcomments" style="margin:0 30px;"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//cdn.jsdelivr.net/gh/xcss/valine@latest/dist/Valine.min.js"></script><script>var valine = new Valine({
+<h1><span id="liu-han-shu-ji-ben-gai-nian">六、函数基本概念</span><a href="#liu-han-shu-ji-ben-gai-nian" class="header-anchor">#</a></h1>
+<h2><span id="1-han-shu-ding-yi">1. 函数定义</span><a href="#1-han-shu-ding-yi" class="header-anchor">#</a></h2>
+<p>格式：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> 函数名<span class="params">(函数参数列表)</span></span>[:函数返回值] &#123;</span><br><span class="line">    函数代码块</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>例：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">(args: <span class="type">Array</span>&lt;<span class="type">String</span>&gt;)</span></span>: <span class="built_in">Unit</span> &#123;</span><br><span class="line">    println(args.contentToString())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中，<code>Unit</code>等价于<code>Java</code>的<code>void</code>,函数返回值为<code>Unit</code>时可不加，即上面例可写为：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">(args: <span class="type">Array</span>&lt;<span class="type">String</span>&gt;)</span></span> &#123;</span><br><span class="line">    println(args.contentToString())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2><span id="2-han-shu-yu-fang-fa-guan-xi">2. 函数与方法关系</span><a href="#2-han-shu-yu-fang-fa-guan-xi" class="header-anchor">#</a></h2>
+<ul>
+<li><strong>方法</strong>可以认为是函数的一种特殊类型</li>
+<li>从形式上，有<code>receiver</code>的函数即为<code>方法</code></li>
+</ul>
+<p>简单来说<code>Abc.get</code>中的<code>Abc</code>就是<code>receiver</code></p>
+<p>例：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">(args: <span class="type">Array</span>&lt;<span class="type">String</span>&gt;)</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> foo:Foo = Foo() </span><br><span class="line">    <span class="keyword">val</span> result = foo.bar(<span class="string">"Hello,"</span>, <span class="string">"World"</span>)</span><br><span class="line">    println(result)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">bar</span><span class="params">(p0:<span class="type">String</span>, p1:<span class="type">String</span>)</span></span>: String &#123;</span><br><span class="line">        <span class="keyword">return</span> p0+p1</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中，<code>Foo</code>类中有函数<code>bar</code>，其功能为拼接传入的两个字符串并返回。<br>
+使用<code>foo.bar</code>来调用<code>bar</code>函数，其中<code>foo</code>即为<code>receiver</code>，<code>bar</code>函数也可称之为方法<br>
+<strong>Kotlin中可以不定义类直接定义函数，这种没有<code>receiver</code>的函数为顶级函数</strong></p>
+<h2><span id="3-han-shu-lei-xing">3. 函数类型</span><a href="#3-han-shu-lei-xing" class="header-anchor">#</a></h2>
+<p>函数类型表达</p>
+<table>
+    <tr>
+        <td>函数</td>
+        <td>类型</td>
+    </tr>
+    <tr>
+        <td>fun foo() {}</td>
+        <td>() -> Unit</td>
+    </tr>
+    <tr>
+        <td>fun foo(p0:Int):String{ ... }</td>
+        <td>(Int) -> String</td>
+    </tr>
+    <tr>
+        <td>class Foo { <br>   fun bar(p0:String, p1:String):Any { ... } <br>}</td>
+        <td>Foo.(String,String) -> Any 等价于 <br> (Foo,String,String) -> Any 等价于 <br> Function3&lt;Foo, String, Long, Any></td>
+    </tr>
+</table>
+<p>如果<code>receiver</code>当做函数参数类型列表里第一项，则表明该函数为方法</p>
+<h2><span id="4-han-shu-de-yin-yong">4. 函数的引用</span><a href="#4-han-shu-de-yin-yong" class="header-anchor">#</a></h2>
+<ul>
+<li>
+<p>函数的引用类似C语言中的函数指针，可用于函数传递</p>
+  <table>
+      <tr>
+          <td>函数</td>
+          <td>lamba表达</td>
+      </tr>
+      <tr>
+          <td>fun foo() {}</td>
+          <td>::foo</td>
+      </tr>
+      <tr>
+          <td>fun foo(p0:Int):String{ ... }</td>
+          <td>::foo</td>
+      </tr>
+      <tr>
+          <td>class Foo { <br>   fun bar(p0:String, p1:String):Any { ... } <br>}</td>
+          <td>Foo::bar</td>
+      </tr>
+  </table>
+</li>
+<li>
+<p>声明函数类型的变量</p>
+  <table>
+      <tr>
+          <td>函数</td>
+          <td>声明函数变量</td>
+      </tr>
+      <tr>
+          <td>fun foo() {}</td>
+          <td>val f:() -> Unit = ::foo</td>
+      </tr>
+      <tr>
+          <td>fun foo(p0:Int):String{ ... }</td>
+          <td>val g:(Int) -> String = ::foo</td>
+      </tr>
+      <tr>
+          <td>class Foo { <br>   fun bar(p0:String, p1:String):Any { ... } <br>}</td>
+          <td>val h:(Foo, String, Long) -> Any = Foo::bar</td>
+      </tr>
+  </table>
+<p>可省略函数类型，让编译器去推断</p>
+  <table>
+      <tr>
+          <td>函数</td>
+          <td>声明函数变量</td>
+      </tr>
+      <tr>
+          <td>fun foo() {}</td>
+          <td>val f = ::foo</td>
+      </tr>
+      <tr>
+          <td>fun foo(p0:Int):String{ ... }</td>
+          <td>val g = ::foo</td>
+      </tr>
+      <tr>
+          <td>class Foo { <br>   fun bar(p0:String, p1:String):Any { ... } <br>}</td>
+          <td>val h = Foo::bar</td>
+      </tr>
+  </table>
+</li>
+<li>
+<p>方法的函数引用</p>
+  <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">bar</span><span class="params">(p0:<span class="type">String</span>, p1:<span class="type">Long</span>)</span></span> :Any&#123; ... &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">val</span> foo = Foo()</span><br><span class="line"><span class="keyword">val</span> m:(String, <span class="built_in">Long</span>) -&gt; Any = foo.bar</span><br></pre></td></tr></table></figure>
+<p>其中<code>bar</code>函数使用的Foo类的实例化对象<code>foo</code>作为<code>receiver</code>，这种方式称为<strong>绑定receiver的函数引用</strong></p>
+</li>
+</ul>
+<h2><span id="5-bian-chang-can-shu">5. 变长参数</span><a href="#5-bian-chang-can-shu" class="header-anchor">#</a></h2>
+<p>格式：<strong><code>vararg 参数名：参数类型</code></strong><br>
+与<code>java</code>中的<code>void multiParams(String... args)</code>类似<br>
+在调用函数之前参数个数是不确定的，只有在调用的时候才能确定参数的类型和数量。<br>
+则参数是某个类型的数组</p>
+<p>例：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">multiParams</span><span class="params">(<span class="keyword">vararg</span> ints: <span class="type">Int</span>)</span></span> &#123;</span><br><span class="line">    println(ints.contentToString)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>调用：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">multiParams(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>)</span><br></pre></td></tr></table></figure>
+<h2><span id="6-duo-fan-hui-zhi">6. 多返回值</span><a href="#6-duo-fan-hui-zhi" class="header-anchor">#</a></h2>
+<p>借助<code>Pair</code>和<code>Triple</code>类型完成多返回值的操作</p>
+<p>例：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">multiReturnValues</span><span class="params">()</span></span> : Triple&lt;<span class="built_in">Int</span>, <span class="built_in">Long</span>, <span class="built_in">Double</span>&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> Triple(<span class="number">1</span>, <span class="number">3L</span>, <span class="number">5.0</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">val</span> (a,b,c) = multiReturnValues()</span><br><span class="line"></span><br><span class="line">println(a)</span><br><span class="line">println(b)</span><br><span class="line">println(c)</span><br></pre></td></tr></table></figure>
+<p>通过解构将<code>Pair</code>和<code>Triple</code>中的值赋给不同变量</p>
+<h2><span id="7-mo-ren-can-shu">7. 默认参数</span><a href="#7-mo-ren-can-shu" class="header-anchor">#</a></h2>
+<p>定义：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">defaultParameter</span><span class="params">(x:<span class="type">Int</span>, y:<span class="type">String</span>, z: <span class="type">Long</span> = <span class="number">0</span>L)</span></span> &#123;</span><br><span class="line">    println(x+ +y + z)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>调用：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">defaultParameter(<span class="number">2</span>, <span class="string">"5"</span>)</span><br></pre></td></tr></table></figure>
+<p>注意：默认值应该是从参数列表最后一项往前赋值，调用时传递地参数                                                                                                                        按照定义时的参数列表顺序传递参数值</p>
+<h2><span id="8-ju-ming-can-shu">8. 具名参数</span><a href="#8-ju-ming-can-shu" class="header-anchor">#</a></h2>
+<p>定义：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">defaultParameter</span><span class="params">(x:<span class="type">Int</span> = <span class="number">5</span>, y:<span class="type">String</span>, z: <span class="type">Long</span> = <span class="number">0</span>L)</span></span> &#123;</span><br><span class="line">    println(x+ +y + z)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>调用：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">defaultParameter(y = <span class="string">"5"</span>)</span><br></pre></td></tr></table></figure>
+<p>调用时可使用形参名字来显式接收参数，这样避免了给首尾参数加默认值，调用时无法只传中间参数值的问题</p>
+<h1><span id="qi-ying-yong">七、应用</span><a href="#qi-ying-yong" class="header-anchor">#</a></h1>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> calculator = Calculator()</span><br><span class="line">    calculator.cal(<span class="string">"3"</span>,<span class="string">"*"</span>,<span class="string">"5"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Calculator</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">cal</span><span class="params">(<span class="keyword">vararg</span> args:<span class="type">String</span>)</span></span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (args.size &lt; <span class="number">3</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> showHelp()</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">val</span> operators = mapOf(</span><br><span class="line">                <span class="string">"+"</span> to ::plus,</span><br><span class="line">                <span class="string">"-"</span> to ::minus,</span><br><span class="line">                <span class="string">"*"</span> to ::times,</span><br><span class="line">                <span class="string">"/"</span> to ::div,</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">        <span class="keyword">val</span> opFun = operators[args[<span class="number">1</span>]]?: <span class="keyword">return</span> showHelp()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            println(<span class="string">"Input:<span class="subst">$&#123;args.joinToString(<span class="string">" "</span>)&#125;</span>"</span>)</span><br><span class="line">            println(<span class="string">"Output:"</span> + opFun(args[<span class="number">0</span>].toInt(), args[<span class="number">2</span>].toInt()))</span><br><span class="line">        &#125; <span class="keyword">catch</span> (e: Exception) &#123;</span><br><span class="line">            println(<span class="string">"Invalid Input"</span>)</span><br><span class="line">            showHelp()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">plus</span><span class="params">(arg0:<span class="type">Int</span>, arg1: <span class="type">Int</span>)</span></span>:<span class="built_in">Int</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> arg0 + arg1</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">minus</span><span class="params">(arg0:<span class="type">Int</span>, arg1: <span class="type">Int</span>)</span></span>:<span class="built_in">Int</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> arg0 - arg1</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">times</span><span class="params">(arg0:<span class="type">Int</span>, arg1: <span class="type">Int</span>)</span></span>:<span class="built_in">Int</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> arg0 * arg1</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">div</span><span class="params">(arg0:<span class="type">Int</span>, arg1: <span class="type">Int</span>)</span></span>:<span class="built_in">Int</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> arg0 / arg1</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">showHelp</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="keyword">val</span> helpStr = <span class="string">"""</span></span><br><span class="line"><span class="string">            Simple Calculator:</span></span><br><span class="line"><span class="string">                Input: 2 * 3</span></span><br><span class="line"><span class="string">                Output: 6</span></span><br><span class="line"><span class="string">        """</span>.trimIndent()</span><br><span class="line">        println(helpStr)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>实现简单的四则运算功能</p>
+<h1><span id="ba-fu-lu">八、附录</span><a href="#ba-fu-lu" class="header-anchor">#</a></h1>
+<p>参考文章：<br>
+<a href="https://www.kotlincn.net/docs/reference/basic-types.html" target="_blank" rel="noopener">https://www.kotlincn.net/docs/reference/basic-types.html</a><br>
+<a href="https://www.kotlincn.net/docs/reference/functions.html" target="_blank" rel="noopener">https://www.kotlincn.net/docs/reference/functions.html</a></p>
+</div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2020-12-07</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Kotlin/" title="Kotlin">Kotlin </a><a class="tag" href="/tags/类型/" title="类型">类型 </a><span class="leancloud_visitors"></span></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="" onclick="javascript:join_favorite()" ref="sidebar"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" href="http://twitter.com/home?status=,http://puppet16.github.io/2020/12/07/kotlin学习系列一/,Puppet,Kotlin 学习系列一：内置类型,;" target="_blank" rel="noopener"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2020/12/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%BA%8C/" title="Kotlin学习系列二：类型进阶">上一篇</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2020/11/27/%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97%E5%9B%9B/" title="源码系列四：事件分发机制">下一篇</a></li></ul></div><script src="/js/visitors.js"></script><a id="comments"></a><div id="vcomments" style="margin:0 30px;"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//cdn.jsdelivr.net/gh/xcss/valine@latest/dist/Valine.min.js"></script><script>var valine = new Valine({
   el:'#vcomments',
   notify:false || false, 
   verify:false|| false, 
