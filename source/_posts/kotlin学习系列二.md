@@ -406,6 +406,8 @@ fun main() {
 }
 ```
 
+其中，变量`ageRef`和`ageRef2`类型为`KProperty0<Int>`，变量`ageRef2`和`nameRef2`类型为`KMutableProperty0<String>`
+
 # 三、 扩展
 
 `Kotlin`能够扩展一个类的新功能而无需继承该类或者使用像装饰者这样的设计模式。例如，可以为一个不能修改的、来自第三方库中的类编写一个新的函数。 这个新增的函数就像那个原始类本来就有的函数一样，可以用普通的方法调用。 这种机制称为**扩展函数**。此外，也有**扩展属性**， 允许你为一个已经存在的类添加新的属性。
@@ -494,8 +496,8 @@ fun String.times(count:Int):String {
 }
 
 fun main() {
-    val str1 = String::times(3)
-    val str2 = "*"::times(3)
+    val str1 = (String::times)("str", 3)
+    val str2 = ("*"::times)(3)
 }
 ```
 
