@@ -1,5 +1,5 @@
 ---
-title: Kotlin 系列一：内置类型
+title: Kotlin 学习系列一：内置类型
 date: 2020-12-07 16:51:45
 tags: [Kotlin, 类型]
 summary: Kotlin 内置类型
@@ -9,11 +9,11 @@ summary: Kotlin 内置类型
 
 # 一、前言
 
-1. 本文主要讲述**Kotlin 基本数据类型**
-2. **Kotlin官网：[https://kotlinlang.org/](https://kotlinlang.org/)**
-3. Kotlin 学习系列文章：
-    * {% post_link kotlin学习系列二 kotlin学习系列二：kotlin函数 %}
-
+1. 本文主要讲述**Kotlin 内置类型即本身已被Kotlin集成的类型**
+2. **Kotlin英文官网：[https://kotlinlang.org/](https://kotlinlang.org/)**
+3. **Kotlin中文官网：[https://www.kotlincn.net/](https://www.kotlincn.net/)**
+4. Kotlin 学习系列文章：
+    * {% post_link kotlin学习系列二 Kotlin学习系列二：类型进阶 %}
 
 # 二、基本类型
 
@@ -596,12 +596,301 @@ Hello
 4.0
 ```
 
+# 六、函数基本概念
+
+## 1. 函数定义
+
+格式： 
+
+```kotlin
+fun 函数名(函数参数列表)[:函数返回值] {
+    函数代码块
+}
+```
+
+例：
+
+```kotlin
+fun main(args: Array<String>): Unit {
+    println(args.contentToString())
+}
+```
+
+其中，`Unit`等价于`Java`的`void`,函数返回值为`Unit`时可不加，即上面例可写为：
+
+```kotlin
+fun main(args: Array<String>) {
+    println(args.contentToString())
+}
+```
+
+## 2. 函数与方法关系
+
+* **方法**可以认为是函数的一种特殊类型
+* 从形式上，有`receiver`的函数即为`方法`
+
+简单来说`Abc.get`中的`Abc`就是`receiver`
+
+例：
+
+```kotlin
+fun main(args: Array<String>) {
+    val foo:Foo = Foo() 
+    val result = foo.bar("Hello,", "World")
+    println(result)
+}
+
+class Foo {
+    fun bar(p0:String, p1:String): String {
+        return p0+p1
+    }
+}
+```
+
+其中，`Foo`类中有函数`bar`，其功能为拼接传入的两个字符串并返回。
+使用`foo.bar`来调用`bar`函数，其中`foo`即为`receiver`，`bar`函数也可称之为方法
+**Kotlin中可以不定义类直接定义函数，这种没有`receiver`的函数为顶级函数**
+
+## 3. 函数类型
+
+函数类型表达
+
+<table>
+    <tr>
+        <td>函数</td>
+        <td>类型</td>
+    </tr>
+    <tr>
+        <td>fun foo() {}</td>
+        <td>() -> Unit</td>
+    </tr>
+    <tr>
+        <td>fun foo(p0:Int):String{ ... }</td>
+        <td>(Int) -> String</td>
+    </tr>
+    <tr>
+        <td>class Foo { <br/>   fun bar(p0:String, p1:String):Any { ... } <br/>}</td>
+        <td>Foo.(String,String) -> Any 等价于 <br/> (Foo,String,String) -> Any 等价于 <br/> Function3&lt;Foo, String, Long, Any></td>
+    </tr>
+</table>
+
+如果`receiver`当做函数参数类型列表里第一项，则表明该函数为方法
+
+## 4. 函数的引用
+
+* 函数的引用类似C语言中的函数指针，可用于函数传递
+
+    <table>
+        <tr>
+            <td>函数</td>
+            <td>lamba表达</td>
+        </tr>
+        <tr>
+            <td>fun foo() {}</td>
+            <td>::foo</td>
+        </tr>
+        <tr>
+            <td>fun foo(p0:Int):String{ ... }</td>
+            <td>::foo</td>
+        </tr>
+        <tr>
+            <td>class Foo { <br/>   fun bar(p0:String, p1:String):Any { ... } <br/>}</td>
+            <td>Foo::bar</td>
+        </tr>
+    </table>
+
+* 声明函数类型的变量
+
+    <table>
+        <tr>
+            <td>函数</td>
+            <td>声明函数变量</td>
+        </tr>
+        <tr>
+            <td>fun foo() {}</td>
+            <td>val f:() -> Unit = ::foo</td>
+        </tr>
+        <tr>
+            <td>fun foo(p0:Int):String{ ... }</td>
+            <td>val g:(Int) -> String = ::foo</td>
+        </tr>
+        <tr>
+            <td>class Foo { <br/>   fun bar(p0:String, p1:String):Any { ... } <br/>}</td>
+            <td>val h:(Foo, String, Long) -> Any = Foo::bar</td>
+        </tr>
+    </table>
+
+    可省略函数类型，让编译器去推断
+
+    <table>
+        <tr>
+            <td>函数</td>
+            <td>声明函数变量</td>
+        </tr>
+        <tr>
+            <td>fun foo() {}</td>
+            <td>val f = ::foo</td>
+        </tr>
+        <tr>
+            <td>fun foo(p0:Int):String{ ... }</td>
+            <td>val g = ::foo</td>
+        </tr>
+        <tr>
+            <td>class Foo { <br/>   fun bar(p0:String, p1:String):Any { ... } <br/>}</td>
+            <td>val h = Foo::bar</td>
+        </tr>
+    </table>
+
+* 方法的函数引用
+  
+    ```kotlin
+    class Foo {
+        fun bar(p0:String, p1:Long) :Any{ ... }
+    }
+    val foo = Foo()
+    val m:(String, Long) -> Any = foo.bar
+    ```
+
+    其中`bar`函数使用的Foo类的实例化对象`foo`作为`receiver`，这种方式称为**绑定receiver的函数引用**
+
+## 5. 变长参数
+
+格式：**`vararg 参数名：参数类型`**
+与`java`中的`void multiParams(String... args)`类似
+在调用函数之前参数个数是不确定的，只有在调用的时候才能确定参数的类型和数量。
+则参数是某个类型的数组
+
+例：
+
+```kotlin
+fun multiParams(vararg ints: Int) {
+    println(ints.contentToString)
+}
+```
+
+调用：
+
+```kotlin
+multiParams(1,2,3,4)
+```
+
+## 6. 多返回值
+
+借助`Pair`和`Triple`类型完成多返回值的操作
+
+例：
+
+```kotlin
+fun multiReturnValues() : Triple<Int, Long, Double> {
+    return Triple(1, 3L, 5.0)
+}
+val (a,b,c) = multiReturnValues()
+
+println(a)
+println(b)
+println(c)
+```
+
+通过解构将`Pair`和`Triple`中的值赋给不同变量
+
+## 7. 默认参数
+
+定义：
+
+```kotlin
+
+fun defaultParameter(x:Int, y:String, z: Long = 0L) {
+    println(x+ +y + z)
+}
+
+```
+
+调用：
+
+```kotlin
+defaultParameter(2, "5")
+```
+
+注意：默认值应该是从参数列表最后一项往前赋值，调用时传递地参数                                                                                                                        按照定义时的参数列表顺序传递参数值
+
+## 8. 具名参数
+
+定义：
+
+```kotlin
+fun defaultParameter(x:Int = 5, y:String, z: Long = 0L) {
+    println(x+ +y + z)
+}
+```
+
+调用：
+
+```kotlin
+defaultParameter(y = "5")
+```
+
+调用时可使用形参名字来显式接收参数，这样避免了给首尾参数加默认值，调用时无法只传中间参数值的问题
+
+# 七、应用
+
+```kotlin
+fun main() {
+    val calculator = Calculator()
+    calculator.cal("3","*","5")
+}
+
+class Calculator {
+    fun cal(vararg args:String) {
+        if (args.size < 3) {
+            return showHelp()
+        }
+        val operators = mapOf(
+                "+" to ::plus,
+                "-" to ::minus,
+                "*" to ::times,
+                "/" to ::div,
+        )
+
+        val opFun = operators[args[1]]?: return showHelp()
+
+        try {
+            println("Input:${args.joinToString(" ")}")
+            println("Output:" + opFun(args[0].toInt(), args[2].toInt()))
+        } catch (e: Exception) {
+            println("Invalid Input")
+            showHelp()
+        }
+    }
+
+    fun plus(arg0:Int, arg1: Int):Int{
+        return arg0 + arg1
+    }
+    fun minus(arg0:Int, arg1: Int):Int{
+        return arg0 - arg1
+    }
+    fun times(arg0:Int, arg1: Int):Int{
+        return arg0 * arg1
+    }
+    fun div(arg0:Int, arg1: Int):Int{
+        return arg0 / arg1
+    }
+
+    fun showHelp() {
+        val helpStr = """
+            Simple Calculator:
+                Input: 2 * 3
+                Output: 6
+        """.trimIndent()
+        println(helpStr)
+    }
+}
+```
+
+实现简单的四则运算功能
 
 
+# 八、附录
 
-
-
-
-# 附录
-
-参考文章：[https://kotlinlang.org/docs/reference/basic-types.html](https://kotlinlang.org/docs/reference/basic-types.html)
+参考文章：
+[https://www.kotlincn.net/docs/reference/basic-types.html](https://www.kotlincn.net/docs/reference/basic-types.html)
+[https://www.kotlincn.net/docs/reference/functions.html](https://www.kotlincn.net/docs/reference/functions.html)
