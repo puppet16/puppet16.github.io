@@ -1,5 +1,5 @@
 ---
-title: Kotlin学习系列二：类型进阶
+title: Kotlin学习系列二：类与接口初解
 date: 2020-12-15 17:32:47
 tags: [Kotlin, 类型]
 summary: Kotlin类型进阶
@@ -14,6 +14,7 @@ summary: Kotlin类型进阶
 3. **Kotlin中文官网：[https://www.kotlincn.net/](https://www.kotlincn.net/)**
 4. Kotlin 学习系列文章：
     * {% post_link kotlin学习系列一 kotlin学习系列一：内置类型 %}
+    * {% post_link kotlin学习系列三 kotlin学习系列三：表达式 %}
 
 # 二、类与接口
 

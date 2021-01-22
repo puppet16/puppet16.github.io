@@ -13,7 +13,8 @@ summary: Kotlin 内置类型
 2. **Kotlin英文官网：[https://kotlinlang.org/](https://kotlinlang.org/)**
 3. **Kotlin中文官网：[https://www.kotlincn.net/](https://www.kotlincn.net/)**
 4. Kotlin 学习系列文章：
-    * {% post_link kotlin学习系列二 Kotlin学习系列二：类型进阶 %}
+    * {% post_link kotlin学习系列二 Kotlin学习系列二：类与接口初解 %}
+    * {% post_link kotlin学习系列三 kotlin学习系列三：表达式 %}
 
 # 二、基本类型
 
@@ -44,7 +45,7 @@ summary: Kotlin 内置类型
 ![kotlin_type_1](kotlin学习系列一/kotlin_type_1.png)
 
 **修饰符：**
-**`val`**：声明只读变量，对应 java 里加了`final`修饰符的变量
+**`val`**：声明只读变量，对应 java 里加了`final`修饰符的变量，只有`get`方法，没有`set`方法。
 **`var`**：声明可读写变量。
 
 `Kotlin`里的`val a:Int = 2`等同于`Kotlin`里的`val a = 2`等同于`Java`里的`final int a = 2`
