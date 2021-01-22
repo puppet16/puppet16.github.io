@@ -2,7 +2,7 @@
 title: Kotlin学习系列二：类与接口初解
 date: 2020-12-15 17:32:47
 tags: [Kotlin, 类型]
-summary: Kotlin类型进阶
+summary: Kotlin类与接口
 ---
 
 <!-- toc -->

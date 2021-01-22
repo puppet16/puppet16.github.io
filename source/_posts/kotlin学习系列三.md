@@ -2,7 +2,7 @@
 title: kotlin学习系列三：表达式
 date: 2021-01-15 10:14:31
 tags: [Kotlin, 表达式]
-summary: Kotlin类型进阶
+summary: Kotlin表达式
 ---
 
 <!-- toc -->
