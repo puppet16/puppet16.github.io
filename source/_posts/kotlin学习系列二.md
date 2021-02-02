@@ -15,6 +15,7 @@ summary: Kotlin类与接口
 4. Kotlin 学习系列文章：
     * {% post_link kotlin学习系列一 kotlin学习系列一：内置类型 %}
     * {% post_link kotlin学习系列三 kotlin学习系列三：表达式 %}
+    * {% post_link kotlin学习系列四 kotlin学习系列四：函数进阶 %}
 
 # 二、类与接口
 

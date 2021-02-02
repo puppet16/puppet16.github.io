@@ -1,5 +1,5 @@
 ---
-title: kotlin学习系列三：表达式
+title: Kotlin学习系列三：表达式
 date: 2021-01-15 10:14:31
 tags: [Kotlin, 表达式]
 summary: Kotlin表达式
@@ -15,6 +15,7 @@ summary: Kotlin表达式
 4. Kotlin 学习系列文章：
     * {% post_link kotlin学习系列一 kotlin学习系列一：内置类型 %}
     * {% post_link kotlin学习系列二 kotlin学习系列二：类与接口初解 %}
+    * {% post_link kotlin学习系列四 kotlin学习系列四：函数进阶 %}
 
 # 二、常量和变量
 
