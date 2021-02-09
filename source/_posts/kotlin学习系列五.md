@@ -707,3 +707,488 @@ class ProxyX(private var initialValue: String) {
 1. 声明了一个代理类`ProxyX`，代理可读写属性，传入一个初始值，实现`getValue()`方法和`setValue()`方法
 2. `getValue()`方法功能为：取值时返回一个字符串，该字符串是值加一个常量
 3. `setValue()`方法功能为：将新添加的值拼接到原值的后面
+
+### 4. 自定义属性代理
+
+**实现效果：** 将`.properties`文件中的内容以变量的方式展示，以方便用户读写，文件中包含`author`、`version`、`desc`等信息
+
+在工程里的`resources`文件夹下创建`Config.properties`文件，如下图所示：
+
+![Config.properties位置](/kotlin学习系列五/kotlin_proxy_properties_1.png)
+
+
+```kotlin
+class PropertiesDelegate(private val path: String, private val defaultValue: String = "") {
+    private lateinit var url: URL
+    private val properties: Properties by lazy {
+        val prop = Properties()
+        url = try {
+            javaClass.getResourceAsStream(path).use {
+                prop.load(it)
+            }
+            javaClass.getResource(path)!!
+        } catch (e: Exception) {
+            try {
+                ClassLoader.getSystemClassLoader().getResourceAsStream(path).use {
+                    prop.load(it)
+                }
+                ClassLoader.getSystemClassLoader().getResource(path)!!
+            } catch (e: Exception) {
+                FileInputStream(path).use {
+                    prop.load(it)
+                }
+                URL("file://${File(path).canonicalPath}")
+            }
+        }
+        prop
+    }
+
+    operator fun getValue(thisRef: Any?, property: KProperty<*>): String {
+        return properties.getProperty(property.name, defaultValue)
+    }
+
+    operator fun setValue(thisRef: Any?, property: KProperty<*>, value: String) {
+        properties.setProperty(property.name, value)
+        File(url.toURI()).outputStream().use {
+            properties.store(it, "Hello")
+        }
+    }
+}
+
+abstract class AbsProperties(path: String) {
+    protected val prop = PropertiesDelegate(path)
+}
+
+class Config: AbsProperties("Config.properties") {
+    var author by prop
+    var version by prop
+    var desc by prop
+}
+
+fun main() {
+    val config = Config()
+    println(config.author)
+    println(config.version)
+    config.version = "1.1.0"
+    println(config.desc)
+    println(config.version)
+}
+```
+
+**说明：**
+
+1. `resources`文件夹下内容编译完成后会被复制到`classpath`下，所以使用`ClassLoader`可以读取到文件
+2. `resources`文件夹内容编译后位置如下图所示：
+
+    ![confg.properties编译后位置](/kotlin学习系列五/kotlin_proxy_properties_2.png)
+
+3. 上述代码创建一个`Properties`的代理类`PropertiesDelegate`，入参为一个地址，功能为：获取该地址文件里的所有属性值。
+4. 注意创建的变量名要与`Config.properties`文件中的键值对里的键名一致，否则无法读取出属性
+5. 代理类`PropertiesDelegate`也可以重新设置属性值，设置的属性值保存在编译后的文件内，并没有改变源文件，在修改时会自动添加所写的`comments`即`Hello`，并且自动添加了修改时间，效果上看上去就像是一个提交纪录
+
+    ![修改后的config.properties](/kotlin学习系列五/kotlin_proxy_properties_3.png)
+
+# 六、 单例 `object`
+
+## 1. 定义
+
+`Kotlin`中使用关键字`object`来定义**饿汉式单例**
+
+```kotlin
+object Singleton {
+
+}
+```
+
+如上代码所示，只需要关键字`object`后加一个类名即可创建一个饿汉式单例，它等价于`Java`中如下所示的单例定义：
+
+```java
+public class Singleton {
+    public static final Singleton INSTANCE = new Singleton();
+}
+```
+
+## 2. 访问`object`的成员
+
+`object`定义的单例可以当做类一样去添加成员属性，成员函数
+
+```kotlin
+object Singleton {
+    var value: Int = 26
+    fun plus() {
+        value++
+    }
+}
+
+fun main() {
+    Singleton.plus()
+    println("value${Singleton.value}")
+}
+```
+
+```java
+public static void main(String[] args) {
+    Singleton.INSTANCE.plus();
+    System.out.println("value:"+ Singleton.INSTANCE.getValue());
+}
+```
+
+如上所示，在`kotlin`定义了一个单例`Singleton`，在`kotlin`中调用时直接使用单例的名字即可调用，但是在`java`调用时需要加一个`INSTANCE`，上述定义单例代码经过编译反后的`class`文件代码如下：
+
+```java
+public final class Singleton {
+   private static int value;
+   @NotNull
+   public static final Singleton INSTANCE;
+
+   public final int getValue() {
+      return value;
+   }
+
+   public final void setValue(int var1) {
+      value = var1;
+   }
+
+   public final void plus() {
+      int var10000 = value++;
+   }
+
+   private Singleton() {
+   }
+
+   static {
+      Singleton var0 = new Singleton();
+      INSTANCE = var0;
+      value = 26;
+   }
+}
+```
+
+## 3. 静态成员`@JvmStatic`
+
+因`kotlin`是跨平台语言，其中`C`语言、`JavaScript`等都没有静态成员概念，所在`kotlin`没有静态成员的概念，但可以使用注解`JvmStatic`来模拟。
+
+### 1. 在单例中使用`@JvmStatic`
+
+```kotlin
+object Singleton {
+    @JvmStatic var value: Int = 26
+    @JvmStatic fun plus() {
+        value++
+    }
+}
+
+fun main() {
+    Singleton.plus()
+    println("value${Singleton.value}")
+}
+```
+
+```java
+public static void main(String[] args) {
+    Singleton.plus();
+    System.out.println("value:"+ Singleton.getValue());
+}
+```
+
+**说明：**
+
+1. 如上所示，在`kotlin`中定义单例时为其成员添加了注解`@JvmStatic`。
+2. 在`kotlin`中调用单例成员时没有任何变化
+3. 在`java`中调用单例成员时可省略`INSTANCE`，可直接视同其调用静态成员
+   
+
+上述定义添加注解的单例代码经过反编译后的`class`文件代码如下：
+
+```java
+public final class Singleton {
+   private static int value;
+   @NotNull
+   public static final Singleton INSTANCE;
+
+   public static final int getValue() {
+      return value;
+   }
+
+   public static final void setValue(int var0) {
+      value = var0;
+   }
+
+   @JvmStatic
+   public static final void plus() {
+      int var10000 = value++;
+   }
+
+   private Singleton() {
+   }
+
+   static {
+      Singleton var0 = new Singleton();
+      INSTANCE = var0;
+      value = 26;
+   }
+}
+```
+
+### 2. 在普通类中使用`@JvmStatic`
+
+**注解`JvmStatic`只能使用在单例或普通类的伴生对象里的成员上**
+**伴生对象 *(companion objects)*：** 是一个类的伴生对象，定义一个类时可以同时在类内定义定义一个`object`
+
+```kotlin
+class Foo {
+    companion object {
+        @JvmField var value:String = "Test"
+        @JvmStatic fun y() {
+            println("Test")
+        }
+    }
+}
+
+fun main() {
+    Foo.y()
+    println("value:${Foo.value}")
+}
+```
+
+```java
+public static void main(String[] args) {
+    Foo.y();
+    System.out.println("value:"+ Foo.value);
+}
+```
+
+
+**说明：**
+
+1. 如上所示，在`kotlin`中定义伴生对象时使用`companion object`
+2. 在`kotlin`中调用类的伴生对象中的静态成员时，直接使用类名即可
+3. 在`java`中调用类的伴生对象中的静态成员时，直接使用类名即可
+   
+
+上述定义伴生对象的类代码经过反编译后的`class`文件代码如下：
+
+```java
+public final class Foo {
+   @JvmField
+   @NotNull
+   public static String value = "Test";
+   @NotNull
+   public static final Foo.Companion Companion = new Foo.Companion((DefaultConstructorMarker)null);
+
+   @JvmStatic
+   public static final void y() {
+      Companion.y();
+   }
+
+   public static final class Companion {
+      @JvmStatic
+      public final void y() {
+         String var1 = "Test";
+         boolean var2 = false;
+         System.out.println(var1);
+      }
+
+      private Companion() {
+      }
+
+      // $FF: synthetic method
+      public Companion(DefaultConstructorMarker $constructor_marker) {
+         this();
+      }
+   }
+}
+```
+
+
+## 4. `@JvmField`
+
+**注解`@JvmField`作用：** 不生成`getter/setter`，但不会给所修饰的属性添加静态属性，只是该属性变成`public`
+
+### 1. 在单例中使用`@JvmField`
+
+```kotlin
+object Singleton {
+    @JvmField var value: Int = 26
+    @JvmStatic fun plus() {
+        value++
+    }
+}
+
+fun main() {
+    Singleton.plus()
+    println("value${Singleton.value}")
+}
+```
+
+```java
+//java
+
+public static void main(String[] args) {
+    Singleton.plus();
+    System.out.println("value:"+ Singleton.value);
+}
+```
+
+**说明：**
+
+1. 如上所示,为单例中的属性`value`添加注解`@JvmField`
+2. `kotlin`中调用并没有改变
+3. `java`中调用时直接使用该变量名，它成为了一个全局静态变量
+
+上述定义添加注解的单例代码经过反编译后的`class`文件代码如下：
+
+```java
+public final class Singleton {
+   @JvmField
+   public static int value;
+   @NotNull
+   public static final Singleton INSTANCE;
+
+   @JvmStatic
+   public static final void plus() {
+      int var10000 = value++;
+   }
+
+   private Singleton() {
+   }
+
+   static {
+      Singleton var0 = new Singleton();
+      INSTANCE = var0;
+      value = 26;
+   }
+}
+```
+
+### 2. 在普通类中使用`@JvmField`
+
+```kotlin
+class Foo {
+    @JvmField var x: Int = 22
+}
+
+fun main() {
+    val foo = Foo()
+    println(foo.x)
+}
+```
+
+```java
+public static void main(String[] args) {
+    Foo foo = new Foo();
+    System.out.println(foo.x);
+}
+```
+
+**说明：**
+
+1. 如上所示，在普通类中使用注解`@JvmField`修饰一个属性
+2. 注解`@JvmField`并没有给属性静态属性，所以必须要声明一个对象再调用它
+
+
+上述定义添加注解的普通类经过反编译后的`class`文件代码如下：
+
+```java
+public final class Foo {
+   @JvmField
+   public int x = 22;
+}
+```
+
+## 5. `object`的构造器
+
+`kotlin`中使用`object`定义的单例不能自定义构造器，系统会自动生成一个无参构造器，但是可以自定义若干个`init`块
+
+`kotlin`中单例可以与普通类一样继承或实现其它的类或接口
+
+```kotlin
+object Singleton {
+    @JvmField var value: Int = 26
+    init {
+        value *= 2
+    }
+}
+```
+
+上述代码经过反编译后的`class`文件代码如下：
+
+```java
+public final class Singleton {
+   @JvmField
+   public static int value;
+   @NotNull
+   public static final Singleton INSTANCE;
+
+   private Singleton() {
+   }
+
+   static {
+      Singleton var0 = new Singleton();
+      INSTANCE = var0;
+      value = 26;
+      value *= 2;
+   }
+}
+```
+
+# 七、内部类
+
+## 1. 定义
+
+在`Java`中定义内部类，只需在一个类内再定义一个类，类内的类即为内部类，内部类分为一般内部类、静态内部类。一般内部类持有外部类的引用，所以有可能引起内存泄露，静态内部类没有外部类的引用，所以不能直接调用外部的方法。
+
+```java
+public class Outer {
+    class Inner {
+
+    }
+    static class StaticInner {
+
+    }
+}
+```
+
+在`kotlin`中定义**非静态内部类** 使用关键字`inner`，而不加关键字的类内类是**静态内部类**
+
+```kotlin
+class Outer {
+    inner class Inner
+    class StaticInner
+}
+```
+
+## 2. 实例化
+
+对于内部类的实例化，`java`和`kotlin`操作相同。
+初始化非静态内部类时需要**先构造外部类对象** ，然后再拿对象去初始化内部类
+初始化静态内部类时，只引用了**外部类的类名** ，不需要初始化外部类
+
+
+```kotlin
+//kotlin --非静态内部类
+val inner = Outer().Inner()
+```
+
+```java
+//java --非静态内部类
+Outer.Inner inner = new Outer().new Inner();
+```
+
+```kotlin
+//kotlin --静态内部类
+val staticInner = Outer.StaticInner()
+```
+
+```java
+//java --静态内部类
+Outer.StaticInner inner = new Outer.StaticInner();
+```
+
+## 单例`object`的内部`object`
+
+```kotlin
+object OuterObject {
+    object InnerObject
+}
+```
