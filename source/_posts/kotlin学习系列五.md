@@ -2822,7 +2822,6 @@ sealed class IntList {
 4. 只要有`component()`方法就可以解构,列表定义了几个`component`方法，就可以解构几个元素
 
 
-
 # 十四、参考文章
 
 1. [https://www.runoob.com/w3cnote/java-inner-class-intro.html](https://www.runoob.com/w3cnote/java-inner-class-intro.html)
