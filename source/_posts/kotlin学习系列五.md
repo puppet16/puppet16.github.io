@@ -2717,9 +2717,116 @@ Lee
 
 # 十三、应用 -  递归整型列表
 
+```kotlin
+fun main() {
+    //[0,1,2,3]
+    //实现方式一
+//    val list = IntList.Cons(0, IntList.Cons(1, IntList.Cons(2, IntList.Cons(3, IntList.Nil))))
+    val list = intListOf(0,1,2,3)
+    println(list)
+    println(list.joinToString('-'))
+    println(list.sum())
+
+    val (first, second, third) = list
+    println("$first, $second, $third")
+}
+
+//实现嵌套列表
+fun intListOf(vararg ints: Int): IntList {
+    return when(ints.size) {
+        0 -> IntList.Nil
+        else -> {
+            IntList.Cons(
+                    ints[0],
+                    intListOf(*(ints.slice(1 until ints.size).toIntArray()))
+            )
+        }
+    }
+}
+
+//扩展方法--求和
+fun IntList.sum(): Int {
+    return when (this) {
+        IntList.Nil -> 0
+        is IntList.Cons -> {
+            return head + tail.sum()
+        }
+    }
+}
+
+operator fun IntList.component1(): Int? {
+    return when(this) {
+        IntList.Nil -> null
+        is IntList.Cons -> {
+            head
+        }
+    }
+}
+operator fun IntList.component2(): Int? {
+    return when(this) {
+        IntList.Nil -> null
+        is IntList.Cons -> {
+            tail.component1()
+        }
+    }
+}
+
+operator fun IntList.component3(): Int? {
+    return when(this) {
+        IntList.Nil -> null
+        is IntList.Cons -> {
+            tail.component2()
+        }
+    }
+}
+sealed class IntList {
+    //链的最后一个
+    object  Nil: IntList() {
+        override fun toString(): String {
+            return "Nil"
+        }
+    }
+    data class Cons(val head: Int, val tail:IntList): IntList() {
+        override fun toString(): String {
+            return "$head, $tail"
+        }
+    }
+
+    fun joinToString(sep: Char = ','):String {
+        return when(this) {
+            Nil -> {
+                "Nil"
+            }
+            is Cons -> {
+                "${head}$sep${tail.joinToString(sep)}"
+            }
+        }
+    }
+}
+```
+
+打印结果：
+
+```java
+0, 1, 2, 3, Nil
+0-1-2-3-Nil
+6
+0, 1, 2
+```
+
+**说明：**
+
+1. 在一个数组前加星号，表示将该数组元素变成一个个的参数传递给变长参数 *(vararg)*
+2. 因为密封类的子类有限，所以可以使用`when`语句判断密封类
+3. 密封类中的`joinToString()`方法、它的扩展方法`sum()`和数据类`Cons`的`toString()`方法都使用了递归操作
+4. 只要有`component()`方法就可以解构,列表定义了几个`component`方法，就可以解构几个元素
+
 
 
 # 十三、参考文章
 
 1. [https://www.runoob.com/w3cnote/java-inner-class-intro.html](https://www.runoob.com/w3cnote/java-inner-class-intro.html)
 2. [https://www.kotlincn.net/docs/reference/compiler-plugins.html](https://www.kotlincn.net/docs/reference/compiler-plugins.html)
+3. [https://www.kotlincn.net/docs/reference/compiler-plugins.html](https://www.kotlincn.net/docs/reference/compiler-plugins.html)
+4. [https://www.kotlincn.net/docs/reference/kapt.html](https://www.kotlincn.net/docs/reference/kapt.html)
+  
