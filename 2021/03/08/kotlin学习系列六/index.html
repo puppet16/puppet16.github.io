@@ -1,0 +1,449 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="Ltt"><title>kotlin 学习系列六：泛型 · Puppet</title><meta name="description" content="一、前言
+二、泛型的基本概念
+
+1. 基本声明
+
+1. 函数声明泛型
+2. 类声明泛型
+3. 使用
+4. Nothing
+
+
+
+
+三、泛型约束
+
+1. 添加泛型约束
+2. 添加多个约束
+3. 多个泛型参数
+
+
+四、泛型型变
+
+1. 不变
+2. 协变
+
+1. 实现协变
+2. 协变点
+3. 协变总结
+
+"><meta name="keywords" content="技术博客,Hexo,Android,Linux,HTML,Java"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><script src="/js/jquery.js"></script><meta name="generator" content="Hexo 4.2.0"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/logo@2x.png" style="width:127px;"><h3 title=""><a href="/">Puppet</a></h3><div class="description"><p>心之所愿，无事不成。<br> Nothing is impossible to a willing heart.</p></div></div></div><ul class="social-links"><li><a href="https://github.com/puppet16" target="_blank" rel="noopener"><i class="fa fa-github"></i></a></li><li><a href="mailto:2542469086@qq.com"><i class="fa fa-envelope"></i></a></li><li><a href="http://sighttp.qq.com/authd?IDKEY=" target="_blank" rel="noopener"><i class="fa fa-qq"></i></a></li><li><a href="https://zhihu.com/" target="_blank" rel="noopener"><i class="fa fa-mortar-board"></i></a></li></ul><div class="footer"><div class="p"> <span>© 2020 - 2050 </span><i class="fa fa-star"></i><span> Ltt</span></div><div class="by_farbox"><span>Powered by </span><a href="https://hexo.io/zh-cn/" target="_blank">Hexo </a><span> & </span><a href="https://github.com/mrcore/hexo-theme-Anatole-Core" target="_blank">Anatole-Core.  </a><a href="http://www.beian.miit.gov.cn/" target="_blank">&nbsp;粤ICP备15011643号</a></div></div></div><div class="main"><div class="page-top animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li><li><a href="/tags">标签</a></li><li><a href="/about">关于</a></li><li><a href="/guestbook">留言</a></li></div><div class="information"><div class="back_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div></div></div><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>kotlin 学习系列六：泛型</a></h3></div><div class="post-content"><div class="toc">
+<!-- toc -->
+<ul>
+<li><a href="#yi-qian-yan">一、前言</a></li>
+<li><a href="#er-fan-xing-de-ji-ben-gai-nian">二、泛型的基本概念</a>
+<ul>
+<li><a href="#1-ji-ben-sheng-ming">1. 基本声明</a>
+<ul>
+<li><a href="#1-han-shu-sheng-ming-fan-xing">1. 函数声明泛型</a></li>
+<li><a href="#2-lei-sheng-ming-fan-xing">2. 类声明泛型</a></li>
+<li><a href="#3-shi-yong">3. 使用</a></li>
+<li><a href="#4-nothing">4. Nothing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#san-fan-xing-yue-shu">三、泛型约束</a>
+<ul>
+<li><a href="#1-tian-jia-fan-xing-yue-shu">1. 添加泛型约束</a></li>
+<li><a href="#2-tian-jia-duo-ge-yue-shu">2. 添加多个约束</a></li>
+<li><a href="#3-duo-ge-fan-xing-can-shu">3. 多个泛型参数</a></li>
+</ul>
+</li>
+<li><a href="#si-fan-xing-xing-bian">四、泛型型变</a>
+<ul>
+<li><a href="#1-bu-bian">1. 不变</a></li>
+<li><a href="#2-xie-bian">2. 协变</a>
+<ul>
+<li><a href="#1-shi-xian-xie-bian">1. 实现协变</a></li>
+<li><a href="#2-xie-bian-dian">2. 协变点</a></li>
+<li><a href="#3-xie-bian-zong-jie">3. 协变总结</a></li>
+</ul>
+</li>
+<li><a href="#3-ni-bian">3. 逆变</a>
+<ul>
+<li><a href="#1-shi-xian-ni-bian">1. 实现逆变</a></li>
+<li><a href="#2-ni-bian-dian">2. 逆变点</a></li>
+<li><a href="#3-ni-bian-zong-jie">3. 逆变总结</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#wu-xing-tou-ying">五、 星投影</a>
+<ul>
+<li><a href="#1-ding-yi">1. 定义</a>
+<ul>
+<li><a href="#1-xie-bian-dian-shi-li">1. 协变点示例</a></li>
+<li><a href="#2-ni-bian-dian-shi-li">2. 逆变点示例</a></li>
+</ul>
+</li>
+<li><a href="#2-gua-yong-fan-wei">2. 适用范围</a></li>
+</ul>
+</li>
+<li><a href="#liu-fan-xing-shi-xian-yuan-li-ji-nei-lian-te-hua">六、泛型实现原理及内联特化</a>
+<ul>
+<li><a href="#1-fan-xing-shi-xian-yuan-li">1. 泛型实现原理</a>
+<ul>
+<li><a href="#1-fan-xing-ca-chu">1. 泛型擦除</a></li>
+<li><a href="#2-fan-xing-shi-xian-dui-bi">2. 泛型实现对比</a></li>
+</ul>
+</li>
+<li><a href="#2-nei-lian-te-hua">2. 内联特化</a>
+<ul>
+<li><a href="#1-nei-lian-te-hua-gai-nian">1. 内联特化概念</a></li>
+<li><a href="#2-nei-lian-te-hua-shi-ji-ying-yong">2. 内联特化实际应用</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#qi-ying-yong">七、 应用</a>
+<ul>
+<li><a href="#1-mo-ni-self-type">1. 模拟 <code>Self Type</code></a>
+<ul>
+<li><a href="#1-builder-mo-shi-zhong-de-lei-xing-ji-cheng-wen-ti">1. <code>Builder</code>模式中的类型继承问题</a></li>
+<li><a href="#2-scala-de-self-type">2. <code>Scala</code>的<code>Self Type</code></a></li>
+<li><a href="#3-shi-yong-fan-xing-mo-ni-self-type">3. 使用泛型模拟<code>Self Type</code></a></li>
+</ul>
+</li>
+<li><a href="#2-ji-yu-fan-xing-shi-xian-model-shi-li-de-zhu-ru">2. 基于泛型实现<code>Model</code>实例的注入</a></li>
+</ul>
+</li>
+<li><a href="#ba-can-kao-wen-zhang">八、参考文章</a></li>
+</ul>
+<!-- tocstop -->
+</div>
+<h1><span id="yi-qian-yan">一、前言</span><a href="#yi-qian-yan" class="header-anchor">#</a></h1>
+<ol>
+<li>本文主要讲述<strong>Kotlin 泛型</strong></li>
+<li><strong>Kotlin官网：<a href="https://kotlinlang.org/" target="_blank" rel="noopener">https://kotlinlang.org/</a></strong></li>
+<li><strong>Kotlin中文官网：<a href="https://www.kotlincn.net/" target="_blank" rel="noopener">https://www.kotlincn.net/</a></strong></li>
+<li>Kotlin 学习系列文章：
+<ul>
+<li>
+<a href="/2020/12/07/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%80/" title="kotlin 学习系列一：内置类型">kotlin 学习系列一：内置类型</a>
+</li>
+<li>
+<a href="/2020/12/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%BA%8C/" title="kotlin 学习系列二：类与接口初解">kotlin 学习系列二：类与接口初解</a>
+</li>
+<li>
+<a href="/2021/01/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%89/" title="kotlin 学习系列三：表达式">kotlin 学习系列三：表达式</a>
+</li>
+<li>
+<a href="/2021/01/22/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%9B%9B/" title="kotlin 学习系列四：函数进阶">kotlin 学习系列四：函数进阶</a>
+</li>
+<li>
+<a href="/2021/02/02/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%BA%94/" title="kotlin 学习系列五：类型进阶">kotlin 学习系列五：类型进阶</a>
+</li>
+</ul>
+</li>
+</ol>
+<h1><span id="er-fan-xing-de-ji-ben-gai-nian">二、泛型的基本概念</span><a href="#er-fan-xing-de-ji-ben-gai-nian" class="header-anchor">#</a></h1>
+<ol>
+<li>泛型是一种类型层面的抽象</li>
+<li>泛型通过泛型参数实现构造更加通用的类型的能力</li>
+<li>泛型可以让符合继承关系的类型批量实现某些能力</li>
+</ol>
+<h2><span id="1-ji-ben-sheng-ming">1. 基本声明</span><a href="#1-ji-ben-sheng-ming" class="header-anchor">#</a></h2>
+<p>使用泛型前要先用尖括号声明泛型</p>
+<h3><span id="1-han-shu-sheng-ming-fan-xing">1. 函数声明泛型</span><a href="#1-han-shu-sheng-ming-fan-xing" class="header-anchor">#</a></h3>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">package</span> kotlin.comparisons</span><br><span class="line"></span><br><span class="line"><span class="meta">@SinceKotlin(<span class="meta-string">"1.1"</span>)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">actual</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T : Comparable&lt;T&gt;</span>&gt; <span class="title">maxOf</span><span class="params">(a: <span class="type">T</span>, b: <span class="type">T</span>)</span></span>: T &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">if</span> (a &gt;= b) a <span class="keyword">else</span> b</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>函数声明泛型，泛型的声明要放到函数名之前</li>
+<li>如上代码是比较大小的源码，比较两个泛型对象大小，返回较大的对象</li>
+<li>上述代码声明了一个泛型<code>T</code>该泛型代表的类型要实现<code>Comparable</code>接口，以确保可以比较大小</li>
+</ol>
+<h3><span id="2-lei-sheng-ming-fan-xing">2. 类声明泛型</span><a href="#2-lei-sheng-ming-fan-xing" class="header-anchor">#</a></h3>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">sealed</span> <span class="class"><span class="keyword">class</span> <span class="title">List</span>&lt;<span class="type">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">object</span>  Nil: List&lt;<span class="built_in">Nothing</span>&gt;() &#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">data</span> <span class="class"><span class="keyword">class</span> <span class="title">Cons</span>&lt;<span class="type">E</span>&gt; </span>(<span class="keyword">val</span> head: E, <span class="keyword">val</span> tail:List&lt;E&gt;): List&lt;E&gt;() &#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>在类上声明泛型时，泛型声明位于类名后</li>
+<li><code>Nothing</code>类是所有类型的子类</li>
+<li>数据类<code>Cons</code>的泛型声明，是声明了一个泛型形参，而它实现<code>List</code>类时将这个形参作为一个实参传递给了密封类<code>List</code></li>
+</ol>
+<h3><span id="3-shi-yong">3. 使用</span><a href="#3-shi-yong" class="header-anchor">#</a></h3>
+<p>声明泛型时只是声明了泛型形参，而调用时传递进去一个具体类型的实参</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> max = maxOf(<span class="string">"Hello"</span>, <span class="string">"World"</span>)</span><br><span class="line">println(max)</span><br><span class="line"><span class="comment">//val list = List.Cons&lt;Double&gt;(1.0, List.Nil)</span></span><br></pre></td></tr></table></figure>
+<h3><span id="4-nothing">4. Nothing</span><a href="#4-nothing" class="header-anchor">#</a></h3>
+<p><img src="/2021/03/08/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AD/kotlin_type_construct.png" alt="kotlin类型结构图"></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> kotlin</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Nothing</span> <span class="keyword">private</span> <span class="keyword">constructor</span></span>()</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li><code>Kotlin</code> 里所有东西都有类型，而且有明显的层级关系如上图所示</li>
+<li><code>Kotlin</code>类型层次结构的最底层就是类型 <code>Nothing</code> ，最顶层是类型<code>Any?</code>，即<code>Nothing</code>类是所有类型的子类，<code>Any?</code>类是所有类型的父类</li>
+<li><code>Nothing</code>类型的表达式计算结果是永远不会返回的 <em>（跟<code>Java</code> 中的 <code>void</code> 相同）</em></li>
+<li><code>Nothing</code>的构造方法私有的，所以是没有实例的。可以使用<code>Nothing</code>来表示“一个不存在的值”</li>
+<li><code>Nothing?</code>可以只包含一个值：<code>null</code></li>
+<li><a href="https://www.kancloud.cn/alex_wsc/android_kotlin/1053641" target="_blank" rel="noopener">参考文章1</a>   <a href="https://kotlinlang.org/docs/exceptions.html#java-interoperability" target="_blank" rel="noopener">参考文章2</a> <a href="https://zhuanlan.zhihu.com/p/26890263" target="_blank" rel="noopener">参考文章3</a></li>
+<li><em>图中线条颜色无实际意义，只为了方便查看</em></li>
+</ol>
+<h1><span id="san-fan-xing-yue-shu">三、泛型约束</span><a href="#san-fan-xing-yue-shu" class="header-anchor">#</a></h1>
+<h2><span id="1-tian-jia-fan-xing-yue-shu">1. 添加泛型约束</span><a href="#1-tian-jia-fan-xing-yue-shu" class="header-anchor">#</a></h2>
+<p><strong>在声明泛型时通过继承父类或实现接口的方式为泛型添加约束</strong></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> kotlin.comparisons</span><br><span class="line"></span><br><span class="line"><span class="meta">@SinceKotlin(<span class="meta-string">"1.1"</span>)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">actual</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T : Comparable&lt;T&gt;</span>&gt; <span class="title">maxOf</span><span class="params">(a: <span class="type">T</span>, b: <span class="type">T</span>)</span></span>: T &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">if</span> (a &gt;= b) a <span class="keyword">else</span> b</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//java</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T extends Comparable&lt;T&gt;&gt; <span class="function">T <span class="title">maxOf</span><span class="params">(T a, T b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (a.compareTo(b) &gt; <span class="number">0</span>) <span class="keyword">return</span> a;</span><br><span class="line">    <span class="keyword">return</span> b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>如上代码所示，方法<code>maxOf()</code>比较两个泛型类型的大小，但是泛型必须是能比较大小的类型，即<code>T</code>需要实现接口<code>Comparable</code></li>
+<li><code>Java</code>中也是通过继承父类或实现接口的方式为泛型添加约束</li>
+</ol>
+<h2><span id="2-tian-jia-duo-ge-yue-shu">2. 添加多个约束</span><a href="#2-tian-jia-duo-ge-yue-shu" class="header-anchor">#</a></h2>
+<p>实现目标：比较两个类大小，并调用较大类的<code>invoke()</code>方法</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//kotlin</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="type">&lt;T&gt;</span> <span class="title">callMax</span><span class="params">(a: <span class="type">T</span>, b: <span class="type">T</span>)</span></span> <span class="keyword">where</span> T : Comparable&lt;T&gt;, T : () -&gt; <span class="built_in">Unit</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (a &gt; b) a() <span class="keyword">else</span> b()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>通过<code>where</code>语句为泛型添加多个约束</li>
+<li>如上代码所示，泛型<code>T</code>必须实现接口<code>Comparable</code>能比较大小，而且是一个返回值是<code>Unit</code>的函数支持<code>invoke()</code>方法</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//java</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T extends Comparable&lt;T&gt; &amp; Supplier&lt;R&gt;, R extends Number&gt; <span class="function">R <span class="title">callMax</span><span class="params">(T a, T b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (a.compareTo(b) &gt; <span class="number">0</span>) <span class="keyword">return</span> a.get();</span><br><span class="line">    <span class="keyword">return</span> b.get();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>如上所示，在声明泛型<code>T</code>时为它添加了约束, 它必须是<code>Comparable</code>和<code>Supplier</code>的，并且返回结果必须是数值型的</li>
+</ol>
+<h2><span id="3-duo-ge-fan-xing-can-shu">3. 多个泛型参数</span><a href="#3-duo-ge-fan-xing-can-shu" class="header-anchor">#</a></h2>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="type">&lt;T,R&gt;</span> <span class="title">callMax</span><span class="params">(a:<span class="type">T</span>, b:<span class="type">T</span>)</span></span> <span class="keyword">where</span> T: Comparable&lt;T&gt;, T:()-&gt;R, R: Number &#123;</span><br><span class="line">    <span class="keyword">if</span> (a &gt; b) a() <span class="keyword">else</span> b()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>如上代码所示，声明了两个泛型：<code>T</code>代表要比较的类，<code>R</code>代表比较类的返回值是<code>R</code></li>
+<li>要比较的类型<code>T</code>必须实现接口<code>Comparable</code>，而且是一个返回值是数值类型的<code>R</code>的函数</li>
+</ol>
+<h1><span id="si-fan-xing-xing-bian">四、泛型型变</span><a href="#si-fan-xing-xing-bian" class="header-anchor">#</a></h1>
+<p>泛型实参的继承关系对泛型类型的继承关系的影响</p>
+<p>泛型型变有三类：不变、协变、逆变</p>
+<h2><span id="1-bu-bian">1. 不变</span><a href="#1-bu-bian" class="header-anchor">#</a></h2>
+<p>泛型形参没有继承关系，泛型实参也没有继承关系</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">sealed</span> <span class="class"><span class="keyword">class</span> <span class="title">List</span>&lt;<span class="type">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">object</span> Nil:List&lt;<span class="built_in">Nothing</span>&gt;()</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    <span class="keyword">data</span> <span class="class"><span class="keyword">class</span> <span class="title">Cons</span>&lt;<span class="type">E</span>&gt; </span>(<span class="keyword">val</span> head: E, <span class="keyword">val</span> tail:List&lt;E&gt;): List&lt;E&gt;() &#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> list = List.Cons(<span class="number">1.0</span>, List.Nil)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>声明的泛型<code>T</code>之前 <strong>没有任何修饰词</strong> ，表示泛型型变不变，即泛型没有任何继承关系</li>
+<li><code>List&lt;Nothing&gt;</code>不是<code>List&lt;T&gt;</code>的子类，<code>List.Nil</code>也不是<code>List&lt;T&gt;</code>的子类</li>
+<li><code>List.Nil</code>不能满足<code>List&lt;T&gt;</code>，所以<code>list</code>的赋值语句会报错</li>
+</ol>
+<h2><span id="2-xie-bian">2. 协变</span><a href="#2-xie-bian" class="header-anchor">#</a></h2>
+<h3><span id="1-shi-xian-xie-bian">1. 实现协变</span><a href="#1-shi-xian-xie-bian" class="header-anchor">#</a></h3>
+<p>泛型形参的继承关系与泛型实参的继承关系一致</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">sealed</span> <span class="class"><span class="keyword">class</span> <span class="title">List</span>&lt;<span class="type">out T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">object</span> Nil:List&lt;<span class="built_in">Nothing</span>&gt;()</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    <span class="keyword">data</span> <span class="class"><span class="keyword">class</span> <span class="title">Cons</span>&lt;<span class="type">E</span>&gt; </span>(<span class="keyword">val</span> head: E, <span class="keyword">val</span> tail:List&lt;E&gt;): List&lt;E&gt;() &#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> list = List.Cons(<span class="number">1.0</span>, List.Nil)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>声明泛型<code>T</code>之前添加了 <strong>关键字<code>out</code></strong>，表示泛型形变是协变，即泛型的形参和实参的继承关系一致</li>
+<li>而<code>Noting</code>是任何类型的子类，作为协变类型则<code>List&lt;Nothing&gt;</code>是<code>List&lt;T&gt;</code>的子类，<code>List.Nil</code>也就是<code>List&lt;T&gt;</code>的子类</li>
+<li>如此<code>List.Nil</code>可以满足<code>List&lt;T&gt;</code>，所以<code>list</code>的赋值语句不会报错</li>
+<li>对应<code>Java</code>中的<code>? extend </code>操作</li>
+</ol>
+<h3><span id="2-xie-bian-dian">2. 协变点</span><a href="#2-xie-bian-dian" class="header-anchor">#</a></h3>
+<p><strong>协变点：</strong> 在一个类里的函数的返回值为我们定义的泛型参数，则该函数返回的泛型参数为协变点</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Book</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span>  <span class="title">EduBook</span>:<span class="type">Book</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BookStore</span>&lt;<span class="type">out T: Book</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">getBook</span><span class="params">()</span></span>: T &#123;</span><br><span class="line">        TODO()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> eduBookStore:BookStore&lt;EduBook&gt; = BookStore&lt;EduBook&gt;()</span><br><span class="line">    <span class="keyword">val</span> bookStore: BookStore&lt;Book&gt; = eduBookStore</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> book : Book = bookStore.getBook()</span><br><span class="line">    <span class="keyword">val</span> eduBook: EduBook = eduBookStore.getBook()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>声明了两个类：子类教辅书<code>EduBook</code>，父类书籍<code>Book</code></li>
+<li>声明了书店类<code>BookStore</code>，其接收一个协变的泛型参数<code>T</code>，该参数有一个约束，必须是<code>Book</code>的子类。书店类还有一个方法<code>getBook()</code>，其返回值为<code>T</code>，这个<code>T</code>即为协变点</li>
+<li><code>main()</code>方法中首先创建了一个教辅书店<code>eduBookStore</code>。之后又创建了一个书店<code>bookStore</code>, 并为其赋值前面创建的教辅书店</li>
+<li>根据 <strong>里氏替换原则</strong> <em>(子类永远可以替代父类)</em> 教辅书店是书店的子类，书店是其父类</li>
+</ol>
+<h3><span id="3-xie-bian-zong-jie">3. 协变总结</span><a href="#3-xie-bian-zong-jie" class="header-anchor">#</a></h3>
+<ol>
+<li>子类<code>Derived</code>兼容父类<code>Base</code></li>
+<li>生产者<code>Producer&lt;Derived&gt;</code>兼容<code>Producer&lt;Base&gt;</code></li>
+<li>存在 <strong>协变点</strong> 的类的泛型参数必须声明为 <strong>协变或不变</strong></li>
+<li>当泛型类作为泛型参数类实例的 <strong>生产者</strong> 时用 <strong>协变</strong></li>
+<li>协变就是泛型类型实例的生产者</li>
+</ol>
+<h2><span id="3-ni-bian">3. 逆变</span><a href="#3-ni-bian" class="header-anchor">#</a></h2>
+<h3><span id="1-shi-xian-ni-bian">1. 实现逆变</span><a href="#1-shi-xian-ni-bian" class="header-anchor">#</a></h3>
+<p>泛型形参的继承关系与泛型实参的继承关系相反</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">package</span> kotlin</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Comparable</span>&lt;<span class="type">in T</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">operator</span> <span class="function"><span class="keyword">fun</span> <span class="title">compareTo</span><span class="params">(other: <span class="type">T</span>)</span></span>: <span class="built_in">Int</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>声明泛型<code>T</code>之前添加了 <strong>关键字<code>in</code></strong>，表示泛型形变是逆变，即泛型的形参和实参的继承关系相反</li>
+<li>数值类<code>Number</code>是整型类<code>Int</code>的父类</li>
+<li>能够比较<code>Number</code>的类肯定可以比较<code>Int</code>，反过来，能比较<code>Int</code>的不一定可以比较<code>Number</code></li>
+<li>根据里氏替换原则，数值比较类<code>Comparable&lt;Number&gt;</code>是整型比较类<code>Comparable&lt;Int&gt;</code>的 <strong>子类</strong></li>
+<li>对应<code>Java</code>中的<code>? super</code>操作</li>
+</ol>
+<h3><span id="2-ni-bian-dian">2. 逆变点</span><a href="#2-ni-bian-dian" class="header-anchor">#</a></h3>
+<p><strong>逆变点：</strong> 在一个类里的函数的入参为我们定义的泛型参数，则该函数形参的泛型参数为逆变点</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">open</span> <span class="class"><span class="keyword">class</span> <span class="title">Car</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Audi</span> : <span class="type">Car</span></span>()</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Factory</span>&lt;<span class="type">in T: Car</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">put</span><span class="params">(t: <span class="type">T</span>)</span></span> &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> factory:Factory&lt;Car&gt; = Factory&lt;Car&gt;()</span><br><span class="line">    <span class="keyword">val</span> audiFactory:Factory&lt;Audi&gt; = factory</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> car = Car()</span><br><span class="line">    <span class="keyword">val</span> audi = Audi()</span><br><span class="line"></span><br><span class="line">    factory.put(car)</span><br><span class="line">    factory.put(audi)</span><br><span class="line"></span><br><span class="line"><span class="comment">//    audiFactory.put(car)//报错</span></span><br><span class="line">    audiFactory.put(audi)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>声明了两个类：父类汽车类<code>Car</code>，子类奥迪类<code>Audi</code></li>
+<li>声明了汽车工厂类<code>Factory</code>，其接收一个逆变的泛型参数<code>T</code>，该参数有一个约束，必须是<code>Car</code>的子类。汽车工厂类还有一个方法<code>put()</code>，其入参为<code>T</code>，这个<code>T</code>即为逆变点</li>
+<li><code>main()</code>方法中首先创建了一个汽车工厂<code>factory</code>。之后又创建了一个奥迪汽车工厂<code>audiFactory</code>, 并为其赋值前面创建的汽车工厂</li>
+<li>根据 <strong>里氏替换原则</strong> <em>(子类永远可以替代父类)</em> 汽车工厂是奥迪汽车工厂的子类，奥迪汽车工厂是其父类</li>
+<li>汽车工厂可以放所有的汽车，奥迪汽车工厂只能放奥迪汽车</li>
+</ol>
+<h3><span id="3-ni-bian-zong-jie">3. 逆变总结</span><a href="#3-ni-bian-zong-jie" class="header-anchor">#</a></h3>
+<ol>
+<li>子类<code>Derived</code>兼容父类<code>Base</code></li>
+<li>消费者<code>Consumer&lt;Derived&gt;</code>兼容<code>Consumer&lt;Base&gt;</code></li>
+<li>存在 <strong>逆变点</strong> 的类的泛型参数必须声明为 <strong>逆变或不变</strong></li>
+<li>当泛型类作为泛型参数类实例的 <strong>消费者</strong> 时用 <strong>逆变</strong></li>
+<li>消费者就是逆变的场景</li>
+</ol>
+<h1><span id="wu-xing-tou-ying">五、 星投影</span><a href="#wu-xing-tou-ying" class="header-anchor">#</a></h1>
+<h2><span id="1-ding-yi">1. 定义</span><a href="#1-ding-yi" class="header-anchor">#</a></h2>
+<p>有些时候可以使用星号替代泛型参数</p>
+<ol>
+<li>星号可以在变量类型声明的位置</li>
+<li><code>*</code>可用以描述一个未知的类型</li>
+<li><code>*</code>所替换的类型在：
+<ul>
+<li>协变点返回泛型参数上限类型</li>
+<li>逆变点接收泛型参数下限类型</li>
+</ul>
+</li>
+</ol>
+<h3><span id="1-xie-bian-dian-shi-li">1. 协变点示例</span><a href="#1-xie-bian-dian-shi-li" class="header-anchor">#</a></h3>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> queryMap: QueryMap&lt;*, *&gt; = QueryMap&lt;String, <span class="built_in">Int</span>&gt;()</span><br><span class="line">    queryMap.getKey()</span><br><span class="line">    queryMap.getValue()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">QueryMap</span>&lt;<span class="type">out K: CharSequence, out V : Any</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">getKey</span><span class="params">()</span></span>: K = TODO()</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">getValue</span><span class="params">()</span></span>: V = TODO()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>声明了一个类<code>QueryMap</code>，接收两个泛型：协变泛型<code>K</code>，约束上界为<code>CharSequence</code>; 协变泛型<code>V</code>, 约束上界为<code>Any</code></li>
+<li>声明变量<code>queryMap</code>时类型为<code>QueeryMap</code>，但是传入的两个泛型为星号。</li>
+<li>变量<code>queryMap</code>的<code>getKey()</code>方法返回值的类型就是泛型<code>K</code>的上界，即<code>CharSequence</code></li>
+<li>变量<code>queryMap</code>的<code>getValue()</code>方法返回值的类型就是泛型<code>V</code>的上界，即<code>Any</code></li>
+</ol>
+<h3><span id="2-ni-bian-dian-shi-li">2. 逆变点示例</span><a href="#2-ni-bian-dian-shi-li" class="header-anchor">#</a></h3>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> f: Function&lt;*,*&gt; = Function&lt;Number, Any&gt;()</span><br><span class="line">    f.invoke()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Function</span>&lt;<span class="type">in P1, in P2</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">invoke</span><span class="params">(p1: <span class="type">P1</span>, p2: <span class="type">P2</span>)</span></span> = <span class="built_in">Unit</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>声明了一个类<code>Function</code>，接收两个泛型：逆变泛型<code>P1</code>、逆变泛型<code>P2</code></li>
+<li>声明变量<code>f</code>时类型为<code>Function</code>，但是传入的两个泛型为星号</li>
+<li>调用变量<code>f</code>的<code>invoke()</code>方法，时传入的两个参数的类型取泛型的下限</li>
+<li>定义泛型时没办法添加下限约束，所以是<code>Nothing</code></li>
+<li>因为<code>Nothing</code>没有实例，所以变量<code>f</code>的<code>invoke()</code>方法无法调用</li>
+</ol>
+<h2><span id="2-gua-yong-fan-wei">2. 适用范围</span><a href="#2-gua-yong-fan-wei" class="header-anchor">#</a></h2>
+<p><strong><code>*</code>不能直接或间接应用在属性或函数上，即不能将<code>*</code>作为一个类型传递给泛型</strong></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">QueryMap&lt;Sting,*&gt;()</span><br><span class="line">maxOf&lt;*&gt;(<span class="number">1</span>,<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>如上两种<code>*</code>的使用方式都是 <strong>不正确的</strong>，不能将<code>*</code>作为一个类型传递给泛型</li>
+<li>第一条语句将<code>*</code>间接作用到属性上</li>
+<li>第二条语句将<code>*</code>直接作用到函数上</li>
+</ol>
+<p><strong><code>*</code>适用于作为类型描述的场景</strong></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> queryMap:QueryMap&lt;*, *&gt;</span><br><span class="line"><span class="keyword">if</span>(f <span class="keyword">is</span> Function&lt;*, *&gt;)&#123;&#125;</span><br><span class="line">HashMap&lt;String, List&lt;*&gt;&gt;()</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>类型实例化时或真正使用时可以使用<code>*</code></li>
+<li>第一条语句：定义一个<code>queryMap</code>变量时，该变量类型是<code>QueryMap</code>类，<code>QueryMap</code>类传入的两个泛型使用<code>*</code> 描述，之后会根据<code>QueryMap</code>类里定义泛型时是协变还是逆变，来取上限还是下限</li>
+<li>第二条语句：使用操作符<code>is</code>来判断变量是什么类型时，<code>is</code>后的类型可以使用<code>*</code>，因其也是类型描述</li>
+<li>第三条语句：是一个<code>HashMap</code>的类型构造，本来是不允许使用<code>*</code>，但是<code>HashMap</code>有两个泛型参数<code>K</code>、<code>V</code>, 这两个泛型参数传的都是具体的类型：<code>K</code>对应<code>String</code>,<code>V</code>对应<code>List&lt;*&gt;</code>，其中<code>List</code>可以传递一个泛型参数，这个泛型参数可以使用<code>*</code>。因为<code>List&lt;*&gt;</code>在这个位置作为参数实际上是一个描述。<br>
+<strong>总结：直接的类型构造是不能用<code>*</code>，但参数里还有泛型，则该参数里的泛型可以使用<code>*</code></strong></li>
+</ol>
+<h1><span id="liu-fan-xing-shi-xian-yuan-li-ji-nei-lian-te-hua">六、泛型实现原理及内联特化</span><a href="#liu-fan-xing-shi-xian-yuan-li-ji-nei-lian-te-hua" class="header-anchor">#</a></h1>
+<h2><span id="1-fan-xing-shi-xian-yuan-li">1. 泛型实现原理</span><a href="#1-fan-xing-shi-xian-yuan-li" class="header-anchor">#</a></h2>
+<h3><span id="1-fan-xing-ca-chu">1. 泛型擦除</span><a href="#1-fan-xing-ca-chu" class="header-anchor">#</a></h3>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="type">&lt;T : Comparable&lt;T&gt;</span>&gt; <span class="title">maxOf</span><span class="params">(a: <span class="type">T</span>, b: <span class="type">T</span>)</span></span>: T &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">if</span> (a &gt; b) a <span class="keyword">else</span> b</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编译后代码：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> static <span class="keyword">final</span> Comparable maxOf(<span class="meta">@NotNull</span> Comparable a, <span class="meta">@NotNull</span> Comparable b) &#123;</span><br><span class="line">    <span class="keyword">return</span> a.compareTo(b) &gt; <span class="number">0</span> ? a : b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>如下代码所示，写了一个函数<code>maxOf()</code>比较两个约束为<code>Comparable</code>的泛型形参的大小</li>
+<li>编译后泛型<code>T</code>直接取的它的上限<code>Comparable</code>，此为<strong>类型擦除</strong></li>
+</ol>
+<h3><span id="2-fan-xing-shi-xian-dui-bi">2. 泛型实现对比</span><a href="#2-fan-xing-shi-xian-dui-bi" class="header-anchor">#</a></h3>
+<ul>
+<li><strong>伪泛型：</strong> 编译时擦除类型，运行时无实际类型生成。如<code>Java</code>、<code>Kotlin</code></li>
+<li><strong>真泛型：</strong> 编译时生成真实类型，运行时也存在该类。如<code>C#</code>、<code>C++</code></li>
+</ul>
+<p><img src="/2021/03/08/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AD/kotlin_genericity_comparison.png" alt="泛型实现对比图"></p>
+<p><strong>说明：</strong></p>
+<ol>
+<li>在<code>C#</code>语言中，基本类型可以直接作为泛型参数，而在<code>Java</code>中不可以，只能使用基本类型的装箱类型</li>
+<li><code>IR</code> 是<code>intermediate representation</code><em>（中间表示)</em> 的缩写</li>
+<li><code>Java</code>字节码中会将泛型类型擦除<code>List&lt;String&gt;</code> 、<code>List&lt;Double&gt;</code>只会有一个<code>List</code>。而在<code>C#.Net</code>的字节码中会真正生成<code>List&lt;string</code>、<code>List&lt;double&gt;</code>两个类</li>
+<li>运行时，<code>Java</code>中内存也只会加载一个<code>List</code>，而在<code>C#</code>中内存会加载两个</li>
+<li>类型擦除会使内存占用减少，但是类型问题在运行时处理进行类型强转，增加了开销</li>
+</ol>
+<p><strong>泛型类型无法当做真实类型</strong></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span><span class="type">&lt;T&gt;</span> <span class="title">genericMethod</span><span class="params">(t: <span class="type">T</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> t = T()<span class="comment">//报错</span></span><br><span class="line">    <span class="keyword">val</span> ts = Array&lt;T&gt;(<span class="number">3</span>)&#123;TODO()&#125;<span class="comment">//报错</span></span><br><span class="line">    <span class="keyword">val</span> jclass = T::<span class="class"><span class="keyword">class</span>.<span class="title">java</span>//报错</span></span><br><span class="line">    <span class="keyword">val</span> list = ArrayList&lt;T&gt;()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>定义一个函数<code>genericMethod()</code>，传入一个泛型参数</li>
+<li>第一行代码会 <strong>报错：</strong> 因为无法确定泛型<code>T</code>是否有一个默认无参构造器</li>
+<li>第二行代码会 <strong>报错：</strong> <code>Array</code>虽然写成了泛型的形式，但并不是泛型，编译后也不会将泛型擦除，因为它有固定的类型<code>Unit</code>，所以泛型<code>T</code>无法作为数组的元素类型</li>
+<li>第三行代码 <strong>报错：</strong> 因为泛型无法作为一个真正在类型，编译时会将泛型擦除，所以无法获取泛型<code>T</code>的<code>class</code>文件</li>
+<li>第四行代码 <strong>正确：</strong> 因为<code>ArrayList</code>中的泛型会在编译时被擦除，所以传啥都可以</li>
+<li>而在<code>C#</code>中，以上语句都是正确的</li>
+</ol>
+<h2><span id="2-nei-lian-te-hua">2. 内联特化</span><a href="#2-nei-lian-te-hua" class="header-anchor">#</a></h2>
+<h3><span id="1-nei-lian-te-hua-gai-nian">1. 内联特化概念</span><a href="#1-nei-lian-te-hua-gai-nian" class="header-anchor">#</a></h3>
+<p><code>Kotlin</code>独有，<code>Java</code>没有。<br>
+如果一个函数是内联函数，则会将内联函数内容替换到调用内联函数的位置，一旦替换过去，则内联函数的泛型也就能确定类型</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">inline fun&lt;reified T&gt; genericMethod(t: T) &#123;</span><br><span class="line">    val t &#x3D; T()&#x2F;&#x2F;报错</span><br><span class="line">    val ts &#x3D; Array&lt;T&gt;(3)&#123;TODO()&#125;</span><br><span class="line">    val jclass &#x3D; T::class.java</span><br><span class="line">    val list &#x3D; ArrayList&lt;T&gt;()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fun main() &#123;</span><br><span class="line">    genericMethod(&quot;str&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>如上代码，声明了一个内联函数<code>genericMethod()</code>。且该函数接收的泛型<code>T</code>前加 <strong>关键字<code>reified</code>修饰</strong>，表示该泛型可被具体化 <em>(reified)</em></li>
+<li>因内联类具体化的特性，调用<code>genericMethod()</code>时会将该函数体放到调用位置，此时该函数的泛型<code>T</code>也能确定类型，即<code>T</code>此时特化成一个具体类型。</li>
+<li>调用<code>genericMethod()</code>时, 传入一个<code>String</code>，则内联函数的泛型<code>T</code>特化为了<code>String</code>类型</li>
+<li>第一条语句错误：虽然<code>T</code>特化为了<code>String</code>类型，但还是无法确定该类型是否有一个默认无参构造器。<em>但是<code>C#</code>可以添加构造器的约束</em></li>
+<li>第二条语句正确：因<code>T</code>特化为了<code>String</code>类型，所以是创建了一个<code>String</code>类型的数组</li>
+<li>第三条语句正确：因<code>T</code>特化为了<code>String</code>类型，所以获取了<code>String</code>类型的<code>class</code>类</li>
+</ol>
+<h3><span id="2-nei-lian-te-hua-shi-ji-ying-yong">2. 内联特化实际应用</span><a href="#2-nei-lian-te-hua-shi-ji-ying-yong" class="header-anchor">#</a></h3>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.google.gson;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> &lt;T&gt; T fromJson(String json, Class&lt;T&gt; classOfT)&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>如上所示代码为<code>Gson</code>框架中的一个反序列化的一个方法</li>
+<li><code>fromJson()</code>方法接收一个泛型<code>T</code>参数，并返回一个该类型的结果，同时还接收了该泛型<code>T</code>类型的<code>class</code></li>
+<li>反序列化操作步骤：构造对象 --&gt; 填充数据 --&gt; 返回对象</li>
+<li>而构造对象一般通过反射构造，这就必须知道该对象的<code>class</code></li>
+</ol>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> gson = Gson()</span><br><span class="line">    <span class="keyword">val</span> garen : Person = gson.fromJson(<span class="string">"""&#123;"name":"盖伦", "age":20&#125;"""</span>)</span><br><span class="line">    <span class="keyword">val</span> ashe = gson.fromJson&lt;Person&gt;(<span class="string">"""&#123;"name":"艾希", "age":18&#125;"""</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">data</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span></span>(<span class="keyword">val</span> name:String, <span class="keyword">val</span> age:<span class="built_in">Int</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;<span class="keyword">reified</span> T&gt;</span> Gson.<span class="title">fromJson</span><span class="params">(json:<span class="type">String</span>)</span></span>: T = fromJson(json, T::<span class="class"><span class="keyword">class</span>.<span class="title">java</span>)</span></span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>如上代码所示，创建一个<code>Gson</code>类的扩展函数，该函数为内联函数，且只需要传入一个反序列化的字符串，不需要返回值类型的<code>class</code></li>
+<li>该函数直接内联到调用处，所以泛型<code>T</code>也就特化为一个具体的类型，也就可以获取该泛型的<code>class</code></li>
+<li><code>main()</code>函数中声明了变量<code>garen</code>及其类型为<code>Person</code>，并调用扩展的内联函数<code>fromJson()</code>为其赋值，虽然没有为<code>fromJson()</code>中传入泛型的具体类型，但通过 <strong>类型推导</strong>的形式，将泛型参数的类型推导出来，进而将泛型<code>T</code>特化</li>
+<li><code>main()</code>函数中声明了变量<code>ashe</code>，并调用扩展的内联函数<code>fromJson()</code>为其赋值，为<code>fromJson()</code>中传入泛型的具体类型<code>Person</code>，直接将泛型<code>T</code>特化</li>
+</ol>
+<h1><span id="qi-ying-yong">七、 应用</span><a href="#qi-ying-yong" class="header-anchor">#</a></h1>
+<h2><span id="1-mo-ni-self-type">1. 模拟 <code>Self Type</code></span><a href="#1-mo-ni-self-type" class="header-anchor">#</a></h2>
+<h3><span id="1-builder-mo-shi-zhong-de-lei-xing-ji-cheng-wen-ti">1. <code>Builder</code>模式中的类型继承问题</span><a href="#1-builder-mo-shi-zhong-de-lei-xing-ji-cheng-wen-ti" class="header-anchor">#</a></h3>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typealias</span> OnConfirm = () -&gt; <span class="built_in">Unit</span></span><br><span class="line"><span class="keyword">typealias</span> OnCancel = () -&gt; <span class="built_in">Unit</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">val</span> EmptyFunction = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">open</span> <span class="class"><span class="keyword">class</span> <span class="title">Dialog</span></span>(<span class="keyword">val</span> title: String, <span class="keyword">val</span> content: String)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ConfirmDialog</span></span>(title: String, content: String,</span><br><span class="line">                    <span class="keyword">val</span> onConfirm: OnConfirm,</span><br><span class="line">                    <span class="keyword">val</span> onCancel: OnCancel) : Dialog(title, content)</span><br><span class="line"></span><br><span class="line"><span class="keyword">open</span> <span class="class"><span class="keyword">class</span> <span class="title">DialogBuilder</span> </span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">var</span> title = <span class="string">""</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">var</span> content = <span class="string">""</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">title</span><span class="params">(title: <span class="type">String</span>)</span></span>: DialogBuilder &#123;</span><br><span class="line">        <span class="keyword">this</span>.title = title</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">content</span><span class="params">(content: <span class="type">String</span>)</span></span>: DialogBuilder &#123;</span><br><span class="line">        <span class="keyword">this</span>.content = content</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">open</span> <span class="function"><span class="keyword">fun</span> <span class="title">build</span><span class="params">()</span></span> = Dialog(<span class="keyword">this</span>.title, <span class="keyword">this</span>.content)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ConfirmDialogBuilder</span> : <span class="type">DialogBuilder</span></span>() &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">var</span> onConfirm: OnConfirm = EmptyFunction</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">var</span> onCancel: OnCancel = EmptyFunction</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">onConfirm</span><span class="params">(onConfirm: <span class="type">OnConfirm</span>)</span></span>: ConfirmDialogBuilder &#123;</span><br><span class="line">        <span class="keyword">this</span>.onConfirm = onConfirm</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">onCancel</span><span class="params">(onCancel: <span class="type">OnCancel</span>)</span></span>: ConfirmDialogBuilder &#123;</span><br><span class="line">        <span class="keyword">this</span>.onCancel = onCancel</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">build</span><span class="params">()</span></span> = ConfirmDialog(title, content, onConfirm, onCancel)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> confirmDialog = ConfirmDialogBuilder()</span><br><span class="line">            .title(<span class="string">"提交弹窗"</span>)</span><br><span class="line">            .onCancel &#123; <span class="comment">//这行开始报错</span></span><br><span class="line">                println(<span class="string">"点击取消"</span>)</span><br><span class="line">            &#125;</span><br><span class="line">            .content(<span class="string">"确定提交吗？"</span>)</span><br><span class="line">            .onConfirm &#123;</span><br><span class="line">                println(<span class="string">"点击确定"</span>)</span><br><span class="line">            &#125;</span><br><span class="line">            .build()</span><br><span class="line">    </span><br><span class="line">    confirmDialog.onConfirm()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>声明了一个弹窗基类<code>Dialog</code>，该类提供了标题<code>title</code>和内容<code>content</code>两个属性</li>
+<li>声明了一个继承弹窗基类的子类提交弹窗类<code>ConfirmDialog</code>，该类除了基类的两个属性外又添加了两个属性：确定点击事件<code>onConfirm()</code>、取消点击事件<code>onCancel</code></li>
+<li>声明了一个<code>Builder</code>模式的基类<code>DialogBuilder</code>，用以构造<code>Dialog</code>，基类中的方法返回基类类型</li>
+<li>声明了一个继承基类<code>DialogBuilder</code>的子类<code>ConfirmDialogBuilder</code>，用以构造<code>ConfirmDialog</code></li>
+<li><strong>问题：</strong> 子类 <code>Builder</code> 中的函数返回的类型是基类 <code>Builder</code> 的类型，所以使用子类<code>Builder</code>创建出来的子类对象<code>ConfirmDialog</code>无法使用其独有的函数，即在<code>main()</code>方法中在<code>onCancel</code>处的代码会错：<code>Unresolved reference: onCancel</code></li>
+</ol>
+<h3><span id="2-scala-de-self-type">2. <code>Scala</code>的<code>Self Type</code></span><a href="#2-scala-de-self-type" class="header-anchor">#</a></h3>
+<p><code>Scala</code>语言的<code>Self Type</code>可以解决<code>Builder</code>类继承后类型错误问题</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">type</span> <span class="title">OnConfirm</span> </span>= () =&gt; <span class="type">Unit</span></span><br><span class="line">    <span class="class"><span class="keyword">type</span> <span class="title">OnCancel</span> </span>= () =&gt; <span class="type">Unit</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">val</span> <span class="type">EmptyFunction</span> = () =&gt; &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Dialog</span>(<span class="params">val title: <span class="type">String</span>, val content: <span class="type">String</span></span>)</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class">    <span class="title">class</span> <span class="title">ConfirmDialog</span>(<span class="params"></span></span></span><br><span class="line"><span class="class"><span class="params">                        title: <span class="type">String</span>,</span></span></span><br><span class="line"><span class="class"><span class="params">                        content: <span class="type">String</span>,</span></span></span><br><span class="line"><span class="class"><span class="params">                        val onConfirm: <span class="type">OnConfirm</span>,</span></span></span><br><span class="line"><span class="class"><span class="params">                        val onCancel: <span class="type">OnCancel</span></span></span></span><br><span class="line"><span class="class"><span class="params">                    </span>) <span class="keyword">extends</span> <span class="title">Dialog</span>(<span class="params">title, content</span>)</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class">    <span class="title">class</span> <span class="title">DialogBuilder</span> </span>&#123;</span><br><span class="line">        self =&gt;</span><br><span class="line">        <span class="keyword">protected</span> <span class="keyword">var</span> title: <span class="type">String</span> = <span class="string">""</span></span><br><span class="line">        <span class="keyword">protected</span> <span class="keyword">var</span> content: <span class="type">String</span> = <span class="string">""</span></span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">title</span></span>(title: <span class="type">String</span>): self<span class="class">.<span class="keyword">type</span> </span>= &#123;</span><br><span class="line">            <span class="keyword">this</span>.title = title</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">this</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">content</span></span>(content: <span class="type">String</span>): self<span class="class">.<span class="keyword">type</span> </span>= &#123;</span><br><span class="line">            <span class="keyword">this</span>.content = content</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">this</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">build</span></span>() = <span class="keyword">new</span> <span class="type">Dialog</span>(<span class="keyword">this</span>.title, <span class="keyword">this</span>.content)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">ConfirmDialogBuilder</span> <span class="keyword">extends</span> <span class="title">DialogBuilder</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">var</span> onConfirm: <span class="type">OnConfirm</span> = <span class="type">EmptyFunction</span></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">var</span> onCancel: <span class="type">OnCancel</span> = <span class="type">EmptyFunction</span></span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">onConfirm</span></span>(onConfirm: =&gt; <span class="type">Unit</span>): <span class="type">ConfirmDialogBuilder</span> = &#123;</span><br><span class="line">            <span class="keyword">this</span>.onConfirm = () =&gt; &#123;</span><br><span class="line">                onConfirm</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">this</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">onCancel</span></span>(onCancel: =&gt; <span class="type">Unit</span>): <span class="type">ConfirmDialogBuilder</span> = &#123;</span><br><span class="line">            <span class="keyword">this</span>.onCancel = () =&gt; &#123;</span><br><span class="line">                onCancel</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">this</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">build</span></span>() = <span class="keyword">new</span> <span class="type">ConfirmDialog</span>(title, content, onConfirm, onCancel)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">        <span class="keyword">new</span> <span class="type">ConfirmDialogBuilder</span>()</span><br><span class="line">            .title(<span class="string">"Hello"</span>)</span><br><span class="line">            .onCancel &#123;</span><br><span class="line">                println(<span class="string">"onCancel"</span>)</span><br><span class="line">            &#125;</span><br><span class="line">            .content(<span class="string">"World"</span>)</span><br><span class="line">            .onConfirm &#123;</span><br><span class="line">                println(<span class="string">"onConfirm"</span>)</span><br><span class="line">            &#125;</span><br><span class="line">            .build()</span><br><span class="line">            .onConfirm()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>如上为<code>Scala</code>语言代码，其中<code>def</code>相当于<code>kotlin</code>的<code>fun</code>，该函数返回类型为 <code>self.type</code>。其中 <code>self</code>在类后添加了声明，表示该类在使用过程中真实的类型，如果是子类的话，就是子类类型。</li>
+<li>在<code>Kotlin</code>中可以使用泛型来实现<code>Self Type</code></li>
+</ol>
+<h3><span id="3-shi-yong-fan-xing-mo-ni-self-type">3. 使用泛型模拟<code>Self Type</code></span><a href="#3-shi-yong-fan-xing-mo-ni-self-type" class="header-anchor">#</a></h3>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typealias</span> OnConfirm = () -&gt; <span class="built_in">Unit</span></span><br><span class="line"><span class="keyword">typealias</span> OnCancel = () -&gt; <span class="built_in">Unit</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">val</span> EmptyFunction = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">open</span> <span class="class"><span class="keyword">class</span> <span class="title">Dialog</span></span>(<span class="keyword">val</span> title: String, <span class="keyword">val</span> content: String)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ConfirmDialog</span></span>(title: String, content: String,</span><br><span class="line">                    <span class="keyword">val</span> onConfirm: OnConfirm,</span><br><span class="line">                    <span class="keyword">val</span> onCancel: OnCancel) : Dialog(title, content)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">SelfType</span>&lt;<span class="type">Self</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">val</span> self: Self</span><br><span class="line">        <span class="keyword">get</span>() = <span class="keyword">this</span> <span class="keyword">as</span> Self</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">open</span> <span class="class"><span class="keyword">class</span> <span class="title">DialogBuilder</span>&lt;<span class="type">Self : DialogBuilder&lt;Self</span>&gt;&gt; : <span class="type">SelfType</span>&lt;<span class="type">Self</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">var</span> title = <span class="string">""</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">var</span> content = <span class="string">""</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">title</span><span class="params">(title: <span class="type">String</span>)</span></span>: Self &#123;</span><br><span class="line">        <span class="keyword">this</span>.title = title</span><br><span class="line">        <span class="keyword">return</span> self</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">content</span><span class="params">(content: <span class="type">String</span>)</span></span>: Self &#123;</span><br><span class="line">        <span class="keyword">this</span>.content = content</span><br><span class="line">        <span class="keyword">return</span> self</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">open</span> <span class="function"><span class="keyword">fun</span> <span class="title">build</span><span class="params">()</span></span> = Dialog(<span class="keyword">this</span>.title, <span class="keyword">this</span>.content)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ConfirmDialogBuilder</span> : <span class="type">DialogBuilder</span>&lt;<span class="type">ConfirmDialogBuilder</span>&gt;</span>() &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">var</span> onConfirm: OnConfirm = EmptyFunction</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">var</span> onCancel: OnCancel = EmptyFunction</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">onConfirm</span><span class="params">(onConfirm: <span class="type">OnConfirm</span>)</span></span>: ConfirmDialogBuilder &#123;</span><br><span class="line">        <span class="keyword">this</span>.onConfirm = onConfirm</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">onCancel</span><span class="params">(onCancel: <span class="type">OnCancel</span>)</span></span>: ConfirmDialogBuilder &#123;</span><br><span class="line">        <span class="keyword">this</span>.onCancel = onCancel</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">build</span><span class="params">()</span></span> = ConfirmDialog(title, content, onConfirm, onCancel)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> confirmDialog = ConfirmDialogBuilder()</span><br><span class="line">            .title(<span class="string">"提交弹窗"</span>)</span><br><span class="line">            .onCancel &#123;</span><br><span class="line">                println(<span class="string">"点击取消"</span>)</span><br><span class="line">            &#125;</span><br><span class="line">            .content(<span class="string">"确定提交吗？"</span>)</span><br><span class="line">            .onConfirm &#123;</span><br><span class="line">                println(<span class="string">"点击确定"</span>)</span><br><span class="line">            &#125;</span><br><span class="line">            .build()</span><br><span class="line"></span><br><span class="line">    confirmDialog.onConfirm()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>打印结果：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">点击确定</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>定义了一个接口<code>SelfType</code>，接收一个泛型<code>Self</code>，该接口内定义了一个成员<code>self</code>，类型就是传入的泛型类型，设置该成员的<code>getter</code>方法中将该成员强转为<code>Self</code></li>
+<li>基类<code>DialogBuilder</code>实现接口<code>SelfType</code>，接口传入的泛型在声明时添加了约束：该泛型上界为<code>DialogBuilder</code>类，该类中的函数返回类型改为泛型<code>Self</code></li>
+<li>子类<code>ConfirmDialogBuilder</code>，继承基类<code>DialogBuilder</code>时传入的泛型实参使用子类<code>ConfirmDialogBuilder</code>，如此使用子类<code>ConfirmDialogBuilder</code>中函数返回的就是<code>ConfirmDialogBuilder</code>，则子类创建出来的子类<code>ConfirmDialog</code> 就可以使用子类<code>ConfirmDialog</code>独有的函数</li>
+</ol>
+<h2><span id="2-ji-yu-fan-xing-shi-xian-model-shi-li-de-zhu-ru">2. 基于泛型实现<code>Model</code>实例的注入</span><a href="#2-ji-yu-fan-xing-shi-xian-model-shi-li-de-zhu-ru" class="header-anchor">#</a></h2>
+<h1><span id="ba-can-kao-wen-zhang">八、参考文章</span><a href="#ba-can-kao-wen-zhang" class="header-anchor">#</a></h1>
+<ol>
+<li><a href="https://zhuanlan.zhihu.com/p/26890263" target="_blank" rel="noopener">Kotlin 中的 Nothing 和 Unit</a></li>
+<li><a href="https://www.jianshu.com/p/0c2948f7e656" target="_blank" rel="noopener">Java和Kotlin中泛型的协变、逆变和不变</a></li>
+<li><a href="https://www.kotlincn.net/docs/reference/generics.html" target="_blank" rel="noopener">https://www.kotlincn.net/docs/reference/generics.html</a></li>
+</ol>
+</div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2021-03-08</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Kotlin/" title="Kotlin">Kotlin </a><a class="tag" href="/tags/泛型/" title="泛型">泛型 </a><span class="leancloud_visitors"></span></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="" onclick="javascript:join_favorite()" ref="sidebar"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" href="http://twitter.com/home?status=,http://puppet16.github.io/2021/03/08/kotlin学习系列六/,Puppet,kotlin 学习系列六：泛型,;" target="_blank" rel="noopener"></a></div></div><div class="pagination"><ul class="clearfix"><li class="next pagbuttons"><a class="btn" role="navigation" href="/2021/02/02/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%BA%94/" title="Kotlin 学习系列五：类型进阶">下一篇</a></li></ul></div><script src="/js/visitors.js"></script><a id="comments"></a><div id="vcomments" style="margin:0 30px;"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//cdn.jsdelivr.net/gh/xcss/valine@latest/dist/Valine.min.js"></script><script>var valine = new Valine({
+  el:'#vcomments',
+  notify:false || false, 
+  verify:false|| false, 
+  app_id:'xpSQCFiXzEQnCBUKrP6EHIUF-gzGzoHsz',
+  app_key:'Ev5N03MrqLzS683mu92hf4RO',
+  placeholder:'行至水穷处，坐看云起时...',
+  path: window.location.pathname,
+  serverURLs: '',
+  visitor:true,
+  recordIP:true,
+  avatar:''
+})</script></div></div></div></div><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/add-bookmark.js"></script><script src="/js/baidu-tongji.js"></script><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1,"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"left","hOffset":0,"vOffset":20},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"dialog":{"enable":false,"hitokoto":true},"log":false});</script></body></html>
