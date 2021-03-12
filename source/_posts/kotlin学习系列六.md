@@ -795,3 +795,4 @@ fun main() {
 1. [Kotlin 中的 Nothing 和 Unit](https://zhuanlan.zhihu.com/p/26890263)
 2. [Java和Kotlin中泛型的协变、逆变和不变](https://www.jianshu.com/p/0c2948f7e656)
 3. [https://www.kotlincn.net/docs/reference/generics.html](https://www.kotlincn.net/docs/reference/generics.html)
+4. [Scala之自身类型(Self Type)](https://blog.csdn.net/bluishglc/article/details/60739183)
