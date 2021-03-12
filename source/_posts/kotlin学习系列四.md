@@ -17,6 +17,7 @@ summary: Kotlin 函数进阶
     * {% post_link kotlin学习系列二 kotlin学习系列二：类与接口初解 %}
     * {% post_link kotlin学习系列三 kotlin学习系列三：表达式 %}
     * {% post_link kotlin学习系列五 kotlin学习系列五：类型进阶 %}
+    * {% post_link kotlin学习系列六 kotlin学习系列六：泛型 %}
 
 # 二、高阶函数
 

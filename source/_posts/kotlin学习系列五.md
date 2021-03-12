@@ -17,6 +17,7 @@ summary: Kotlin 类型进阶
     * {% post_link kotlin学习系列二 kotlin学习系列二：类与接口初解 %}
     * {% post_link kotlin学习系列三 kotlin学习系列三：表达式 %}
     * {% post_link kotlin学习系列四 kotlin学习系列四：函数进阶 %}
+    * {% post_link kotlin学习系列六 kotlin学习系列六：泛型 %}
 
 # 二、 类的构造器
 
@@ -166,7 +167,7 @@ Person person = new Person("lee");
 
 如上，若`kotlin`中主构造器前不加`@JvmOverloads`注解，则`java`中的调用语句会报错。
 
-## 3. 构造同名的工厂函数
+## 4. 构造同名的工厂函数
 
 在`Kotlin`中，定义了一个类情况下，还可以定义同名的函数，该同名函数一般用于构建同名类对象
 
@@ -783,7 +784,7 @@ fun main() {
 
 # 六、 单例 `object`
 
-## 1. 定义
+## 1. 单例定义
 
 `Kotlin`中使用关键字`object`来定义**饿汉式单例**
 
@@ -1122,7 +1123,7 @@ public final class Singleton {
 
 # 七、内部类`inner class`
 
-## 1. 定义
+## 1. 内部类定义
 
 在`Java`中定义内部类，只需在一个类内再定义一个类，类内的类即为内部类，内部类分为一般内部类、静态内部类。一般内部类持有外部类的引用，所以有可能引起内存泄露，静态内部类没有外部类的引用，所以不能直接调用外部的方法。
 
@@ -1146,7 +1147,7 @@ class Outer {
 }
 ```
 
-## 2. 实例化
+## 2. 内部类实例化
 
 对于内部类的实例化，`java`和`kotlin`操作相同。
 初始化非静态内部类时需要**先构造外部类对象** ，然后再拿对象去初始化内部类
@@ -1253,7 +1254,7 @@ public static void main(String[] args) {
 
 # 八、数据类`data class`
 
-## 1. 定义
+## 1. 数据类定义
 
 只需要在普通类前面加关键字`data`即为数据类。
 数据类对标`java`中的`bean`类，但两者并不相等
@@ -1642,7 +1643,7 @@ public class Computer {
 
 # 九、枚举类`enum class`
 
-## 1. 定义
+## 1. 枚举类定义
 
 使用关键字 **`enum`**
 
@@ -1658,7 +1659,7 @@ enum class State {
 }
 ```
 
-## 2. 属性
+## 2. 枚举类属性
 
 **Java:**
 
@@ -1681,7 +1682,7 @@ println(State.START.name)
 println(State.START.ordinal)
 ```
 
-## 3. 构造器
+## 3. 枚举类构造器
 
 **Java:**
 
@@ -1709,7 +1710,7 @@ enum class State(val id: Int) {
 1. 声明构造器后，每个枚举项都要调用构造器。只有通过这种方式来创建有构造器的枚举项。
 
 
-## 4. 实现接口
+## 4. 枚举类实现接口
 
 ### 1. 统一实现
 
@@ -1801,7 +1802,7 @@ fun State.next(): State {
 1. 枚举也是一个类，可以为其定义扩展方法
 2. 如上代码为枚举类`State`定义了一个扩展方法`next()`，该方法可以获取某个枚举项的下一个枚举，且是循环的
 
-## 6. 条件分支
+## 6. 枚举类条件分支
 
 
 ```kotlin
@@ -1816,7 +1817,7 @@ val value = when(state) {
 
 1. 枚举是有限个数的，所以可以将其作为条件分支
 
-## 7. 比较大小
+## 7. 枚举类比较大小
 
 ```kotlin
 val state = State.START
@@ -1830,7 +1831,7 @@ if (state <= State.FINISHED) {
 1. 同一个枚举类下的枚举项之间可以比较大小
 2. 枚举项之间比较的是`ordinal`
 
-## 8. 区间
+## 8. 枚举类区间
 
 枚举是有顺序的，可以创建枚举区间
 
@@ -1853,13 +1854,13 @@ fun main() {
 
 # 十、密封类`sealed class`
 
-## 1. 概念
+## 1. 密封类概念
 
 1. 密封类是一种特殊的抽象类，它首先是一个抽象类，其次才是密封类，即密封类可以被继承
 2. 密封类的子类定义只能在与自身相同的文件中，即其子类只在一个有限范围内
 3. 密封类的子类的个数是有限的
 
-## 2. 定义
+## 2. 密封类定义
 
 使用关键字`sealed`来定义密封类
 
@@ -1921,7 +1922,7 @@ class Error(val errorInfo: String):PlayerState()
 4. 但是`Idle`、`Playing`、 `Error`的类型是一样的
 5. 继承密封类的时候要调用父类的构造器
    
-## 4. 子类分支
+## 4. 密封类子类分支
 
 密封类的子类是可数的，分支就可完备，就可以使用`when`分支语句
 
@@ -2005,14 +2006,14 @@ class Player {
 
 # 十一、内联类`inline class`
 
-## 1. 概念
+## 1. 内联类概念
 
 1. 内联类是对某一个类型的包装
 2. 内联类是类似于`java`装箱类型 *(Float, Double等)* 的一种类型
 3. 编译器会尽可能使用被包装的类型进行优化
 4. 内联类在`Kotlin 1.3`版本中处于公测阶段，谨慎使用
 
-## 2. 定义
+## 2. 内联类定义
 
 使用关键字`inline`来定义内联类
 
@@ -2028,7 +2029,7 @@ inline class BoxInt(val value:Int)
 4. 主构造器只能有一个参数即被包装的类型，
 5. 主构造器里的参数只能用`val`修饰
 
-## 3. 方法
+## 3. 内联类方法
 
 ```kotlin
 inline class BoxInt(val value:Int) {
@@ -2043,7 +2044,7 @@ inline class BoxInt(val value:Int) {
 1. 内联类可以定义方法，如上代码所示，定义了一个重载运算符的函数`inc()`,如此可以执行运行符`++`
 
 
-## 4. 属性
+## 4. 内联类属性
 
 ```kotlin
 inline class BoxInt(val value: Int) {
@@ -2058,7 +2059,7 @@ inline class BoxInt(val value: Int) {
 1. *Inline class cannot have properties with backing fields*
 2. 内联类可以定义只有`getter`的属性，即内联类只能定义方法
 
-## 5. 继承关系
+## 5. 内联类继承关系
 
 ```kotlin
 inline class BoxInt(val value: Int) : Comparable<Int> {
@@ -2078,7 +2079,7 @@ fun main() {
 2. 内联类可以实现接口
 3. 内联类不能继承父类，也不能被继承
 
-## 6. 编译优化
+## 6. 内联类编译优化
 
 ```kotlin
 fun main() {
@@ -2195,7 +2196,7 @@ public static final void main() {
 
 ## 7. 内联类使用场景
 
-### 1. 官方例子
+### 1. 内联类官方例子
 
 ```kotlin
 public inline class UInt @PublishedApi internal constructor(@PublishedApi internal val data: Int) : Comparable<UInt> {
