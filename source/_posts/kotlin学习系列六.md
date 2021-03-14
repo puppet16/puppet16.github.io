@@ -166,7 +166,12 @@ fun <T,R> callMax(a:T, b:T) where T: Comparable<T>, T:()->R, R: Number {
 
 # 四、泛型型变
 
- 泛型实参的继承关系对泛型类型的继承关系的影响
+> 任何时候期望A类型的值时，可以使用B类型的值,则B就是A的 **子类型**
+> 超类型是子类型的反义词。如果B是A的子类型，那么反过来A就是B的 **超类型**
+
+当你期望`List<Object>`时，允许赋值一个`List<String>`过来，也就意味着其他的类型 *(如 `List<Int>`等)* 也能赋值进来。这就造成了类型不一致的可能性，无法确保类型安全，违背了泛型引入的初衷 —— **确保类型安全。**
+`Java`提供了 **有限制的通配符** 来确保类型安全，允许泛型类构建相应的子类型化关系，提高代码的通用性(灵活性)。与之对应的，便是`Kotlin`的型变。`Kotlin`中存在协变和逆变两种概念，统称为 **声明处型变**
+
 
  泛型型变有三类：不变、协变、逆变
 
@@ -331,9 +336,60 @@ fun main() {
 4. 当泛型类作为泛型参数类实例的 **消费者** 时用 **逆变**
 5. 消费者就是逆变的场景
 
+## 4. `UnsafeVariance`注解
+
+* 型变点与泛型参数定义不一致时可以使用注解`UnsafeVariance`来使编译器停止警告。
+
+* 即：只要函数内部能保证不会对泛型参数存在写操作的行为，可以使用`UnSafeVariance`注解使编译器停止警告，就可以将其放在`in`位置。`out`关键字修饰的泛型参数也是同理。
+
+* 示例：
+  
+    ```kotlin
+    package kotlin.collections
+
+    expect class ArrayList<E> : MutableList<E>, RandomAccess {
+        override val size: Int
+        override fun isEmpty(): Boolean
+        override fun contains(element: @UnsafeVariance E): Boolean
+        override fun containsAll(elements: Collection<@UnsafeVariance E>): Boolean
+        override operator fun get(index: Int): E
+        override fun indexOf(element: @UnsafeVariance E): Int
+        override fun lastIndexOf(element: @UnsafeVariance E): Int
+        ...
+    }
+    ```
+    如上所示`Kotlin`的`ArrayList`中`contains`等函数，就是应用`UnSafeVariance`注解使泛型参数存在于`in`位置，其内部没有写操作。
+
+
+## 5. 型变总结
+
+|协变|逆变|不变|
+|--|--|--|
+|结构|Producer<out T>|Consumer<in T>|MutableList<T>|
+|Java实现|Producer<? extends T>|Consumer<? super T>|MutableList<T>|
+|子类型化关系|保留子类型化关系|逆转子类型化关系|无子类型化关系|
+|位置|out位置|in位置|in位置和out位置|
+|角色|生产者|消费者|生产者和消费者|
+|表现|只读|只写，读取受限|即可读也可写|
+
+**使用泛型时，选择型变类型：**
+
+* 首先需要考虑泛型形参的位置：只读操作(协变或不变)、只写读操作(逆变或不变)、又读又写操作（不变）。
+    例如：`Array`中存在又读又写的操作，如果为其指定协变或逆变，都会造成类型不安全：
+
+    ```kotlin
+    class Array<T>(val size: Int) {
+        fun get(index: Int): T { …… }
+        fun set(index: Int, value: T) { …… }
+    }
+    ```
+
+* 最后判断是否需要子类型化关系，子类型化关系主要用于提高`API`的灵活度。
+    如果需要子类型化关系，则只读操作(协变或不变)选择协变，否则不变;只写读操作(逆变或不变),选择逆变，否则不变。
+
 # 五、 星投影
 
-## 1. 定义
+## 1. 星投影定义
 
 有些时候可以使用星号替代泛型参数
 
@@ -786,6 +842,177 @@ fun main() {
 
 ## 2. 基于泛型实现`Model`实例的注入
 
+### 1. 使用注入的地方
+
+1. `ViewModel`在`MVVM`中持有`View`中的数据结构，同时要跟`Model`进行通信，所以`ViewModel`持有`Model`。
+2. 但是当有多个`Model`时，最好通过一个三方的类去管理`Model`实例，并转发给`ViewModel`。
+3. 其`Model`的获取通常使用注入方法来实现。
+4. 注入方法有：
+   * 添加注解。注解处理器在编译时将`Model`注入；
+   * 反射。通过读取注解在运行时实现注入；
+   * 代理。通过代理类实现`Model`注入；
+
+### 2. 通过代理方式实现注入
+
+#### 1. 实现方式一
+
+```kotlin
+abstract class AbsModel {
+    init {
+        Models.run { register() }
+    }
+}
+
+class DatabaseModel: AbsModel() {
+    fun query(sql: String): Int = 0
+}
+
+class NetworkModel: AbsModel() {
+    fun get(url:String) = """{"code":0}"""
+}
+
+object Models {
+    private val modelMap = ConcurrentHashMap<Class<out AbsModel>, AbsModel>()
+
+    fun <T: AbsModel> KClass<T>.get(): T {
+        return modelMap[this.java] as T
+    }
+
+    fun AbsModel.register() {
+        modelMap[this.javaClass] = this
+    }
+}
+
+inline fun <reified T: AbsModel> modelOf(): ModelDelegate<T> {
+    return ModelDelegate(T::class)
+}
+
+class ModelDelegate<T: AbsModel>(val kClass:KClass<T>): ReadOnlyProperty<Any, T> {
+    override fun getValue(thisRef: Any, property: KProperty<*>): T {
+        return Models.run { kClass.get() }
+    }
+}
+
+class MainViewModel{
+    val databaseModel by modelOf<DatabaseModel>()
+    val networkModel by modelOf<NetworkModel>()
+}
+
+fun initModels() {
+    DatabaseModel()
+    NetworkModel()
+}
+
+fun main() {
+    initModels()
+    val mainViewModel = MainViewModel()
+    mainViewModel.databaseModel.query("select * from usertable").let(::println)
+    mainViewModel.networkModel.get("https://puppet16.github.io/").let(::println)
+}
+```
+
+**说明：**
+
+1. 定义了抽象类`AbsModel`,其为所有`Model`的父类，子类创建时一定会调用父类的构造器，所以父类的`init`块一定会执行，`init`块中调用了单例`Modules`的`register()`方法
+2. 定义了单例`Models`类：
+   * 该类中定义了一个抽象类`AbsModel`的扩展方法`register()`，该方法是将`AbsModel`的子类实例放到`modeMap`中，`Key`是子类的`javaClass`即`java`中的`class`类。如此只要是继承了`AbsModel`的子类都会将实例存入`modeMap`中；
+   * 该类中还定义了一个`Kotlin`的`class`的扩展方法`get()`，该方法是获取子类的实例，返回值一定是继承`AbsModel`的子类
+   * 注意：定义的以上两扩展方法作用域只是在单例`Models`中
+3. 定义了基于抽象类`AbsModel`的子类`DatabaseModel`、`NetworkModel`
+4. 定义了代理类`ModelDelegate`，主构造器中定义一个属性`kClass`，类型为`KClass<T>`，其中泛型`T`添加了约束上界为`AbsModel`。实现接口`ReadOnlyProperty`的方法`getValue()`，通过`kClass`的`get()`方法取得子类实例
+5. 定义了非必须的函数`modelOf()`，该方法接收一个泛型`T`，添加了约束上界为`AbsModel`，返回结果是一个`ModelDelegate`类的实例
+6. 定义类`MainViewModel`，该类中有两个属性：`databaseModel`、`networkModel`，这两个属性通过代理的方式赋值
+7. 定义类`initModels`，该类初始化了子类`DatabaseModel`、`NetworkModel`
+8. 最后在`main()`方法中先初始化两个`AbsModel`子类，再创建属性`mainViewModel`,之后通过属性`mainViewModel`获取不同的`AbsModel`子类实例，调用实例的方法
+
+#### 实现方式二
+
+```kotlin
+
+abstract class AbsModel {
+    init {
+        Models.run { register() }
+    }
+}
+
+class DatabaseModel: AbsModel() {
+    fun query(sql: String): Int = 0
+}
+
+class NetworkModel: AbsModel() {
+    fun get(url:String) = """{"code":0}"""
+}
+
+class PageModel: AbsModel() {
+    init {
+        Models.run { register("PageModel2") }
+    }
+
+    fun enter() {
+        println("enter Next Page")
+    }
+}
+
+object Models {
+    private val modelMap = ConcurrentHashMap<String, AbsModel>()
+
+    fun <T: AbsModel> String.get(): T {
+        return modelMap[this] as T
+    }
+
+    fun AbsModel.register(name: String = this.javaClass.simpleName) {
+        modelMap[name] = this
+
+        println(modelMap.values.joinToString())
+    }
+}
+
+object ModelDelegate{
+    operator fun <T: AbsModel> getValue(thisRef: Any, property: KProperty<*>): T {
+        return Models.run { property.name.capitalize().get() }
+    }
+}
+
+
+class MainViewModel{
+    val databaseModel: DatabaseModel by ModelDelegate
+    val networkModel: NetworkModel by ModelDelegate
+    val pageModel: PageModel by ModelDelegate
+    val pageModel2: PageModel by ModelDelegate
+}
+
+fun initModels() {
+    DatabaseModel()
+    NetworkModel()
+    PageModel()
+}
+
+fun main() {
+    initModels()
+    val mainViewModel = MainViewModel()
+    mainViewModel.databaseModel.query("select * from mysql.user").let(::println)
+    mainViewModel.networkModel.get("https://www.imooc.com").let(::println)
+    mainViewModel.pageModel.enter()
+    mainViewModel.pageModel2.enter()
+}
+```
+
+**说明：**
+
+1. 方式二是方式一的优化，即将泛型参数省略。
+2. 单例`Models`的`register()`方法有一个`String`类型的入参，默认值为子类的简单类名，该入参作为`modelMap`的`Key`值。子类`DatabaseModel`的简单类名为`DatabaseModel`。单例`Models`的`get()`方法就成为了`String`的扩展方法
+3. 类`ModelDelegate`也不需要泛型区别`Model`，对于不同属性没有了区别，所以定义为了单例。其中获取子类实例的方法`getValue()`中使用了被代理的属性的名字获取子类实例，所以 **定义的属性名字要与子类名字相同。**
+4. `capitalize()`方法是返回一个字符串，该字符串首字母大写。所以获取属性名字后再使用该函数才可保证与子类名字相同。
+5. 在类`MainViewModel`中声明属性时，直接使用`ModelDelegate`代理属性赋值会报错：无法确定`ModelDelegate`类中`getValue()`方法中的泛型`T`。要解决这个问题只需要在定义属性时添加上`AbsModel`的子类型即可推导出泛型`T`类型。
+6. 因为`Models`的`register()`方法可以传入`String`类型的入参，则子类可以自己定义在`modelMap`中的`Key`值。
+7. 子类`PageModel`虽然在父类构造器中以`PageModel`为`Key`值添加进了一次`modelMap`中，但在自己的构造器中又以`PageModel2`为`Key`值再一次的添加入`modelMap`中。即在`modelMap`中`Key`值为`PageModel`和`PageModel2`对应的`Value`值都是同一个`PageModel`子类实例
+8. 如此可以定义属性`pageModel`和`pageModel2`通过代理获取同一个`PageModel`子类实例
+
+
+
+
+
+
 
 
 
@@ -794,5 +1021,6 @@ fun main() {
 
 1. [Kotlin 中的 Nothing 和 Unit](https://zhuanlan.zhihu.com/p/26890263)
 2. [Java和Kotlin中泛型的协变、逆变和不变](https://www.jianshu.com/p/0c2948f7e656)
-3. [https://www.kotlincn.net/docs/reference/generics.html](https://www.kotlincn.net/docs/reference/generics.html)
-4. [Scala之自身类型(Self Type)](https://blog.csdn.net/bluishglc/article/details/60739183)
+3. [Kotlin知识归纳（十二） —— 泛型](https://www.jianshu.com/p/1715f0483768)
+4. [https://www.kotlincn.net/docs/reference/generics.html](https://www.kotlincn.net/docs/reference/generics.html)
+5. [Scala之自身类型(Self Type)](https://blog.csdn.net/bluishglc/article/details/60739183)
