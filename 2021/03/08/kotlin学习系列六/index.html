@@ -67,11 +67,13 @@
 <li><a href="#3-ni-bian-zong-jie">3. 逆变总结</a></li>
 </ul>
 </li>
+<li><a href="#4-unsafevariance-zhu-jie">4. <code>UnsafeVariance</code>注解</a></li>
+<li><a href="#5-xing-bian-zong-jie">5. 型变总结</a></li>
 </ul>
 </li>
 <li><a href="#wu-xing-tou-ying">五、 星投影</a>
 <ul>
-<li><a href="#1-ding-yi">1. 定义</a>
+<li><a href="#1-xing-tou-ying-ding-yi">1. 星投影定义</a>
 <ul>
 <li><a href="#1-xie-bian-dian-shi-li">1. 协变点示例</a></li>
 <li><a href="#2-ni-bian-dian-shi-li">2. 逆变点示例</a></li>
@@ -105,7 +107,12 @@
 <li><a href="#3-shi-yong-fan-xing-mo-ni-self-type">3. 使用泛型模拟<code>Self Type</code></a></li>
 </ul>
 </li>
-<li><a href="#2-ji-yu-fan-xing-shi-xian-model-shi-li-de-zhu-ru">2. 基于泛型实现<code>Model</code>实例的注入</a></li>
+<li><a href="#2-ji-yu-fan-xing-shi-xian-model-shi-li-de-zhu-ru">2. 基于泛型实现<code>Model</code>实例的注入</a>
+<ul>
+<li><a href="#1-shi-yong-zhu-ru-de-di-fang">1. 使用注入的地方</a></li>
+<li><a href="#2-tong-guo-dai-li-fang-shi-shi-xian-zhu-ru">2. 通过代理方式实现注入</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#ba-can-kao-wen-zhang">八、参考文章</a></li>
@@ -208,7 +215,12 @@
 <li>要比较的类型<code>T</code>必须实现接口<code>Comparable</code>，而且是一个返回值是数值类型的<code>R</code>的函数</li>
 </ol>
 <h1><span id="si-fan-xing-xing-bian">四、泛型型变</span><a href="#si-fan-xing-xing-bian" class="header-anchor">#</a></h1>
-<p>泛型实参的继承关系对泛型类型的继承关系的影响</p>
+<blockquote>
+<p>任何时候期望A类型的值时，可以使用B类型的值,则B就是A的 <strong>子类型</strong><br>
+超类型是子类型的反义词。如果B是A的子类型，那么反过来A就是B的 <strong>超类型</strong></p>
+</blockquote>
+<p>当你期望<code>List&lt;Object&gt;</code>时，允许赋值一个<code>List&lt;String&gt;</code>过来，也就意味着其他的类型 <em>(如 <code>List&lt;Int&gt;</code>等)</em> 也能赋值进来。这就造成了类型不一致的可能性，无法确保类型安全，违背了泛型引入的初衷 —— <strong>确保类型安全。</strong><br>
+<code>Java</code>提供了 <strong>有限制的通配符</strong> 来确保类型安全，允许泛型类构建相应的子类型化关系，提高代码的通用性(灵活性)。与之对应的，便是<code>Kotlin</code>的型变。<code>Kotlin</code>中存在协变和逆变两种概念，统称为 <strong>声明处型变</strong></p>
 <p>泛型型变有三类：不变、协变、逆变</p>
 <h2><span id="1-bu-bian">1. 不变</span><a href="#1-bu-bian" class="header-anchor">#</a></h2>
 <p>泛型形参没有继承关系，泛型实参也没有继承关系</p>
@@ -279,8 +291,76 @@
 <li>当泛型类作为泛型参数类实例的 <strong>消费者</strong> 时用 <strong>逆变</strong></li>
 <li>消费者就是逆变的场景</li>
 </ol>
+<h2><span id="4-unsafevariance-zhu-jie">4. <code>UnsafeVariance</code>注解</span><a href="#4-unsafevariance-zhu-jie" class="header-anchor">#</a></h2>
+<ul>
+<li>
+<p>型变点与泛型参数定义不一致时可以使用注解<code>UnsafeVariance</code>来使编译器停止警告。</p>
+</li>
+<li>
+<p>即：只要函数内部能保证不会对泛型参数存在写操作的行为，可以使用<code>UnSafeVariance</code>注解使编译器停止警告，就可以将其放在<code>in</code>位置。<code>out</code>关键字修饰的泛型参数也是同理。</p>
+</li>
+<li>
+<p>示例：</p>
+  <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> kotlin.collections</span><br><span class="line"></span><br><span class="line"><span class="keyword">expect</span> <span class="class"><span class="keyword">class</span> <span class="title">ArrayList</span>&lt;<span class="type">E</span>&gt; : <span class="type">MutableList</span>&lt;<span class="type">E</span>&gt;, <span class="type">RandomAccess &#123;</span></span></span><br><span class="line">    <span class="keyword">override</span> <span class="keyword">val</span> size: <span class="built_in">Int</span></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">isEmpty</span><span class="params">()</span></span>: <span class="built_in">Boolean</span></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">contains</span><span class="params">(element: @<span class="type">UnsafeVariance</span> <span class="type">E</span>)</span></span>: <span class="built_in">Boolean</span></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">containsAll</span><span class="params">(elements: <span class="type">Collection</span>&lt;@<span class="type">UnsafeVariance</span> <span class="type">E</span>&gt;)</span></span>: <span class="built_in">Boolean</span></span><br><span class="line">    <span class="keyword">override</span> <span class="keyword">operator</span> <span class="function"><span class="keyword">fun</span> <span class="title">get</span><span class="params">(index: <span class="type">Int</span>)</span></span>: E</span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">indexOf</span><span class="params">(element: @<span class="type">UnsafeVariance</span> <span class="type">E</span>)</span></span>: <span class="built_in">Int</span></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">lastIndexOf</span><span class="params">(element: @<span class="type">UnsafeVariance</span> <span class="type">E</span>)</span></span>: <span class="built_in">Int</span></span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如上所示<code>Kotlin</code>的<code>ArrayList</code>中<code>contains</code>等函数，就是应用<code>UnSafeVariance</code>注解使泛型参数存在于<code>in</code>位置，其内部没有写操作。</p>
+</li>
+</ul>
+<h2><span id="5-xing-bian-zong-jie">5. 型变总结</span><a href="#5-xing-bian-zong-jie" class="header-anchor">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>协变</th>
+<th>逆变</th>
+<th>不变</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>结构</td>
+<td>Producer<out t></out></td>
+<td>Consumer<in t></in></td>
+</tr>
+<tr>
+<td>Java实现</td>
+<td>Producer&lt;? extends T&gt;</td>
+<td>Consumer&lt;? super T&gt;</td>
+</tr>
+<tr>
+<td>子类型化关系</td>
+<td>保留子类型化关系</td>
+<td>逆转子类型化关系</td>
+</tr>
+<tr>
+<td>位置</td>
+<td>out位置</td>
+<td>in位置</td>
+</tr>
+<tr>
+<td>角色</td>
+<td>生产者</td>
+<td>消费者</td>
+</tr>
+<tr>
+<td>表现</td>
+<td>只读</td>
+<td>只写，读取受限</td>
+</tr>
+</tbody>
+</table>
+<p><strong>使用泛型时，选择型变类型：</strong></p>
+<ul>
+<li>
+<p>首先需要考虑泛型形参的位置：只读操作(协变或不变)、只写读操作(逆变或不变)、又读又写操作（不变）。<br>
+例如：<code>Array</code>中存在又读又写的操作，如果为其指定协变或逆变，都会造成类型不安全：</p>
+  <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Array</span>&lt;<span class="type">T</span>&gt;</span>(<span class="keyword">val</span> size: <span class="built_in">Int</span>) &#123;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">get</span><span class="params">(index: <span class="type">Int</span>)</span></span>: T &#123; …… &#125;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">set</span><span class="params">(index: <span class="type">Int</span>, value: <span class="type">T</span>)</span></span> &#123; …… &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>最后判断是否需要子类型化关系，子类型化关系主要用于提高<code>API</code>的灵活度。<br>
+如果需要子类型化关系，则只读操作(协变或不变)选择协变，否则不变;只写读操作(逆变或不变),选择逆变，否则不变。</p>
+</li>
+</ul>
 <h1><span id="wu-xing-tou-ying">五、 星投影</span><a href="#wu-xing-tou-ying" class="header-anchor">#</a></h1>
-<h2><span id="1-ding-yi">1. 定义</span><a href="#1-ding-yi" class="header-anchor">#</a></h2>
+<h2><span id="1-xing-tou-ying-ding-yi">1. 星投影定义</span><a href="#1-xing-tou-ying-ding-yi" class="header-anchor">#</a></h2>
 <p>有些时候可以使用星号替代泛型参数</p>
 <ol>
 <li>星号可以在变量类型声明的位置</li>
@@ -428,11 +508,59 @@
 <li>子类<code>ConfirmDialogBuilder</code>，继承基类<code>DialogBuilder</code>时传入的泛型实参使用子类<code>ConfirmDialogBuilder</code>，如此使用子类<code>ConfirmDialogBuilder</code>中函数返回的就是<code>ConfirmDialogBuilder</code>，则子类创建出来的子类<code>ConfirmDialog</code> 就可以使用子类<code>ConfirmDialog</code>独有的函数</li>
 </ol>
 <h2><span id="2-ji-yu-fan-xing-shi-xian-model-shi-li-de-zhu-ru">2. 基于泛型实现<code>Model</code>实例的注入</span><a href="#2-ji-yu-fan-xing-shi-xian-model-shi-li-de-zhu-ru" class="header-anchor">#</a></h2>
+<h3><span id="1-shi-yong-zhu-ru-de-di-fang">1. 使用注入的地方</span><a href="#1-shi-yong-zhu-ru-de-di-fang" class="header-anchor">#</a></h3>
+<ol>
+<li><code>ViewModel</code>在<code>MVVM</code>中持有<code>View</code>中的数据结构，同时要跟<code>Model</code>进行通信，所以<code>ViewModel</code>持有<code>Model</code>。</li>
+<li>但是当有多个<code>Model</code>时，最好通过一个三方的类去管理<code>Model</code>实例，并转发给<code>ViewModel</code>。</li>
+<li>其<code>Model</code>的获取通常使用注入方法来实现。</li>
+<li>注入方法有：
+<ul>
+<li>添加注解。注解处理器在编译时将<code>Model</code>注入；</li>
+<li>反射。通过读取注解在运行时实现注入；</li>
+<li>代理。通过代理类实现<code>Model</code>注入；</li>
+</ul>
+</li>
+</ol>
+<h3><span id="2-tong-guo-dai-li-fang-shi-shi-xian-zhu-ru">2. 通过代理方式实现注入</span><a href="#2-tong-guo-dai-li-fang-shi-shi-xian-zhu-ru" class="header-anchor">#</a></h3>
+<h4><span id="1-shi-xian-fang-shi-yi">1. 实现方式一</span><a href="#1-shi-xian-fang-shi-yi" class="header-anchor">#</a></h4>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbsModel</span> </span>&#123;</span><br><span class="line">    <span class="keyword">init</span> &#123;</span><br><span class="line">        Models.run &#123; register() &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DatabaseModel</span>: <span class="type">AbsModel</span></span>() &#123;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">query</span><span class="params">(sql: <span class="type">String</span>)</span></span>: <span class="built_in">Int</span> = <span class="number">0</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">NetworkModel</span>: <span class="type">AbsModel</span></span>() &#123;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">get</span><span class="params">(url:<span class="type">String</span>)</span></span> = <span class="string">"""&#123;"code":0&#125;"""</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">object Models &#123;</span></span><br><span class="line"><span class="string">    private val modelMap = ConcurrentHashMap&lt;Class&lt;out AbsModel&gt;, AbsModel&gt;()</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    fun &lt;T: AbsModel&gt; KClass&lt;T&gt;.get(): T &#123;</span></span><br><span class="line"><span class="string">        return modelMap[this.java] as T</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    fun AbsModel.register() &#123;</span></span><br><span class="line"><span class="string">        modelMap[this.javaClass] = this</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">inline fun &lt;reified T: AbsModel&gt; modelOf(): ModelDelegate&lt;T&gt; &#123;</span></span><br><span class="line"><span class="string">    return ModelDelegate(T::class)</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">class ModelDelegate&lt;T: AbsModel&gt;(val kClass:KClass&lt;T&gt;): ReadOnlyProperty&lt;Any, T&gt; &#123;</span></span><br><span class="line"><span class="string">    override fun getValue(thisRef: Any, property: KProperty&lt;*&gt;): T &#123;</span></span><br><span class="line"><span class="string">        return Models.run &#123; kClass.get() &#125;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">class MainViewModel&#123;</span></span><br><span class="line"><span class="string">    val databaseModel by modelOf&lt;DatabaseModel&gt;()</span></span><br><span class="line"><span class="string">    val networkModel by modelOf&lt;NetworkModel&gt;()</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">fun initModels() &#123;</span></span><br><span class="line"><span class="string">    DatabaseModel()</span></span><br><span class="line"><span class="string">    NetworkModel()</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">fun main() &#123;</span></span><br><span class="line"><span class="string">    initModels()</span></span><br><span class="line"><span class="string">    val mainViewModel = MainViewModel()</span></span><br><span class="line"><span class="string">    mainViewModel.databaseModel.query("select * from usertable").let(::println)</span></span><br><span class="line"><span class="string">    mainViewModel.networkModel.get("https://puppet16.github.io/").let(::println)</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>定义了抽象类<code>AbsModel</code>,其为所有<code>Model</code>的父类，子类创建时一定会调用父类的构造器，所以父类的<code>init</code>块一定会执行，<code>init</code>块中调用了单例<code>Modules</code>的<code>register()</code>方法</li>
+<li>定义了单例<code>Models</code>类：
+<ul>
+<li>该类中定义了一个抽象类<code>AbsModel</code>的扩展方法<code>register()</code>，该方法是将<code>AbsModel</code>的子类实例放到<code>modeMap</code>中，<code>Key</code>是子类的<code>javaClass</code>即<code>java</code>中的<code>class</code>类。如此只要是继承了<code>AbsModel</code>的子类都会将实例存入<code>modeMap</code>中；</li>
+<li>该类中还定义了一个<code>Kotlin</code>的<code>class</code>的扩展方法<code>get()</code>，该方法是获取子类的实例，返回值一定是继承<code>AbsModel</code>的子类</li>
+<li>注意：定义的以上两扩展方法作用域只是在单例<code>Models</code>中</li>
+</ul>
+</li>
+<li>定义了基于抽象类<code>AbsModel</code>的子类<code>DatabaseModel</code>、<code>NetworkModel</code></li>
+<li>定义了代理类<code>ModelDelegate</code>，主构造器中定义一个属性<code>kClass</code>，类型为<code>KClass&lt;T&gt;</code>，其中泛型<code>T</code>添加了约束上界为<code>AbsModel</code>。实现接口<code>ReadOnlyProperty</code>的方法<code>getValue()</code>，通过<code>kClass</code>的<code>get()</code>方法取得子类实例</li>
+<li>定义了非必须的函数<code>modelOf()</code>，该方法接收一个泛型<code>T</code>，添加了约束上界为<code>AbsModel</code>，返回结果是一个<code>ModelDelegate</code>类的实例</li>
+<li>定义类<code>MainViewModel</code>，该类中有两个属性：<code>databaseModel</code>、<code>networkModel</code>，这两个属性通过代理的方式赋值</li>
+<li>定义类<code>initModels</code>，该类初始化了子类<code>DatabaseModel</code>、<code>NetworkModel</code></li>
+<li>最后在<code>main()</code>方法中先初始化两个<code>AbsModel</code>子类，再创建属性<code>mainViewModel</code>,之后通过属性<code>mainViewModel</code>获取不同的<code>AbsModel</code>子类实例，调用实例的方法</li>
+</ol>
+<h4><span id="shi-xian-fang-shi-er">实现方式二</span><a href="#shi-xian-fang-shi-er" class="header-anchor">#</a></h4>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbsModel</span> </span>&#123;</span><br><span class="line">    <span class="keyword">init</span> &#123;</span><br><span class="line">        Models.run &#123; register() &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DatabaseModel</span>: <span class="type">AbsModel</span></span>() &#123;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">query</span><span class="params">(sql: <span class="type">String</span>)</span></span>: <span class="built_in">Int</span> = <span class="number">0</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">NetworkModel</span>: <span class="type">AbsModel</span></span>() &#123;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">get</span><span class="params">(url:<span class="type">String</span>)</span></span> = <span class="string">"""&#123;"code":0&#125;"""</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">class PageModel: AbsModel() &#123;</span></span><br><span class="line"><span class="string">    init &#123;</span></span><br><span class="line"><span class="string">        Models.run &#123; register("PageModel2") &#125;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    fun enter() &#123;</span></span><br><span class="line"><span class="string">        println("enter Next Page")</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">object Models &#123;</span></span><br><span class="line"><span class="string">    private val modelMap = ConcurrentHashMap&lt;String, AbsModel&gt;()</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    fun &lt;T: AbsModel&gt; String.get(): T &#123;</span></span><br><span class="line"><span class="string">        return modelMap[this] as T</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    fun AbsModel.register(name: String = this.javaClass.simpleName) &#123;</span></span><br><span class="line"><span class="string">        modelMap[name] = this</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        println(modelMap.values.joinToString())</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">object ModelDelegate&#123;</span></span><br><span class="line"><span class="string">    operator fun &lt;T: AbsModel&gt; getValue(thisRef: Any, property: KProperty&lt;*&gt;): T &#123;</span></span><br><span class="line"><span class="string">        return Models.run &#123; property.name.capitalize().get() &#125;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">class MainViewModel&#123;</span></span><br><span class="line"><span class="string">    val databaseModel: DatabaseModel by ModelDelegate</span></span><br><span class="line"><span class="string">    val networkModel: NetworkModel by ModelDelegate</span></span><br><span class="line"><span class="string">    val pageModel: PageModel by ModelDelegate</span></span><br><span class="line"><span class="string">    val pageModel2: PageModel by ModelDelegate</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">fun initModels() &#123;</span></span><br><span class="line"><span class="string">    DatabaseModel()</span></span><br><span class="line"><span class="string">    NetworkModel()</span></span><br><span class="line"><span class="string">    PageModel()</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">fun main() &#123;</span></span><br><span class="line"><span class="string">    initModels()</span></span><br><span class="line"><span class="string">    val mainViewModel = MainViewModel()</span></span><br><span class="line"><span class="string">    mainViewModel.databaseModel.query("select * from mysql.user").let(::println)</span></span><br><span class="line"><span class="string">    mainViewModel.networkModel.get("https://www.imooc.com").let(::println)</span></span><br><span class="line"><span class="string">    mainViewModel.pageModel.enter()</span></span><br><span class="line"><span class="string">    mainViewModel.pageModel2.enter()</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>方式二是方式一的优化，即将泛型参数省略。</li>
+<li>单例<code>Models</code>的<code>register()</code>方法有一个<code>String</code>类型的入参，默认值为子类的简单类名，该入参作为<code>modelMap</code>的<code>Key</code>值。子类<code>DatabaseModel</code>的简单类名为<code>DatabaseModel</code>。单例<code>Models</code>的<code>get()</code>方法就成为了<code>String</code>的扩展方法</li>
+<li>类<code>ModelDelegate</code>也不需要泛型区别<code>Model</code>，对于不同属性没有了区别，所以定义为了单例。其中获取子类实例的方法<code>getValue()</code>中使用了被代理的属性的名字获取子类实例，所以 <strong>定义的属性名字要与子类名字相同。</strong></li>
+<li><code>capitalize()</code>方法是返回一个字符串，该字符串首字母大写。所以获取属性名字后再使用该函数才可保证与子类名字相同。</li>
+<li>在类<code>MainViewModel</code>中声明属性时，直接使用<code>ModelDelegate</code>代理属性赋值会报错：无法确定<code>ModelDelegate</code>类中<code>getValue()</code>方法中的泛型<code>T</code>。要解决这个问题只需要在定义属性时添加上<code>AbsModel</code>的子类型即可推导出泛型<code>T</code>类型。</li>
+<li>因为<code>Models</code>的<code>register()</code>方法可以传入<code>String</code>类型的入参，则子类可以自己定义在<code>modelMap</code>中的<code>Key</code>值。</li>
+<li>子类<code>PageModel</code>虽然在父类构造器中以<code>PageModel</code>为<code>Key</code>值添加进了一次<code>modelMap</code>中，但在自己的构造器中又以<code>PageModel2</code>为<code>Key</code>值再一次的添加入<code>modelMap</code>中。即在<code>modelMap</code>中<code>Key</code>值为<code>PageModel</code>和<code>PageModel2</code>对应的<code>Value</code>值都是同一个<code>PageModel</code>子类实例</li>
+<li>如此可以定义属性<code>pageModel</code>和<code>pageModel2</code>通过代理获取同一个<code>PageModel</code>子类实例</li>
+</ol>
 <h1><span id="ba-can-kao-wen-zhang">八、参考文章</span><a href="#ba-can-kao-wen-zhang" class="header-anchor">#</a></h1>
 <ol>
 <li><a href="https://zhuanlan.zhihu.com/p/26890263" target="_blank" rel="noopener">Kotlin 中的 Nothing 和 Unit</a></li>
 <li><a href="https://www.jianshu.com/p/0c2948f7e656" target="_blank" rel="noopener">Java和Kotlin中泛型的协变、逆变和不变</a></li>
+<li><a href="https://www.jianshu.com/p/1715f0483768" target="_blank" rel="noopener">Kotlin知识归纳（十二） —— 泛型</a></li>
 <li><a href="https://www.kotlincn.net/docs/reference/generics.html" target="_blank" rel="noopener">https://www.kotlincn.net/docs/reference/generics.html</a></li>
+<li><a href="https://blog.csdn.net/bluishglc/article/details/60739183" target="_blank" rel="noopener">Scala之自身类型(Self Type)</a></li>
 </ol>
 </div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2021-03-08</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Kotlin/" title="Kotlin">Kotlin </a><a class="tag" href="/tags/泛型/" title="泛型">泛型 </a><span class="leancloud_visitors"></span></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="" onclick="javascript:join_favorite()" ref="sidebar"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" href="http://twitter.com/home?status=,http://puppet16.github.io/2021/03/08/kotlin学习系列六/,Puppet,kotlin 学习系列六：泛型,;" target="_blank" rel="noopener"></a></div></div><div class="pagination"><ul class="clearfix"><li class="next pagbuttons"><a class="btn" role="navigation" href="/2021/02/02/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%BA%94/" title="Kotlin 学习系列五：类型进阶">下一篇</a></li></ul></div><script src="/js/visitors.js"></script><a id="comments"></a><div id="vcomments" style="margin:0 30px;"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//cdn.jsdelivr.net/gh/xcss/valine@latest/dist/Valine.min.js"></script><script>var valine = new Valine({
   el:'#vcomments',
