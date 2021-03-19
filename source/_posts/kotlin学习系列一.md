@@ -10,14 +10,16 @@ summary: Kotlin 内置类型
 # 一、前言
 
 1. 本文主要讲述**Kotlin 内置类型即本身已被Kotlin集成的类型**
-2. **Kotlin英文官网：[https://kotlinlang.org/](https://kotlinlang.org/)**
-3. **Kotlin中文官网：[https://www.kotlincn.net/](https://www.kotlincn.net/)**
-4. Kotlin 学习系列文章：
+2. *本文是对[Bennyhuo老师](https://github.com/enbandari)讲解的`Kotlin`系列视频的总结笔记*
+3. **Kotlin英文官网：[https://kotlinlang.org/](https://kotlinlang.org/)**
+4. **Kotlin中文官网：[https://www.kotlincn.net/](https://www.kotlincn.net/)**
+5. Kotlin 学习系列文章：
     * {% post_link kotlin学习系列二 Kotlin学习系列二：类与接口初解 %}
     * {% post_link kotlin学习系列三 kotlin学习系列三：表达式 %}
     * {% post_link kotlin学习系列四 kotlin学习系列四：函数进阶 %}
     * {% post_link kotlin学习系列五 kotlin学习系列五：类型进阶 %}
     * {% post_link kotlin学习系列六 kotlin学习系列六：泛型 %}
+    * {% post_link kotlin学习系列七 kotlin学习系列七：反射 %}
 
 # 二、基本类型
 
@@ -110,7 +112,7 @@ println("Value of j is $j , j.length is ${j.length}")
 ```kotlin
 val a = "32"
 val b = "32"
-a == b 返回true, a === b 返回false
+a == b 返回true, a === b 返回true
 ```
 
 ## 7. Raw String
@@ -341,7 +343,7 @@ for (i in array.indices) {
 }
 ```
 
-其中，数组的属性**`indices`**，表示一个 [0, array.size] 的整型区间
+其中，数组的属性 **`indices`**，表示一个 [0, array.size] 的整型区间
 打印结果为：
 
 ```
@@ -657,6 +659,11 @@ class Foo {
 
 ## 3. 函数类型
 
+函数的类型具有与函数签名相对应的特殊表示法，即它们的参数和返回值
+
+* 所有函数类型都有一个圆括号括起来的参数类型列表以及一个返回类型
+* 函数类型可以有一个额外的接收者类型，它在表示法中的点之前指定
+  
 函数类型表达
 
 <table>
@@ -679,8 +686,11 @@ class Foo {
 </table>
 
 如果`receiver`当做函数参数类型列表里第一项，则表明该函数为方法
+参考：[https://www.kotlincn.net/docs/reference/lambdas.html](https://www.kotlincn.net/docs/reference/lambdas.html#%E5%87%BD%E6%95%B0%E7%B1%BB%E5%9E%8B)
 
 ## 4. 函数的引用
+
+`::`是创建一个成员引用或者一个[类引用](https://www.kotlincn.net/docs/reference/reflection.html#%E7%B1%BB%E5%BC%95%E7%94%A8)的操作符
 
 * 函数的引用类似C语言中的函数指针，可用于函数传递
 
@@ -804,7 +814,7 @@ println(c)
 ```kotlin
 
 fun defaultParameter(x:Int, y:String, z: Long = 0L) {
-    println(x+ +y + z)
+    println("x:$x, y:$y, z: $z")
 }
 
 ```

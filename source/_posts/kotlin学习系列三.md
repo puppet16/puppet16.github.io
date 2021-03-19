@@ -10,14 +10,16 @@ summary: Kotlin表达式
 # 一、前言
 
 1. 本文主要讲述**Kotlin 表达式**
-2. **Kotlin官网：[https://kotlinlang.org/](https://kotlinlang.org/)**
-3. **Kotlin中文官网：[https://www.kotlincn.net/](https://www.kotlincn.net/)**
-4. Kotlin 学习系列文章：
+2. *本文是对[Bennyhuo老师](https://github.com/enbandari)讲解的`Kotlin`系列视频的总结笔记*
+3. **Kotlin官网：[https://kotlinlang.org/](https://kotlinlang.org/)**
+4. **Kotlin中文官网：[https://www.kotlincn.net/](https://www.kotlincn.net/)**
+5. Kotlin 学习系列文章：
     * {% post_link kotlin学习系列一 kotlin学习系列一：内置类型 %}
     * {% post_link kotlin学习系列二 kotlin学习系列二：类与接口初解 %}
     * {% post_link kotlin学习系列四 kotlin学习系列四：函数进阶 %}
     * {% post_link kotlin学习系列五 kotlin学习系列五：类型进阶 %}
     * {% post_link kotlin学习系列六 kotlin学习系列六：泛型 %}
+    * {% post_link kotlin学习系列七 kotlin学习系列七：反射 %}
 
 # 二、常量和变量
 
@@ -197,7 +199,7 @@ c = try {
 
 * 二目算术运算符
 
-    |表达式|翻译为|
+    |表达式|实际调用|
     |----|----|
     |a + b|a.plus(b)|
     |a - b|a.minus(b)|
