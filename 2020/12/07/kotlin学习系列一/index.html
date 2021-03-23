@@ -109,6 +109,7 @@
 <h1><span id="yi-qian-yan">一、前言</span><a href="#yi-qian-yan" class="header-anchor">#</a></h1>
 <ol>
 <li>本文主要讲述<strong>Kotlin 内置类型即本身已被Kotlin集成的类型</strong></li>
+<li><em>本文是对<a href="https://github.com/enbandari" target="_blank" rel="noopener">Bennyhuo老师</a>讲解的<code>Kotlin</code>系列视频的总结笔记</em></li>
 <li><strong>Kotlin英文官网：<a href="https://kotlinlang.org/" target="_blank" rel="noopener">https://kotlinlang.org/</a></strong></li>
 <li><strong>Kotlin中文官网：<a href="https://www.kotlincn.net/" target="_blank" rel="noopener">https://www.kotlincn.net/</a></strong></li>
 <li>Kotlin 学习系列文章：
@@ -127,6 +128,9 @@
 </li>
 <li>
 <a href="/2021/03/08/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AD/" title="kotlin学习系列六：泛型">kotlin学习系列六：泛型</a>
+</li>
+<li>
+<a href="/2021/03/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%83/" title="kotlin学习系列七：反射">kotlin学习系列七：反射</a>
 </li>
 </ul>
 </li>
@@ -292,7 +296,7 @@
 <h2><span id="6-zi-fu-chuan-bi-jiao">6. 字符串比较</span><a href="#6-zi-fu-chuan-bi-jiao" class="header-anchor">#</a></h2>
 <p><code>==</code>：比较字符串的内容，等同于<code>Java</code>里的<code>equals</code>语句<br>
 <code>===</code>：比较字符串的引用，等同于<code>Java</code>里的<code>==</code></p>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> a = <span class="string">"32"</span></span><br><span class="line"><span class="keyword">val</span> b = <span class="string">"32"</span></span><br><span class="line">a == b 返回<span class="literal">true</span>, a === b 返回<span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> a = <span class="string">"32"</span></span><br><span class="line"><span class="keyword">val</span> b = <span class="string">"32"</span></span><br><span class="line">a == b 返回<span class="literal">true</span>, a === b 返回<span class="literal">true</span></span><br></pre></td></tr></table></figure>
 <h2><span id="7-raw-string">7. Raw String</span><a href="#7-raw-string" class="header-anchor">#</a></h2>
  <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> 变量名 = <span class="string">"""</span></span><br><span class="line"><span class="string">   内容</span></span><br><span class="line"><span class="string">"""</span>[.trimIndent()]</span><br></pre></td></tr></table></figure>
 <p><code>trimIndent</code>函数作用：删除多余公共缩进</p>
@@ -406,7 +410,7 @@
 <h2><span id="3-qu-jian-ying-yong">3. 区间应用</span><a href="#3-qu-jian-ying-yong" class="header-anchor">#</a></h2>
 <p>可以使用区间来实现<code>java</code>中<code>fori</code>循环</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> array = intArrayOf(<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>)</span><br><span class="line"><span class="keyword">for</span>(i <span class="keyword">in</span> <span class="number">0</span> until array.size) &#123;</span><br><span class="line">    println(array[i])</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">for</span> (i <span class="keyword">in</span> array.indices) &#123;</span><br><span class="line">    println(<span class="string">"i:<span class="variable">$i</span>, value: <span class="subst">$&#123;array[i]&#125;</span>"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>其中，数组的属性**<code>indices</code>**，表示一个 [0, array.size] 的整型区间<br>
+<p>其中，数组的属性 <strong><code>indices</code></strong>，表示一个 [0, array.size] 的整型区间<br>
 打印结果为：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1</span><br><span class="line">3</span><br><span class="line">5</span><br><span class="line">7</span><br><span class="line">i:0, value: 1</span><br><span class="line">i:1, value: 3</span><br><span class="line">i:2, value: 5</span><br><span class="line">i:3, value: 7</span><br></pre></td></tr></table></figure>
 <h1><span id="wu-ji-he">五、集合</span><a href="#wu-ji-he" class="header-anchor">#</a></h1>
@@ -534,6 +538,11 @@
 使用<code>foo.bar</code>来调用<code>bar</code>函数，其中<code>foo</code>即为<code>receiver</code>，<code>bar</code>函数也可称之为方法<br>
 <strong>Kotlin中可以不定义类直接定义函数，这种没有<code>receiver</code>的函数为顶级函数</strong></p>
 <h2><span id="3-han-shu-lei-xing">3. 函数类型</span><a href="#3-han-shu-lei-xing" class="header-anchor">#</a></h2>
+<p>函数的类型具有与函数签名相对应的特殊表示法，即它们的参数和返回值</p>
+<ul>
+<li>所有函数类型都有一个圆括号括起来的参数类型列表以及一个返回类型</li>
+<li>函数类型可以有一个额外的接收者类型，它在表示法中的点之前指定</li>
+</ul>
 <p>函数类型表达</p>
 <table>
     <tr>
@@ -553,8 +562,10 @@
         <td>Foo.(String,String) -> Any 等价于 <br> (Foo,String,String) -> Any 等价于 <br> Function3&lt;Foo, String, Long, Any></td>
     </tr>
 </table>
-<p>如果<code>receiver</code>当做函数参数类型列表里第一项，则表明该函数为方法</p>
+<p>如果<code>receiver</code>当做函数参数类型列表里第一项，则表明该函数为方法<br>
+参考：<a href="https://www.kotlincn.net/docs/reference/lambdas.html#%E5%87%BD%E6%95%B0%E7%B1%BB%E5%9E%8B" target="_blank" rel="noopener">https://www.kotlincn.net/docs/reference/lambdas.html</a></p>
 <h2><span id="4-han-shu-de-yin-yong">4. 函数的引用</span><a href="#4-han-shu-de-yin-yong" class="header-anchor">#</a></h2>
+<p><code>::</code>是创建一个成员引用或者一个<a href="https://www.kotlincn.net/docs/reference/reflection.html#%E7%B1%BB%E5%BC%95%E7%94%A8" target="_blank" rel="noopener">类引用</a>的操作符</p>
 <ul>
 <li>
 <p>函数的引用类似C语言中的函数指针，可用于函数传递</p>
@@ -639,7 +650,7 @@
 <p>通过解构将<code>Pair</code>和<code>Triple</code>中的值赋给不同变量</p>
 <h2><span id="7-mo-ren-can-shu">7. 默认参数</span><a href="#7-mo-ren-can-shu" class="header-anchor">#</a></h2>
 <p>定义：</p>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">defaultParameter</span><span class="params">(x:<span class="type">Int</span>, y:<span class="type">String</span>, z: <span class="type">Long</span> = <span class="number">0</span>L)</span></span> &#123;</span><br><span class="line">    println(x+ +y + z)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">defaultParameter</span><span class="params">(x:<span class="type">Int</span>, y:<span class="type">String</span>, z: <span class="type">Long</span> = <span class="number">0</span>L)</span></span> &#123;</span><br><span class="line">    println(<span class="string">"x:<span class="variable">$x</span>, y:<span class="variable">$y</span>, z: <span class="variable">$z</span>"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>调用：</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">defaultParameter(<span class="number">2</span>, <span class="string">"5"</span>)</span><br></pre></td></tr></table></figure>
 <p>注意：默认值应该是从参数列表最后一项往前赋值，调用时传递地参数                                                                                                                        按照定义时的参数列表顺序传递参数值</p>
