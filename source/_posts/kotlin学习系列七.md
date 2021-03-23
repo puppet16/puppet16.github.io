@@ -594,8 +594,489 @@ Person(id=0, name=Lee, avatarUrl=https://api.github.com/users/Lee, smallUrl=http
 
 # 六、 应用 -- 可释放对象引用的不可空类型
 
+>创建一个引用，该引用持有一个占用较大内存资源的类型对象，在最后不需要该引用时，我们需要将其释放，也就是将引用置为`null`，`Kotlin`中只有声明为可空类型才能置为`null`，但是可空类型属性使用比较繁琐，可以通过`属性代理`将定义不可空类型引用释放
+
+```kotlin
+
+class ReleasableNotNull<T: Any>: ReadWriteProperty<Any, T> {
+    private var value: T? = null
+
+    override fun getValue(thisRef: Any, property: KProperty<*>): T {
+        return value ?: throw IllegalStateException("Not initialized or released already.")
+    }
+
+    override fun setValue(thisRef: Any, property: KProperty<*>, value: T) {
+        this.value = value
+    }
+
+    fun isInitialized() = value != null
+
+    fun release() {
+        value = null
+    }
+}
+
+inline val KProperty0<*>.isInitialized: Boolean
+    get() {
+        isAccessible = true
+        return (this.getDelegate() as? ReleasableNotNull<*>)?.isInitialized()
+            ?: throw IllegalAccessException("Delegate is not an instance of ReleasableNotNull or is null.")
+    }
+
+fun KProperty0<*>.release() {
+    isAccessible = true
+    (this.getDelegate() as? ReleasableNotNull<*>)?.release()
+        ?: throw IllegalAccessException("Delegate is not an instance of ReleasableNotNull or is null.")
+}
+
+class Bitmap(val width: Int, val height: Int)
+
+class Activity {
+    private var bitmap by ReleasableNotNull<Bitmap>()
+
+    fun onCreate(){
+        println(this::bitmap.isInitialized)
+        bitmap = Bitmap(1920, 1080)
+        println(::bitmap.isInitialized)
+    }
+
+    fun onDestroy(){
+        println(::bitmap.isInitialized)
+        ::bitmap.release()
+        println(::bitmap.isInitialized)
+    }
+}
+
+fun main() {
+    val activity = Activity()
+    activity.onCreate()
+    activity.onDestroy()
+}
+```
+
+打印结果：
+
+```java
+false
+true
+true
+false
+```
+
+**说明：**
+
+1. 定义了一个自定义属性代理类`ReleasableNotNull`，该类接收一个泛型，这个泛型就是可以被释放的引用类型
+2. 自定义属性代理类只需要实现`getValue()`和`setValue`方法即可，不一定非要实现`ReadWirtProperty`接口
+3. 在`ReleasableNotNull`类中创建了属性`value`，类型为可空的泛型`T`
+4. 在`ReleasableNotNull`类中的`getValue()`方法，如果`value`为空的话要抛出异常，因为传进来的类型不可能为空，为空的情况也是没有初始化或是手动调用`release()`方法，将该属性释放了，此时也不能再使用该类获取类型了
+5. `isInitialized()`方法是判断`ReleasableNotNull`类是否初始化
+6. `release()`方法是将传进来的类型释放
+7. 因为`isInitialized()`和`release()`方法是定义在属性代理类`ReleasableNotNull`内的方法，而该类的属性`value`才是最终要调用这两个方法的`receiver`，所以要为属性添加两个扩展方法
+8. 根据`lateInit`中对属性添加扩展方法的样式为自定义属性代理类`ReleasableNotNull`里的属性添加代理
+9. `KProperty0<*>.isInitialized`是为所有无`receiver`的属性添加扩展属性`isInitialized`，获取该属性值时应该返回自定义属性代理类`ReleasableNotNull`里的`isInitialized`方法结果，所以通过`getDelegate()`方法先获取该属性的代理对象，然后再强转为`ReleasableNotNull`,若强转失败则抛出异常`IllegalAccessException`；若强转成功则直接调用`isInitialized()`方法
+10. `KProperty0<*>.release()`与`KProperty0<*>.isInitialized`内部处理基本一致，只是`KProperty0<*>.release()`是为`KProperty0<*>`添加了一个扩展函数，`KProperty0<*>.isInitialized`为`KProperty0<*>`添加了一个扩展属性
+11. 使用`getDelegate()`前必须加上`isAccessible = true`语句给予访问权限，否则会报错:`kotlin.reflect.full.IllegalPropertyDelegateAccessException: Cannot obtain the delegate of a non-accessible property`
+12. 使用如上代码时必须要添加`kotlin`的反射库
+
+# 七、 插件化加载类
+
+>插件加载运行，并实现插件文件监听及热部署即自动监听`jar`包的修改，若进行了修改则重新进行加载运行里面的类
+
+## 1. `ClassLoader`
+
+![classLoader](/kotlin学习系列七/reflection_classloader.png)
+
+**说明：**
+
+1. **启动类加载器 _(BootstrapClassLoader)_：** 启动类加载器主要加载的是`JVM`自身需要的类，这个类加载使用`C++`语言实现的，是虚拟机自身的一部分，负责加载存放在 `JDK\jre\lib` *(JDK代表JDK的安装目录，下同)* 下，或被 `-Xbootclasspath`参数指定的路径中的，并且能被虚拟机识别的类库 *（如rt.jar，所有的java.开头的类均被 BootstrapClassLoader加载）*。启动类加载器是无法被`Java`程序直接引用的。
+   **总结：** 启动类加载器加载`java`运行过程中的核心类库`JRE\lib\rt.jar`, `sunrsasign.jar`, `charsets.jar`, `jce.jar`, `jsse.jar`, `plugin.jar`以及存放在`JRE\classes`里的类，也就是`JDK`提供的类等。*常见的比如：Object、Stirng、List…*
+2. **扩展类加载器 *(ExtClassLoader)*：** 该加载器由 `sun.misc.Launcher$ExtClassLoader`实现，它负责加载 `JDK\jre\lib\ext`目录中，或者由 `java.ext.dirs`系统变量指定的路径中的所有类库 *（如javax.开头的类）*，开发者可以直接使用扩展类加载器。
+3. **应用程序类加载器 *(AppClassLoader)*：** 该类加载器由 `sun.misc.Launcher$AppClassLoader`来实现，会加载 `java` 环境变量 `CLASSPATH` 所指定的路径下的类库。而 `CLASSPATH` 所指定的路径可以通过 `System.getProperty("java.class.path")` 获取；该变量也可以覆盖，可以使用参数 `-cp`，*例如：`java -cp` 路径（可以指定要执行的 `class` 目录）*；开发者可以直接使用该类加载器，如果应用程序中没有自定义过自己的类加载器，一般情况下这个就是程序中 **默认的类加载器**。
+   **总结：** 应用程序类加载器加载`CLASSPATH`变量指定路径下的类，即指你自已在项目工程中编写的类
+4. **自定义类加载器 *(CustomClassLoader)*：** 该 `ClassLoader` 是指我们自定义的 `ClassLoader`，大部分情况下使用 `AppClassLoader` 就足够了。
 
 
+### 1. `ClassLoader`的双亲委派机制
+
+`ClassLoader`使用的是双亲委托模型来搜索类的，每个`ClassLoader`实例都有一个父类加载器的引用 *（不是继承的关系，是一个包含的关系）*，虚拟机内置的类加载器 *(Bootstrap ClassLoader)* 本身没有父类加载器，但可以用作其它`ClassLoader`实例的的父类加载器。
+当一个`ClassLoader`实例需要加载某个类时，它会试图亲自搜索某个类之前，先把这个任务委托给它的父类加载器，这个过程是 **由上至下依次检查**的。
+
+**加载步骤：**
+
+1. 当`AppClassLoader`加载一个`class`时，它首先不会自己去尝试加载这个类，而是把类加载请求委派给父类加载器`ExtClassLoader`去完成
+2. 当`ExtClassLoader`加载一个`class`时，它首先也不会自己去尝试加载这个类，而是把类加载请求委派给`BootStrapClassLoader`去完成
+3. 如果`BootStrapClassLoader`加载失败 *(例如在`$JAVA_HOME/jre/lib`里未查找到该`class`）*，会使用`ExtClassLoader`来尝试加载
+4. 若`ExtClassLoader`也加载失败，则会使用`AppClassLoader`来加载。
+5. 如果`AppClassLoader`也加载失败，则返回给委托的发起者，由它到指定的文件系统或网络等URL中加载该类。如果它们都没有加载到这个类时，则抛出`ClassNotFoundException`异常。否则将这个找到的类生成一个类的定义，并将它加载到内存当中，最后返回这个类在内存中的`Class`实例对象。
+6. **总结：** 自底向上检查类是否已经加载，自顶向下尝试加载类
+
+**双亲委派机制作用：**
+
+1. 防止重复加载同一个 `.class`。通过委托去向上面问一问是否加载过了，加载过了就不用再加载一遍
+2. 保证核心 `.class` 不能被篡改。假如我们自定义了一个`java.lang.Integer`类，当使用它时，因为双亲委派，会先使用`BootStrapClassLoader`来进行加载，这样加载的便是`jdk`的`Integer`类，而不是自定义的这个，避免因为加载自定义核心类而造成`JVM`运行错误。
+
+**JVM如何判断两个`class`是否相同：**
+
+ `JVM`在判定两个`class`是否相同时，不仅要判断两个类名是否相同，而且要判断是否由同一个类加载器实例加载的。只有两者同时满足的情况下，`JVM`才认为这两个`class`是相同的。就算两个`class`是同一份`class`字节码，如果被两个不同的`ClassLoader`实例所加载，`JVM`也会认为它们是两个不同`class`
+
+## 2. 插件化加载类实现
+
+为方便的实现类的加载和卸载必须要自定义`ClassLoader`。必须保证类和它的`ClassLoader`都没有被使用的情况下才可以卸载类
+
+
+**实现思路：** 有一个名为`Host`的项目，它依赖了一个公共库`Common`，这个库中定义了一堆的接口，为`Host`访问插件里的类做入口。如此所有插件的入口类都是`Common`中定义的接口的实现。如此`Host`反射取到插件里的入口实现类并将其强转为`Common`里的接口后就可以访问插件内容了
+
+![project_struct](/kotlin学习系列七/reflection_plugin_struct.png)
+
+### 1. 创建`plugin`接口
+
+在一个名为`plugin_common`的单独的`Module`中创建插件的入口接口
+
+```kotlin
+interface Plugin {
+    companion object {
+        const val CONFIG = "plugin.config"
+        const val KEY = "plugin.impl"
+    }
+
+    fun start()
+
+    fun stop()
+}
+```
+
+**说明：**
+
+1. 如上在名为`plugin_common`的单独的`Module`中创建一个接口`Plugin`，其中有两个方法`start()`、`stop()`，还
+2. 该接口的伴生对象中创建了两个常量`CONFIG`、`KEY`，`CONFIG`是实现`Plugin`接口的类的配置文件名；`KEY`是配置文件中的键值名称
+
+### 2. 创建两个继承`plugin`接口的类
+
+在名为`plugin_1`的单独的`Module`中创建`Plugin`接口的实现类`PluginImpl1`，在名为`plugin_2`的单独的`Module`中创建`Plugin`接口的实现类`PluginImpl2`
+
+```kotlin
+class PluginImpl1: Plugin{
+    override fun start() {
+        println("Plugin1: Start")
+        newMethod()
+    }
+
+    fun newMethod(){
+        println("newMethod called!!")
+    }
+
+    override fun stop() {
+        println("Plugin1: Stop")
+    }
+}
+```
+
+```kotlin
+class PluginImpl2: Plugin{
+    override fun start() {
+        println("Plugin2: Start")
+    }
+
+    override fun stop() {
+        println("Plugin2: Stop")
+    }
+}
+```
+
+**说明：**
+
+1. 如上是两个接口`Plugin`的实现类`PluginImpl1`、`PluginImpl2`，在各自的实现方法中打印一些信息，只是在`PluginImpl1`中的`start()`方法多调用了一个方法`newMethod()`，该方法也是打印信息
+
+### 3. 将实现类所在`Module`打包成`jar`
+
+`plugin_1`、`plugin_2`的`build.gradle`文件内容如下：
+
+```groovy
+plugins {
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm'
+}
+
+group 'cn.ltt.kotlin.plugin'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+
+    implementation project(":plugin_common")
+
+    testCompile(group: 'junit', name: 'junit', version: '4.12')
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+```
+
+**说明：**
+
+1. 点击`Gradle`窗口中`plugin_1\Tasks\build\assemble`条目，生成`jar`包
+   ![attar](/kotlin学习系列七/reflection_project_jar_location.png)
+2. `jar`包位置：`plugin_1\build\libs\plugin_1-1.0-SNAPSHOT.jar`
+
+### 4. 为两个实现接口的类添加配置文件
+
+因为实现`Plugiin`接口的类的名字没有要求，如果想使用反射拿到该类还需要知道类的名字，所以添加一个配置文件，该文件中写出该类的名字
+
+```java
+//plugin_1
+plugin.impl=cn.ltt.kotlin.plugin1.PluginImpl1
+```
+
+```java
+//plugin_2
+plugin.impl=cn.ltt.kotlin.plugin1.PluginImpl2
+```
+
+**说明：**
+
+1. 该配置文件在各自`Module`下的`resources`文件夹内，名为`plugin.config`
+
+### 5. 递归监听文件夹
+
+为了实现热加载插件需要实时监听文件是否有改动
+
+```kotlin
+//FileWatcher.kt
+
+typealias FileEventListener = (file: File) -> Unit
+private val EMPTY: FileEventListener = {}
+
+@RequiresApi(Build.VERSION_CODES.O)
+class FileWatcher(private val watchFile: File,
+                  private val recursively: Boolean = true,
+                  private val onCreated: FileEventListener = EMPTY,
+                  private val onModified: FileEventListener = EMPTY,
+                  private val onDeleted: FileEventListener = EMPTY) {
+
+    private val folderPath by lazy {
+        Paths.get(watchFile.canonicalPath).let {
+            if (Files.isRegularFile(it)) it.parent else it
+        } ?: throw IllegalArgumentException("Illegal path: $watchFile")
+    }
+
+    @Volatile
+    private var isWatching = false
+
+    private fun File.isWatched() = watchFile.isDirectory || this.name == watchFile.name
+
+    private fun Path.register(watchService: WatchService, recursively: Boolean, vararg events: Kind<Path>) {
+        when (recursively && watchFile.isDirectory) {
+            true -> // register all subfolders
+                Files.walkFileTree(this, object : SimpleFileVisitor<Path>() {
+                    override fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult {
+                        dir.register(watchService, *events)
+                        return FileVisitResult.CONTINUE
+                    }
+                })
+            false -> register(watchService, *events)
+        }
+    }
+
+    @Synchronized
+    fun start() {
+        if(!isWatching){
+            isWatching = true
+        }
+
+        thread {
+            // We obtain the file system of the Path
+            val fileSystem = folderPath.fileSystem
+
+            // We create the new WatchService using the try-with-resources block(in kotlin we use `use` block)
+            fileSystem.newWatchService().use { service ->
+                // We watch for modification events
+                folderPath.register(service, recursively,
+                    StandardWatchEventKinds.ENTRY_CREATE,
+                    StandardWatchEventKinds.ENTRY_DELETE,
+                    StandardWatchEventKinds.ENTRY_MODIFY
+                )
+
+                // Start the infinite polling loop
+                while (isWatching) {
+                    // Wait for the next event
+                    val watchKey = service.take()
+
+                    watchKey.pollEvents().forEach { watchEvent ->
+                        // Get the type of the event
+                        Paths.get(folderPath.toString(), (watchEvent.context() as Path).toString()).toFile()
+                            .takeIf {
+                                it.isWatched()
+                            }
+                            ?.let(
+                                when (watchEvent.kind()) {
+                                    StandardWatchEventKinds.ENTRY_CREATE -> {
+                                        println("onCreated")
+                                        onCreated
+                                    }
+                                    StandardWatchEventKinds.ENTRY_DELETE -> {
+                                        println("onDeleted")
+                                        onDeleted
+                                    }
+                                    else ->{
+                                        println("onModified")
+                                        onModified // modified.
+                                    }
+                                }
+                            )
+                    }
+
+                    if (!watchKey.reset()) {
+                        // Exit if no longer valid
+                        break
+                    }
+                }
+            }
+        }
+    }
+
+    @Synchronized
+    fun stop(){
+        isWatching = false
+    }
+}
+```
+
+**说明：**
+
+1. 如上代码功能为递归的监听某个文件夹和文件的修改
+2. 类`FileWatcher`有三个事件：`onCreated`创建、`onModified`修改、`onDeleted`删除
+3. 这三个事件的类型是`FileEventListener`，可以看到这只是一个别名，事件只是一个接口`File`类型参数，不返回结果的函数
+
+### 6. 创建自定义类加载器
+
+```kotlin
+class PluginClassLoader(private val classPath: String) : URLClassLoader(arrayOf(File(classPath).toURI().toURL())) {
+    init {
+        println("Classloader init @${hashCode()}")
+    }
+
+    protected fun finalize() {
+        println("Classloader will be gc @${hashCode()}")
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+class PluginLoader(private val classPath: String) {
+
+    private val watcher = FileWatcher(
+        File(classPath),
+        onCreated = ::onFileChanged,
+        onModified = ::onFileChanged,
+        onDeleted = ::onFileChanged
+    )
+
+    private var classLoader: PluginClassLoader? = null
+    private var plugin: Plugin? = null
+
+    fun load() {
+        reload()
+        watcher.start()
+    }
+
+    private fun onFileChanged(file: File) {
+        println("$file changed, reloading...")
+        reload()
+    }
+
+    @Synchronized
+    private fun reload() {
+        plugin?.stop()
+        this.plugin = null
+        this.classLoader?.close()
+        this.classLoader = null
+
+        val classLoader = PluginClassLoader(classPath)
+        val properties = classLoader.getResourceAsStream(Plugin.CONFIG)?.use {
+            Properties().also { properties ->
+                properties.load(it)
+            }
+        } ?: run {
+            classLoader.close()
+            return println("Cannot find config file for $classPath")
+        }
+
+        plugin = properties.getProperty(Plugin.KEY)?.let {
+            val pluginImplClass = classLoader.loadClass(it) as? Class<Plugin>
+                ?: run {
+                    classLoader.close()
+                    return println("Plugin Impl from $classPath: $it should be derived from Plugin.")
+                }
+
+            pluginImplClass.kotlin.primaryConstructor?.call()
+                ?: run {
+                    classLoader.close()
+                    return println("Illegal! Plugin has no primaryConstructor!")
+                }
+        }
+
+        plugin?.start()
+        this.classLoader = classLoader
+
+        System.gc()
+    }
+
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun main() {
+    arrayOf(
+        "plugin_1/build/libs/plugin_1-1.0-SNAPSHOT.jar",
+        "plugin_2/build/libs/plugin_2-1.0-SNAPSHOT.jar"
+    ).map {
+        PluginLoader(it).apply { load() }
+    }
+}
+```
+
+**说明：**
+
+1. 创建一个插件`jar`包的加载器`PluginClassLoader`，该类继承自`URLClassLoader`,`URLClassLoader`入参为`URL`类型的数组列表`URLClassLoader`可以加载`jar`文件
+2. `PluginClassLoader`传入一个`jar`文件的`String`类型地址，之后将这个地址转为`URL`再将其创建为一个数组传入`URLClassLoader`中，如此就加载了`jar`文件
+3. 创建插件加载器`PluginLoader`，每个插件对应一个`PluginLoader`对象。该类需要传入插件所在的地址名为`classPath`
+   1. 在`PluginLoader`中创建`FileWahter`对象`watcher`，传入插件所在地址、三个对应事件，因为这三个事件都是入参为`File`不需要返回结果的函数
+   2. 定义函数`onFileChanged()`，入参为`File`类型，不需要返回结果，则可将该函数放到创建对象`FileWathcer`语句中，在文件的创建、修改、删除事件都使用函数`onFileChanged`监听
+   3. 如果文件有更改的话，应该重新加载文件，所以`onFileChanged()`函数中要重新加载文件
+   4. 定义函数`reload()`，在该函数中真正实现加载插件的逻辑
+   5. 定义函数`load()`，该函数用于开始执行文件的监听和插件的加载，是整个加载插件功能的入口
+   6. 加载插件需要`PluginClassLoader`类，及加载的插件，所以要定义变量`classLoader`，类型为可空的`PluginClassLoader`；定义变量`plugin`，类型为可空的`Plugin`
+   7. 重新加载时要先将之前的插件关闭，调用`plugin`的`stop`方法
+   8. 每个`plugin`对应一个`PluginClassLoader`，所以在`reload`方法中去重新创建`PluginClassLoader`的实例
+   9. 加载插件前要先获取该插件的配置定义属性名为`properties`，使用语句`classLoader.getResourceAsStream(Plugin.CONFIG)`获取配置文件的`InputStream`
+   10. 再创建一个 `Properties`对象，通过它的`load()`方法，加载配置文件的输入流
+   11. 再通过 `elves`操作符，判断如果没有拿到`Plugin.CONFIG`的配置文件，则关闭当前`ClassLoader`，打印异常信息：不能获取配置文件
+   12. 通过语句`properties.getProperty(Plugin.KEY)`获取配置文件中插件的入口类名
+   13. 通过语句 `classLoader.loadClass(it) as? Class<Plugin>`加载该类，并将该类强转为`Plugin`类型将其赋值给属性`pluginImplClass`，如果转换失败则关闭当前`ClassLoader`，打印异常信息：该类并未实现接口`plugin`
+   14. 通过语句`pluginImplClass.kotlin.primaryConstructor?.call()`创建类实例： `classLoader.loadClass`语句获取的类是`Java`中的类，所以要先将`pluginImplClass`转为`kotlin`的类，再调用该类的主构造器的创建方法创建该类。**注意：此时默认实现接口`Plugin`的类都有主构造器**。如果创建失败则关闭当前`ClassLoader`，打印异常信息：该类没有主构造器
+   15. 如此，拿到了`plugin`类实例，此时可以调用实例的`start()`方法
+   16. 之后重新为`classloader`对象赋值为之前加载`plugin`类所用的`ClassLoader`
+   17. 因为创建了大量的局部的变量，在最后的时候调用`System.gc()`，通知系统及时回收
+   18. 对于函数来说添加注解`@Synchronized`来加锁，如此保证函数在多线程下也可以正常使用
+4. `main()`方法中操作：
+   1. 创建了一个包含两个插件`jar`包地址的`String`类型的数组
+   2. 通过`map`函数将数组每个元素都做了如下的操作
+   3. 创建`PluginLoader`类的实例，传入参数即为插件`jar`包地址，之后再调用该实例的`apply`方法，如此`PluginLoader`实例即为`apply`方法中的`receiver`，在`apply`方法中调用`PluginLoader`类的实例的`load`方法开始加载插件
+
+5. 验证是否为实时监听热更新方法：修改插件里类的某个方法，之后再重新打包
+
+# 八、参考文章
+
+1. [深入分析Java ClassLoader原理](https://blog.csdn.net/xyang81/article/details/7292380#NetWorkClassLoader)
+2. [这篇文章绝对让你深刻理解java类的加载以及ClassLoader源码分析](https://zhuanlan.zhihu.com/p/94847256)
 
 
 
