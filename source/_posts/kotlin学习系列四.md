@@ -1,5 +1,5 @@
 ---
-title: Kotlin 学习系列四：函数进阶
+title: Kotlin学习系列四：函数进阶
 date: 2021-01-22 15:26:44
 tags: [Kotlin, 函数]
 summary: Kotlin 函数进阶
@@ -20,6 +20,7 @@ summary: Kotlin 函数进阶
     * {% post_link kotlin学习系列五 kotlin学习系列五：类型进阶 %}
     * {% post_link kotlin学习系列六 kotlin学习系列六：泛型 %}
     * {% post_link kotlin学习系列七 kotlin学习系列七：反射 %}
+    * {% post_link kotlin学习系列八 kotlin学习系列八：注解 %}
 
 # 二、高阶函数
 

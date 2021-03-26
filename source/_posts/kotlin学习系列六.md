@@ -1,5 +1,5 @@
 ---
-title: kotlin 学习系列六：泛型
+title: kotlin学习系列六：泛型
 date: 2021-03-08 15:22:26
 tags: [Kotlin, 泛型]
 summary: Kotlin 泛型
@@ -20,6 +20,7 @@ summary: Kotlin 泛型
     * {% post_link kotlin学习系列四 kotlin学习系列四：函数进阶 %}
     * {% post_link kotlin学习系列五 kotlin学习系列五：类型进阶 %}
     * {% post_link kotlin学习系列七 kotlin学习系列七：反射 %}
+    * {% post_link kotlin学习系列八 kotlin学习系列八：注解 %}
 
 # 二、泛型的基本概念
 

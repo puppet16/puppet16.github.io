@@ -20,6 +20,7 @@ summary: Kotlin表达式
     * {% post_link kotlin学习系列五 kotlin学习系列五：类型进阶 %}
     * {% post_link kotlin学习系列六 kotlin学习系列六：泛型 %}
     * {% post_link kotlin学习系列七 kotlin学习系列七：反射 %}
+    * {% post_link kotlin学习系列八 kotlin学习系列八：注解 %}
 
 # 二、常量和变量
 

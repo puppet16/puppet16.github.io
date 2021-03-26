@@ -1,5 +1,5 @@
 ---
-title: Kotlin 学习系列一：内置类型
+title: Kotlin学习系列一：内置类型
 date: 2020-12-07 16:51:45
 tags: [Kotlin, 类型]
 summary: Kotlin 内置类型
@@ -20,6 +20,7 @@ summary: Kotlin 内置类型
     * {% post_link kotlin学习系列五 kotlin学习系列五：类型进阶 %}
     * {% post_link kotlin学习系列六 kotlin学习系列六：泛型 %}
     * {% post_link kotlin学习系列七 kotlin学习系列七：反射 %}
+    * {% post_link kotlin学习系列八 kotlin学习系列八：注解 %}
 
 # 二、基本类型
 
@@ -833,7 +834,7 @@ defaultParameter(2, "5")
 
 ```kotlin
 fun defaultParameter(x:Int = 5, y:String, z: Long = 0L) {
-    println(x+ +y + z)
+    println("x:$x, y:$y, z: $z")
 }
 ```
 

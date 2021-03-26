@@ -1,5 +1,5 @@
 ---
-title: Kotlin 学习系列五：类型进阶
+title: Kotlin学习系列五：类型进阶
 date: 2021-02-02 10:24:05
 tags: [Kotlin, 类型]
 summary: Kotlin 类型进阶
@@ -20,6 +20,7 @@ summary: Kotlin 类型进阶
     * {% post_link kotlin学习系列四 kotlin学习系列四：函数进阶 %}
     * {% post_link kotlin学习系列六 kotlin学习系列六：泛型 %}
     * {% post_link kotlin学习系列七 kotlin学习系列七：反射 %}
+    * {% post_link kotlin学习系列八 kotlin学习系列八：注解 %}
 
 # 二、 类的构造器
 
