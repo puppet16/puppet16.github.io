@@ -490,7 +490,6 @@ Person(name=Lee, age=18, group=Group(id=1, name=student, location=beijing))
 3. 对数据类`Person`进行深拷贝时，也对它的参数数据类`Group`进行了深拷贝，而深拷贝使用反射创建新的实例，所以两个`Group`实例不相等
 4. 打印出深拷贝的`Person`实例，与一开始创建的`Person`实例里的基本数据都是一致的
 
-
 # 五、 应用 -- Model映射
 
 >在工程中可能会有数据类之间转换的需要，本章讲述如何通过反射进行类之间快速的转换
