@@ -13,7 +13,8 @@ summary: Kotlin 注解
 2. *本文是对[Bennyhuo老师](https://github.com/enbandari)讲解的`Kotlin`系列视频的总结笔记*
 3. **Kotlin官网：[https://kotlinlang.org/](https://kotlinlang.org/)**
 4. **Kotlin中文官网：[https://www.kotlincn.net/](https://www.kotlincn.net/)**
-5. Kotlin 学习系列文章：
+5. **Kotlin源码：[https://github.com/JetBrains/kotlin](https://github.com/JetBrains/kotlin)**
+6. Kotlin 学习系列文章：
     * {% post_link kotlin学习系列一 kotlin学习系列一：内置类型 %}
     * {% post_link kotlin学习系列二 kotlin学习系列二：类与接口初解 %}
     * {% post_link kotlin学习系列三 kotlin学习系列三：表达式 %}
@@ -1269,7 +1270,6 @@ Human(name=Lee, avatarUrl=https://api.github.com/users/Lee, detailUrl=https://ap
 6. 目标代码生成：不同形式的目标代码—汇编语言形式、可重定位二进制代码形式、内存形式(Load-and-Go)
 7. 符号表管理：合理组织符号，便于各阶段查找\填写等。
 8. 出错处理
-9. 参考文章：[.java文件编译过程和执行过程分析](https://www.jianshu.com/p/af78a314c6fc)
 
 ![attar](/kotlin学习系列八/java_complier_process.png)
 
@@ -1278,33 +1278,613 @@ Human(name=Lee, avatarUrl=https://api.github.com/users/Lee, detailUrl=https://ap
 1. 抽象语法树 *(Abstract Syntax Tree, AST)* 是源代码语法结构的一种抽象表示。它以树状的形式表现编程语言的结构。
 2. 将源文件进行解析，构造抽象语法树，符号表填充，最输出扩展名为`.class`的字节码文件
 3. 在编译过程中会调用注解处理器`APT`*(Annotation Process Tool)* 扫描和处理注解，按照一定的规则，生成相应的`java`文件，然后再进行编译，注解处理器一般生成新的源文件，而不是更改之前源文件的语法树
+4. 参考文章：[.java文件编译过程和执行过程分析](https://www.jianshu.com/p/af78a314c6fc)
 
 **代码生成三方工具**：
 
 * 生成`Java`代码： **JavaPoet**
 * 生成`Kotlin`代码： **KotlinPoet**
 
-## 2. 实现注解处理器版 `Model` 映射
+## 2. 开源库`KotlinPoet`
+
+**官网：** [KotlinPoet](https://square.github.io/kotlinpoet/)
+
+`KotlinPoet`是一个用于生成扩展名为`.kt`的`kotlin`文件的开源库，他支持`Kotlin`和`Java`语句
+
+```kotlin
+val personClass = ClassName("cn.lee.kotlin", "Person")
+val file = FileSpec.builder("cn.lee.kotlin", "KotlinPoetTest")
+         .addType(TypeSpec.classBuilder("Person")
+               .primaryConstructor(FunSpec.constructorBuilder()
+                        .addParameter("name", String::class)
+                        .build())
+               .addProperty(PropertySpec.builder("name", String::class)
+                        .initializer("name")
+                        .build())
+               .addProperty(PropertySpec.builder("age", Int::class)
+                        .initializer("18")
+                        .build())
+               .addFunction(FunSpec.builder("printContent")
+                        .addStatement("println(%P)", "name= \$name")
+                        .build())
+               .build())
+         .addFunction(FunSpec.builder("main")
+               .addParameter("args", String::class, KModifier.VARARG)
+               .addStatement("%T(args[0]).printContent()", personClass)
+               .build())
+         .build()
+file.writeTo(System.out)
+```
+
+**打印结果：**
+
+```kotlin
+package cn.lee.kotlin
+
+import kotlin.Int
+import kotlin.String
+
+class Person(
+  val name: String
+) {
+  val age: Int = 18
+
+  fun printContent() {
+    println("""name= $name""")
+  }
+}
+
+fun main(vararg args: String) {
+  Person(args[0]).printContent()
+}
+
+```
+
+**说明：**
+
+1. `ClassName`作用是提供一个全称类名。该类必须是顶级成员
+2. `FileSpec`用于创建`Kotlin`文件内容。内容包含顶级对象 *（如类、对象、函数、属性和类型别名）*, 通过`Builder`创建
+3. `FileSpec.builder`方法中两个入参分别是创建的内容的文件所在包名及创建的内容的文件名
+   1. `addType()`方法是创建一个类。它接收一个`TypeSpec`对象作为参数
+   2. `addFunction()`方法是创建一个函数。它接收一个`FunSpec`对象作为参数
+4. `TypeSpec`用于生成类、接口或枚举声明
+5. `TypeSpec.classBuilder()`方法中的入参是创建的类的类名
+   1. `primaryConstructor()`方法是给要创建的类添加主构造器，其入参为`FunSpec.constructorBuilder`创建的构造器对象
+   2. `addProperty()`方法为类添加属性。其入参为`PropertySpec`对象
+   3. `addFunction()`方法为类添加函数。其入参为`FunSpec`对象
+6. `PropertySpec`用于生成属性
+7. `PropertySpec.builder()`方法中第一个入参是属性名称，第二个入参是属性类型
+   1. `initializer()`方法是为创建的属性赋初值，入参必须是`String`类型
+   2. 若该方法创建的属性与`FunSpec.constructorBuilder`语句创建构造器时添加的属性名称一致时，会将属性合并到构造器中声明
+8. `FunSpec`用于生成函数的声明
+9. `FunSpec.constructorBuilder()`用于创建一个构造器函数
+10. `FunSpec.builder`方法用于创建一个函数。它接收一个`String`对象作为参数，该参数即为创建的函数的名字
+    1. `addParameter()`方法为函数添加入参。第一个参数一般是入参名称，第二个参数是入参类型，第三个参数是入参修饰符
+    2. `addStatement()`方法为函数的函数体添加一条语句。第一个参数是具体语句，第二个参数是第一个参数中具体语句要使用的可变的内容，如字符串、类等。 用到第二个参数时 **第一个参数需要添加占位符**，第二个参数类型由占位符确定，**占位符一定要大写**  
+         |占位符|含义|示例|说明|
+         |----|----|----|----|
+         |%S|替换字符串|.addStatement("return %S", name)|只能替换一般文本，如果有$会将其进行转义|
+         |%P|替换含有$的字符串，即字符串模板|.addStatement("println(%P)", "name= \$name")|会将$符号作为正常文本|
+         |%T|替换某个类|.addStatement("return %T()", Date::class) <br/> .addStatement("%T(args[0]).printContent()", ClassName("cn.lee.kotlin", "Person"))|若替换的是在 生成代码时恰好可用的类，则第二个参数是某个类的`class`引用，此时会自动将该类的包导入；<br/> 若要引用了一个不存在的类 *(生成代码时尚未存在)*，则第二个参数是`ClassName`对象|
+11. 上述代码生成的文件`KotlinPoetTest.kt`地址：module名称/build/generated/source/kapt/debug/cn/lee/kotlin
+    ![attar](/kotlin学习系列八/apt_file_generate.png)
+
+## 3. 注解处理器`AbstractProcessor`
+
+### 1. 自定义注解处理器
+
+`AbstractProcessor`类是`Java API`提供的扫描源码并解析注解的框架，可以继承该抽象类来实现自己的解析注解逻辑。
+
+自定义注解处理器所在的类是帮助我们生成需要的代码源文件的，我们最后需要的是他生成的文件，最后打包进apk也是他生成的文件，自定义注解处理器所在的类本身是不需要打包的，所以自定义注解处理类不需要放到打包的工程`Module`中。
+
+继承`AbstractProcessor`的类需要实现以下四个方法：  
+
+* `init()`方法
+   会被注解处理工具调用，在这里可以做一些 **初始化** 的工作
+* `process()`方法
+  **相当于每个处理器的主函数`main()`**，在这里写扫描、评估和处理注解的代码，以及生成代码。
+  该方法提供两个参数：
+   1. `java.lang.model.element.TypeElement`对象的`Set`集合：处理注解的过程要经过一个或者多个回合才能完成。每个回合中注解处理器都会被调用，并且接收到一个以在当前回合中已经处理过的注解类型的`Type`为元素的`Set`集合。
+   2. `javax.annotation.processing.RoundEnvironment`对象：通过这个对象可以访问到当前或者之前的回合中处理的`Element`元素 `(即可以被注解类型注解的元素，如类、方法、参数等等)`，只有被注解处理器注册的注解类型注解过的元素才会被处理。
+* `getSupportedSourceVersion()`方法
+   指定使用的`Java`版本，通常这里返回`SourceVersion.latestSupported()`，默认返回`SourceVersion.RELEASE_6`，**该方法可以使用注解 `@SupportedSourceVersion`替代**
+* `getSupportedAnnotationTypes()`方法
+   指定这个注解处理器是注册给哪个注解的。**注意:** 它的返回值是一个字符串的集合，包含本处理器想要处理的注解类型的合法全称，即注解器所支持的注解类型集合，如果没有这样的类型，则返回一个空集合，**该方法可以使用注解 `@SupportedAnnotationTypes`替代**
+
+### 2. 声明自定义注解处理器
+
+1. 需要在处理器所在`module`的`main`目录中创建`resources`文件夹
+2. 再在`resources`文件夹下创建`META-INF.services`的文件夹
+3. 最后在`META-INF.services`的文件夹中创建文件`javax.annotation.processing.Processor`
+4. 之后在该文件中写入自定义注解处理器的类全称
+
+## 4. 注解解析器`Element`
+
+`element`指的是一系列与之相关的接口集合，它们位于`javax.lang.model.element`包下面。
+`element`是代表程序的一个元素，这个元素可以是：**包、类/接口、属性变量、方法/方法形参、泛型参数**。
+`element`是`java-apt` *(编译时注解处理器)* 技术的基础
+可以将`element`看作是`java`编译过程中语法分析后得出的语法树，每个类都是一个树，一个类是最外层的根节点，类变量和实例变量是根节点下的一个子节点，方法是另一个根节点，而方法中的变量又可以看成这个方法的子节点，依次类推下去。通过面向对象的方法我们将这个节点抽象出一个`element`类，这个类就提取出变量节点或者方法节点的一些相同的属性，**`Element`就作为一个顶级的父类**。
+
+各种`element`所代表的元素类型如下图所示：
+![attar](/kotlin学习系列八/element_type_description.png)
+
+**说明：**
+
+1. `PackageElement` 代表包的接口
+2. `TypeElement` 代表`java`程序中的类或者接口。提供访问该类型和其内部成员的一些方法。注意：枚举类型看做是类,注解类型看做是接口
+3. `VariableElement` 代表一个字段,枚举常量,方法或者构造器的参数,本地变量,`try-with-resource`中的`resource` 变量,或者是异常参数
+   `try-with-resources`语句是一种声明了一种或多种资源的`try`语句。资源是指在程序用完了之后必须要关闭的对象`try-with-resources`语句保证了每个声明了的资源在语句结束的时候都会被关闭。任何实现了`java.lang.AutoCloseable`接口的对象，和实现了`java.io.Closeable`接口的对象，都可以当做资源使用
+4. `TypeParameterElement` 代表泛型类,接口,方法或者构造器的形式类型参数。一个类型参数就对应的一个类型变量
+5. `ExecutableElement` 代表一个类或者接口的方法,构造器,或者初始块(静态或者实例的),包括注解类型。是`Parameterizable`的子接口
+
+## 5. 实现注解处理器版 `Model` 映射
+
+### 1. 创建注解
+
+在自己创建的目录`apt`下创建 名为`annotations`的`module`
+
+![attar](/kotlin学习系列八/apt_annotations.png)
+
+```kotlin
+//build.gradle
+
+plugins {
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm'
+}
+
+group 'cn.lee.kotlin'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+```
+
+```kotlin
+//ModeMap.kt
+
+package cn.lee.kotlin.annotations.apt
+
+@Retention(AnnotationRetention.BINARY)
+@Target(AnnotationTarget.CLASS)
+annotation class ModelMap
+```
+
+**说明：**
+
+1. 在该`module`中创建了一个注解类`ModelMap`
+2. 该注解类作用于类上，且注解信息记录在编译之后的二进制文件中，但对反射不可见
+
+### 2. 创建注解处理器
+
+#### 1. 添加依赖包
+
+在自己创建的目录`apt`下创建 名为`compiler`的`module`
+
+![attar](/kotlin学习系列八/apt_compiler.png)
+
+```kotlin
+//build.gradle
+
+plugins {
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm'
+}
+
+group 'cn.lee.kotlin'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+
+    implementation "com.squareup:kotlinpoet:1.4.3"
+    implementation "com.bennyhuo.aptutils:aptutils:1.7.1"
+    implementation project(":apt:annotations")
+
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+```
+
+**说明：**
+
+1. 注解处理器所在的`module`需要添加注解`module`的依赖以方便读取注解
+2. 注解处理器要根据注解生成对应`Kotlin`代码，所以添加`KotlinPoet`的依赖
+3. 为了方便的编写注解处理器，添加了`bennyhuo`老师的开源库`aptutils`
+
+#### 2. 创建处理器
+
+创建文件名为`ModelMapProcessor`的注解处理器
+
+```kotlin
+//ModelMapProcessor.kt
+
+@SupportedAnnotationTypes("cn.lee.kotlin.annotations.apt.ModelMap")
+@SupportedSourceVersion(SourceVersion.RELEASE_8)
+class ModelMapProcessor: AbstractProcessor() {
+   override fun init(processingEnv: ProcessingEnvironment) {
+      super.init(processingEnv)
+      AptContext.init(processingEnv)
+   }
+
+   override fun process(annotations: MutableSet<out TypeElement>, roundEnv: RoundEnvironment): Boolean {
+      roundEnv.getElementsAnnotatedWith(ModelMap::class.java)
+         .forEach {
+               element ->
+               element.enclosedElements.filterIsInstance<ExecutableElement>()
+                  .firstOrNull { it.simpleName() == "<init>" }
+                  ?.let {
+                     val typeElement = element as TypeElement
+                     FileSpec.builder(typeElement.packageName(), "${typeElement.simpleName()}\$\$ModelMap")
+                           .addFunction(
+                              FunSpec.builder("toMap")
+                                 .receiver(typeElement.asType().asKotlinTypeName())
+                                 .addStatement("return mapOf(${it.parameters.joinToString {""""${it.simpleName()}" to ${it.simpleName()}""" }})")
+                                 .build()
+                           )
+                           .addFunction(
+                              FunSpec.builder("to${typeElement.simpleName()}")
+                                 .addTypeVariable(TypeVariableName("V"))
+                                 .receiver(MAP.parameterizedBy(STRING, TypeVariableName("V")))
+                                 .addStatement(
+                                       "return ${typeElement.simpleName()}(${it.parameters.joinToString{ """this["${it.simpleName()}"] as %T """ } })",
+                                       *it.parameters.map { it.asType().asKotlinTypeName() }.toTypedArray()
+                                 )
+                                 .build()
+                           )
+                           .build().writeToFile()
+                  }
+         }
+      return true
+   }
+}
+```
+
+**说明：**
+
+1. 该示例中指定该处理器只支持注解`ModelMap`
+2. 该示例中初始化了开源库`aptutils`中的`AptContext`
+3. 该示例中使用注解指定了`java`版本为*1.8*
+4. 通过上下文`roundEnv`的`getElementsAnnotatedWith()`方法获取被某注解标注的元素，该方法入参为注解的`java`的`class`，返回的是一个元素集合
+5. 再通过`forEach`语句对元素列表中每个元素进行处理
+6. `element.enclosedElements` 语句返回该元素所包含的元素列表。类或接口被认为包含了它直接声明的字段、方法、构造函数和成员类型。包直接包含了顶级类和接 口，但不包含其子包
+7. `.filterIsInstance<ExecutableElement>()`语句返回某类元素实例列表。此时是从上条语句中得到的元素列表中过滤出`ExecutableElement`类型的元素实例
+8. `firstOrNull`语句返回符合筛选条件的对象，此时它的筛选条件是`it.simpleName() == "<init>"`,即筛选出构造器对象
+9. 将`element`强转为`TypeElement`类型的属性`typeElement`
+10. 使用`KotlinPoet`中的`FileSpec.builder`语句来创建`kotlin`文件内容
+    1. `typeElement.packageName()`为开源库`aptutils`中对`TypeElement`类的扩展方法，用于获取该`element`所在的顶级元素的包名。如此创建的`kotlin`文件所在的包名即为该元素所在顶级元素的包名
+    2. `${typeElement.simpleName()}\$\$ModelMap`，是取被标注的类的简单名字加上两个$符号再加上字符串`ModelMap`,最后拼接成的字符串即为创建的`kotlin`文件的名字
+    3. 通过`addFunction()`方法为创建的`kotlin`文件添加了名为`toMap`的函数，该函数功能是将主构造器中的参数生成一个`Map`,并将其返回。
+       1. 通过`receiver()`为`toMap`函数添加`receiver`，即`toMap`函数为该`receiver`的扩展函数。此时我们使用入参为`TypeName`类型参数的`receiver()`方法，使用`aptutils`的`typeElement.asType().asKotlinTypeName()`方法，可以解决`Kotlin`中一些类型映射问题，避免在`Kotlin`文件中出现`Java`的类型，而直接使用`typeElement.asClassName()`获取的`TypeName`类型，就可能会出现在生成的`Kotlin`代码中使用`Java`的类
+       2. 通过`addStatement()`方法为函数添加一行代码，实现的代码示例为：*`return mapOf("name" to name, "age" to age)`*
+       `joinToString()`方法功能为遍历集合元素，为集合元素间添加分隔符，组成一个新的字符串并返回。默认分隔符为逗号。
+       `${it.parameters.joinToString {""""${it.simpleName()}" to ${it.simpleName()}""" }}`语句作用是遍历主构造器中的参数列表，将参数列表组成键值对，所以`to`前的参数名称添加了双引号，后面的没有。
+    4. 通过`addFunction()`方法为创建的`kotlin`文件添加函数，函数名为`to`加上被注解`@ModelMap`所修饰的类的简单类名。该函数功能是根据`Map`生成被`@ModelMap`标注的类对象。
+       1. 通过`addTypeVariable()`为该函数声明一个泛型，通过语句`TypeVariableName()`定义该泛型名称,此时声明该泛型为`V`
+       2. 通过`receiver()`为该函数添加`receiver`，`MAP.parameterizedBy()`方法返回一个设置了`Key`和`value`类型的`Map`，此时`key`为`String`，`value`就是之前声明的泛型`V`
+       3. 通过`addStatement()`方法为该函数添加一条语句，生成代码示例为：*`Human(this["name"] as String , this["age"] as Int)`*
+       通过`it.parameters.joinToString()`方法遍历主构造器中参数列表，取出以参数名为`Key`的存于`Map`中的`value`值，因为`value`值对应的`map`中的类型是泛型可以是任何类型，所以在此处还要进行类型转换，使用`%T`。注意：**有几个形参就会有几个`%T`**
+       `*it.parameters.map { it.asType().asKotlinTypeName() }.toTypedArray()`是`addStatement()`方法的第二个参数，用于替换`%T`，第二个参数是变长参数，而我们最后返回的是一个数组，所以需要加星号，将数组展开便于传值。
+    5. 最后通过`aptutils`中的`writeToFile()`方法将文件内容与入到文件中
+
+#### 3. 添加处理器声明
+
+创建好注解处理器后，我们需要告诉编译器在编译的时候使用哪个注解处理器
+![attar](/kotlin学习系列八/apt_compiler.png)
+
+**说明：**
+
+1. 在`javax.annotation.processing.Processor`文件中写入自定义注解处理器的类全称：`cn.lee.kotlin.annotations.apt.compiler.ModelMapProcessor`
+
+### 3. 测试注解处理器
+
+在主`Module`下进行测试
+
+#### 1. `build.gradle.kts`配置
+
+```kotlin
+//build.gradle.kts
+
+import org.jetbrains.kotlin.config.KotlinCompilerVersion
+plugins {
+    id ("com.android.application")
+    id ("kotlin-android")
+    kotlin("kapt")
+    kotlin("jvm") version "1.4.30"
+    ...
+}
+
+android {
+    ...
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+        kotlinOptions.jvmTarget  = "1.8"
+    }
+}
 
 
+dependencies {
+    ...
+    implementation(kotlin("stdlib-jdk8", KotlinCompilerVersion.VERSION))
+    //注解处理器示例
+    kapt (project(":apt:compiler"))
+    implementation (project(":apt:annotations"))
+}
+```
+
+**说明：**
+
+1. 添加`kapt`的插件支持
+2. 设置`kotlin`在编译时使用的`jvmTarget`是`1.8`版本
+3. 添加注解模块的运行时依赖
+4. 自定义注解处理器所在的`module`并不是运行时的依赖，我们只需要处理器生成的文件
+5. [Kapt官网](http://www.kotlincn.net/docs/reference/kapt.html)
+
+#### 2. 创建测试文件
+
+```kotlin
+
+import cn.lee.kotlin.annotations.apt.ModelMap
+
+fun main() {
+    val person = Person("Lee", 18)
+    val human = person.toMap().toHuman()
+    println(person)
+    println(human)
+}
+
+//fun Human.toMap() = mapOf("name" to name, "age" to age)
+//fun <V> Map<String, V>.toHuman() = Human(this["name"] as String , this["age"] as Int)
+
+@ModelMap
+data class Human(val name: String, val age :Int)
+
+@ModelMap
+data class Person(val name: String, val age :Int, val address:String = "china")
+```
+
+打印结果如下：
+
+```java
+Person(name=Lee, age=18, address=china)
+Human(name=Lee, age=18)
+```
+
+**说明：**
+
+1. 创建两个数据类`Human`、`Person`，为这两个类添加注解`@ModelMap`，如此对应生成的文件名为`Human$$ModelMap.kt`、`Person$$ModelMap.kt`,地址如下：
+   ![attar](/kotlin学习系列八/apt_file_generate2.png)
+2. 在`main()`函数中创建`Person`对象`person`，再将`person`转为`Map`,再将`Map`转为了`Human`
+3. 生成的两个文件内容如下：
+
+   ```kotlin
+   //Human$$ModelMap.kt
+
+   package cn.ltt.projectcollection.kotlin.annotationlab
+
+   import kotlin.Int
+   import kotlin.String
+   import kotlin.collections.Map
+
+   fun Human.toMap() = mapOf("name" to name, "age" to age)
+
+   fun <V> Map<String, V>.toHuman() = Human(this["name"] as String , this["age"] as Int )
+   ```
+
+   ```kotlin
+   //Person$$ModelMap.kt
+
+   package cn.ltt.projectcollection.kotlin.annotationlab
+
+   import kotlin.Int
+   import kotlin.String
+   import kotlin.collections.Map
+
+   fun Person.toMap() = mapOf("name" to name, "age" to age, "address" to address)
+
+   fun <V> Map<String, V>.toPerson() = Person(this["name"] as String , this["age"] as Int ,
+      this["address"] as String )
+   ```
+
+# 七、`Kotlin`编译器插件
+
+## 1. 编译器插件工作机制
+
+在`Java`平台上，会将`*.kt`文件编译为`*.class`文件，而编译器插件会基于编译好的`*.class`文件直接修改该文件的内容，注解处理器会创建新的类参与编译。
+
+## 2. `AllOpen`插件
+
+### 1. `AllOpen`插件介绍
+
+`Kotlin` 的类及其成员默认是 `final` 的，可以使用`AllOpen`插件去掉`final`修饰符
+
+`AllOpen`插件包括两个插件：
+
+1. `AllOpen-Intellij`：为开发者提供便利，可以在编写代码时直接继承由`AllOpen`插件去掉`final`修饰符的类
+2. `AllOpen-Gradle`：真正完成编译器插件逻辑
+
+### 2. `AllOpen`插件源码
+
+源码地址：[https://github.com/JetBrains/kotlin/blob/master/plugins/allopen/allopen-cli/src/AllOpenDeclarationAttributeAltererExtension.kt](https://github.com/JetBrains/kotlin/blob/master/plugins/allopen/allopen-cli/src/AllOpenDeclarationAttributeAltererExtension.kt)
+
+```kotlin
+//AllOpenDeclarationAttributeAltererExtension.kt
+
+package org.jetbrains.kotlin.allopen
+
+...
+abstract class AbstractAllOpenDeclarationAttributeAltererExtension : DeclarationAttributeAltererExtension, AnnotationBasedExtension {
+    companion object {
+        val ANNOTATIONS_FOR_TESTS = listOf("AllOpen", "AllOpen2", "test.AllOpen")
+    }
+
+    override fun refineDeclarationModality(
+        modifierListOwner: KtModifierListOwner,
+        declaration: DeclarationDescriptor?,
+        containingDeclaration: DeclarationDescriptor?,
+        currentModality: Modality,
+        isImplicitModality: Boolean
+    ): Modality? {
+        if (currentModality != Modality.FINAL || modifierListOwner.isPrivate()) {
+            return null
+        }
+
+        val descriptor = declaration as? ClassDescriptor ?: containingDeclaration ?: return null
+        if (descriptor.hasSpecialAnnotation(modifierListOwner)) {
+            return if (!isImplicitModality && modifierListOwner.hasModifier(KtTokens.FINAL_KEYWORD))
+                Modality.FINAL // Explicit final
+            else
+                Modality.OPEN
+        }
+
+        return null
+    }
+}
+```
+
+**说明：**
+
+1. 在`refineDeclarationModality()`方法中实现去掉`final`的逻辑
+2. 先判断如果没有`final`修饰符，或类是`private`的话都不做任何处理
+3. 再定义一个属性`descriptor`值是强转为`ClassDescriptor`类型的`declaration`或是不为空的`containingDeclaration`，否则不做任何处理
+4. 之后判断类是否被对应的注解标注，若没有则不做处理
+5. 之后再判断是否手动添加的`final`，若是手动添加的则返回`final`，否则返回`open`
+
+## 3. `NoArg`插件
+
+### 1. `NoArg`插件介绍
+
+`NoArg`插件，给数据类加一个注解，使用数据类在编译时生成一个无参构造器，但无法在代码里直接访问该构造器，只能通过反射拿到
+
+`NoArg`插件包括两个插件：
+
+1. `NoArg-Intellij`：为开发者提供便利，可以在反编译时直接看到生成的无参构造器
+2. `NoArg-Gradle`：真正完成编译器插件逻辑
+
+### 2. `NoArg`插件源码
+
+#### 1. `NoArg-Gradle`关键源码
+
+源码地址：[https://github.com/JetBrains/kotlin/blob/master/plugins/noarg/noarg-cli/src/AbstractNoArgExpressionCodegenExtension.kt](https://github.com/JetBrains/kotlin/blob/master/plugins/noarg/noarg-cli/src/AbstractNoArgExpressionCodegenExtension.kt)
+
+```kotlin
+//AbstractNoArgExpressionCodegenExtension.kt
+
+package org.jetbrains.kotlin.noarg
 
 
+abstract class AbstractNoArgExpressionCodegenExtension(val invokeInitializers: Boolean) : ExpressionCodegenExtension,
+    AnnotationBasedExtension {
 
+    private fun ImplementationBodyCodegen.generateNoArgConstructor() {
+        ...
+        functionCodegen.generateMethod(JvmDeclarationOrigin.NO_ORIGIN, constructorDescriptor, object : CodegenBased(state) {
+            override fun doGenerateBody(codegen: ExpressionCodegen, signature: JvmMethodSignature) {
+                codegen.v.load(0, AsmTypes.OBJECT_TYPE)
 
+                if (isParentASealedClassWithDefaultConstructor) {
+                    codegen.v.aconst(null)
+                    codegen.v.visitMethodInsn(
+                        Opcodes.INVOKESPECIAL, superClassInternalName, "<init>",
+                        "(Lkotlin/jvm/internal/DefaultConstructorMarker;)V", false
+                    )
+                } else {
+                    codegen.v.visitMethodInsn(Opcodes.INVOKESPECIAL, superClassInternalName, "<init>", "()V", false)
+                }
 
+                if (invokeInitializers) {
+                    generateInitializers(codegen)
+                }
+                codegen.v.visitInsn(Opcodes.RETURN)
+            }
+        })
+    }
+}
+```
 
+**说明：**
 
+1. 因为要添加一个无参的构造器，所以直接对字节码进行操作
+2. 其中有一条语句判断`invokeInitializers`是否为`true`：为`true`，则执行`generateInitializers()`方法，该方法用于生成构造器
 
+#### 2. `NoArg-Intellij`关键源码
 
+源码地址：[https://github.com/JetBrains/kotlin/blob/master/plugins/noarg/noarg-ide/src/IdeArgExpressionCodegenExtension.kt](https://github.com/JetBrains/kotlin/blob/master/plugins/noarg/noarg-ide/src/IdeArgExpressionCodegenExtension.kt)
 
+```kotlin
+//IdeArgExpressionCodegenExtension.kt
 
+package org.jetbrains.kotlin.noarg.ide
 
+class IdeNoArgExpressionCodegenExtension(project: Project) : AbstractNoArgExpressionCodegenExtension(invokeInitializers = false) {
 
+    private val cachedAnnotationsNames = CachedAnnotationNames(project, NO_ARG_ANNOTATION_OPTION_PREFIX)
 
-# 七、 参考文章
+    override fun getAnnotationFqNames(modifierListOwner: KtModifierListOwner?): List<String> =
+        cachedAnnotationsNames.getAnnotationNames(modifierListOwner)
+}
+```
+
+**说明：**
+
+1. `invokeInitializers`设置为了`false`，所以`IntelliJ`反编译`Kotlin`看不到`invokeInitializers`为`true`的效果
+
+## 4. 其它实用插件
+
+![attar](/kotlin学习系列八/compiler_plugin_count.png)
+
+|常用插件名称|作用|适用范围|
+|----|----|----|
+|`android-extensions`|合成`View`属性、生成对应的字节码|省略了`findViewById`语句，可以直接使用布局文件中声明的`viewId`当作`View`的属性来访问`View`|
+|kotlin-serialization|为序列化类生成`serializer`,支持跨平台|用于数据类的序列化及反序列化，支持跨平台，生成的`serializer`可以给`java`平台生成字节码，还可以给`js`、`native`生成对应`javascript`、机器码等|
+
+## 5. 总结
+
+`Kotlin`编译器插件不仅支持`Java`平台，还支持`Js`平台、`Native`平台等，是跨平台的
+
+||注解处理器|`Kotlin`编译器插件|
+|--|--|--|
+|输出形式|源码|字节码|
+|能力范围|新增类，不能修改|新增、修改已有类|
+|依赖约束|依赖注解|可深入编译器细节|
+|`API`状态|稳定，公开|未公开，未来可期|
+|支持平台|`Java`虚拟机|跨平台|
+|上手难度|要对`Java`编译过程有一些了解，熟悉符号表|掌握目标代码 *(字节码、机器码)* 生成|
+
+# 八、 参考文章
 
 1. [https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-metadata/](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-metadata/)
 2. [https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/)
 3. [正确使用Kotlin注解，兼容Java代码](https://www.jianshu.com/p/eb091dd229f6)
 4. [.java文件编译过程和执行过程分析](https://www.jianshu.com/p/af78a314c6fc)
 5. [Android APT（Java注解应用）](https://www.jianshu.com/p/92e4a6159a1a)
+6. [java-apt的实现之Element详解](https://www.jianshu.com/p/899063e8452e)
+7. [javax.lang.model.element源码解析](https://blog.csdn.net/qq_26000415/article/details/82352764)
