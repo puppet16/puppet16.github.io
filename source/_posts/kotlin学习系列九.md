@@ -177,6 +177,8 @@ val users = names.map { name ->
 
 **协程的关键：** 挂起、恢复
 
+<span id="jumpGenerator"></span>
+
 ### 1. `Python`的`Generator`
 
 ```py
@@ -210,6 +212,8 @@ print(f"[1]{next(gen)}")
 5. 执行到第一条打印语句时，才会真正开始执行`numbers()`里的代码：先给`i`赋值为0，再进入死循环，之后执行到`yield i`，将这个函数挂起，再将`i`的值抛给了调用的位置，即`next(gen)`得到的是`i`的值，此时`i`的值为0
 6. 之后开始执行第二条打印语句，如此又开始执行`numbers()`函数里的`yield i`语句后的代码，将`i`值加一，因在列循环中，所以再次执行到了`yield i`，如此第二条打印语句的`next(gen)`得到了`i`的值，此时`i`的值为1
 7. `Python`的`Generator`是无栈的非对称协程
+
+<span id="jumpLua"></span>
 
 ### 2. `Lua`的`Coroutine`
 
@@ -916,21 +920,431 @@ private class DispatchedContinuation<T>(val delegate: Continuation<T>, val dispa
         }
     }
 }
-
+  
 ```
 
 **说明：**
 
 1. 整体实现原理是：添加拦截器，拦截了`SuspendLambda`并返回了自己的`Continuation`，在自己的`Continuation`被调用时先切换线程，再去调用`SuspendLambda`的`resume`。如此实现了线程切换。这也是自定义类`DispatcherContext`实现的功能
 
-# 五、应用--`Generator`与标准库的序列生成器
+# 五、应用--使用标准库的序列生成器`Sequence`实现`Generator`
+
+`Generator`是`Python`中的协程特性，`Generator`的使用请看之前的章节：[Pyhton的Generator](#jumpGenerator)
+
+## 1. 使用代码实现
+
+```kotlin
+abstract class GeneratorScope<T> internal constructor(){
+    protected abstract val parameter: T
+
+    abstract suspend fun yield(value: T)
+}
+
+sealed class State {
+    class NotReady(val continuation: Continuation<Unit>): State()
+    class Ready<T>(val continuation: Continuation<Unit>, val nextValue: T): State()
+    object Done: State()
+}
+
+interface Generator<T> {
+    operator fun iterator(): Iterator<T>
+}
+
+class GeneratorImpl<T>(private val block: suspend GeneratorScope<T>.(T) -> Unit, private val parameter: T): Generator<T> {
+    override fun iterator(): Iterator<T> {
+        return GeneratorIterator(block, parameter)
+    }
+}
+
+fun <T> generator(block: suspend GeneratorScope<T>.(T) -> Unit): (T) -> Generator<T> {
+    return { parameter: T ->
+        GeneratorImpl(block, parameter)
+    }
+}
+
+class GeneratorIterator<T>(private val block: suspend GeneratorScope<T>.(T) -> Unit, override val parameter: T)
+    : GeneratorScope<T>(), Iterator<T>, Continuation<Any?> {
+    override val context: CoroutineContext = EmptyCoroutineContext
+
+    private var state: State
+
+    init {
+        val coroutineBlock: suspend GeneratorScope<T>.() -> Unit = { block(parameter) }
+        val start = coroutineBlock.createCoroutine(this, this)
+        state = State.NotReady(start)
+    }
+
+    override suspend fun yield(value: T) = suspendCoroutine<Unit> {
+        continuation ->
+        state = when(state) {
+            is State.NotReady -> State.Ready(continuation, value)
+            is State.Ready<*> ->  throw IllegalStateException("Cannot yield a value while ready.")
+            State.Done -> throw IllegalStateException("Cannot yield a value while done.")
+        }
+    }
+
+    private fun resume() {
+        when(val currentState = state) {
+            is State.NotReady -> currentState.continuation.resume(Unit)
+        }
+    }
+
+    override fun hasNext(): Boolean {
+        resume()
+        return state != State.Done
+    }
+
+    override fun next(): T {
+        return when(val currentState = state) {
+            is State.NotReady -> {
+                resume()
+                return next()
+            }
+            is State.Ready<*> -> {
+                state = State.NotReady(currentState.continuation)
+                (currentState as State.Ready<T>).nextValue
+            }
+            State.Done -> throw IndexOutOfBoundsException("No value left.")
+        }
+    }
+
+    override fun resumeWith(result: Result<Any?>) {
+        state = State.Done
+        result.getOrThrow()
+    }
+
+}
+
+fun main() {
+    val nums = generator { start: Int ->
+        for (i in 0..5) {
+            yield(start + i)
+        }
+    }
+
+    val seq = nums(10)
+
+    for (j in seq) {
+        println(j)
+    }
+}
+```
+
+**打印结果：**
+
+```kotlin
+10
+11
+12
+13
+14
+15
+```
+
+**代码说明：**
+
+1. 定义抽象类`GeneratorScope`：
+   1. 将该抽象类的构造函数声明为模块内可见
+   2. 定义一个泛型`T`类型的参数`parameter`
+   3. 定义一个抽象的挂起函数`yield()`，接收一个泛型`T`类型的参数
+   4. 该抽象类用于限制挂起函数`yield()`的使用范围：仅限于以该抽象类为`receiver`的`Lambda`表达式
+2. 定义密封类`State`，用于标识协程运行情况：
+   1. **不带值的状态建议使用枚举，带值的状态建议使用密封类**
+   2. `NotReady`状态：还没有准备好值，需要一个协程继续执行协程体
+   3. `Ready`状态：已经有值了，此时内部已经`yield`，所以需要协程挂起，并将值传入
+   4. `Done`状态：协程体已执行完毕不会有新的值了
+3. 定义类`GeneratorIterator`：
+   1. 主构造器上添加两个类内属性：一个是名为`block`的挂起函数——该挂起函数的`receiver`是`GeneratorScope`类、入参是泛型、返回结果是`Unit`；另一个是名为`parameter`的泛型参数
+   2. 创建一个记录状态的属性`state`
+   3. 添加一个初始化代码块：
+      1. 启动协程时的`SuspendLambda`是没有参数的，但是该类传入的是一个带参数的挂起函数，所以声明一个名为`coroutineBlock`的无参挂起函数，在挂起函数体中将该类传入的泛型类型的参数作为入参调用传入的那个挂起函数
+      2. 通过`coroutineBlock`创建协程，因不需要马上启动，所以使用`createCoroutine()`方法创建，该方法需要传入两个参数：第一个参数是`receiver`，因该类实现了`GeneratorScope`抽象类，所以写`this`；第二个参数是协程执行完毕后的回调，因为该类实现了`Continuation`接口，所以写`this`
+      3. 状态初始化为`NotReady`，并传入上一条语句创建的协程
+   4. 实现接口`Iterator`用于迭代：
+      1. 定义一个`resume()`方法，用于判断如果当前状态是`NotReady`，调用一下状态中协程的`resume()`方法，以此来判断协程是否能`yield`值
+      2. `hasNext()`方法：用于判断是否有下一个值。先执行一下自定义的`resume()`方法——若状态是`NotReady`去调用协程的`resume()`方法，之后判断若状态为`Done`，表示协程执行完毕没有值了返回`false`，其它状态返回`true`
+      3. `next()`方法返回下一次`yield()`返回的值。将当前状态`state`赋值给另一个属性`currentState`，判断`currentState`：
+         1. 若`currentState`是`NotReady`，则调用一下自定义的`resume()`方法，看一下是否还有值，之后再调用一下`next()`方法
+         2. 若`currentState`是`Ready`，先将`state`切换为`NotReady`状态，之后将`curentState`强转为`Ready`状态，之后调用`Ready#nextValue()`方法，得到`yield()`的值
+         3. 若`currentState`是`Done`，抛出异常：下标越界
+   5. 实现接口`Continuation`用于协程：
+      1. 因为本次实现的功能不需要`CoroutineContext`，所以为`CoroutineContext`类型的属性`context`赋值为`EmptyCoroutineContext`对象
+      2. `resumeWith()`方法会在协程结束时调用，此时将状态置为`Done`，`result.getOrThrow()`语句表示若有异常则抛出异常，否则不做操作
+   6. 继承抽象类`GeneratorScope`：实现`yield()`方法，该方法是一个挂起函数，需要通过`suspendCoroutine`拿到它的`Continuation`，之后根据当前状态`state`重新为`state`赋值:
+      1. 若当前状态是`NotReady`，调用了`yield()`方法表示值已经准备好了，所以将当前置为`Ready`状态。创建`Ready`实例时将`yield()`之后继续执行的`Continuation`即通过`suspendCoroutine`拿到的`Continuation`传入进去，也将`yield()`方法的入参`value`传入进去
+      2. 若当前状态是`Ready`*(判断时`Ready`后加星投影是因为运行时这个类型不会真正存在)*，抛出异常：在`Ready`状态不能`yield`值了
+      3. 若当前状态是`Done`状态，抛出异常：不能在`Done`状态`yield`值
+4. 定义接口`Generator`，该接口中定义了一个重载运算符的函数`iterator()`、返回一个迭代器
+5. 定义实现类`GeneratorImpl`，它实现了接口`Generator`：
+   1. 主构造器上添加两个类内属性：一个是名为`block`的挂起函数——该挂起函数的`receiver`是`GeneratorScope`类、入参是泛型、返回结果是`Unit`；另一个是名为`parameter`的泛型参数
+   2. 在实现`iterator()`方法中直接返回`GeneratorIterator`类的对象
+6. 定义一个生成器函数`generator`：
+   1. 入参是一个挂起函数——该挂起函数的`receiver`是`GeneratorScope`类、入参是泛型、返回结果是`Unit`
+   2. 返回结果是一个函数——该函数有一个泛型入参、返回结果是接口`Generator`类型对象
+   3. 函数体直接`return`了一个`Lambda`表达式，入参是泛型`T`类型的`parameter`，返回是一个接口`Generator`的实现类`GeneratorImpl`的对象
+
+**执行流程说明：**
+
+1. `generator`函数创建一个`Lambda`表达式即创建一个新函数，新函数接收一个参数返回一个`GeneratorImpl`实例
+2. `GeneratorImpl`实现了`iterator`运算符即可以迭代了
+3. 每次迭代先通过`hasNext()`函数判断是否有值，这个值就是`yield()`函数中的入参，其中若状态是`NotReady`则 **会恢复协程**
+4. 恢复协程会执行执行`yield()`函数，若状态是`NotReady`状态会将状态置为`Ready`并 **将协程挂起** 后交给状态对象`state`
+5. 之后执行`next()`函数取值，若是`Ready`状态，则将状态置为`NotReady`并将状态对象中的协程传给`NotReady`以便于下次该状态下恢复协程，如此实现了协程的挂起和恢复
+
+## 2. 使用`sequence`实现
+
+```kotlin
+fun main() {
+    val sequence = sequence {
+        yield(1)
+        yield(2)
+        yield(3)
+        yield(4)
+        yieldAll(listOf(1,2,3,4))
+    }
+
+    for(seq in sequence){
+        println(seq)
+    }
+}
+```
+
+**打印结果：**
+
+```kotlin
+1
+2
+3
+4
+1
+2
+3
+4
+```
+
+**说明：**
+
+1. 直接使用`sequence`实现了`Python`中的`Generator`功能
+2. 每次`yield`都会挂起，也可以对`sequence`迭代
+3. 但是上一节自定义的代码中可以输入一个初始值，而`sequence`不行
+
+# 六、 应用-- 仿 `Lua` 协程实现非对称协程 `API`
+
+非对称协程：非对称协程的调度权只能转移给调用自己的协程，[Lua的Coroutine](#jumpLua)就是非对称协程
+
+```kotlin
+
+sealed class Status {
+    class Created(val continuation: Continuation<Unit>): Status()
+    class Yielded<P>(val continuation: Continuation<P>): Status()
+    class Resumed<R>(val continuation: Continuation<R>): Status()
+    object Dead: Status()
+}
+
+@RequiresApi(Build.VERSION_CODES.N)
+class Coroutine<P, R> (
+    override val context: CoroutineContext = EmptyCoroutineContext,
+    private val block: suspend Coroutine<P, R>.CoroutineBody.(P) -> R
+): Continuation<R> {
+
+    companion object {
+        fun <P, R> create(
+            context: CoroutineContext = EmptyCoroutineContext,
+            block: suspend Coroutine<P, R>.CoroutineBody.(P) -> R
+        ): Coroutine<P, R> {
+            return Coroutine(context, block)
+        }
+    }
+
+    inner class CoroutineBody {
+        var parameter: P? = null
+
+        suspend fun yield(value: R): P = suspendCoroutine { continuation ->
+            val previousStatus = status.getAndUpdate {
+                when(it) {
+                    is Status.Created -> throw IllegalStateException("Never started!")
+                    is Status.Yielded<*> -> throw IllegalStateException("Already yielded!")
+                    is Status.Resumed<*> -> Status.Yielded(continuation)
+                    Status.Dead -> throw IllegalStateException("Already dead!")
+                }
+            }
+
+            (previousStatus as? Status.Resumed<R>)?.continuation?.resume(value)
+        }
+    }
+
+    private val body = CoroutineBody()
+
+    private val status: AtomicReference<Status>
+
+    val isActive: Boolean
+        get() = status.get() != Status.Dead
+
+    init {
+        val coroutineBlock: suspend CoroutineBody.() -> R = { block(parameter!!) }
+        val start = coroutineBlock.createCoroutine(body, this)
+        status = AtomicReference(Status.Created(start))
+    }
 
 
+    override fun resumeWith(result: Result<R>) {
+        val previousStatus = status.getAndUpdate {
+            when(it) {
+                is Status.Created -> throw IllegalStateException("Never started!")
+                is Status.Yielded<*> -> throw IllegalStateException("Already yielded!")
+                is Status.Resumed<*> -> {
+                    Status.Dead
+                }
+                Status.Dead -> throw IllegalStateException("Already dead!")
+            }
+        }
+        (previousStatus as? Status.Resumed<R>)?.continuation?.resumeWith(result)
+    }
 
+    suspend fun resume(value: P): R = suspendCoroutine { continuation ->
+        val previousStatus = status.getAndUpdate {
+            when(it) {
+                is Status.Created -> {
+                    body.parameter = value
+                    Status.Resumed(continuation)
+                }
+                is Status.Yielded<*> -> {
+                    Status.Resumed(continuation)
+                }
+                is Status.Resumed<*> -> throw IllegalStateException("Already resumed!")
+                Status.Dead -> throw IllegalStateException("Already dead!")
+            }
+        }
 
+        when(previousStatus){
+            is Status.Created -> previousStatus.continuation.resume(Unit)
+            is Status.Yielded<*> -> (previousStatus as Status.Yielded<P>).continuation.resume(value)
+        }
+    }
 
+    suspend fun <SymT> SymCoroutine<SymT>.yield(value: R): P {
+        return body.yield(value)
+    }
+}
 
+class Dispatcher: ContinuationInterceptor {
+    override val key = ContinuationInterceptor
 
+    private val executor = Executors.newSingleThreadExecutor()
+
+    override fun <T> interceptContinuation(continuation: Continuation<T>): Continuation<T> {
+        return DispatcherContinuation(continuation, executor)
+    }
+}
+
+class DispatcherContinuation<T>(val continuation: Continuation<T>, val executor: Executor): Continuation<T> by continuation {
+
+    override fun resumeWith(result: Result<T>) {
+        executor.execute {
+            continuation.resumeWith(result)
+        }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.N)
+suspend fun main() {
+    val producer = Coroutine.create<Unit, Int>(Dispatcher()) {
+        for(i in 0..3){
+            log("send", i)
+            yield(i)
+        }
+        200
+    }
+
+    val consumer = Coroutine.create<Int, Unit>(Dispatcher()) { param: Int ->
+        log("start", param)
+        for(i in 0..3){
+            val value = yield(Unit)
+            log("receive", value)
+        }
+    }
+
+    while (producer.isActive && consumer.isActive){
+        val result = producer.resume(Unit)
+        consumer.resume(result)
+    }
+}
+
+fun log(vararg msg: Any?) = println("Coroutine: ${msg.joinToString(" ")}")
+
+```
+
+**打印结果：**
+
+```kotlin
+Coroutine: send 0
+Coroutine: start 0
+Coroutine: send 1
+Coroutine: receive 1
+Coroutine: send 2
+Coroutine: receive 2
+Coroutine: send 3
+Coroutine: receive 3
+Coroutine: receive 200
+```
+
+**说明：**
+
+1. 创建密封类`Status`，用于协程的状态：
+   1. `Created`：创建状态
+   2. `Yielded`：挂起状态，`yield`时的值定义为泛型类型`<P>`
+   3. `Resumed`：恢复状态，
+   4. `Dead`：销毁状态
+2. 创建类`Coroutine`：
+   1. 该类有两个泛型参数：`P`表示需要的参数；`R`表示返回值，也就是`yield`时传出的值
+   2. 创建伴生对象，在伴生对象中创建可静态调用的方法`create()`,用于创建`Coroutine`类的对象
+   3. 创建内部类`CoroutineBody`，用于约束`yield`方法只能在该协程`lambda`中使用：
+      1. 创建一个泛型`P`类型的参数`parameter`，初始值为`null`
+      2. 创建一个挂起函数`yield`，该函数接收的入参为泛型`R`类型`value`，返回值为泛型`P`类型
+   4. 该类主构造器中有两个参数：一个是带默认参数的`CoroutineContext`类型的`context`，若不需要在多线程下运行不传该值直接使用默认值`EmptyCoroutineContext`；一个是挂起函函数`block`，该函数必须以`CoroutineBody`为`receiver`、以泛型`P`为入参、以泛型`R`为返回值
+   5. 该类实现`Continuation`的接口，用于监听协程结束，在协程结束后会调用`resumeWith()`方法，在该方法中更新状态：
+      1. 创建状态属性`previousStatus`，调用`status`的`getAndUpdate()`方法，该方法使用给定函数的结果以原子方式更新当前值，并返回先前的值，该方法中的函数里的`it`即为当前状态，也就是更新之前的状态
+      2. 添加`when`语句进行状态判断
+      3. 若为`Created`状态，抛非法异常：从没开始过
+      4. 若为`Yielded`状态，抛非法异常：已经`yield`了
+      5. 若为`Resumed`状态，返回`Dead`状态
+      6. 若为`Dead`状态，抛非法异常：已经销毁
+      7. 切换完状态后，将`previousStatus`强转为`Resumed`状态，之后每步都加非空判断，调用该状态的协程的`resumeWith()`方法将`result`传入
+   6. 创建名为`body`的`CoroutineBody`对象
+   7. 创建名为`status`的`Status`对象，但是使用了`AtomicReference`将对象包裹。**`AtomicReference`是可以原子更新的对象引用**，以保证线程安全
+   8. 创建布尔型的属性`isActive`，用于判断协程是否还在活动，覆写该属性的`get()`方法，比较`status`是否是`Dead`状态
+   9. 创建初始代码块：
+      1. 创建名为`coroutineBlock`的用于创建协程的`SuspendLambda`，它的类型为以`CoroutinBody`为`receiver`的无入参、返回值为泛型`R`类型的挂起函数，其函数体是将强转为非空的`parameter`参数为入参调用的挂起函数`block`
+      2. 通过`coroutineBlock`创建名为`start`的协程，因不需要马上启动，所以使用`createCoroutine()`方法创建。`createCoroutine()`方法需要传入两个参数：第一个参数是`receiver`即`SuspendLambda`的`receiver`，所以写`CoroutinBody`的实例`body`；第二个参数是协程执行完毕后的回调，因为类`Coroutine`实现了`Continuation`接口，所以写`this`
+      3. 初始化状态`status`，为其赋值为`Created`状态，并将创建的`start`传入
+   10. 创建`resume()`方法，该方法是一个挂起函数，传入泛型`P`类型的参数，返回泛型`R`，需要通过`suspendCoroutine`拿到它的`Continuation`，然后进行状态的流转:
+       1. 创建状态属性`previousStatus`，调用`status`的`getAndUpdate()`方法，该方法使用给定函数的结果以原子方式更新当前值，并返回先前的值，该方法中的函数里的`it`即为当前状态，也就是更新之前的状态
+       2. 添加`when`语句进行状态判断
+       3. 若为`Created`状态，将`body`中的`parameter`赋值为`value`，作为函数调用的第一个参数。之后状态流转为`resume`,并将控制外部流程的`continuation`传递进去
+       4. 若为`Yielded`状态，状态流转为`resume`,并将控制外部流程的`continuation`传递进去
+       5. 若为`Resumed`状态，抛非法异常：已经`resumed`了
+       6. 若为`Dead`状态，抛非法异常：已经销毁
+       7. 切换完状态后，判断`previousStatus`状态：
+          1. 若为`Created`状态，将之前的挂起点执行一下，之所以不在上一条的`when`语句中执行，是因为`getAndUpdate`中的`lambda`可能会执行多次。因此，等状态流转成功后再执行。这是协程刚被创建，第一次执行`resume`方法的场景，所以`resume()`方法不需要传进去参数
+          2. 若为`Yielded`状态，将`previousStatus`强转为`P`泛型的`Yielded`类型，之后执行它的`continuation`的`resume()`方法，并将`value`值传递进去
+   11. 创建`yield()`方法，该方法是一个挂起函数，传入泛型`R`类型的参数，返回泛型`P`，需要通过`suspendCoroutine`拿到它的`Continuation`，然后进行状态的流转，但是
+3. 创建类`DispatcherContinuation`，用于进行`continuation`的分发
+   1. 其主构造器中传入两个参数，一个是要执行的`continuation`，一个是要执行`continuation`的`executor`
+   2. 该类实现使用`Continuation`代理，如果只需要实现需要修改的方法即可，其它与`Continuation`一致
+4. 创建类`Dispatcher`，实现`ContinuationInterceptor`接口，用于切换线程：
+   1. 其中`key`若是实现协程拦截器，则赋值`ContinuationInterceptor`
+   2. 在拦截协程方法中返回分发协程类对象，其中传入的执行器是使用`newSingleThreadExecutor()`创建的新执行器
+5. 创建`main()`函数验证代码：
+   1. 创建一个名为`producer`的`Coroutine`，其中
+      1. 第一个形参是`CoroutineContext`类型，传入的是`Dispatcher`类实例，该类实现`ContinuationInterceptor`接口，而该接口继承自`CoroutineContext`
+      2. 第二个形参是`receiver`为`CoroutineBody`的`lambda`表达式，该表达式入参为`Unit`即无入参，返回结果为`Int`类型。此时`lambda`表达式功能为执行`fori`循环，执行四次，从0开始到3结束，每次打印日志发送出去的值，并将`i`通过`yield()`方法传递出去
+   2. 创建名为`consumer`的`Coroutine`，其中
+      1. 第一个形参是`CoroutineContext`类型，传入的是`Dispatcher`类实例，该类实现`ContinuationInterceptor`接口，而该接口继承自`CoroutineContext`
+      2. 第二个形参是`receiver`为`CoroutineBody`的`lambda`表达式，该表达式入参为`Int`类型，返回结果为`Unit`类型。此时`lambda`表达式功能为打印传递进来的参数，之后执行`fori`循环，执行四次，从0开始到3结束，每次通过`yield()`方法取到生产者发送的值，并打印接收到的值
+   3. 创建一个循环，如果生产者和消息者都处于活跃状态则执行循环体：通过生产者的`resume()`方法取到生产的值，将通过消息者的`resume()`方法将值传递给消息者
+6. 问题：使用`Executor`的`newSingleThreadExecutor()`方法创建的线程不是幽灵线程，该线程会一直在后台等待`execute()`方法传递的任务。所以主线程执行完毕后，`executor`创建的线程还在后台运行，因此不能正常结束
+
+# 七、 应用-- 基于非对称协程`API`实现对称协程
 
 
 
@@ -979,4 +1393,5 @@ private class DispatchedContinuation<T>(val delegate: Continuation<T>, val dispa
 1. [kotlin协程的挂起suspend](https://blog.csdn.net/cpcpcp123/article/details/111724079)
 2. [Kotlin协程简介](https://www.jianshu.com/p/6e6835573a9c)
 3. [Kotlin协程-协程的内部概念Continuation](https://blog.csdn.net/weixin_42063726/article/details/106198212)
+4. [AtomicReference源码详解](https://blog.csdn.net/z974656361/article/details/110247463)
 
