@@ -46,7 +46,7 @@
 </li>
 </ul>
 </li>
-<li><a href="#san-ying-yong-huo-qu-fan-xing-shi-can">三、 应用 – 获取泛型实参</a>
+<li><a href="#san-shi-li-huo-qu-fan-xing-shi-can">三、 示例 – 获取泛型实参</a>
 <ul>
 <li><a href="#1-huo-qu-function-fan-hui-zhi-de-lei-xing-shi-can">1. 获取<code>Function</code>返回值的类型实参</a>
 <ul>
@@ -57,19 +57,19 @@
 <li><a href="#2-zai-chou-xiang-fu-lei-li-huo-qu-gai-fu-lei-fan-xing-de-shi-can">2. 在抽象父类里获取该父类泛型的实参</a></li>
 </ul>
 </li>
-<li><a href="#si-ying-yong-wei-shu-ju-lei-shi-xian-deepcopy">四、 应用 – 为数据类实现<code>DeepCopy</code></a>
+<li><a href="#si-shi-li-wei-shu-ju-lei-shi-xian-deepcopy">四、 示例 – 为数据类实现<code>DeepCopy</code></a>
 <ul>
 <li><a href="#1-shu-ju-lei-zi-dai-de-copy-fang-fa-zhi-shi-qian-kao-bei">1. 数据类自带的<code>copy</code>方法只是浅拷贝</a></li>
 <li><a href="#2-wei-shu-ju-lei-tian-jia-shen-kao-bei-fang-fa">2. 为数据类添加深拷贝方法</a></li>
 </ul>
 </li>
-<li><a href="#wu-ying-yong-model-ying-she">五、 应用 – Model映射</a>
+<li><a href="#wu-shi-li-model-ying-she">五、 示例 – Model映射</a>
 <ul>
 <li><a href="#1-tong-guo-map-zhuan-wei-ren-yi-lei-xing">1. 通过<code>Map</code>转为任意类型</a></li>
 <li><a href="#2-tong-guo-ren-yi-lei-xing-ying-she-wei-ren-yi-lei-xing">2. 通过任意类型映射为任意类型</a></li>
 </ul>
 </li>
-<li><a href="#liu-ying-yong-ke-shi-fang-dui-xiang-yin-yong-de-bu-ke-kong-lei-xing">六、 应用 – 可释放对象引用的不可空类型</a></li>
+<li><a href="#liu-shi-li-ke-shi-fang-dui-xiang-yin-yong-de-bu-ke-kong-lei-xing">六、 示例 – 可释放对象引用的不可空类型</a></li>
 <li><a href="#qi-cha-jian-hua-jia-zai-lei">七、 插件化加载类</a>
 <ul>
 <li><a href="#1-classloader">1. <code>ClassLoader</code></a>
@@ -295,7 +295,7 @@
 <li>混淆时，<code>proguard</code>会将<code>signature</code>混淆，所以要<code>keep</code>住<code>signature</code>才可以拿到泛型实参。<br>
 <code>Proguard</code>配置：<code>-keepattributes Signature</code></li>
 </ol>
-<h1><span id="san-ying-yong-huo-qu-fan-xing-shi-can">三、 应用 – 获取泛型实参</span><a href="#san-ying-yong-huo-qu-fan-xing-shi-can" class="header-anchor">#</a></h1>
+<h1><span id="san-shi-li-huo-qu-fan-xing-shi-can">三、 示例 – 获取泛型实参</span><a href="#san-shi-li-huo-qu-fan-xing-shi-can" class="header-anchor">#</a></h1>
 <h2><span id="1-huo-qu-function-fan-hui-zhi-de-lei-xing-shi-can">1. 获取<code>Function</code>返回值的类型实参</span><a href="#1-huo-qu-function-fan-hui-zhi-de-lei-xing-shi-can" class="header-anchor">#</a></h2>
 <h3><span id="1-tong-guo-kotlin-fan-she-huo-qu">1. 通过<code>Kotlin</code>反射获取</span><a href="#1-tong-guo-kotlin-fan-she-huo-qu" class="header-anchor">#</a></h3>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span></span>(<span class="keyword">val</span> name:String, <span class="keyword">val</span> age: String)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Api</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">getUsers</span><span class="params">()</span></span>: List&lt;Person&gt;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="comment">//方法一</span></span><br><span class="line">    Api::<span class="class"><span class="keyword">class</span>.<span class="title">declaredMemberFunctions</span>.<span class="title">first</span> </span>&#123; it.name == <span class="string">"getUsers"</span> &#125;</span><br><span class="line">            .returnType.arguments.forEach &#123;</span><br><span class="line">                println(it)</span><br><span class="line">            &#125;</span><br><span class="line">    <span class="comment">//方法二</span></span><br><span class="line">    Api::getUsers.returnType.arguments.forEach &#123; println(it) &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -333,7 +333,7 @@
 <li>方法二使用<code>Java</code>反射：调用<code>this.javaClass</code>获取<code>java</code>的<code>class</code>实例，之后调用<code>genericSuperclass</code>获取带有泛型实参的<code>Type!</code>，之后调用<code>safeAs()</code>方法将<code>Type!</code>类型转为<code>ParameterizedType</code>类型，再调用方法<code>actualTypeArguments</code>得到参数的列表，再调用<code>first()</code>取第一个参数</li>
 <li>打印结果一个是<code>Kotlin</code>的<code>String</code>，一个是<code>Java</code>的<code>String</code>。<code>Kotlin</code>的<code>String</code>的编译完成后会编译为<code>Java</code>的<code>String</code>,所以在<code>Java</code>的反射中所有的<code>Kotlin</code>类型都是<code>Java</code>类型</li>
 </ol>
-<h1><span id="si-ying-yong-wei-shu-ju-lei-shi-xian-deepcopy">四、 应用 – 为数据类实现<code>DeepCopy</code></span><a href="#si-ying-yong-wei-shu-ju-lei-shi-xian-deepcopy" class="header-anchor">#</a></h1>
+<h1><span id="si-shi-li-wei-shu-ju-lei-shi-xian-deepcopy">四、 示例 – 为数据类实现<code>DeepCopy</code></span><a href="#si-shi-li-wei-shu-ju-lei-shi-xian-deepcopy" class="header-anchor">#</a></h1>
 <p>定义两个数据类<code>Person</code>、<code>Group</code>，<code>Group</code>是<code>Person</code>的一个参数</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">data</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span></span>(<span class="keyword">val</span> name:String = <span class="string">"Lee"</span>, <span class="keyword">val</span> age:<span class="built_in">Int</span> = <span class="number">18</span>, <span class="keyword">val</span> group: Group)</span><br><span class="line"></span><br><span class="line"><span class="keyword">data</span> <span class="class"><span class="keyword">class</span> <span class="title">Group</span></span>(<span class="keyword">val</span> id:<span class="built_in">Int</span>, <span class="keyword">val</span> name:String, <span class="keyword">val</span> location:String)</span><br></pre></td></tr></table></figure>
 <h2><span id="1-shu-ju-lei-zi-dai-de-copy-fang-fa-zhi-shi-qian-kao-bei">1. 数据类自带的<code>copy</code>方法只是浅拷贝</span><a href="#1-shu-ju-lei-zi-dai-de-copy-fang-fa-zhi-shi-qian-kao-bei" class="header-anchor">#</a></h2>
@@ -382,7 +382,7 @@
 <li>对数据类<code>Person</code>进行深拷贝时，也对它的参数数据类<code>Group</code>进行了深拷贝，而深拷贝使用反射创建新的实例，所以两个<code>Group</code>实例不相等</li>
 <li>打印出深拷贝的<code>Person</code>实例，与一开始创建的<code>Person</code>实例里的基本数据都是一致的</li>
 </ol>
-<h1><span id="wu-ying-yong-model-ying-she">五、 应用 – Model映射</span><a href="#wu-ying-yong-model-ying-she" class="header-anchor">#</a></h1>
+<h1><span id="wu-shi-li-model-ying-she">五、 示例 – Model映射</span><a href="#wu-shi-li-model-ying-she" class="header-anchor">#</a></h1>
 <blockquote>
 <p>在工程中可能会有数据类之间转换的需要，本章讲述如何通过反射进行类之间快速的转换</p>
 </blockquote>
@@ -412,7 +412,7 @@
 <li>获取被转换的类<code>From</code>的成员属性列表，之后将列表转换为集合，集合键为属性名称，值为属性值，最后再调用上一节所讲的<code>Map</code>的转换函数<code>mapAs()</code></li>
 <li><strong>注意：</strong> 两个任意类型中的参数名称要一致，且参数要定义在主构造器中</li>
 </ol>
-<h1><span id="liu-ying-yong-ke-shi-fang-dui-xiang-yin-yong-de-bu-ke-kong-lei-xing">六、 应用 – 可释放对象引用的不可空类型</span><a href="#liu-ying-yong-ke-shi-fang-dui-xiang-yin-yong-de-bu-ke-kong-lei-xing" class="header-anchor">#</a></h1>
+<h1><span id="liu-shi-li-ke-shi-fang-dui-xiang-yin-yong-de-bu-ke-kong-lei-xing">六、 示例 – 可释放对象引用的不可空类型</span><a href="#liu-shi-li-ke-shi-fang-dui-xiang-yin-yong-de-bu-ke-kong-lei-xing" class="header-anchor">#</a></h1>
 <blockquote>
 <p>创建一个引用，该引用持有一个占用较大内存资源的类型对象，在最后不需要该引用时，我们需要将其释放，也就是将引用置为<code>null</code>，<code>Kotlin</code>中只有声明为可空类型才能置为<code>null</code>，但是可空类型属性使用比较繁琐，可以通过<code>属性代理</code>将定义不可空类型引用释放</p>
 </blockquote>
