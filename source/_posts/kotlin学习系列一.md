@@ -334,7 +334,7 @@ intRange.forEach { elem ->
 println(1.3235f in floatRange)
 ```
 
-## 3. 区间应用
+## 3. 区间示例
 
 可以使用区间来实现`java`中`fori`循环
 
@@ -850,7 +850,7 @@ defaultParameter(y = "5")
 
 调用时可使用形参名字来显式接收参数，这样避免了给首尾参数加默认值，调用时无法只传中间参数值的问题
 
-# 七、应用
+# 七、示例
 
 ```kotlin
 fun main() {

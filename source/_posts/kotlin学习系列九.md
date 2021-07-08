@@ -150,7 +150,7 @@ try {
 #### 3. 通过多个用户名获取多个用户的数组
 
 ```kotlin
-val names = arrayOf("abreslav","udalov", "yole")         
+val names = arrayOf("abreslav","udalov", "yole")
 val users = names.map { name ->
     githubApi.getUserSuspend(name)
 }
@@ -279,6 +279,8 @@ End Main
 5. `Lua`中`..`有拼接字符串的意思
 6. `Lua`的协程是 **有栈的非对称协程**
 
+<span id="jumpGoRoutine"></span>
+
 ### 3. `Go`的`routine`
 
 >计算机科学领域的任何问题都可以通过增加一个间接的中间层来解决
@@ -307,7 +309,7 @@ func main() {
     channel := make(chan int)
     var readChannel <-chan int = channel
     var writeChannel chan <- int = channel
-    
+
     go func() {
         for i:= 0; i < 3; i++ {
             fmt.Println("write",i)
@@ -315,7 +317,7 @@ func main() {
         }
         close(writeChannel)
     }()
-    
+
     go func() {
         fmt.Println("wait for read")
         for i := range readChannel {
@@ -358,6 +360,8 @@ read end
    1. 每个`go routine` 都是并发或并行执行
    2. 无`Buffer`的`Channel`写时会挂起，直到读取，反之亦然
    3. **`go routine` 可以认为是一种有栈对称协程的实现**
+
+<span id="jumpJsAsync"></span>
 
 ### 4. `async/await`关键字
 
@@ -465,7 +469,7 @@ suspend fun coroutine(){
    * `Dispatchers.Default`：适合 `CPU` 密集型的任务，比如计算
 4. 在 `suspend` 函数执行完成之后，**协程会自动帮我们把线程再切回来**
 
-**挂起时线程和协程操作流程总结：** 
+**挂起时线程和协程操作流程总结：**
 
 1. 我们的协程原本是运行在某线程的。当代码遇到 `suspend` 函数的时候，会被 `suspend` 也就是被挂起，而所谓的被挂起，就是线程切换，根据 `Dispatchers` 切换到其它线程执行`suspend`函数。当这个`suspend`函数执行完毕后，协程会重新切换回一开始的线程
 2. 切回原线程的操作在 `Kotlin` 里叫做 **恢复 *(resume)***， 也就是协程会帮我们再 `post` 一个 `Runnable`，让协程中剩下的代码继续回到一开始的线程中执行
@@ -608,11 +612,11 @@ suspend fun getUserSuspend(name: String) = suspendCoroutine<User> { continuation
 ```kotlin
 
 fun <T> (suspend () -> T).createCoroutine(completion: Continuation<T>): Continuation<Unit> {
-    
+
 }
 
-fun <R, T> (suspend R.() -> T).createCoroutine(receiver: R, completion: Continuation<T>): Continuation<Unit> { 
-    
+fun <R, T> (suspend R.() -> T).createCoroutine(receiver: R, completion: Continuation<T>): Continuation<Unit> {
+
 }
 ```
 
@@ -651,12 +655,12 @@ suspend {
 ### 2. `startCoroutine`
 
 ```kotlin
-fun <T> (suspend () -> T).startCoroutine(completion: Continuation<T>): Unit { 
-    
+fun <T> (suspend () -> T).startCoroutine(completion: Continuation<T>): Unit {
+
 }
 
-fun <R, T> (suspend R.() -> T).startCoroutine(receiver: R, completion: Continuation<T>): Unit { 
-    
+fun <R, T> (suspend R.() -> T).startCoroutine(receiver: R, completion: Continuation<T>): Unit {
+
 }
 ```
 
@@ -698,7 +702,7 @@ fun <R, T> (suspend R.() -> T).startCoroutine(receiver: R, completion: Continuat
 ```kotlin
 @SinceKotlin("1.3")
 public interface ContinuationInterceptor : CoroutineContext.Element {
-   
+
     companion object Key : CoroutineContext.Key<ContinuationInterceptor>
 
     public fun <T> interceptContinuation(continuation: Continuation<T>): Continuation<T>
@@ -875,7 +879,7 @@ Logger.debug(4)
 6. 之后执行第六行代码：`Logger.debug(returnImmediately())`，继续执行`mLabel`值为2的分支：
    1. 调用挂起函数`ConsoleMainKt.returnImmediately(this);`，该挂起函数没有切换线程之类的操作，不需要实现真正的挂起
    2. `mLabel`自加1
-   3. 通过函数`isSuspended()`判断该挂起函数的返回值`result` **不是** **挂起标记**，**此时不会`return`**，而是继续执行下个分支的语句  
+   3. 通过函数`isSuspended()`判断该挂起函数的返回值`result` **不是** **挂起标记**，**此时不会`return`**，而是继续执行下个分支的语句
    4. 此时执行`mLabel`值为3的分支：打印出`returnImmediately()`函数的返回值
 7. 之后执行第七行代码：`Logger.debug(4)`，纯打印语句，直接执行
 8. 如此，创建协程时返回的`Contiuation`中`resume`全部执行完毕，此时执行创建协程时传入的`Continuation`即`mCompletion`的`resumeWith()`方法，将`Unit`传入其中
@@ -887,6 +891,8 @@ Logger.debug(4)
 * 协程体内的代码都是通过`Continuation.resumeWith`调用来实现恢复
 * 每调用一次`resumeWith`则`mLabel`加1，`mLabel`表示挂起次数，每个分支是挂起`mLabel`次后执行的代码，即每一个挂点对应一个`case`分支
 * 挂起函数返回`COROUTINE_SUSPENDED`时才是真正的挂起
+
+<span id="jumpThreadSwitch"></span>
 
 ## 7. 协程的线程调度
 
@@ -920,18 +926,18 @@ private class DispatchedContinuation<T>(val delegate: Continuation<T>, val dispa
         }
     }
 }
-  
+
 ```
 
 **说明：**
 
 1. 整体实现原理是：添加拦截器，拦截了`SuspendLambda`并返回了自己的`Continuation`，在自己的`Continuation`被调用时先切换线程，再去调用`SuspendLambda`的`resume`。如此实现了线程切换。这也是自定义类`DispatcherContext`实现的功能
 
-# 五、应用--使用标准库的序列生成器`Sequence`实现`Generator`
+# 五、示例--使用标准库的序列生成器`Sequence`实现`Generator`
 
 `Generator`是`Python`中的协程特性，`Generator`的使用请看之前的章节：[Pyhton的Generator](#jumpGenerator)
 
-## 1. 使用代码实现
+## 1. 代码实现
 
 ```kotlin
 abstract class GeneratorScope<T> internal constructor(){
@@ -1128,7 +1134,9 @@ fun main() {
 2. 每次`yield`都会挂起，也可以对`sequence`迭代
 3. 但是上一节自定义的代码中可以输入一个初始值，而`sequence`不行
 
-# 六、 应用-- 仿 `Lua` 协程实现非对称协程 `API`
+<span id="jumpLuaAPI"></span>
+
+# 六、 示例-- 仿 `Lua` 协程实现非对称协程 `API`
 
 非对称协程：非对称协程的调度权只能转移给调用自己的协程，[Lua的Coroutine](#jumpLua)就是非对称协程
 
@@ -1221,7 +1229,7 @@ class Coroutine<P, R> (
             is Status.Yielded<*> -> (previousStatus as Status.Yielded<P>).continuation.resume(value)
         }
     }
-
+    //为了下一章节对称协程调用API时特殊添加
     suspend fun <SymT> SymCoroutine<SymT>.yield(value: R): P {
         return body.yield(value)
     }
@@ -1327,7 +1335,7 @@ Coroutine: receive 200
        7. 切换完状态后，判断`previousStatus`状态：
           1. 若为`Created`状态，将之前的挂起点执行一下，之所以不在上一条的`when`语句中执行，是因为`getAndUpdate`中的`lambda`可能会执行多次。因此，等状态流转成功后再执行。这是协程刚被创建，第一次执行`resume`方法的场景，所以`resume()`方法不需要传进去参数
           2. 若为`Yielded`状态，将`previousStatus`强转为`P`泛型的`Yielded`类型，之后执行它的`continuation`的`resume()`方法，并将`value`值传递进去
-   11. 创建`yield()`方法，该方法是一个挂起函数，传入泛型`R`类型的参数，返回泛型`P`，需要通过`suspendCoroutine`拿到它的`Continuation`，然后进行状态的流转，但是
+   11. 创建`yield()`方法，该方法是一个挂起函数，传入泛型`R`类型的参数，返回泛型`P`，需要通过`suspendCoroutine`拿到它的`Continuation`，然后进行状态的流转。
 3. 创建类`DispatcherContinuation`，用于进行`continuation`的分发
    1. 其主构造器中传入两个参数，一个是要执行的`continuation`，一个是要执行`continuation`的`executor`
    2. 该类实现使用`Continuation`代理，如果只需要实现需要修改的方法即可，其它与`Continuation`一致
@@ -1341,57 +1349,803 @@ Coroutine: receive 200
    2. 创建名为`consumer`的`Coroutine`，其中
       1. 第一个形参是`CoroutineContext`类型，传入的是`Dispatcher`类实例，该类实现`ContinuationInterceptor`接口，而该接口继承自`CoroutineContext`
       2. 第二个形参是`receiver`为`CoroutineBody`的`lambda`表达式，该表达式入参为`Int`类型，返回结果为`Unit`类型。此时`lambda`表达式功能为打印传递进来的参数，之后执行`fori`循环，执行四次，从0开始到3结束，每次通过`yield()`方法取到生产者发送的值，并打印接收到的值
-   3. 创建一个循环，如果生产者和消息者都处于活跃状态则执行循环体：通过生产者的`resume()`方法取到生产的值，将通过消息者的`resume()`方法将值传递给消息者
+   3. 创建一个循环，如果生产者和消费者都处于活跃状态则执行循环体：通过生产者的`resume()`方法取到生产的值，将通过消费者的`resume()`方法将值传递给消费者
 6. 问题：使用`Executor`的`newSingleThreadExecutor()`方法创建的线程不是幽灵线程，该线程会一直在后台等待`execute()`方法传递的任务。所以主线程执行完毕后，`executor`创建的线程还在后台运行，因此不能正常结束
 
-# 七、 应用-- 基于非对称协程`API`实现对称协程
+# 七、 示例-- 基于非对称协程`API`实现对称协程
+
+## 1. 实现思路
+
+基于非对称协程实现对称协程只需要 **添加一个中间层调度中心**即可实现。
+
+![avatar](/kotlin学习系列九/symmetric_coroutine.png)
+
+如上图所示：
+
+1. 若从协程A转到协程B，若是非对称协程直接在协程A中`yield()`或是`resume(coroutineB)`即可
+2. 而若是对称协程，协程A`yield()`之后将调度权转给调度中心，而调度中心再调用`resume(coroutineB)`,如此来通过非对称实现对称。
+3. **调度中心可以是单独的一个协程，它只负责分发转移调度权。** 而调度协程如何知道调度权转移给谁呢？只需要调用`yield()`方法时将要转到的协程作为参数传入调度协程即可，如下图所示：</br>
+    ![avatar](/kotlin学习系列九/symmetric_coroutine2.png)
+
+## 2. 代码实现
+
+```kotlin
+
+//sym全拼为symmetric
+class SymCoroutine<T>(
+    override val context: CoroutineContext = EmptyCoroutineContext,
+    private val block: suspend SymCoroutine<T>.SymCoroutineBody.(T) -> Unit
+) : Continuation<T> {
+
+    companion object {
+        lateinit var main: SymCoroutine<Any?>
+
+        suspend fun main(block: suspend SymCoroutine<Any?>.SymCoroutineBody.() -> Unit) {
+            SymCoroutine<Any?> { block() }.also { main = it }.start(Unit)
+        }
+
+        fun <T> create(
+            context: CoroutineContext = EmptyCoroutineContext,
+            block: suspend SymCoroutine<T>.SymCoroutineBody.(T) -> Unit
+        ): SymCoroutine<T> {
+            return SymCoroutine(context, block)
+        }
+    }
+
+    class Parameter<T>(val coroutine: SymCoroutine<T>, val value: T)
+
+    val isMain: Boolean
+        get() = this == main
+
+    private val body = SymCoroutineBody()
+
+    private val coroutine = Coroutine<T, Parameter<*>>(context) {
+        Parameter(this@SymCoroutine, suspend {
+            block(body, it)
+            if(this@SymCoroutine.isMain) Unit else throw IllegalStateException("SymCoroutine cannot be dead.")
+        }() as T)
+    }
+
+    inner class SymCoroutineBody {
+        private tailrec suspend fun <P> transferInner(symCoroutine: SymCoroutine<P>, value: Any?): T{
+            if(this@SymCoroutine.isMain){
+                return if(symCoroutine.isMain){
+                    value as T
+                } else {
+                    val parameter = symCoroutine.coroutine.resume(value as P)
+                    transferInner(parameter.coroutine, parameter.value)
+                }
+            } else {
+                this@SymCoroutine.coroutine.run {
+                   return yield(Parameter(symCoroutine, value as P))
+                }
+            }
+        }
+
+        suspend fun <P> transfer(symCoroutine: SymCoroutine<P>, value: P): T {
+           return transferInner(symCoroutine, value)
+        }
+    }
+
+    override fun resumeWith(result: Result<T>) {
+        throw IllegalStateException("SymCoroutine cannot be dead!")
+    }
+
+    suspend fun start(value: T){
+        coroutine.resume(value)
+    }
+}
+
+object SymCoroutines {
+    val coroutine0: SymCoroutine<Int> = SymCoroutine.create<Int> { param: Int ->
+        log("coroutine-0", param)
+        var result = transfer(coroutine2, 0)
+        log("coroutine-0 1", result)
+        result = transfer(SymCoroutine.main, Unit)
+        log("coroutine-0 1", result)
+    }
+
+    val coroutine1: SymCoroutine<Int> = SymCoroutine.create { param: Int ->
+        log("coroutine-1", param)
+        val result = transfer(coroutine0, 1)
+        log("coroutine-1 1", result)
+    }
+
+    val coroutine2: SymCoroutine<Int> = SymCoroutine.create { param: Int ->
+        log("coroutine-2", param)
+        var result = transfer(coroutine1, 2)
+        log("coroutine-2 1", result)
+        result = transfer(coroutine0, 2)
+        log("coroutine-2 2", result)
+    }
+}
+
+suspend fun main() {
+    SymCoroutine.main {
+        log("main", 0)
+        val result = transfer(SymCoroutines.coroutine2, 3)
+        log("main end", result)
+    }
+}
+```
+
+**代码说明：**
+
+1. 该章节代码是基于[上一章节非对称协程代码](#jumpLuaAPI)开发的
+2. **对称协程要求在运行结束后主动将调度权转移，而不是执行完毕**。即不允许在不确定的协程里运行结束，以避免意想不到的结果。
+3. 创建类`SymCoroutine`：
+   1. 该类只有一个泛型参数：`T`表示需要的参数；因为是对称协程没有返回值的说法
+   2. 创建伴生对象，在伴生对象中做如下操作：
+      1. 创建`SymCoroutine`类型的属性`main`，用于保存调度中心的协程，以判断当前协程是否为调度中心
+      2. 创建挂起函数`main`，该函数入参类型为以`SymCoroutinBody`为`receiver`的无入参、返回值为`Unit`类型的挂起函数，`main`函数体将传入的挂起函数启动
+      3. 创建可静态调用的方法`create()`，用于创建`SymCoroutine`类的对象
+   3. 创建类`Parameter`，用于包含`yield()`和`resume()`方法中所有入参，即`SymCoroutine`类型的协程对象，和该协程对象所需要的类型为泛型`T`的参数`value`，也是为了复用[上一章节非对称协程代码](#jumpLuaAPI)
+   4. 创建属性`isMain`，返回值类型为`Boolean`，用于判断当前协程是否为调度中心协程即是是否为`main`协程
+   5. 创建`SymCoroutineBody`类型对象`body`
+   6. 创建非对称协程对象`coroutine`，即为[上一章节非对称协程代码](#jumpLuaAPI)中的`Coroutine`类对象，其中需要的参数为泛型`T`，返回的参数为`Parameter`。传入真正执行的`lambda`表达式，该`lambda`表达式返回一个`Parameter`实例对象。
+      1. `parameter`对象第一个入参是要转移的目标协程，传当前协程即可
+      2. `parameter`对象另一个参数是目标协程所需要参数，创建一个`suspend lambda`表达式，在表达式中运行`block`表达式以得到结果，`block`表达式中首先传入上一步创建的`body`对象，再传入泛型参数，因为[上一章节非对称协程代码](#jumpLuaAPI)中的`Coroutine`类对象中的语句`private val block: suspend Coroutine<P, R>.CoroutineBody.(P) -> R`入参中`CoroutineBody`有一个入参`P`,因此可以直接使用`it`来代指。
+      3. 执行完`block`表达式后，判断当前协程是否为`main`，如果是`main`协程则返回一个`Unit`，否则抛出异常：`SymCoroutine`不能执行完毕
+   7. 创建内部类`SymCoroutineBody`，用于约束`transfer`方法只能在该协程`lambda`中使用：
+      1. 创建一个挂起函数`transfer`：
+         1. 一个入参类型为`SymCoroutine`的协程对象，即转移的目标协程，该协程接收一个泛型为`P`类型的参数
+         2. 另一个入参类型为泛型`P`的`value`值，该值为上一个入参协程对象所需要的参数
+         3. 返回值为泛型`T`类型，用于流转到该协程时所要传入参数
+      2. 创建挂起函数`transferInner`，用于实现函数`transfer`的功能：
+         1. 满足尾递归条件的函数前面加`tailrec`修饰，编译器会优化该递归成一个快速而高效的基于循环的版本，减少栈消耗。尾递归条件：1. 最后一条语句是函数调用语句；2. 调用的函数是自身
+         2. 第一个入参类型与`transfer()`函数一致
+         3. 第二个入参类型为`Any?`
+         4. 先判断当前`SymCoroutineBody`的`SymCoroutine`是否为`main`协程
+         5. 若是`main`协程，因为每次转换调度权都会回到`main`协程中，因此要再判断转移目标协程是否为`main`协程
+            1. 若转移目标协程是`main`协程，直接将`value`值返回
+            2. 若转移目标协程不是`main`协程，即不是转移给`main`协程的，则需要获取`yield()`出来的两个参数，通过`symCoroutine.coroutine`取到非对称协程的对象并调用其`resume()`方法获取该协程返回的结果，其中`resume()`方法入参就是该协程需要的参数，即`value`,将其强转为泛型`P`。之后再调用`transferInner()`方法，将转移的目标协程及目标协程需要的参数传递进去
+         6. 若当前`SymCoroutineBody`的`SymCoroutine`不是`main`协程，即协程A到协程B的过程中，协程A还没有`yield`,因此需要执行一下协程A的`yield()`方法，但是`this@SymCoroutine.coroutine`中只有它的`CoroutineBody`里才有`yield()`方法，因此我们需要改造[上一章节的代码](#jumpLuaAPI)在`Coroutine`类中添加如下方法:
+
+            ```kotlin
+            suspend fun <SymT> SymCoroutine<SymT>.yield(value: R): P {
+                return body.yield(value)
+            }
+            ````
+
+            之后调用`this@SymCoroutine.coroutine`的`run`方法，并将`symCoroutine`和`value`拼装成`Parameter`对象，再将该对象作为入参调用`yield()`方法
+
+   8. 创建方法`start()`，用于启动该调度中心的协程`main`，在该方法体中调用非对称协程的`resume()`方法。该方法在`SymCoroutine`的伴生对象里的`main()`方法中被调用
+   9. 创建带名伴生对象`SymCoroutines`，在该伴生对象中创建三个对称协程，在各自的函数中调用`transfer()`方法进行协程的切换，并打印日志
+   10. 创建程序入口`main()`函数，在该函数中调用`SymCoroutine.main()`方法，用于创建并启动调度中心的协程`main`，并在该`main`协程中开始进行协程的切换并打印日志
+
+**打印结果：**
+
+```kotlin
+Coroutine: main 0
+Coroutine: coroutine-2 3
+Coroutine: coroutine-1 2
+Coroutine: coroutine-0 1
+Coroutine: coroutine-2 1 0
+Coroutine: coroutine-0 1 2
+Coroutine: main end kotlin.Unit
+```
+
+**执行流程说明：**
+
+上述例子中协程调用流程如下图所示：</br>
+   ![avatar](/kotlin学习系列九/symmetric_coroutine3.png)
+    </br>
+
+   1. 程序开始首先启动调度中心的协程即协程`main`
+   2. 打印信息`main 0`然后再将调度权转给协程2，并传入值3
+   3. 之后进入协程2，打印信息`coroutine-2 3`，接着将调度权转移给协程1，并传入值2
+   4. 之后进入协程1，打印信息`coroutine-1 2`，接着将调度权转移给协程0，并传入值1
+   5. 之后进入协程0，打印信息`coroutine-0 1`，接着将调度权转移给协程2，并传入值0
+   6. 之后进入协程2，运行调用其第一个挂起函数`transfer()`之后的语句，打印信息`coroutine-2 1 0`，接着将调度权转移给协程0，并传入值2
+   7. 之后进入协程0，打印信息`coroutine-0 1 2`，接着将调度权转移给了调度中心的协程`main`，表示要结束协程调度
+   8. 之后进入协程`main`，运行调用其挂起函数`transfer()`之后的语句，打印信息`main end kotlin.Unit`，程序结束
+   9. 若第6步，打印信息后，将调度权转移给协程1，即`result = transfer(coroutine0, 2)`替换为`result = transfer(coroutine1, 2)`，则会进入协程1，运行调用其挂起函数`transfer()`之后的语句，打印信息`coroutine-1 1 2`，之后协程里`lambda`运行完毕了，并会走到如下语句`if(this@SymCoroutine.isMain) Unit else throw IllegalStateException("SymCoroutine cannot be dead.")`，因为该协程不是协程`main`，则程序会触发断言，抛出异常。由此将协程切换限制到在协程`main`开始，最后到协程`main`里结束
+
+# 八、 示例--仿`Go`的`channel`实现协程通信
+
+```kotlin
+@file:RequiresApi(Build.VERSION_CODES.N)
+package cn.ltt.projectcollection.kotlin.coroutinesLab.go
+
+import android.os.Build
+import androidx.annotation.RequiresApi
+import cn.ltt.projectcollection.kotlin.coroutinesLab.lua.log
+import cn.ltt.projectcollection.kotlin.coroutinesLab.primary.dispatcher.DispatcherContext
+import java.util.*
+import java.util.concurrent.atomic.AtomicReference
+import kotlin.coroutines.*
+
+interface Channel<T> {
+    suspend fun send(value: T)
+
+    suspend fun receive(): T
+
+    fun close()
+}
+
+class ClosedException(message: String) : Exception(message)
+
+class SimpleChannel<T> : Channel<T> {
+
+    sealed class Element {
+        override fun toString(): String {
+            return this.javaClass.simpleName
+        }
+
+        object None : Element()
+        class Producer<T>(val value: T, val continuation: Continuation<Unit>) : Element()
+        class Consumer<T>(val continuation: Continuation<T>) : Element()
+        object Closed : Element()
+    }
+
+    private val state = AtomicReference<Element>(Element.None)
+
+    override suspend fun send(value: T) = suspendCoroutine<Unit> { continuation ->
+        val prev = state.getAndUpdate {
+            when (it) {
+                Element.None -> Element.Producer(value, continuation)
+                is Element.Producer<*> -> throw IllegalStateException("Cannot send new element while previous is not consumed.")
+                is Element.Consumer<*> -> Element.None
+                Element.Closed -> throw IllegalStateException("Cannot send after closed.")
+            }
+        }
+        (prev as? Element.Consumer<T>)?.continuation?.resume(value)?.let { continuation.resume(Unit) }
+    }
 
 
+    override suspend fun receive(): T = suspendCoroutine<T> { continuation ->
+        val prev = state.getAndUpdate {
+            when (it) {
+                Element.None -> Element.Consumer(continuation)
+                is Element.Producer<*> -> Element.None
+                is Element.Consumer<*> -> throw IllegalStateException("Cannot receive new element while previous is not provided.")
+                is Element.Closed -> throw IllegalStateException("Cannot receive new element after closed.")
+            }
+        }
+        (prev as? Element.Producer<T>)?.let {
+            it.continuation.resume(Unit)
+            continuation.resume(it.value)
+        }
+    }
 
+    override fun close() {
+        val prev = state.getAndUpdate { Element.Closed }
+        if (prev is Element.Consumer<*>) {
+            prev.continuation.resumeWithException(ClosedException("Channel is closed."))
+        } else if (prev is Element.Producer<*>) {
+            prev.continuation.resumeWithException(ClosedException("Channel is closed."))
+        }
+    }
+}
 
+fun plainChannelSample() {
+    val channel = SimpleChannel<Int>()
 
+    go("producer"){
+        for (i in 0..6) {
+            log("send", i)
+            channel.send(i)
+        }
+    }
 
+    go("consumer", channel::close){
+        for (i in 0..5) {
+            log("receive-i:$i")
+            val got = channel.receive()
+            log("got", got)
+        }
+    }
+}
 
+fun go(name: String = "", completion: () -> Unit = {}, block: suspend () -> Unit){
+    block.startCoroutine(object : Continuation<Any> {
+        override val context = DispatcherContext()
 
+        override fun resumeWith(result: Result<Any>) {
+            log("end $name", result)
+            completion()
+        }
+    })
+}
 
+fun main() {
+    plainChannelSample()
 
+    //blockingChannelSample()
+}
+```
 
+**说明：**
 
+1. `go routine`的详细内容可以看前而讲到的[Go routine示例](#jumpGoRoutine)
+2. 因工程里设置的最小`API`版本为16，而`AtomicReference#getAndUpdate()`方法需要的`API`版本为**24**， 所以需要添加注解来标识，因此使用**`@file`** 来为整个文件添加注解而不需要再在每个方法上添加
+3. 定义接口`Channel`，用于规范协程间通信的管道。在接口中定义三个方法：
+   1. 挂起函数`send()`方法，用于发送参数
+   2. 挂起函数`receive()`方法，用于接收参数
+   3. 函数`close()`，用于关闭管道
+4. 定义类`CosedException`，用于显示关闭管道异常信息
+5. 定义类`SimpleChannel`，实现接口`channel`，该类 **不支持队列**，只能发送接收，不能发送发送再接收接收：
+   1. 创建密封类`Element`，用于规范管道的几种状态：
+      1. `None`状态，即没有发送的也没有接收的
+      2. `Producer`状态，即已经发送了，但还没有接收
+      3. `Consumer`状态，即已经开始接收了，但还没有发送
+      4. `Closed`状态，管道关闭
+   2. 创建状态属性`state`，类型为`AtomicReference`类型的`Element`，初始值为`Element.None`
+   3. 实现挂起函数`send()`，通过`suspendCoroutine`函数可以获取当前挂起函数中的`Continuation`实例，并且在该函数中可以调用`Continuation`方法。
+      1. `send()`方法是发送数据，不需要返回数据，所以`suspendCoroutine`后的泛型写`Unit`
+      2. 创建状态属性`prev`，调用`state`的`getAndUpdate()`方法，该方法使用给定函数的结果以原子方式更新当前值，并返回先前的值，该方法中的函数里的`it`即为当前状态，也就是更新之前的状态
+         1. 添加`when`语句进行状态判断
+         2. 若为`None`状态，则将`state`更新为`Producer`状态，并将传入的`value`和当前的`coroutine`作为参数传进去，等接收人将`value`取走，并调用这个`coroutine`来将这个协程恢复执行
+         3. 若为`Producer`状态，抛非法异常。因为此时已经是发送待接收状态了不能再发送了
+         4. 若为`Consumer`状态，意味着已经在等待发送数据，将数据发送出去，再将`state`更新为`None`状态
+         5. 若为`Closed`状态，抛非法异常，关闭了就不能再发送了
+      3. 切换完状态后，将`prev`判空强转为`Consumer`状态，意味着已经在等待发送数据，之后每步都加非空判断，调用该状态的协程的`resume()`方法将`value`发送出去，之后调用`continuation`的`resume()`方法恢复当前协程
+   4. 实现挂起函数`receive()`，依然是通过通过`suspendCoroutine`函数获取当前挂起函数中的`Continuation`实例，并且在该函数中调用`Continuation`方法。
+      1. `receive()`方法用于接收数据，该方法返回接收到的数据，所以`suspendCoroutine`后的泛型写`T`
+      2. 创建状态属性`prev`，调用`state`的`getAndUpdate()`方法，该方法使用给定函数的结果以原子方式更新当前值，并返回先前的值，该方法中的函数里的`it`即为当前状态，也就是更新之前的状态
+         1. 添加`when`语句进行状态判断
+         2. 若为`None`状态，则将`state`更新为`Consumer`状态，并将当前的`coroutine`作为参数传进去，
+         3. 若为`Producer`状态，意味着已经是发送待接收状态，因此要将数据接收，再将`state`更新为`None`状态
+         4. 若为`Consumer`状态，抛非法异常。因为此时已经是等待发送状态了，不能接收了。不支持队列
+         5. 若为`Closed`状态，抛非法异常，关闭了就不能再发送了
+      3. 切换完状态后，将`prev`判空强转为`Producer`状态，意味着已经发送数据等待接收，之后每步都加非空判断，因为该状态是发送者，不需要返回结果，调用该状态的协程的`resume()`方法将`Unit`发送回去，之后调用`continuation`的`resume()`方法将发送过来的值传递进去来获取
+   5. 实现挂起函数`close()`：
+      1. 创建状态属性`prev`，调用`state`的`getAndUpdate()`方法，将`state`切换为`closed`状态，并将切换之前的状态值赋值给`prev`
+      2. 判断切换之前的状态值：如果是`Consumer`状态或是`Producer`状态，调用该状态的`continuation`的`resumeWithException()`方法。也就是在关闭过程中管道还在发送或是接收数据，抛出异常管道已经关闭啦不要再用啦
+6. 定义函数`go()`，用于模仿`go`语言中的`routine`样式，
+   1. 有三个入参：
+      1. 第一个参数是一个`String`类型，默认为空，只做打印日志使用
+      2. 第二个参数是无入参返回值为`Unit`的函数`completion`，默认是空函数
+      3. 第三个参数是无入参返回值为`Unit`的挂起函数`block`
+   2. 函数体内调用`block`的`startCoroutine()`方法来运行挂起函数：
+      1. 每次运行挂起函数都会创建一个`DispatcherContext()`，由此实现每个协程都单独运行在自己的线程上。具体实现见[协程间的线程调度](#jumpThreadSwitch)
+      2. 在`resumeWith()`方法中打印信息，并执行传进来的方法`completion()`
+7. 定义函数`plainChannelSample()`，用于非队列非阻塞式管道示例：
+   1. 定义属性`channel`，赋值为`SimpleChannel`类的实例，泛型传入`Int`
+   2. 调用`go()`函数
+      1. 第一个参数传入`producer`
+      2. 第二个参数不传
+      3. 第三个参数传入一个挂起函数，挂起函数体为一个`fori`循环，从0到6执行7次，每次循环都打印信息，并通过调用`channel.send()`方法将循环下标值传递出去
+   3. 调用`go()`函数：
+      1. 第一个参数传入`consumer`
+      2. 第二个参数传入匿名函数，函数中调用`channel::close`，该方法用于关闭管道，即接收完所有数据后调用该方法关闭管道
+      3. 第三个参数传入一个挂起函数，挂起函数体为一个`fori`循环，从0到5执行6次，每次循环打印信息，并通过调用`channel.receive()`方法获取管道发送的值，之后打印该值
+8. 创建`main()`入口函数，在函数中调用`plainChannelSample()`方法
 
+**打印结果：**
 
+```kotlin
+16:49:16:913 [DefaultDispatcher-worker-1] receive
+16:49:16:913 [DefaultDispatcher-worker-0] send 0
+16:49:16:946 [DefaultDispatcher-worker-0] send 1
+16:49:16:946 [DefaultDispatcher-worker-2] got 0
+16:49:16:946 [DefaultDispatcher-worker-2] receive
+16:49:16:946 [DefaultDispatcher-worker-2] got 1
+16:49:16:946 [DefaultDispatcher-worker-3] send 2
+16:49:16:946 [DefaultDispatcher-worker-2] receive
+16:49:16:946 [DefaultDispatcher-worker-2] got 2
+16:49:16:946 [DefaultDispatcher-worker-2] receive
+16:49:16:946 [DefaultDispatcher-worker-4] send 3
+16:49:16:947 [DefaultDispatcher-worker-4] send 4
+16:49:16:947 [DefaultDispatcher-worker-5] got 3
+16:49:16:947 [DefaultDispatcher-worker-5] receive
+16:49:16:947 [DefaultDispatcher-worker-5] got 4
+16:49:16:947 [DefaultDispatcher-worker-5] receive
+16:49:16:947 [DefaultDispatcher-worker-6] send 5
+16:49:16:947 [DefaultDispatcher-worker-6] send 6
+16:49:16:947 [DefaultDispatcher-worker-7] got 5
+16:49:16:948 [DefaultDispatcher-worker-7] end consumer Success(kotlin.Unit)
+16:49:16:949 [DefaultDispatcher-worker-8] end producer Failure(cn.ltt.projectcollection.kotlin.coroutinesLab.go.ClosedException: Channel is closed.)
+```
 
+**打印结果说明：**
 
+1. 最后在`go()`函数中，协程执行完毕后会打印信息，结果显示`consumer`协程成功结束，但是`producer`协程是异常结束，之所以异常是因为`consumer`只循环了6次，且在最后一次循环后将管道关闭了，而在`producer`中循环了7次，最后一次循环时管道已经关闭了，抛出异常，因此`producer`是异常结束
 
+**定义使用队列的可阻塞式的管道**
 
+```kotlin
 
+class QueueChannel<T> : Channel<T> {
+    class Producer<T>(val value: T, val continuation: Continuation<Unit>)
+    class Consumer<T>(val continuation: Continuation<T>)
 
+    sealed class ElementList {
+        object Nil : ElementList()
 
+        abstract class AbsElementList<T> : ElementList() {
+            private val list = mutableListOf<T>()
 
+            protected abstract fun new(): AbsElementList<T>
 
+            fun offer(element: T): ElementList {
+                return new().also { it.list += this.list + element }
+            }
 
+            open fun take(): ElementList {
+                val newList = this.list - this.list.first()
+                if (newList.isEmpty()) return Nil
+                return new().also { it.list += newList }
+            }
 
+            fun peek(): T = list.first()
 
+            fun elements(): List<T> = Collections.unmodifiableList(list)
+        }
 
+        class ProducerList<T> : AbsElementList<Producer<T>>() {
+            override fun new() = ProducerList<T>()
+        }
 
+        class ConsumerList<T> : AbsElementList<Consumer<T>>() {
+            override fun new() = ConsumerList<T>()
+        }
 
+        object Closed : ElementList()
+    }
 
+    private val state = AtomicReference<ElementList>(ElementList.Nil)
 
+    override suspend fun send(value: T) = suspendCoroutine<Unit> { continuation ->
+        val prev = state.getAndUpdate {
+            when (it) {
+                ElementList.Nil -> ElementList.ProducerList<T>().offer(Producer(value, continuation))
+                is ElementList.ProducerList<*> -> {
+                    (it as ElementList.ProducerList<T>).offer(Producer(value, continuation))
+                }
+                is ElementList.ConsumerList<*> -> {
+                    (it as ElementList.ConsumerList<T>).take()
+                }
+                ElementList.Closed -> throw IllegalStateException("Cannot send after closed.")
+                else -> throw IllegalStateException()
+            }
+        }
+        (prev as? ElementList.ConsumerList<T>)?.peek()?.continuation?.resume(value)?.run { continuation.resume(Unit) }
+    }
 
+    override suspend fun receive(): T = suspendCoroutine<T> { continuation ->
+        val prev = state.getAndUpdate {
+            when (it) {
+                ElementList.Nil -> ElementList.ConsumerList<T>().offer(Consumer(continuation))
+                is ElementList.ProducerList<*> -> {
+                    (it as ElementList.ProducerList<T>).take()
+                }
+                is ElementList.ConsumerList<*> -> {
+                    (it as ElementList.ConsumerList<T>).offer(Consumer(continuation))
+                }
+                ElementList.Closed -> throw IllegalStateException("Cannot receive after closed.")
+                else -> throw IllegalStateException()
+            }
+        }
+        (prev as? ElementList.AbsElementList<Producer<T>>)?.peek()?.let {
+            it.continuation.resume(Unit)
+            continuation.resume(it.value)
+        }
+    }
 
+    override fun close() {
+        val prev = state.getAndUpdate { ElementList.Closed }
+        if (prev is ElementList.ConsumerList<*>) {
+            prev.elements().forEach {
+                it.continuation.resumeWithException(ClosedException("Channel is closed."))
+            }
+        } else if (prev is ElementList.ProducerList<*>) {
+            prev.elements().forEach {
+                it.continuation.resumeWithException(ClosedException("Channel is closed."))
+            }
+        }
+    }
+}
 
+fun blockingChannelSample() {
+    val channel = QueueChannel<Int>()
+    for (n in 0..5) {
+        go("producer $n"){
+            for (i in n..n + 5) {
+                log("send", i)
+                channel.send(i)
+            }
+        }
+    }
 
+    go("consumer", channel::close) {
+        for (i in 0..11) {
+            val got = channel.receive()
+            log("got", got)
+        }
+    }
+}
 
+```
 
+**说明：**
 
+1. 定义实现接口`Channel`的实现类`QueueChannel`，用于实现队列的可阻塞式的管道
+   1. 定义类`Producer`，有两个入参
+   2. 定义类`Consumer`，有一个入参
+   3. 定义密封类`ElementList`，通过列表实现队列功能：
+      1. 定义`Nil`状态，
+      2. 定义抽象类`AbsElementList`:
+         1. 定义可变列表属性`list`
+         2. 定义抽象方法`new()`，返回`AbsElementList`对象
+         3. 定义方法`offer()`，入参是泛型`T`类型的元素，返回结果是一个`ElementList`对象，函数体中返回的是一个新创建的列表，新列表添加了之前列表的所有内容，并添加了传入的元素
+         4. 定义开放方法`take()`，返回一个`ElementList`对象，函数体操作：先创建属性`newList`用于存储之前列表去除头部元素后的列表，如果新列表是空的，则返回`Nil`，否则返回一个新创建的列表，该列表添加了`newList`中所有元素
+         5. 定义`peek()`方法，用于返回当前列表的头部元素
+         6. 定义`elements()`方法，用于返回一个只读的元素列表
+   4. 定义类`ProducerList`，继承抽象类`AbsElementList`，重写`new()`方法，返回一个`ProducerList`对象
+   5. 定义类`ConsumerList`，继承抽象类`AbsElementList`，重写`new()`方法，返回一个`ConsumerList`对象
+   6. 定义单例类`Closed`
+   7. 定义属性`state`，用于保存管道状态，初始化为`Nil`状态
+   8. 重写挂起函数`send()`方法，通过`suspendCoroutine`函数可以获取当前挂起函数中的`Continuation`实例，并且在该函数中可以调用`Continuation`方法。
+      1. `send()`方法是发送数据，不需要返回数据，所以`suspendCoroutine`后的泛型写`Unit`
+      2. 创建状态属性`prev`，调用`state`的`getAndUpdate()`方法，该方法使用给定函数的结果以原子方式更新当前值，并返回先前的值，该方法中的函数里的`it`即为当前状态，也就是更新之前的状态
+         1. 添加`when`语句进行状态判断
+         2. 若为`Nil`状态，则将`state`更新为`ProducerList`状态，先将传入的`value`和当前的`coroutine`组合为对象`Producer`，再调用密封类`ElementList`的子类`ProducerList`的`offer()`方法，将组合好的对象`Producer`作为参数传进去
+         3. 若为`ProducerList`状态，不切换状态，当前虽然已经处于已发送待接收状态，但因为使用了列表可以继续发送。先强转为`ProucerList`状态，然后再调用`ProducerList`的`offer()`方法，将传入的`value`和当前的`coroutine`这两个参数 组合的对象`Producer`作为参数传进去
+         4. 若为`ConsumerList`状态，当前是等待发送状态，需要将生产者列表中的头元素发送出去，因此需要更新消费者列表去掉头元素，若去掉头元素后列表变为空了，则将状态切换为`Nil`
+         5. 若为`Closed`状态，抛非法异常，关闭了就不能再发送了
+         6. 若为其它状态，则抛非法异常
+      3. 切换完状态后，将`prev`判空强转为`ConsumerList`状态，意味着已经在等待发送数据，之后每步都加非空判断，通过`peek()`方法取出消费者列表中的第一个消费者，再调用该消费者的协程的`resume()`方法将`value`发送出去，之后调用`continuation`的`resume()`方法恢复当前协程
+   9. 重写挂起函数`receive()`，依然是通过`suspendCoroutine`函数获取当前挂起函数中的`Continuation`实例，并且在该函数中调用`Continuation`方法。
+      1. `receive()`方法用于接收数据，该方法返回接收到的数据，所以`suspendCoroutine`后的泛型写`T`
+      2. 创建状态属性`prev`，调用`state`的`getAndUpdate()`方法，该方法使用给定函数的结果以原子方式更新当前值，并返回先前的值，该方法中的函数里的`it`即为当前状态，也就是更新之前的状态
+         1. 添加`when`语句进行状态判断
+         2. 若为`Nil`状态，则将`state`更新为`ConsumerList`状态，先以当前的`coroutine`为参数创建对象`Consumer`，再调用密封类`ElementList`的子类`ConsumerList`的`offer()`方法，将组合好的对象`Consumer`作为参数传进去
+         3. 若为`ProducerList`状态，当前处于已发送待接收状态，此时可以接收生产者列表中的头元素，然后更新消费者列表去掉头元素，若去掉头元素后列表变为空，则将状态切换为`Nil`
+         4. 若为`ConsumerList`状态，不切换状态，当前虽然是等待发送状态，但还可以继续添加消费者。先强转为`ConsumerList`状态，然后再调用`ConsumerList`的`offer()`方法，将以当前的`coroutine`为参数创建对象`Consumer`，再调用`offer()`方法，将对象`Consumer`放到消费者列表中
+         5. 若为`Closed`状态，抛非法异常，关闭了就不能再接收了
+         6. 若为其它状态，抛非法异常
+      3. 切换完状态后，将`prev`判空强转为以`Producer`为元素的抽象类`AbsElementList`的子类列表，此时意味着已经在等待接收数据，之后每步都加非空判断，通过`peek()`方法取出生产者列表中的第一个生产者，因生产者不需要返回结果，所以调用该生产者的协程的`resume()`方法时传递的是`Unit`，之后调用当前`continuation`的`resume()`方法将发送过来的值传递进去来获取
+   10. 重写函数`close()`：
+       1. 创建存储状态的属性`prev`，调用`state`的`getAndUpdate()`方法，将`state`切换为`closed`状态，并将切换之前的状态值赋值给`prev`
+       2. 判断切换之前的状态值：如果是`ConsumerList`状态或是`ProducerList`状态，通过`prev`的`elements`方法取到该状态中元素列表，使用`foreach`循环调用每个元素的`continuation`的`resumeWithException()`方法。也就是在关闭过程中管道还在发送或是接收数据，抛出异常管道已经关闭啦不要再用啦
+2. 定义函数`blockingChannelSample()`，用于非队列非阻塞式管道示例：
+   1. 定义属性`channel`，赋值为`QueueChannel`类的实例，泛型传入`Int`
+   2. 创建一个`fori`循环，循环下标`n`从0到5共执行6次，每次循环都会调用`go()`函数：
+      1. `go()`函数第一个参数传入`producer`加上当前循环下标值
+      2. 第二个参数不传
+      3. 第三个参数传入一个挂起函数，挂起函数体为一个`fori`循环，循环下标`i`是从外层循环下标当前值`n`开始，到`n+5`结束，共执行6次，每次循环都打印信息，并通过调用`channel.send()`方法将内循环下标`i`值传递出去
+   3. 调用`go()`函数：
+      1. 第一个参数传入`consumer`
+      2. 第二个参数传入匿名函数，函数中调用`channel::close`，该方法用于关闭管道，即接收完所有数据后调用该方法关闭管道
+      3. 第三个参数传入一个挂起函数，挂起函数体为一个`fori`循环，从0到11执行12次，每次循环打印信息，并通过调用`channel.receive()`方法获取管道发送的值，之后打印该值
+3. 最后在`main()`入口函数中调用`blockingChannelSample()`方法
 
+**打印结果：**
 
+```kotlin
+17:39:56:691 [DefaultDispatcher-worker-1] send 1
+17:39:56:691 [DefaultDispatcher-worker-5] send 5
+17:39:56:691 [DefaultDispatcher-worker-3] send 3
+17:39:56:691 [DefaultDispatcher-worker-4] send 4
+17:39:56:691 [DefaultDispatcher-worker-2] send 2
+17:39:56:691 [DefaultDispatcher-worker-0] send 0
+17:39:56:721 [DefaultDispatcher-worker-1] send 2
+17:39:56:721 [DefaultDispatcher-worker-7] got 1
+17:39:56:721 [DefaultDispatcher-worker-5] send 6
+17:39:56:721 [DefaultDispatcher-worker-8] got 5
+17:39:56:721 [DefaultDispatcher-worker-8] got 4
+17:39:56:722 [DefaultDispatcher-worker-9] send 5
+17:39:56:722 [DefaultDispatcher-worker-8] got 3
+17:39:56:722 [DefaultDispatcher-worker-10] send 4
+17:39:56:722 [DefaultDispatcher-worker-8] got 2
+17:39:56:722 [DefaultDispatcher-worker-11] send 3
+17:39:56:722 [DefaultDispatcher-worker-8] got 0
+17:39:56:722 [DefaultDispatcher-worker-12] send 1
+17:39:56:722 [DefaultDispatcher-worker-8] got 2
+17:39:56:722 [DefaultDispatcher-worker-13] send 3
+17:39:56:722 [DefaultDispatcher-worker-8] got 6
+17:39:56:722 [DefaultDispatcher-worker-14] send 7
+17:39:56:723 [DefaultDispatcher-worker-8] got 5
+17:39:56:723 [DefaultDispatcher-worker-15] send 6
+17:39:56:723 [DefaultDispatcher-worker-8] got 4
+17:39:56:723 [DefaultDispatcher-worker-15] send 5
+17:39:56:723 [DefaultDispatcher-worker-8] got 3
+17:39:56:723 [DefaultDispatcher-worker-4] send 4
+17:39:56:723 [DefaultDispatcher-worker-8] got 1
+17:39:56:723 [DefaultDispatcher-worker-4] send 2
+17:39:56:724 [DefaultDispatcher-worker-8] end consumer Success(kotlin.Unit)
+17:39:56:725 [DefaultDispatcher-worker-7] end producer 2 Failure(cn.ltt.projectcollection.kotlin.coroutinesLab.go.ClosedException: Channel is closed.)
+17:39:56:725 [DefaultDispatcher-worker-5] end producer 0 Failure(cn.ltt.projectcollection.kotlin.coroutinesLab.go.ClosedException: Channel is closed.)
+17:39:56:725 [DefaultDispatcher-worker-3] end producer 1 Failure(cn.ltt.projectcollection.kotlin.coroutinesLab.go.ClosedException: Channel is closed.)
+17:39:56:725 [DefaultDispatcher-worker-0] end producer 5 Failure(cn.ltt.projectcollection.kotlin.coroutinesLab.go.ClosedException: Channel is closed.)
+17:39:56:725 [DefaultDispatcher-worker-2] end producer 3 Failure(cn.ltt.projectcollection.kotlin.coroutinesLab.go.ClosedException: Channel is closed.)
+17:39:56:725 [DefaultDispatcher-worker-8] end producer 4 Failure(cn.ltt.projectcollection.kotlin.coroutinesLab.go.ClosedException: Channel is closed.)
+```
 
+**打印结果说明：**
 
+1. 因是多协程操作，每次运行的打印结果都不一样
+2. 最后在`go()`函数中，协程执行完毕后会打印信息，结果显示`consumer`协程成功结束，但是5个`producer`协程都是异常结束，之所以异常是因为`consumer`只循环了12次，且在最后一次循环后将管道关闭了，而有6个生产者且每个生产者发送了6条数据给`consumer`，而`consumer`只循环了12次，不能把各生产者发送的值都接收到，所以抛出异常，因此`producer`是异常结束，将`consumer`协程里的循环改为到35结束，即循环36次，将生产者们发送的值都接收到，如此生产者们就不会异常结束了
 
-# 十三、参考文章
+# 八、 示例--仿`Js`实现`async await`
+
+```kotlin
+
+interface AsyncScope
+
+suspend fun <T> AsyncScope.await(block: () -> Call<T>) = suspendCoroutine<T> {
+    continuation ->
+    val call = block()
+    call.enqueue(object : Callback<T>{
+        override fun onFailure(call: Call<T>, t: Throwable) {
+            continuation.resumeWithException(t)
+        }
+
+        override fun onResponse(call: Call<T>, response: Response<T>) {
+            if(response.isSuccessful){
+                response.body()?.let(continuation::resume) ?: continuation.resumeWithException(NullPointerException())
+            } else {
+                continuation.resumeWithException(HttpException(response))
+            }
+        }
+    })
+}
+
+fun async(context: CoroutineContext = EmptyCoroutineContext, block: suspend AsyncScope.() -> Unit) {
+    val completion = AsyncCoroutine(context)
+    block.startCoroutine(completion, completion)
+}
+
+class AsyncCoroutine(override val context: CoroutineContext = EmptyCoroutineContext): Continuation<Unit>, AsyncScope {
+    override fun resumeWith(result: Result<Unit>) {
+        result.getOrThrow()
+    }
+}
+
+fun main() {
+    async() {
+        val user = await { githubApi.getUserCallback("puppet16") }
+        log(user)
+    }
+}
+```
+
+**打印结果：**
+
+```kotlin
+request: 200
+19:39:56:395 [OkHttp https://api.github.com/...] User(id=14159272, name=Puppet16, url=https://api.github.com/users/puppet16)
+```
+
+**说明：**
+
+1. `js`的`async await`的详细内容可以看前面讲到的[`async/await`关键字](#jumpJsAsync)
+2. 定义一个接口`AsyncScope`，用于约束`async()`、`await()`这两个函数的使用范围
+3. 创建类`AsyncCoroutine`，实现接口`Continuation`和接口`AsyncScope`：
+   1. 重写`ConroutineContext`类型的`context`，默认值为`EmptyCoroutinContext`
+   2. 重写`resumeWith()`方法，在该方法中如果结果有异常则抛出异常
+4. 定义函数`async()`：
+   1. 第一个入参是`CoroutineContext`类型的变量`context`，它的默认值是`EmptyCoroutineContext`
+   2. 第二个入参是挂起函数的`lambda`表达式`block`，必须是限制必须是`AsyncScope`的扩展函数
+   3. 创建名为`completion`的`AsyncCoroutine`类的实例，将`context`传入其中
+   4. 之后调用`startCoroutine()`启动`block`协程，该方法需要的`receiver`和协程结束时调用的`completion`都传入上一步创建的`completion`
+5. 定义挂起函数`await()`，该函数传入一个`lambda`表达式，该表达式没有入参、出参是一个`Call`对象。之后通过`suspendCoroutine`函数获取当前挂起函数中的`Continuation`实例
+   1. 创建属性`call`，用于保存`block()`返回的结果
+   2. 调用`call`的异步请求方法`enqueue()`，该方法需要有一个`Callback`类对象，因此使用 **`object:`关键字创建`Callback`类的匿名内部对象**，之后重写该类中方法
+      1. 在`onFailure()`方法中通过`resumeWithException()`方法给协程抛出异常
+      2. 在`onResponse()`方法中，先判断网络请求是否成功，若未成功则抛出异常；若成功则取`response`的`body`对象，若有`body`对象则通过函数引用，直接调用协程的`resume()`方法；若没有`body`对象则调用`resumeWithException()`方法抛出空指针异常
+6. 由此`async`本身没有异步的能力，异步是由`call`的`enqueue()`方法提供的
+
+# 九、延伸--揭秘 `suspend fun main`
+
+## 1. 普通的`main`函数
+
+```kotlin
+fun main(args: Array<String>) {
+    ...
+}
+```
+
+自`Kotlin 1.3`之后可省略参数
+
+```kotlin
+//since kotlin 1.3
+fun main() {
+    ...
+}
+```
+
+## 2. 可挂起的`main`函数
+
+```kotlin
+suspend fun main() {
+    ...
+}
+```
+
+挂起`main`函数看起来函数类型为：`suspend () -> Unit`。但其实该函数传入了一个`Continuation`，并且返回了一个`Any?`，即实际上类型为`(Continuation<Unit>) -> Any?`，本质上挂起`main`函数为如下样式：
+
+```kotlin
+fun main(continuation: Continuation<Unit>): Any? {
+    ...
+}
+```
+
+而定义为如上形式也就不是入口函数了，可以使用`runSuspend()`方法运行如上形式函数：
+
+```kotlin
+fun main1(continuation: Continuation<Unit>): Any? {
+    return Unit;
+}
+
+fun main() {
+    runSuspend(::main1 as suspend () -> Unit)
+}
+```
+
+```kotlin
+
+package kotlin.coroutines.jvm.internal
+
+import kotlin.coroutines.Continuation
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
+import kotlin.coroutines.startCoroutine
+
+/**
+ * Wrapper for `suspend fun main` and `@Test suspend fun testXXX` functions.
+ */
+@SinceKotlin("1.3")
+internal fun runSuspend(block: suspend () -> Unit) {
+    val run = RunSuspend()
+    block.startCoroutine(run)
+    run.await()
+}
+
+private class RunSuspend : Continuation<Unit> {
+    override val context: CoroutineContext
+        get() = EmptyCoroutineContext
+
+    var result: Result<Unit>? = null
+
+    override fun resumeWith(result: Result<Unit>) = synchronized(this) {
+        this.result = result
+        @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN") (this as Object).notifyAll()
+    }
+
+    fun await() = synchronized(this) {
+        while (true) {
+            when (val result = this.result) {
+                null -> @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN") (this as Object).wait()
+                else -> {
+                    result.getOrThrow() // throw up failure
+                    return
+                }
+            }
+        }
+    }
+}
+
+```
+
+**说明：**
+
+1. 在入口`main()`函数中使用`runSuspend()`方法运行`main1()`方法，其中将`main1()`函数类型引用强转为`suspend () -> Unit`
+2. 函数`runSuspend()`是标准库中的源码函数，该函数被`internal`，没办法直接调用，因此直接将该函数代码从源码中提取出来
+3. `runSuspend()`函数，入参为标准的无参返回值为`Unit`的挂起函数`block`，在函数体中创建`RunSuspend`类的对象`run`，调用`block`的`startCoroutine()`方法开启协程，并将`run`作为`completion`传递进去，最后再调用`await()`方法
+4. `RunSuspend`类实现接口`Continuation`:
+   1. `context`为`EmptyCoroutineContext`
+   2. 定义结果属性`result`，设置初始值为`null`，`Result`作为特殊类型，编译器不允许它作为返回值的类型，而声明为`var`的属性有`getter`，所以该行会报错：`'kotlin.Result' cannot be used as a return type`。
+   而要解决该报错，只需要在`module`的`build.gradle`文件中`kotlinOptions`中配置如下代码：`freeCompilerArgs = ["-Xallow-result-return-type"]`，如下图所示：
+    ![attar](/kotlin学习系列九/coroutine_freecompilerargs.png)
+   3. 重写`resumeWith()`方法，将协程返回的结果赋值给属性`result`
+   4. 定义`await()`方法，添加`synchronized`关键字保证线程安全，添加一个`while`死循环，在循环体内判断如果`result`为`null`，则调用`object`的`wait()`方法继续等待；而如果`result`不为`null`，则直接将其取到并返回
+5. `wait()、notify/notifyAll()`方法延伸：
+   1. `wait()`使当前线程阻塞，前提是 **必须先获得锁**，一般配合`synchronized` 关键字使用，即一般在`synchronized` 同步代码块里使用 `wait()、notify/notifyAll()` 方法
+   2. 由于 `wait()、notify/notifyAll()` 在`synchronized` 代码块执行，说明当前线程一定是获取了锁
+   3. 当线程执行`wait()`方法时候，会释放当前的锁，然后让出`CPU`，进入等待状态。只有当 `notify/notifyAll()` 被执行时候，才会唤醒一个或多个正处于等待状态的线程，然后继续往下执行，直到执行完`synchronized` 代码块的代码或是中途遇到`wait()` ，再次释放锁。
+    也就是说，**`notify/notifyAll()` 的执行只是唤醒沉睡的线程，而不会立即释放锁，锁的释放要看代码块的具体执行情况**。所以在编程中，尽量在使用了`notify/notifyAll()` 后立即退出临界区，以唤醒其他线程让其获得锁
+   4. `wait()` 需要被`try catch`包围，以便发生异常中断也可以使`wait`等待的线程唤醒
+   5. `notify` 和`wait` 的顺序不能错，如果 **A** 线程先执行`notify`方法，**B** 线程在执行`wait`方法，那么 **B** 线程是无法被唤醒的
+   6. `notify` 和 `notifyAll`的区别：
+      1. `notify`方法只唤醒一个等待（对象的）线程并使该线程开始执行。所以如果有多个线程等待一个对象，这个方法只会唤醒其中一个线程，选择哪个线程取决于操作系统对多线程管理的实现
+      2. `notifyAll` 会唤醒所有等待(对象的)线程，尽管哪一个线程将会第一个处理取决于操作系统的实现。如果当前情况下有多个线程需要被唤醒，推荐使用`notifyAll` 方法
+6. 如果先调用的`resumeWith()`，再调用的`await()`，则`result`值不会为`null`，则会在`await()`方法中将`result`值抛出去；如果先调用`await()`，再调用`resumeWith()`，此时`result`值为`null`，会调用`wait`方法，将线程阻塞在这里，直到其它线程调用了`resumeWith()`方法，并在该方法中调用了`notifyAll`,将刚才阻塞的线程唤醒，又执行了一次循环，此时`result`不为`null`，如此将`result`值抛出去
+
+# 十、参考文章
 
 1. [kotlin协程的挂起suspend](https://blog.csdn.net/cpcpcp123/article/details/111724079)
 2. [Kotlin协程简介](https://www.jianshu.com/p/6e6835573a9c)
 3. [Kotlin协程-协程的内部概念Continuation](https://blog.csdn.net/weixin_42063726/article/details/106198212)
 4. [AtomicReference源码详解](https://blog.csdn.net/z974656361/article/details/110247463)
-

@@ -606,7 +606,7 @@ inline fun <reified T> Gson.fromJson(json:String): T = fromJson(json, T::class.j
 3. `main()`函数中声明了变量`garen`及其类型为`Person`，并调用扩展的内联函数`fromJson()`为其赋值，虽然没有为`fromJson()`中传入泛型的具体类型，但通过 **类型推导**的形式，将泛型参数的类型推导出来，进而将泛型`T`特化
 4. `main()`函数中声明了变量`ashe`，并调用扩展的内联函数`fromJson()`为其赋值，为`fromJson()`中传入泛型的具体类型`Person`，直接将泛型`T`特化
 
-# 七、 应用
+# 七、 示例
 
 ## 1. 模拟 `Self Type`
 

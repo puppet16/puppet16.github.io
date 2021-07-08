@@ -906,7 +906,7 @@ public static final void hello() throws IllegalAccessException {
 
 1. 注解只能用于 **函数、属性的`getter/setter`、构造器**上
 
-# 四、 应用 -- 仿 `Retrofit`反射读取注解请求网络
+# 四、 示例 -- 仿 `Retrofit`反射读取注解请求网络
 
 ## 1. 创建一些需要的注解
 
@@ -1077,9 +1077,9 @@ https://api.github.com/users/puppet16/followers
 2. 先获取了用户名为`puppet16`的`GitHub`账号信息
 3. 又获取了用户名为`puppet16`的`GitHub`账号的关注列表
 
-# 五、应用 -- 注解加持反射版`Model`映射
+# 五、示例 -- 注解加持反射版`Model`映射
 
-在{% post_link kotlin学习系列七 kotlin学习系列七：反射 %}中的 **应用 -- Model映射**章节中，讲到可以通过`map`映射为任意类型数据类，但是当前实现有缺陷： `map`中的 `key`值必须与数据类的属性名字一致
+在{% post_link kotlin学习系列七 kotlin学习系列七：反射 %}中的 **示例 -- Model映射**章节中，讲到可以通过`map`映射为任意类型数据类，但是当前实现有缺陷： `map`中的 `key`值必须与数据类的属性名字一致
 
 ```kotlin
 
@@ -1255,7 +1255,7 @@ Human(name=Lee, avatarUrl=https://api.github.com/users/Lee, detailUrl=https://ap
    5. 最后再使用该名称去`map`中取出对应的`value`值
 7. 给`Human`数据类添加注解`MappingStrategy`，可以看到该数据类中属性名字是驼峰类型的，而`Person`中对应的属性名字是下划线类型的，要将`person`转为`human`，则策略类使用`CamelToUnderScore`，否则无法在`map`中找到应对的属性名
 
-# 六、 应用 -- 注解处理器版 `Model` 映射
+# 六、 示例 -- 注解处理器版 `Model` 映射
 
 > 上一章节中讲述通过注解处理不同命名风格的属性的映射，但是每次都要调用自己写的`mapAs()`。
 > 本章主要讲如何通过注解处理器自动生成`modul`自己的`mapAs()`方法

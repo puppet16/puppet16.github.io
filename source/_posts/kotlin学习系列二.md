@@ -743,7 +743,7 @@ println((kotliner as? Person)?.name)
 * 尽可能减少函数对外部变量的访问，也为函数式编程提供基础
 * 必要时创建局部变量指向外部变量，避免因它变化引起程序错误
 
-# 六、应用--使用Retrofit访问网络请求  
+# 六、示例--使用Retrofit访问网络请求  
 
 ```kotlin
 interface GitHubApi {

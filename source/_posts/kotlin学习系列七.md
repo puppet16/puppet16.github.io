@@ -238,7 +238,7 @@ public abstract interface cn/ltt/projectcollection/kotlin/kotlinreflection/Api {
    `Proguard`配置：`-keepattributes Signature`
 
 
-# 三、 应用 -- 获取泛型实参
+# 三、 示例 -- 获取泛型实参
 
 ## 1. 获取`Function`返回值的类型实参
 
@@ -357,7 +357,7 @@ class java.lang.String
 2. 方法二使用`Java`反射：调用`this.javaClass`获取`java`的`class`实例，之后调用`genericSuperclass`获取带有泛型实参的`Type!`，之后调用`safeAs()`方法将`Type!`类型转为`ParameterizedType`类型，再调用方法`actualTypeArguments`得到参数的列表，再调用`first()`取第一个参数
 3. 打印结果一个是`Kotlin`的`String`，一个是`Java`的`String`。`Kotlin`的`String`的编译完成后会编译为`Java`的`String`,所以在`Java`的反射中所有的`Kotlin`类型都是`Java`类型
 
-# 四、 应用 -- 为数据类实现`DeepCopy`
+# 四、 示例 -- 为数据类实现`DeepCopy`
 
 定义两个数据类`Person`、`Group`，`Group`是`Person`的一个参数
 
@@ -494,7 +494,7 @@ Person(name=Lee, age=18, group=Group(id=1, name=student, location=beijing))
 3. 对数据类`Person`进行深拷贝时，也对它的参数数据类`Group`进行了深拷贝，而深拷贝使用反射创建新的实例，所以两个`Group`实例不相等
 4. 打印出深拷贝的`Person`实例，与一开始创建的`Person`实例里的基本数据都是一致的
 
-# 五、 应用 -- Model映射
+# 五、 示例 -- Model映射
 
 >在工程中可能会有数据类之间转换的需要，本章讲述如何通过反射进行类之间快速的转换
 
@@ -596,7 +596,7 @@ Person(id=0, name=Lee, avatarUrl=https://api.github.com/users/Lee, smallUrl=http
 1. 获取被转换的类`From`的成员属性列表，之后将列表转换为集合，集合键为属性名称，值为属性值，最后再调用上一节所讲的`Map`的转换函数`mapAs()`
 2. **注意：** 两个任意类型中的参数名称要一致，且参数要定义在主构造器中
 
-# 六、 应用 -- 可释放对象引用的不可空类型
+# 六、 示例 -- 可释放对象引用的不可空类型
 
 >创建一个引用，该引用持有一个占用较大内存资源的类型对象，在最后不需要该引用时，我们需要将其释放，也就是将引用置为`null`，`Kotlin`中只有声明为可空类型才能置为`null`，但是可空类型属性使用比较繁琐，可以通过`属性代理`将定义不可空类型引用释放
 

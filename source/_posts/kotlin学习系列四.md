@@ -107,7 +107,7 @@ a.forEach() { println("element $it") }
 a.forEach { println("element $it") }
 ```
 
-### 3. 高阶函数应用
+### 3. 高阶函数示例
 
 **统计指印斐波那契数列的时间**
 
@@ -1224,7 +1224,7 @@ fun main() {
     }
     ```
 
-# 七、应用
+# 七、示例
 
 ## 1. 统计字符个数
 

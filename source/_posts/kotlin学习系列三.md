@@ -565,7 +565,7 @@ val sum ={x: Int, y: Int ->
     }
     ```
 
-# 六、应用
+# 六、示例
 
 ## 1. 为`Person` 实现`equals`和`hashCode`方法
 
