@@ -184,16 +184,7 @@
 <code>adb shell pm clear &lt;packagename&gt;</code><br>
 说明：<packagename> 表示应用名包，这条命令的效果相当于在设置里的应用信息界面点击了「清除缓存」和「清除数据」。</packagename></p>
 <h3><span id="5-cha-kan-ding-bu-activity">5. 查看顶部Activity</span><a href="#5-cha-kan-ding-bu-activity" class="header-anchor">#</a></h3>
-<ul>
-<li>
-<p>windows环境下:<br>
-<code>adb shell dumpsys activity | findstr &quot;mFocusedActivity&quot;</code></p>
-</li>
-<li>
-<p>Linux、Mac环境下：<br>
-<code>adb shell dumpsys activity | grep &quot;mFocusedActivity&quot;</code></p>
-</li>
-</ul>
+<p><code>adb shell dumpsys activity top</code></p>
 <h3><span id="6-cha-kan-ying-yong-xiang-xi-xin-xi">6. 查看应用详细信息</span><a href="#6-cha-kan-ying-yong-xiang-xi-xin-xi" class="header-anchor">#</a></h3>
 <p><strong>命令格式：</strong><br>
 <code>adb shell dumpsys package &lt;packagename&gt;</code><br>
