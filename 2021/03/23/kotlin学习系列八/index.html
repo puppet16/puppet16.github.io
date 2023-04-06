@@ -2,7 +2,7 @@
 二、注解的基本概念
 
 1. 注解定义
-2. 限定标注对象
+2. 限定标注对象@Target
 3. 指定作用时机
 4. 添加参数
 5. 注解使用
@@ -20,14 +20,14 @@
 2. 标准库通用注解
 
 1. @Metadata
-2. @Unsa"><meta name="keywords" content="技术博客,Hexo,Android,Linux,HTML,Java"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><script src="/js/jquery.js"></script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/logo@2x.png" style="width:127px;"><h3 title=""><a href="/">Puppet</a></h3><div class="description"><p>心之所愿，无事不成。<br> Nothing is impossible to a willing heart.</p></div></div></div><ul class="social-links"><li><a href="https://github.com/puppet16" target="_blank" rel="noopener"><i class="fa fa-github"></i></a></li><li><a href="mailto:2542469086@qq.com"><i class="fa fa-envelope"></i></a></li><li><a href="http://sighttp.qq.com/authd?IDKEY=" target="_blank" rel="noopener"><i class="fa fa-qq"></i></a></li><li><a href="https://zhihu.com/" target="_blank" rel="noopener"><i class="fa fa-mortar-board"></i></a></li></ul><div class="footer"><div class="p"> <span>© 2020 - 2050 </span><i class="fa fa-star"></i><span> Ltt</span></div><div class="by_farbox"><span>Powered by </span><a href="https://hexo.io/zh-cn/" target="_blank">Hexo </a><span> & </span><a href="https://github.com/mrcore/hexo-theme-Anatole-Core" target="_blank">Anatole-Core.  </a><a href="http://www.beian.miit.gov.cn/" target="_blank">&nbsp;粤ICP备15011643号</a></div></div></div><div class="main"><div class="page-top animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li><li><a href="/tags">标签</a></li><li><a href="/about">关于</a></li><li><a href="/guestbook">留言</a></li></div><div class="information"><div class="back_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div></div></div><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>kotlin 学习系列八：注解</a></h3></div><div class="post-content"><div class="toc">
+2"><meta name="keywords" content="技术博客,Hexo,Android,Linux,HTML,Java"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><script src="/js/jquery.js"></script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/logo@2x.png" style="width:127px;"><h3 title=""><a href="/">Puppet</a></h3><div class="description"><p>心之所愿，无事不成。<br> Nothing is impossible to a willing heart.</p></div></div></div><ul class="social-links"><li><a href="https://github.com/puppet16" target="_blank" rel="noopener"><i class="fa fa-github"></i></a></li><li><a href="mailto:2542469086@qq.com"><i class="fa fa-envelope"></i></a></li><li><a href="http://sighttp.qq.com/authd?IDKEY=" target="_blank" rel="noopener"><i class="fa fa-qq"></i></a></li><li><a href="https://zhihu.com/" target="_blank" rel="noopener"><i class="fa fa-mortar-board"></i></a></li></ul><div class="footer"><div class="p"> <span>© 2020 - 2050 </span><i class="fa fa-star"></i><span> Ltt</span></div><div class="by_farbox"><span>Powered by </span><a href="https://hexo.io/zh-cn/" target="_blank">Hexo </a><span> & </span><a href="https://github.com/mrcore/hexo-theme-Anatole-Core" target="_blank">Anatole-Core.  </a><a href="http://www.beian.miit.gov.cn/" target="_blank">&nbsp;粤ICP备15011643号</a></div></div></div><div class="main"><div class="page-top animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li><li><a href="/tags">标签</a></li><li><a href="/about">关于</a></li><li><a href="/guestbook">留言</a></li></div><div class="information"><div class="back_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div></div></div><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>kotlin 学习系列八：注解</a></h3></div><div class="post-content"><div class="toc">
 <!-- toc -->
 <ul>
 <li><a href="#yi-qian-yan">一、前言</a></li>
 <li><a href="#er-zhu-jie-de-ji-ben-gai-nian">二、注解的基本概念</a>
 <ul>
 <li><a href="#1-zhu-jie-ding-yi">1. 注解定义</a></li>
-<li><a href="#2-xian-ding-biao-zhu-dui-xiang">2. 限定标注对象</a></li>
+<li><a href="#2-xian-ding-biao-zhu-dui-xiang-target">2. 限定标注对象<code>@Target</code></a></li>
 <li><a href="#3-zhi-ding-zuo-yong-shi-ji">3. 指定作用时机</a></li>
 <li><a href="#4-tian-jia-can-shu">4. 添加参数</a></li>
 <li><a href="#5-zhu-jie-shi-yong">5. 注解使用</a></li>
@@ -162,14 +162,16 @@
 </li>
 </ol>
 <h1><span id="er-zhu-jie-de-ji-ben-gai-nian">二、注解的基本概念</span><a href="#er-zhu-jie-de-ji-ben-gai-nian" class="header-anchor">#</a></h1>
-<p><strong>注解</strong> 实际上就是一种代码标签，它作用的对象是代码。它可以给特定的注解代码标注一些额外的信息。然而这些信息可以选择不同保留时期，比如源码期、编译期、运行期。然后在不同时期，可以通过某种方式获取标签的信息来处理实际的代码逻辑，这种方式常常就是我们所说的 <strong>反射</strong>。</p>
+<p><strong>注解</strong> 实际上就是一种代码标签，它作用的对象是代码。实际上，注解几乎无处不在，比如说，经常能在<code>Kotlin</code>标准库当中看见“<code>@Deprecated</code>&quot; 这样的注解，它代表了被标注的代码“已废弃”。在 <code>Java</code> 中，最常见的是 “<code>@Override</code>&quot; 这个注解，它代表了重写。</p>
+<p><strong>注解</strong> 可以给特定的注解代码标注一些额外的信息。然而这些信息可以选择不同保留时期，比如源码期、编译期、运行期。然后在不同时期，可以通过某种方式获取标签的信息来处理实际的代码逻辑，这种方式常常就是我们所说的 <strong>反射</strong>。</p>
 <p>总结如下：</p>
 <ol>
-<li>注解是对程序的附加信息说明</li>
+<li>注解是对程序的附加信息说明，也就是程序代码的一种补充</li>
 <li>注解可以对类、函数、函数参数、属性等做标注</li>
 <li>注解的信息可用于源码级、编译期、运行时</li>
 </ol>
 <h2><span id="1-zhu-jie-ding-yi">1. 注解定义</span><a href="#1-zhu-jie-ding-yi" class="header-anchor">#</a></h2>
+<p><code>Kotlin</code> 的源代码中，提供了很多内置的注解，比如<code>@Deprecated</code>、<code>@JvmStatic</code>、<code>@JvmOverloads</code>等等。除了<code>Kotlin</code>默认就有的注解以外，我们也可以定义自己的注解。</p>
 <p>定义注解类使用关键字 <strong><code>annotation</code></strong></p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">annotation</span> <span class="class"><span class="keyword">class</span> <span class="title">State</span></span></span><br></pre></td></tr></table></figure>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> State &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -178,19 +180,22 @@
 <li><code>java</code>中注解通过<code>@interface</code>关键字进行定义，它和接口声明类似，只不过在前面多加<code>@</code></li>
 <li><code>kotlin</code>中注解和一般类的声明很类似，只是在<code>class</code>前面加上了<code>annotation</code>修饰符</li>
 </ol>
-<h2><span id="2-xian-ding-biao-zhu-dui-xiang">2. 限定标注对象</span><a href="#2-xian-ding-biao-zhu-dui-xiang" class="header-anchor">#</a></h2>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">@Target(CLASS, FUNCTION, PROPERTY, ANNOTATION_CLASS, CONSTRUCTOR, PROPERTY_SETTER, PROPERTY_GETTER, TYPEALIAS)</span></span><br><span class="line"><span class="meta">@MustBeDocumented</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">annotation</span> <span class="class"><span class="keyword">class</span> <span class="title">Deprecated</span></span>(</span><br><span class="line">    <span class="keyword">val</span> message: String,</span><br><span class="line">    <span class="keyword">val</span> replaceWith: ReplaceWith = ReplaceWith(<span class="string">""</span>),</span><br><span class="line">    <span class="keyword">val</span> level: DeprecationLevel = DeprecationLevel.WARNING</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>从上面的代码里，我们可以看到，<code>@Deprecated</code> 这个注解的定义上面，还有其他的注解 <code>@Target</code>、<code>@MustBeDocumented</code>。这样的注解，我们叫做元注解，即它本身是注解的同时，还可以用来修饰其他注解。</p>
+<p><code>Kotlin</code> 常见的元注解有四个：</p>
+<ul>
+<li><code>@Target</code>，这个注解是指定了被修饰的注解都可以用在什么地方，也就是目标；</li>
+<li><code>@Retention</code>，这个注解是指定了被修饰的注解是不是编译后可见、是不是运行时可见，也就是保留位置；</li>
+<li><code>@Repeatable</code>，这个注解是允许我们在同一个地方，多次使用相同的被修饰的注解，使用场景比较少；</li>
+<li><code>@MustBeDocumented</code>，指定被修饰的注解应该包含在生成的 <code>API</code> 文档中显示，这个注解一般用于 <code>SDK</code> 当中。</li>
+</ul>
+<p>这里，需要注意的是 <code>Target</code> 和 <code>Retention</code> 的取值</p>
+<h2><span id="2-xian-ding-biao-zhu-dui-xiang-target">2. 限定标注对象<code>@Target</code></span><a href="#2-xian-ding-biao-zhu-dui-xiang-target" class="header-anchor">#</a></h2>
 <p>定义注解类时，限定定义的注解的标注对象使用 <strong>注解<code>@Target</code></strong></p>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target(AnnotationTarget.CLASS)</span></span><br><span class="line"><span class="keyword">annotation</span> <span class="class"><span class="keyword">class</span> <span class="title">State</span></span></span><br></pre></td></tr></table></figure>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">@Target(CLASS, FUNCTION, PROPERTY, ANNOTATION_CLASS, CONSTRUCTOR, PROPERTY_SETTER, PROPERTY_GETTER, TYPEALIAS)</span></span><br><span class="line"><span class="meta">@MustBeDocumented</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">annotation</span> <span class="class"><span class="keyword">class</span> <span class="title">Deprecated</span></span>(</span><br><span class="line">    <span class="keyword">val</span> message: String,</span><br><span class="line">    <span class="keyword">val</span> replaceWith: ReplaceWith = ReplaceWith(<span class="string">""</span>),</span><br><span class="line">    <span class="keyword">val</span> level: DeprecationLevel = DeprecationLevel.WARNING</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 <p><strong>说明：</strong></p>
 <ol>
-<li>
-<p>如上所示，定义了一个注解<code>State</code>，限制了<code>State</code>只能在类、接口、单例上标注</p>
-</li>
-<li>
-<p>注解<code>@Target</code>用于限制定义的注解的标注对象</p>
-</li>
-<li>
-<p>常用的范围有：</p>
+<li><code>Target</code>常用的范围有：
 <ol>
 <li><code>CLASS</code>：用于类、接口、单例</li>
 <li><code>CONSTRUCTOR</code>：用于主构造器或副构造器</li>
@@ -198,9 +203,7 @@
 <li><code>FUNCTION</code>：用于函数，不包括构造器</li>
 </ol>
 </li>
-<li>
-<p>注意<code>Target</code>和<code>AnnotationTarget</code>都是包<code>kotlin.annotation</code>下的类</p>
-</li>
+<li>注意<code>Target</code>和<code>AnnotationTarget</code>都是包<code>kotlin.annotation</code>下的类</li>
 </ol>
 <h2><span id="3-zhi-ding-zuo-yong-shi-ji">3. 指定作用时机</span><a href="#3-zhi-ding-zuo-yong-shi-ji" class="header-anchor">#</a></h2>
 <p>定义注解类时，指定作用时机使用 <strong>注解<code>@Retention</code></strong></p>
@@ -212,7 +215,7 @@
 <ol>
 <li><code>SOURCE</code>：代表这个注解在编译器处理完之后就被抛弃，这意味着它的信息仅存在于编译器处理期间，不会存到<code>.class</code>文件中</li>
 <li><code>BINARY</code>：对应<code>Java</code>中的<code>CLASS</code>，代表编译器将注解存储于类对应的<code>.class</code>文件中，但是在运行时不能通过反射读取，<strong>在<code>Java</code>中这是<code>Annotation</code>的默认行为</strong></li>
-<li><code>RUNTIME</code>：代表编译器将注解存储于<code>.class</code>文件中，并且 <strong>可由反射获取</strong>，由于<code>Kotlin</code>的语言特性，<code>它是</code>Kotlin<code>中的默认策略</code></li>
+<li><code>RUNTIME</code>：代表编译器将注解存储于<code>.class</code>文件中，并且 <strong>可由反射获取</strong>，由于<code>Kotlin</code>的语言特性，<strong>它是<code>Kotlin</code>中的默认策略</strong></li>
 </ol>
 </li>
 </ol>
@@ -223,6 +226,13 @@
 <ol>
 <li>注解类的参数类型有限制只能是如下类型：基本类型、<code>KClass</code>、枚举、其他注解</li>
 <li>这些类型都是在编译期能确定值的类型</li>
+<li>在前几节展示的注解 <code>@Deprecated</code> 类当中包含了包含了如下成员：
+<ul>
+<li><code>message</code> 代表了废弃的提示信息；</li>
+<li><code>replaceWith</code> 代表了应该用什么来替代废弃的部分；</li>
+<li><code>level</code> 代表警告的程度，分别是 <code>WARNING</code>、<code>ERROR</code>、<code>HIDDEN</code>。</li>
+</ul>
+</li>
 </ol>
 <h2><span id="5-zhu-jie-shi-yong">5. 注解使用</span><a href="#5-zhu-jie-shi-yong" class="header-anchor">#</a></h2>
 <p>直接在对应的限定对象上添加注解即可</p>
@@ -241,6 +251,7 @@
 <p><code>@Target</code> 用来 <strong>指定一个新注解的使用目标</strong>。<br>
 <code>@Target</code> 注解有一个 <code>allowedTargets</code> 属性，该属性用来设置注解的使用目标，<code>allowedTargets</code> 是 <code>kotlin.annotation.AnnotationTarget</code> 枚举类型。<br>
 <code>AnnotationTarget</code>描述 <code>Kotlin</code> 代码中可以被注解的元素类型，它有 <strong>15</strong> 个枚举常量。如下：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//源码</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> <span class="class"><span class="keyword">class</span> <span class="title">AnnotationTarget</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 类、接口、object、注解类</span></span><br><span class="line">    CLASS,</span><br><span class="line">    <span class="comment">// 注解类</span></span><br><span class="line">    ANNOTATION_CLASS,</span><br><span class="line">    <span class="comment">// 泛型参数</span></span><br><span class="line">    TYPE_PARAMETER,</span><br><span class="line">    <span class="comment">// 属性</span></span><br><span class="line">    PROPERTY,</span><br><span class="line">    <span class="comment">// 字段、幕后字段</span></span><br><span class="line">    FIELD,</span><br><span class="line">    <span class="comment">// 局部变量</span></span><br><span class="line">    LOCAL_VARIABLE,</span><br><span class="line">    <span class="comment">// 函数参数</span></span><br><span class="line">    VALUE_PARAMETER,</span><br><span class="line">    <span class="comment">// 构造器</span></span><br><span class="line">    CONSTRUCTOR,</span><br><span class="line">    <span class="comment">// 函数</span></span><br><span class="line">    FUNCTION,</span><br><span class="line">    <span class="comment">// 属性的getter</span></span><br><span class="line">    PROPERTY_GETTER,</span><br><span class="line">    <span class="comment">// 属性的setter</span></span><br><span class="line">    PROPERTY_SETTER,</span><br><span class="line">    <span class="comment">// 类型</span></span><br><span class="line">    TYPE,</span><br><span class="line">    <span class="comment">// 表达式</span></span><br><span class="line">    EXPRESSION,</span><br><span class="line">    <span class="comment">// 文件</span></span><br><span class="line">    FILE,</span><br><span class="line">    <span class="comment">// 类型别名</span></span><br><span class="line">    TYPEALIAS</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <table>
 <thead>
 <tr>
@@ -315,6 +326,7 @@
 <p><code>@Retention</code> 用来指定一个新注解的有效范围。<br>
 <code>@Retention</code> 注解有一个 <code>value</code> 属性，该属性用来设置保留期，<code>value</code> 是 <code>kotlin.annotation.AnnotationRetention</code> 枚举类型。<br>
 <code>AnnotationRetention</code> 描述注解保留期，它有 <strong>3</strong> 个常量，如下：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//源码</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> <span class="class"><span class="keyword">class</span> <span class="title">AnnotationRetention</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 注解只存在于源代码，编译后不可见</span></span><br><span class="line">    SOURCE,</span><br><span class="line">    <span class="comment">// 注解编译后可见，运行时不可见</span></span><br><span class="line">    BINARY,</span><br><span class="line">    <span class="comment">// 编译后可见，运行时可见</span></span><br><span class="line">    RUNTIME</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <table>
 <thead>
 <tr>

@@ -39,9 +39,13 @@
 <ul>
 <li><a href="#1-zai-kotlin-zhong-shi-yong-java-fan-she-he-kotlin-fan-she-you-que-dian">1. 在<code>Kotlin</code>中使用<code>Java</code>反射和<code>Kotlin</code>反射优缺点</a></li>
 <li><a href="#2-shi-yong-kotlin-fan-she">2. 使用<code>Kotlin</code>反射</a></li>
-<li><a href="#3-kclass-lei-zhong-ji-ge-han-shu">3. <code>KClass</code>类中几个函数</a></li>
-<li><a href="#4-kclass-yu-ktype-qu-bie">4. <code>KClass</code>与<code>KType</code>区别</a></li>
-<li><a href="#5-lei-xing-ca-chu">5. 类型擦除</a></li>
+<li><a href="#3-kclass">3. <code>KClass</code></a></li>
+<li><a href="#4-kcallable">4. <code>KCallable</code></a></li>
+<li><a href="#5-kparameter">5. <code>KParameter</code></a></li>
+<li><a href="#6-ktype">6. <code>KType</code></a></li>
+<li><a href="#7-kclass-yu-ktype-qu-bie">7. <code>KClass</code>与<code>KType</code>区别</a></li>
+<li><a href="#8-lei-xing-ca-chu">8. 类型擦除</a></li>
+<li><a href="#9-zong-jie">9. 总结</a></li>
 </ul>
 </li>
 </ul>
@@ -141,6 +145,12 @@
 <li>反射是允许程序在运行时访问程序结构的一类特性</li>
 <li>程序结构包括：类、接口、方法、属性等语法特性</li>
 </ol>
+<p>总的来看，<code>Kotlin</code> 反射具备这三个特质：</p>
+<ul>
+<li><strong>感知</strong> 程序的状态，包含程序的运行状态，还有源代码结构；</li>
+<li>修改程序的状态；</li>
+<li>根据程序的状态，<strong>调整</strong>自身的决策行为。</li>
+</ul>
 <h2><span id="2-fan-she-de-yi-lai">2. 反射的依赖</span><a href="#2-fan-she-de-yi-lai" class="header-anchor">#</a></h2>
 <p><img src="/2021/03/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%83/kotlin_reflection_dependences.png" alt="kotlin反射依赖"></p>
 <p><strong>说明：</strong></p>
@@ -149,7 +159,8 @@
 <li>对于<code>Kotlin</code>来说，<code>Kotlin</code>自己做了一套反射的<code>API</code>,是一个独立的库</li>
 </ol>
 <h3><span id="1-tian-jia-fan-she-ku-yi-lai">1. 添加反射库依赖</span><a href="#1-tian-jia-fan-she-ku-yi-lai" class="header-anchor">#</a></h3>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dependencies &#123;</span><br><span class="line">    implementation(kotlin(<span class="string">"stdlib-jdk8"</span>, KotlinCompilerVersion.VERSION))</span><br><span class="line">    implementation(<span class="string">"org.jetbrains.kotlin:kotlin-reflect"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在 <code>Kotlin</code> 当中，反射库并没有直接集成到标准库当中。这是为了方便一些对程序安装包敏感的应用，可以根据实际需求来选择是否要用 <code>Kotlin</code> 反射。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">dependencies &#123;</span><br><span class="line">    implementation(kotlin(“stdlib-jdk8”, KotlinCompilerVersion.VERSION))</span><br><span class="line">    implementation(”org.jetbrains.kotlin:kotlin-reflect”)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>说明：</strong></p>
 <ol>
 <li>使用<code>Kotlin</code>的反射，需要单独引入依赖库<code>kotlin-reflect</code></li>
@@ -238,10 +249,41 @@
 </ul>
 </li>
 </ol>
-<h3><span id="3-kclass-lei-zhong-ji-ge-han-shu">3. <code>KClass</code>类中几个函数</span><a href="#3-kclass-lei-zhong-ji-ge-han-shu" class="header-anchor">#</a></h3>
+<h3><span id="3-kclass">3. <code>KClass</code></span><a href="#3-kclass" class="header-anchor">#</a></h3>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">actual</span> <span class="class"><span class="keyword">interface</span> <span class="title">KClass</span>&lt;<span class="type">T : Any</span>&gt; : <span class="type">KDeclarationContainer</span>, <span class="type">KAnnotatedElement</span>, <span class="type">KClassifier &#123;</span></span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">actual</span> <span class="keyword">val</span> simpleName: String?</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">actual</span> <span class="keyword">val</span> qualifiedName: String?</span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="keyword">val</span> members: Collection&lt;KCallable&lt;*&gt;&gt;</span><br><span class="line">    <span class="comment">// 省略部分代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个 <code>KClass</code> 其实就代表了一个 <code>Kotlin</code> 类，通过 对象 <code>::class</code>，我们就可以拿到这个对象的<code>KClass</code></p>
 <ul>
 <li>
-<p><code>is</code>开头的函数：判断是否为某个类型。例：<code>isAbstract</code><em>(是不是抽象类)</em>、<code>isCompanion</code><em>(是不是伴生对象)</em></p>
+<p><code>simpleName</code>，类的名称，对于匿名内部类，则为 <code>null</code>；</p>
+</li>
+<li>
+<p><code>qualifiedName</code>，完整的类名；</p>
+</li>
+<li>
+<p><code>members</code>，所有成员属性和方法，类型是<code>Collection&lt;Kcallable&lt;*&gt;&gt;</code>；</p>
+</li>
+<li>
+<p><code>constructors</code>，类的所有构造函数，类型是<code>Collection&lt;KFunction&lt;T&gt;&gt;</code>；</p>
+</li>
+<li>
+<p><code>nestedClasses</code>，类的所有嵌套类，类型是<code>Collection&lt;KClass&lt;*&gt;&gt;</code>；</p>
+</li>
+<li>
+<p><code>visibility</code>，类的可见性，类型是<code>KVisibility?</code>，分别是这几种情况，<code>PUBLIC</code>、<code>PROTECTED</code>、<code>INTERNAL</code>、<code>PRIVATE</code>；</p>
+</li>
+<li>
+<p><code>is</code>开头的函数：判断是否为某个类型：</p>
+<ul>
+<li><code>isAbstract</code>，是不是抽象类</li>
+<li><code>isCompanion</code>，是不是伴生对象</li>
+<li><code>isFinal</code>，是不是 <code>final</code>；</li>
+<li><code>isOpen</code>，是不是 <code>open</code>；</li>
+<li><code>isSealed</code>，是不是密封的；</li>
+<li><code>isData</code>，是不是数据类；</li>
+<li><code>isInner</code>，是不是内部类；</li>
+<li><code>isFun</code>，是不是函数式接口；</li>
+<li><code>isValue</code>，是不是 <code>Value Class</code></li>
+</ul>
 </li>
 <li>
 <p><code>nestedClasses()</code>：获取内部类</p>
@@ -273,7 +315,33 @@
 <p><strong>说明：</strong> 如上代码所示，在类<code>A</code>中为类<code>String</code>定义了一个扩展函数<code>printStar()</code>，则代码<code>A::class.declaredMemberExtensionFunctions</code>可以获取到扩展函数<code>printStar()</code>，但是<code>String.class.declaredMemberExtensionFunctions</code>获取不到。函数<code>printStar()</code>就有两个<code>receiver</code>：<code>A</code>，<code>String</code></p>
 </li>
 </ul>
-<h3><span id="4-kclass-yu-ktype-qu-bie">4. <code>KClass</code>与<code>KType</code>区别</span><a href="#4-kclass-yu-ktype-qu-bie" class="header-anchor">#</a></h3>
+<h3><span id="4-kcallable">4. <code>KCallable</code></span><a href="#4-kcallable" class="header-anchor">#</a></h3>
+<p><code>KCallable</code> 代表了 <code>Kotlin</code> 当中的所有可调用的元素，比如函数、属性、甚至是构造函数。下面是 <code>KCallable</code> 的重要成员：</p>
+<ul>
+<li><code>name</code>，名称，这个很好理解，属性和函数都有名称；</li>
+<li><code>parameters</code>，所有的参数，类型是<code>List&lt;KParameter&gt;</code>，指的是调用这个元素所需的所有参数；</li>
+<li><code>returnType</code>，返回值类型，类型是 <code>KType</code>；</li>
+<li><code>typeParameters</code>，所有的类型参数 (比如泛型)，类型是<code>List&lt;KTypeParameter&gt;</code>；</li>
+<li><code>call()</code>，<code>KCallable</code> 对应的调用方法</li>
+<li><code>visibility</code>，可见性；</li>
+<li><code>isSuspend</code>，是不是挂起函数</li>
+</ul>
+<h3><span id="5-kparameter">5. <code>KParameter</code></span><a href="#5-kparameter" class="header-anchor">#</a></h3>
+<p><code>KParameter</code>，代表了<code>KCallable</code>当中的参数，它的重要成员如下：</p>
+<ul>
+<li><code>index</code>，参数的位置，下标从 0 开始；</li>
+<li><code>name</code>，参数的名称，源码当中参数的名称；</li>
+<li><code>type</code>，参数的类型，类型是 <code>KType</code>；</li>
+<li><code>kind</code>，参数的种类，对应三种情况：<code>INSTANCE</code> 是对象实例、<code>EXTENSION_RECEIVER</code> 是扩展接受者、<code>VALUE</code> 是实际的参数值。</li>
+</ul>
+<h3><span id="6-ktype">6. <code>KType</code></span><a href="#6-ktype" class="header-anchor">#</a></h3>
+<p><code>KType</code>，代表了 <code>Kotlin</code> 当中的类型，它重要的成员如下：</p>
+<ul>
+<li><code>classifier</code>，类型对应的 <code>Kotlin</code> 类，即 <code>KClass</code>，例子： <code>classifier == String::class</code> 来判断是不是 <code>String</code> 类型的；</li>
+<li><code>arguments</code>，类型的类型参数，看起来好像有点绕，其实它就是这个类型的泛型参数；</li>
+<li><code>isMarkedNullable</code>，是否在源代码中标记为可空类型，即这个类型的后面有没有“?”修饰。</li>
+</ul>
+<h3><span id="7-kclass-yu-ktype-qu-bie">7. <code>KClass</code>与<code>KType</code>区别</span><a href="#7-kclass-yu-ktype-qu-bie" class="header-anchor">#</a></h3>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> mapCls = Map::<span class="class"><span class="keyword">class</span></span></span><br><span class="line">    println(mapCls)</span><br><span class="line">    <span class="keyword">val</span> mapType = typeOf&lt;Map&lt;<span class="keyword">out</span> String, <span class="built_in">Int</span>&gt;&gt;()</span><br><span class="line">    mapType.arguments.forEach &#123;</span><br><span class="line">        println(it)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>打印结果：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">kotlin</span>.<span class="title">collections</span>.<span class="title">Map</span></span></span><br><span class="line"><span class="class"><span class="title">out</span> <span class="title">kotlin</span>.<span class="title">String</span></span></span><br><span class="line"><span class="class"><span class="title">kotlin</span>.<span class="title">Int</span></span></span><br></pre></td></tr></table></figure>
@@ -284,7 +352,7 @@
 <li><code>KTypeProjection</code>的构造器中有两个参数<code>Kvariance</code><em>(使用处的型变声明)</em>、<code>KType</code><em>(泛型实参类型)</em></li>
 <li>在获取<code>KType</code>时，为<code>Map</code>的第一个泛型<code>String</code>添加了逆变声明<code>out</code>，所以在打印类型时会先打印出参数的型变类型，之后再打印出类型，如果没有定义型变则只显示类型</li>
 </ol>
-<h3><span id="5-lei-xing-ca-chu">5. 类型擦除</span><a href="#5-lei-xing-ca-chu" class="header-anchor">#</a></h3>
+<h3><span id="8-lei-xing-ca-chu">8. 类型擦除</span><a href="#8-lei-xing-ca-chu" class="header-anchor">#</a></h3>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span></span>(<span class="keyword">val</span> name: String, <span class="keyword">val</span> age: String)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Api</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">getUsers</span><span class="params">()</span></span>: List&lt;Person&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>上述代码的关键二进制代码如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">interface</span> <span class="title">cn</span>/<span class="title">ltt</span>/<span class="title">projectcollection</span>/<span class="title">kotlin</span>/<span class="title">kotlinreflection</span>/<span class="title">Api</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="comment">// access flags 0x401</span></span><br><span class="line">  <span class="comment">// signature ()Ljava/util/List&lt;Lcn/ltt/projectcollection/kotlin/kotlinreflection/Person;&gt;;</span></span><br><span class="line">  <span class="comment">// declaration: java.util.List&lt;cn.ltt.projectcollection.kotlin.kotlinreflection.Person&gt; getUsers()</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="title">getUsers</span><span class="params">()</span>Ljava/util/List</span>;</span><br><span class="line">  <span class="meta">@Lorg</span>/jetbrains/annotations/NotNull;() <span class="comment">// invisible</span></span><br><span class="line">    LOCALVARIABLE <span class="keyword">this</span> Lcn/ltt/projectcollection/kotlin/kotlinreflection/Api; L0 L1 <span class="number">0</span></span><br><span class="line"></span><br><span class="line">  <span class="meta">@Lkotlin</span>/Metadata;(mv=&#123;<span class="number">1</span>, <span class="number">4</span>, <span class="number">2</span>&#125;, bv=&#123;<span class="number">1</span>, <span class="number">0</span>, <span class="number">3</span>&#125;, k=<span class="number">1</span>, d1=&#123;<span class="string">"\u0000\u0014\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0000\n\u0002\u0010 \n\u0002\u0018\u0002\n\u0000\u0008f\u0018\u00002\u00020\u0001J\u000e\u0010\u0002\u001a\u0008\u0012\u0004\u0012\u00020\u00040\u0003H&amp;\u00a8\u0006\u0005"</span>&#125;, d2=&#123;<span class="string">"Lcn/ltt/projectcollection/kotlin/kotlinreflection/Api;"</span>, <span class="string">""</span>, <span class="string">"getUsers"</span>, <span class="string">""</span>, <span class="string">"Lcn/ltt/projectcollection/kotlin/kotlinreflection/Person;"</span>, <span class="string">"app_debug"</span>&#125;)</span><br><span class="line">  <span class="comment">// compiled from: KotlinReflectionLab.kt</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -295,6 +363,13 @@
 <li>混淆时，<code>proguard</code>会将<code>signature</code>混淆，所以要<code>keep</code>住<code>signature</code>才可以拿到泛型实参。<br>
 <code>Proguard</code>配置：<code>-keepattributes Signature</code></li>
 </ol>
+<h3><span id="9-zong-jie">9. 总结</span><a href="#9-zong-jie" class="header-anchor">#</a></h3>
+<p>反射，其实就是 <code>Kotlin</code> 为我们开发者提供的一个工具，通过这个工具，我们可以让程序在运行的时候“自我反省”。这里的“自我反省”一共有三种情况，其实跟我们的现实生活类似。</p>
+<ul>
+<li>第一种情况，程序在运行的时候，可以通过反射来查看自身的状态。</li>
+<li>第二种情况，程序在运行的时候，可以修改自身的状态。</li>
+<li>第三种情况，程序在运行的时候，可以根据自身的状态调整自身的行为。</li>
+</ul>
 <h1><span id="san-shi-li-huo-qu-fan-xing-shi-can">三、 示例 – 获取泛型实参</span><a href="#san-shi-li-huo-qu-fan-xing-shi-can" class="header-anchor">#</a></h1>
 <h2><span id="1-huo-qu-function-fan-hui-zhi-de-lei-xing-shi-can">1. 获取<code>Function</code>返回值的类型实参</span><a href="#1-huo-qu-function-fan-hui-zhi-de-lei-xing-shi-can" class="header-anchor">#</a></h2>
 <h3><span id="1-tong-guo-kotlin-fan-she-huo-qu">1. 通过<code>Kotlin</code>反射获取</span><a href="#1-tong-guo-kotlin-fan-she-huo-qu" class="header-anchor">#</a></h3>
