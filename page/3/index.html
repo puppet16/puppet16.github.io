@@ -1,1 +1,2403 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="Ltt"><title>Puppet</title><meta name="description" content="心之所愿，无事不成。&lt;br&gt; Nothing is impossible to a willing heart."><meta name="keywords" content="技术博客,Hexo,Android,Linux,HTML,Java"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><script src="/js/jquery.js"></script><meta name="generator" content="Hexo 6.3.0"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/logo@2x.png" style="width:127px;"><h3 title=""><a href="/">Puppet</a></h3><div class="description"><p>心之所愿，无事不成。<br> Nothing is impossible to a willing heart.</p></div></div></div><ul class="social-links"><li><a target="_blank" rel="noopener" href="https://github.com/puppet16"><i class="fa fa-github"></i></a></li><li><a href="mailto:2542469086@qq.com"><i class="fa fa-envelope"></i></a></li><li><a target="_blank" rel="noopener" href="http://sighttp.qq.com/authd?IDKEY="><i class="fa fa-qq"></i></a></li><li><a target="_blank" rel="noopener" href="https://zhihu.com/"><i class="fa fa-mortar-board"></i></a></li></ul><div class="footer"><div class="p"> <span>© 2020 - 2050 </span><i class="fa fa-star"></i><span> Ltt</span></div><div class="by_farbox"><span>Powered by </span><a href="https://hexo.io/zh-cn/" target="_blank">Hexo </a><span> & </span><a href="https://github.com/mrcore/hexo-theme-Anatole-Core" target="_blank">Anatole-Core  </a></div><div class="beian"><a href="http://www.beian.miit.gov.cn/" target="_blank">粤ICP备15011643号</a><span style="height:10px;margin-left: 10px;">|</span><img src="/images/gongan.png" style="height:10px;margin-left: 10px;position: relative;top: 1px;"><span style="margin-left: 2px;"></span></div></div></div><div class="main"><div class="page-top animated fadeInDown"><div class="nav"><li><a class="current" href="/">首页</a></li><li><a href="/archives">归档</a></li><li><a href="/tags">标签</a></li><li><a href="/about">关于</a></li><li><a href="/guestbook">留言</a></li></div><div class="information"><div class="back_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)" style="display:none;"> </a></li></div></div></div><div class="autopagerize_page_element"><div class="content"><div class="post animated fadeInDown"><div class="post-title"><h3><a href="/2020/05/31/Java%E6%88%90%E5%91%98%E6%96%B9%E6%B3%95%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F/">Java成员方法执行顺序</a></h3></div><div class="post-content"><p>Java成员方法执行顺序</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2020-05-31</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Java/" title="Java">Java </a><span class="leancloud_visitors"></span></div></div></div></div><div class="post animated fadeInDown"><div class="post-title"><h3><a href="/2020/05/31/Gradle%E7%89%88%E6%9C%AC%E4%BB%8E2-3%E5%8D%87%E5%88%B03-3-2%E9%97%AE%E9%A2%98%E9%9B%86%E9%94%A6/">Gradle版本从2.3升到3.3.2问题集锦</a></h3></div><div class="post-content"><p>Gradle版本从2.3升到3.3.2问题集锦</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2020-05-31</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Android/" title="Android">Android </a><a class="tag" href="/tags/Gradle/" title="Gradle">Gradle </a><span class="leancloud_visitors"></span></div></div></div></div><div class="post animated fadeInDown"><div class="post-title"><h3><a href="/2020/05/31/android-support%E8%BF%81%E7%A7%BB%E5%88%B0androidX/">android.support迁移到androidX</a></h3></div><div class="post-content"><p>android.support迁移到androidX</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2020-05-31</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Android-Library/" title="Android Library">Android Library </a><span class="leancloud_visitors"></span></div></div></div></div><div class="post animated fadeInDown"><div class="post-title"><h3><a href="/2020/05/31/%E5%B0%8F%E7%B1%B35sPlus%E5%AE%89%E8%A3%85%E5%8E%9F%E7%94%9F%E7%B3%BB%E7%BB%9F/">小米5sPlus安装原生系统</a></h3></div><div class="post-content"><p>小米5s Plus安装原生系统</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2020-05-31</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Android/" title="Android">Android </a><a class="tag" href="/tags/小米/" title="小米">小米 </a><a class="tag" href="/tags/Lineageos/" title="Lineageos">Lineageos </a><span class="leancloud_visitors"></span></div></div></div></div><div class="post animated fadeInDown"><div class="post-title"><h3><a href="/2020/05/31/%E4%BD%BF%E7%94%A8IntDef%E6%B3%A8%E8%A7%A3%E4%BB%A3%E6%9B%BFENUM/">使用IntDef注解代替ENUM</a></h3></div><div class="post-content"><p>注解代替枚举</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2020-05-31</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Android/" title="Android">Android </a><a class="tag" href="/tags/注解/" title="注解">注解 </a><span class="leancloud_visitors"></span></div></div></div></div><div class="post animated fadeInDown"><div class="post-title"><h3><a href="/2020/05/22/MediaPlayer%E8%AF%A6%E8%A7%A3/">MediaPlayer 详解</a></h3></div><div class="post-content"><p>MediaPlayer详细介绍，及使用中遇到的问题汇总</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2020-05-22</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Android/" title="Android">Android </a><a class="tag" href="/tags/MediaPlayer/" title="MediaPlayer">MediaPlayer </a><span class="leancloud_visitors"></span></div></div></div></div><div class="post animated fadeInDown"><div class="post-title"><h3><a href="/2020/05/14/%E4%BD%BF%E7%94%A8Hexo%E5%AE%89%E8%A3%85GitHub%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/">使用 Hexo 安装 GitHub 个人博客</a></h3></div><div class="post-content"><p>Hexo 安装个人博客，包含安装 Hexo，安装插件，遇到的一些问题等</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2020-05-14</span><i class="fa fa-tag"></i><a class="tag" href="/tags/blog/" title="blog">blog </a><a class="tag" href="/tags/Hexo/" title="Hexo">Hexo </a><a class="tag" href="/tags/Node/" title="Node">Node </a><span class="leancloud_visitors"></span></div></div></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/page/2/">上一页</a></li></ul></div></div></div></div><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/add-bookmark.js"></script><script src="/js/baidu-tongji.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"puppet16.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.15.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta property="og:type" content="website">
+<meta property="og:title" content="Puppet">
+<meta property="og:url" content="http://puppet16.github.io/page/3/index.html">
+<meta property="og:site_name" content="Puppet">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="Ltt">
+<meta property="article:tag" content="Hexo,Android,Linux,Java">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://puppet16.github.io/page/3/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"en","comments":"","permalink":"","path":"page/3/index.html","title":""}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Puppet</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Puppet</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Ltt</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://puppet16.github.io/2020/05/31/Java%E6%88%90%E5%91%98%E6%96%B9%E6%B3%95%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Ltt">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Puppet">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Puppet">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/05/31/Java%E6%88%90%E5%91%98%E6%96%B9%E6%B3%95%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F/" class="post-title-link" itemprop="url">Java成员方法执行顺序</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-05-31 21:49:39" itemprop="dateCreated datePublished" datetime="2020-05-31T21:49:39+08:00">2020-05-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-06-29 15:29:56" itemprop="dateModified" datetime="2022-06-29T15:29:56+08:00">2022-06-29</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="toc">
+<!-- toc -->
+<ul>
+<li><a href="#yi-san-ge-cheng-yuan-fang-fa">一、三个成员方法：</a></li>
+<li><a href="#er-dai-ma-shi-li">二、代码实例</a></li>
+<li><a href="#san-jie-lun">三、结论</a></li>
+</ul>
+<!-- tocstop -->
+</div>
+<h2><span id="yi-san-ge-cheng-yuan-fang-fa">一、三个成员方法：</span><a href="#yi-san-ge-cheng-yuan-fang-fa" class="header-anchor">#</a></h2>
+<ol>
+<li>
+<p><strong>普通初始化块</strong>：直接在类里写花括号，初始化块只在<strong>创建Java对象时</strong>隐式执行,而且在执行构造器之前执行。例子如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public class XXX &#123;</span><br><span class="line">    &#123;</span><br><span class="line">        &#x2F;&#x2F;普通初始化块的可执行性代码</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>静态初始化块</strong>：就是定义普通初始化块时使用了static修饰符，静态初始化块只在<strong>在类初始化阶段执行</strong>，而不是在创建对象时才执行，所以只会调用一次。例子如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public class XXX &#123;</span><br><span class="line">    static &#123;</span><br><span class="line">        &#x2F;&#x2F;静态初始化块的可执行性代码</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>构造方法</strong>：与类名同名的方法，，在创建Java对象时执行。例子如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public class A &#123;</span><br><span class="line">    A () &#123;</span><br><span class="line">        &#x2F;&#x2F;构造方法的可执行性代码</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2><span id="er-dai-ma-shi-li">二、代码实例</span><a href="#er-dai-ma-shi-li" class="header-anchor">#</a></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public class FatherClass &#123;</span><br><span class="line"></span><br><span class="line">    int value &#x3D; 11;</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line">        value &#x3D; 12;</span><br><span class="line">        Log.d(&quot;Extends&quot;,&quot;普通初始化块-Father&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    static &#123;</span><br><span class="line">         Log.d(&quot;Extends&quot;,&quot;静态初始化块-Father&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    FatherClass () &#123;</span><br><span class="line">        Log.d(&quot;Extends&quot;,&quot;构造方法-Father&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public class ChildClass extends FatherClass &#123;</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line">        Log.d(&quot;Extends&quot;,&quot;普通初始化块-ChildClass&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    static &#123;</span><br><span class="line">         Log.d(&quot;Extends&quot;,&quot;静态初始化块-ChildClass&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ChildClass() &#123;</span><br><span class="line">        Log.d(&quot;Extends&quot;,&quot;构造方法-ChildClass&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ChildClass childClass &#x3D; new ChildClass();</span><br><span class="line">Log.d(&quot;Extends&quot;,&quot;value值：&quot;+childClass.value);</span><br></pre></td></tr></table></figure>
+<p>输出结果为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">D&#x2F;Extends: 静态初始化块-Father</span><br><span class="line">D&#x2F;Extends: 静态初始化块-ChildClass</span><br><span class="line">D&#x2F;Extends: 普通初始化块-Father</span><br><span class="line">D&#x2F;Extends: 构造方法-Father</span><br><span class="line">D&#x2F;Extends: 普通初始化块-ChildClass</span><br><span class="line">D&#x2F;Extends: 构造方法-ChildClass</span><br><span class="line">D&#x2F;Extends: value值：12</span><br></pre></td></tr></table></figure>
+<h2><span id="san-jie-lun">三、结论</span><a href="#san-jie-lun" class="header-anchor">#</a></h2>
+<ol>
+<li>
+<p>单个类执行顺序为：静态初始化块—&gt;普通初始化块—&gt;构造方法。但是静态初始化块只会执行一次。</p>
+</li>
+<li>
+<p>继承父类后调用子类时执行顺序为：父类静态初始化块—&gt;子类静态初始化块—&gt;父类普通初始化块—&gt;父类构造方法—&gt;子类普通初始化块—&gt;子类构造方法。</p>
+</li>
+<li>
+<p>关于普通赋值：普通初始化块、声明实例变量指定的默认值都可以是对象的初始化代码，执行顺序与代码中的排列顺序相同。如FatherClass中，先执行int value = 11;再执行了value = 12；所以value结果为12。若是将int value == 11;放于普通初始化块后，如</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">   value &#x3D; 12;</span><br><span class="line">   Log.d(&quot;Extends&quot;,&quot;普通初始化块-Father&quot;);</span><br><span class="line">&#125;</span><br><span class="line">int value &#x3D; 11;</span><br></pre></td></tr></table></figure>
+<p>则value的值为11。</p>
+</li>
+<li>
+<p>关于静态变量赋值：与普通赋值一致。</p>
+</li>
+</ol>
+<p><em>参考：<a href="https://www.cnblogs.com/wft1990/p/7998353.html" target="_blank" rel="noopener">https://www.cnblogs.com/wft1990/p/7998353.html</a></em></p>
+<p>          <em><a href="https://blog.csdn.net/qq_34626097/article/details/83352293" target="_blank" rel="noopener">https://blog.csdn.net/qq_34626097/article/details/83352293</a></em></p>
+<p>          <em><a href="https://blog.csdn.net/china_songlei/article/details/79696583" target="_blank" rel="noopener">https://blog.csdn.net/china_songlei/article/details/79696583</a></em></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://puppet16.github.io/2020/05/31/Gradle%E7%89%88%E6%9C%AC%E4%BB%8E2-3%E5%8D%87%E5%88%B03-3-2%E9%97%AE%E9%A2%98%E9%9B%86%E9%94%A6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Ltt">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Puppet">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Puppet">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/05/31/Gradle%E7%89%88%E6%9C%AC%E4%BB%8E2-3%E5%8D%87%E5%88%B03-3-2%E9%97%AE%E9%A2%98%E9%9B%86%E9%94%A6/" class="post-title-link" itemprop="url">Gradle版本从2.3升到3.3.2问题集锦</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-05-31 21:39:36" itemprop="dateCreated datePublished" datetime="2020-05-31T21:39:36+08:00">2020-05-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2020-08-06 19:43:36" itemprop="dateModified" datetime="2020-08-06T19:43:36+08:00">2020-08-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="toc">
+<!-- toc -->
+<ul>
+<li><a href="#yi-gradle-ban-ben-sheng-ji-bu-zou">一、Gradle版本升级步骤</a></li>
+<li><a href="#er-cuo-wu-ji-jin">二、错误集锦</a>
+<ul>
+<li><a href="#1-cannot-set-the-value-of-read-only-property-outputfile-for-apkvariantoutputimpl-decorated">1. Cannot set the value of read-only property ‘outputFile’ for ApkVariantOutputImpl_Decorated</a></li>
+<li><a href="#2-xiu-gai-liao-cuo-wu-1-hou-zai-bian-yi-bao-ru-xia-cuo-wu-all-flavors-must-now-belong-to-a-named-flavor-dimension">2. 修改了错误1后再编译报如下错误：All flavors must now belong to a named flavor dimension</a></li>
+<li><a href="#3-error-the-sourceset-instrumenttest-is-not-recognized-by-the-android-gradle-plugin-perhaps-you-misspelled-something">3. ERROR: The SourceSet ‘instrumentTest’ is not recognized by the Android Gradle Plugin. Perhaps you misspelled something?</a></li>
+<li><a href="#4-error-the-android-gradle-plugin-supports-only-kotlin-gradle-plugin-version-1-3-0-and-higher">4. ERROR: The Android Gradle plugin supports only Kotlin Gradle plugin version 1.3.0 and higher.</a></li>
+<li><a href="#5-compile-cuo-wu">5. compile错误</a></li>
+<li><a href="#6-warning-api-variantoutput-getpackageapplication-isobsolete-and-has-been-replaced-with-variant-getpackageapplicationprovider">6. WARNING: API’variantOutput.getPackageApplication()‘isobsolete and has been replaced with’variant.getPackageApplicationProvider()’.</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+</div>
+<h1><span id="yi-gradle-ban-ben-sheng-ji-bu-zou">一、Gradle版本升级步骤</span><a href="#yi-gradle-ban-ben-sheng-ji-bu-zou" class="header-anchor">#</a></h1>
+<p><strong>1. 在gradle-wrapper.properties文件中修改distributionUrl的版本.</strong></p>
+<p><strong>2. 在工程里的build.gradle文件中的dependencies项里修改gradle版本，之后点 Try Again.</strong></p>
+<h1><span id="er-cuo-wu-ji-jin">二、错误集锦</span><a href="#er-cuo-wu-ji-jin" class="header-anchor">#</a></h1>
+<h2><span id="1-cannot-set-the-value-of-read-only-property-outputfile-for-apkvariantoutputimpl-decorated">1. Cannot set the value of read-only property ‘outputFile’ for ApkVariantOutputImpl_Decorated</span><a href="#1-cannot-set-the-value-of-read-only-property-outputfile-for-apkvariantoutputimpl-decorated" class="header-anchor">#</a></h2>
+<p><strong>错误原因：</strong> outputFile变成了可读字段<br>
+<strong>修改方案：</strong></p>
+<ol>
+<li>将variant.outputs.each中的each改成all</li>
+<li>output.outputFile = new File(outputFile.parent, fileName)改为 outputFileName  =fileName</li>
+</ol>
+<p><strong>原代码：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">applicationVariants.all &#123; variant -&gt;</span><br><span class="line">    variant.outputs.each &#123; output -&gt;</span><br><span class="line">        def outputFile &#x3D; output.outputFile</span><br><span class="line">        if (outputFile !&#x3D; null &amp;&amp; outputFile.name.endsWith(&#39;.apk&#39;)) &#123;</span><br><span class="line"></span><br><span class="line">            def fileName &#x3D; &quot;&quot;</span><br><span class="line">            if (checkQuDao()) &#123;</span><br><span class="line">                fileName &#x3D; &quot;QiQi_$&#123;defaultConfig.versionName&#125;$&#123;variant.productFlavors[0].name&#125;.apk&quot;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                fileName &#x3D; &quot;QiQi-debug.apk&quot;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            &#x2F;&#x2F;    def fileName &#x3D; &quot;QiQi_$&#123;defaultConfig.versionName&#125;$&#123;variant.productFlavors[0].name&#125;.apk&quot;</span><br><span class="line">            output.outputFile &#x3D; new File(outputFile.parent, fileName)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>修改后的代码：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">applicationVariants.all &#123; variant -&gt;</span><br><span class="line">    variant.outputs.**all** &#123; output -&gt;</span><br><span class="line">        def outputFile &#x3D; output.outputFile</span><br><span class="line">        if (outputFile !&#x3D; null &amp;&amp; outputFile.name.endsWith(&#39;.apk&#39;)) &#123;</span><br><span class="line"></span><br><span class="line">            def fileName &#x3D; &quot;&quot;</span><br><span class="line">            if (checkQuDao()) &#123;</span><br><span class="line">                fileName &#x3D; &quot;QiQi_$&#123;defaultConfig.versionName&#125;$&#123;variant.productFlavors[0].name&#125;.apk&quot;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                fileName &#x3D; &quot;QiQi-debug.apk&quot;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            &#x2F;&#x2F;    def fileName &#x3D; &quot;QiQi_$&#123;defaultConfig.versionName&#125;$&#123;variant.productFlavors[0].name&#125;.apk&quot;</span><br><span class="line">            **outputFileName  &#x3D;fileName**</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2><span id="2-xiu-gai-liao-cuo-wu-1-hou-zai-bian-yi-bao-ru-xia-cuo-wu-all-flavors-must-now-belong-to-a-named-flavor-dimension">2. 修改了错误1后再编译报如下错误：All flavors must now belong to a named flavor dimension</span><a href="#2-xiu-gai-liao-cuo-wu-1-hou-zai-bian-yi-bao-ru-xia-cuo-wu-all-flavors-must-now-belong-to-a-named-flavor-dimension" class="header-anchor">#</a></h2>
+<p><strong>错误原因：</strong> gradle版本3.0之后添加了flavorDimensions管理<br>
+<strong>修改方案：</strong> 在defaultConfig里面加入flavorDimensions，并在多渠道打包里的每一项里加上dimension。<br>
+<strong>修改后代码：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">defaultConfig &#123;</span><br><span class="line">    applicationId globalConfiguration.applicationId</span><br><span class="line">    minSdkVersion globalConfiguration.AndridMinSdkVersion</span><br><span class="line">    targetSdkVersion globalConfiguration.AndroidTargetSdkVersion</span><br><span class="line">    multiDexEnabled true</span><br><span class="line">    flavorDimensions &quot;product&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">productFlavors &#123;</span><br><span class="line"></span><br><span class="line">    xiaomi&#123;</span><br><span class="line">        dimension &quot;product&quot;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    huawei&#123;</span><br><span class="line">        dimension &quot;product&quot;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    oppo&#123;</span><br><span class="line">        dimension &quot;product&quot;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><em>参考文章<a href="https://blog.csdn.net/chen_xi_hao/article/details/80526049" target="_blank" rel="noopener">https://blog.csdn.net/chen_xi_hao/article/details/80526049</a></em></p>
+</blockquote>
+<h2><span id="3-error-the-sourceset-instrumenttest-is-not-recognized-by-the-android-gradle-plugin-perhaps-you-misspelled-something">3. ERROR: The SourceSet ‘instrumentTest’ is not recognized by the Android Gradle Plugin. Perhaps you misspelled something?</span><a href="#3-error-the-sourceset-instrumenttest-is-not-recognized-by-the-android-gradle-plugin-perhaps-you-misspelled-something" class="header-anchor">#</a></h2>
+<p><strong>错误原因：</strong> gradle版本3.0之后已废弃instrumentTest<br>
+<strong>解决方案：</strong> 将instrumentTest替换为androidTest<br>
+<strong>原代码：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">sourceSets &#123;</span><br><span class="line">main &#123;</span><br><span class="line">    manifest.srcFile &#39;AndroidManifest.xml&#39;</span><br><span class="line">    java.srcDirs &#x3D; [&#39;src&#39;]</span><br><span class="line">    resources.srcDirs &#x3D; [&#39;src&#39;]</span><br><span class="line">    aidl.srcDirs &#x3D; [&#39;src&#39;]</span><br><span class="line">    renderscript.srcDirs &#x3D; [&#39;src&#39;]</span><br><span class="line">    res.srcDirs &#x3D; [&#39;res&#39;]</span><br><span class="line">    assets.srcDirs &#x3D; [&#39;assets&#39;]</span><br><span class="line">&#125;</span><br><span class="line">instrumentTest.setRoot(&#39;tests&#39;)</span><br></pre></td></tr></table></figure>
+<p><strong>修改后代码：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">sourceSets &#123;</span><br><span class="line">    main &#123;</span><br><span class="line">        manifest.srcFile &#39;AndroidManifest.xml&#39;</span><br><span class="line">        java.srcDirs &#x3D; [&#39;src&#39;]</span><br><span class="line">        resources.srcDirs &#x3D; [&#39;src&#39;]</span><br><span class="line">        aidl.srcDirs &#x3D; [&#39;src&#39;]</span><br><span class="line">        renderscript.srcDirs &#x3D; [&#39;src&#39;]</span><br><span class="line">        res.srcDirs &#x3D; [&#39;res&#39;]</span><br><span class="line">        assets.srcDirs &#x3D; [&#39;assets&#39;]</span><br><span class="line">    &#125;</span><br><span class="line">    androidTest.setRoot(&#39;tests&#39;)</span><br></pre></td></tr></table></figure>
+<h2><span id="4-error-the-android-gradle-plugin-supports-only-kotlin-gradle-plugin-version-1-3-0-and-higher">4. ERROR: The Android Gradle plugin supports only Kotlin Gradle plugin version 1.3.0 and higher.</span><a href="#4-error-the-android-gradle-plugin-supports-only-kotlin-gradle-plugin-version-1-3-0-and-higher" class="header-anchor">#</a></h2>
+<p><strong>错误原因：</strong> gradle只支持1.3.0及以上的Kotlin Gradle plugin版本<br>
+<strong>修改方案：</strong> 修改kotlin版本，修改工程下的build.gradle文件中的dependencies项里的kotlin版本</p>
+<h2><span id="5-compile-cuo-wu">5. compile错误</span><a href="#5-compile-cuo-wu" class="header-anchor">#</a></h2>
+<p><strong>报了三个错误：</strong><br>
+<strong>1、WARNING: Configuration ‘compile’ is obsolete and has been replaced with ‘implementation’ and ‘api’.</strong><br>
+<strong>2、WARNING: Configuration ‘testCompile’ is obsolete and has been replaced with ‘testImplementation’.</strong><br>
+<strong>3、WARNING: Configuration ‘androidTestCompile’ is obsolete and has been replaced with ‘androidTestImplementation’.</strong><br>
+<strong>错误原因：</strong> compile已过时<br>
+<strong>解决方案：</strong> 使用implementation和api两个字段替换compile<br>
+<strong>implementation和api区别：</strong></p>
+<ul>
+<li>api 指令<br>
+完全等同于compile指令，没区别，你将所有的compile改成api，完全没有错。</li>
+<li>implement指令<br>
+这个指令的特点就是，对于使用了该命令编译的依赖，对该项目有依赖的项目将无法访问到使用该命令编译的依赖中的任何程序，也就是将该依赖隐藏在内部，而不对外部公开，这样避免了不同module引用了不同版本的支持包报错的问题。</li>
+</ul>
+<blockquote>
+<p><em>参考文章<a href="https://www.jianshu.com/p/f34c179bc9d0" target="_blank" rel="noopener">https://www.jianshu.com/p/f34c179bc9d0</a></em></p>
+</blockquote>
+<h2><span id="6-warning-api-variantoutput-getpackageapplication-isobsolete-and-has-been-replaced-with-variant-getpackageapplicationprovider">6. WARNING: API’variantOutput.getPackageApplication()‘isobsolete and has been replaced with’variant.getPackageApplicationProvider()’.</span><a href="#6-warning-api-variantoutput-getpackageapplication-isobsolete-and-has-been-replaced-with-variant-getpackageapplicationprovider" class="header-anchor">#</a></h2>
+<p><strong>原代码：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">applicationVariants.all &#123; variant -&gt;</span><br><span class="line">    variant.outputs.all &#123; output -&gt;</span><br><span class="line">        def outputFile &#x3D; output.outputFile</span><br><span class="line">        if (outputFile !&#x3D; null &amp;&amp; outputFile.name.endsWith(&#39;.apk&#39;)) &#123;</span><br><span class="line"></span><br><span class="line">            def fileName &#x3D; &quot;&quot;</span><br><span class="line">            if (checkQuDao()) &#123;</span><br><span class="line">                fileName &#x3D; &quot;QiQi_$&#123;defaultConfig.versionName&#125;$&#123;variant.productFlavors[0].name&#125;.apk&quot;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                fileName &#x3D; &quot;QiQi-debug.apk&quot;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            &#x2F;&#x2F;    def fileName &#x3D; &quot;QiQi_$&#123;defaultConfig.versionName&#125;$&#123;variant.productFlavors[0].name&#125;.apk&quot;</span><br><span class="line">            outputFileName &#x3D; fileName</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>修改后的代码：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">applicationVariants.all &#123; variant -&gt;</span><br><span class="line">    variant.outputs.all &#123; output -&gt;</span><br><span class="line">        </span><br><span class="line">            if (checkQuDao()) &#123;</span><br><span class="line">                outputFileName &#x3D; &quot;QiQi_$&#123;variant.versionName&#125;$&#123;variant.productFlavors[0].name&#125;.apk&quot;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                outputFileName &#x3D; &quot;QiQi-debug.apk&quot;</span><br><span class="line">            &#125;</span><br><span class="line">            &#x2F;&#x2F;    def fileName &#x3D; &quot;QiQi_$&#123;defaultConfig.versionName&#125;$&#123;variant.productFlavors[0].name&#125;.apk&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://puppet16.github.io/2020/05/31/android-support%E8%BF%81%E7%A7%BB%E5%88%B0androidX/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Ltt">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Puppet">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Puppet">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/05/31/android-support%E8%BF%81%E7%A7%BB%E5%88%B0androidX/" class="post-title-link" itemprop="url">android.support迁移到androidX</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-05-31 21:33:00" itemprop="dateCreated datePublished" datetime="2020-05-31T21:33:00+08:00">2020-05-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2020-08-06 19:43:36" itemprop="dateModified" datetime="2020-08-06T19:43:36+08:00">2020-08-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="toc">
+<!-- toc -->
+<ul>
+<li><a href="#yi-qian-yan">一、前言</a></li>
+<li><a href="#er-ti-huan-cheng-androidx-hou-yu-dao-de-wen-ti">二、替换成androidx后遇到的问题</a>
+<ul>
+<li><a href="#1-dui-findviewbyid-de-yin-yong-bu-ming-que">1. 对findViewById的引用不明确</a></li>
+<li><a href="#2-v4jar-bao-keyeventcompat-bu-cun-zai">2. v4jar包keyeventcompat不存在</a></li>
+<li><a href="#3-error-tag-failed-to-resolve-variable-junit-version">3. ERROR: [TAG] Failed to resolve variable ‘${junit.version}’</a></li>
+<li><a href="#4-error-error-resource-previously-defined-here">4. Error:error: resource previously defined here.</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+</div>
+<h1><span id="yi-qian-yan">一、前言</span><a href="#yi-qian-yan" class="header-anchor">#</a></h1>
+<p>Google 2018 IO 大会推出了 Android新的扩展库 AndroidX，用于替换原来的 Android扩展库，将原来的android.<em>替换成androidx.</em>；只有包名和Maven工件名受到影响，原来的类名，方法名和字段名不会更改。官方早就推荐将support库迁移到androidx，因为后续support库不会再做更新。<br>
+迁移时只需要3.2版本及以上的android studio，在菜单refactor中点击migrate to androidx即可，该向导会提示需要做的更新。其中包括gradle版本至少3.2以上，compileSdkVersion 版本28以上。<br>
+<strong>1. 常用依赖库对比</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Old build artifact</th>
+<th style="text-align:left">AndroidX build artifact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">com.android.support:appcompat-v7:28.0.2</td>
+<td style="text-align:left">androidx.appcompat:appcompat:1.0.0</td>
+</tr>
+<tr>
+<td style="text-align:left">com.android.support:design:28.0.2</td>
+<td style="text-align:left">com.google.android.material:material:1.0.0</td>
+</tr>
+<tr>
+<td style="text-align:left">com.android.support:support-v4:28.0.2</td>
+<td style="text-align:left">androidx.legacy:legacy-support-v4:1.0.0</td>
+</tr>
+<tr>
+<td style="text-align:left">com.android.support:recyclerview-v7:28.0.2</td>
+<td style="text-align:left">androidx.recyclerview:recyclerview:1.0.0</td>
+</tr>
+<tr>
+<td style="text-align:left">com.android.support.constraint:constraint-layout:1.1.2</td>
+<td style="text-align:left">androidx.constraintlayout:constraintlayout:1.1.2</td>
+</tr>
+</tbody>
+</table>
+<p><strong>2. 常用支持库类对比</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Support Library class</th>
+<th style="text-align:left">AndroidX class</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">android.support.v4.app.Fragment</td>
+<td style="text-align:left">androidx.fragment.app.Fragment</td>
+</tr>
+<tr>
+<td style="text-align:left">android.support.v4.app.FragmentActivity</td>
+<td style="text-align:left">androidx.fragment.app.FragmentActivity</td>
+</tr>
+<tr>
+<td style="text-align:left">android.support.v7.app.AppCompatActivity</td>
+<td style="text-align:left">androidx.appcompat.app.AppCompatActivity</td>
+</tr>
+<tr>
+<td style="text-align:left">android.support.v7.app.ActionBar</td>
+<td style="text-align:left">androidx.appcompat.app.ActionBar</td>
+</tr>
+<tr>
+<td style="text-align:left">android.support.v7.widget.RecyclerView</td>
+<td style="text-align:left">androidx.recyclerview.widget.RecyclerView</td>
+</tr>
+</tbody>
+</table>
+<p>了解androidX可以看这一篇:<a href="https://blog.csdn.net/qq_17766199/article/details/81433706" target="_blank" rel="noopener">androidX了解一下</a><br>
+更多androidX详细内容看:<a href="https://developer.android.google.cn/jetpack/androidx/migrate" target="_blank" rel="noopener">官方文档</a></p>
+<p>关于gradle低版本升级可以看这篇文章:<a href="https://blog.csdn.net/u013183608/article/details/89428563" target="_blank" rel="noopener">https://blog.csdn.net/u013183608/article/details/89428563</a></p>
+<h1><span id="er-ti-huan-cheng-androidx-hou-yu-dao-de-wen-ti">二、替换成androidx后遇到的问题</span><a href="#er-ti-huan-cheng-androidx-hou-yu-dao-de-wen-ti" class="header-anchor">#</a></h1>
+<h2><span id="1-dui-findviewbyid-de-yin-yong-bu-ming-que">1. 对findViewById的引用不明确</span><a href="#1-dui-findviewbyid-de-yin-yong-bu-ming-que" class="header-anchor">#</a></h2>
+<p><strong>描述：</strong> Activity 中的方法 findViewById(int) 和 AppCompatActivity 中的方法 <t>findViewById(int) 都匹配其中, T是类型变量:T扩展已在方法 <t>findViewById(int)中声明的View</t></t></p>
+<p><strong>解决方法：</strong> compileSdkVersion不一致，应该进行统一</p>
+<h2><span id="2-v4jar-bao-keyeventcompat-bu-cun-zai">2. v4jar包keyeventcompat不存在</span><a href="#2-v4jar-bao-keyeventcompat-bu-cun-zai" class="header-anchor">#</a></h2>
+<p><strong>描述：</strong> 错误: 找不到符号 符号:  类 KeyEventCompat 位置: 程序包 androidx.core.view</p>
+<p><strong>原因：</strong> KeyEventCompat类被取消了hasNoModifiers方法，而该方法已经被KeyEvent实现了<br>
+<strong>原代码：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">if (KeyEventCompat.hasNoModifiers(event)) &#123;</span><br><span class="line">    handled &#x3D; arrowScroll(FOCUS_FORWARD);</span><br><span class="line">&#125; else if (KeyEventCompat.hasModifiers(event, KeyEvent.META_SHIFT_ON)) &#123;</span><br><span class="line">    handled &#x3D; arrowScroll(FOCUS_BACKWARD);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>修改后代码:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">if (event.hasNoModifiers()) &#123;</span><br><span class="line">    handled &#x3D; arrowScroll(FOCUS_FORWARD);</span><br><span class="line">&#125; else if (event.hasModifiers(KeyEvent.META_SHIFT_ON)) &#123;</span><br><span class="line">    handled &#x3D; arrowScroll(FOCUS_BACKWARD);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2><span id="3-error-tag-failed-to-resolve-variable-junit-version">3. ERROR: [TAG] Failed to resolve variable ‘${junit.version}’</span><a href="#3-error-tag-failed-to-resolve-variable-junit-version" class="header-anchor">#</a></h2>
+<p><strong>解决方法：</strong> file-&gt;Invalidate Caches / restart</p>
+<h2><span id="4-error-error-resource-previously-defined-here">4. Error:error: resource previously defined here.</span><a href="#4-error-error-resource-previously-defined-here" class="header-anchor">#</a></h2>
+<p><strong>原因：</strong> 自定义View时自定义属性使用了系统的属性名称<br>
+<strong>解决方案：</strong></p>
+<ol>
+<li>重命名自已定义的属性，以避免与系统的属性名称重复<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;declare-styleable name&#x3D;&quot;TestTextView&quot;&gt;  </span><br><span class="line">    &lt;attr name&#x3D;&quot;text_color&quot; format&#x3D;&quot;color&quot;&#x2F;&gt;</span><br><span class="line">    &lt;attr name&#x3D;&quot;text_size&quot; format&#x3D;&quot;float&quot; &#x2F;&gt;</span><br><span class="line">&lt;&#x2F;declare-styleable&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li>不对textColor进行重命名，直接引用系统的textColor，然后在xml里面使用 时，就不能使用自定义的命名空间了（例如：app:），得用使用原生的引用（android:）<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;declare-styleable name&#x3D;&quot;TestTextView&quot;&gt;</span><br><span class="line">    &lt;attr name&#x3D;&quot;textColor&quot;&#x2F;&gt;</span><br><span class="line">    &lt;attr name&#x3D;&quot;textSize&quot;&#x2F;&gt;</span><br><span class="line">&lt;&#x2F;declare-styleable&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://puppet16.github.io/2020/05/31/%E5%B0%8F%E7%B1%B35sPlus%E5%AE%89%E8%A3%85%E5%8E%9F%E7%94%9F%E7%B3%BB%E7%BB%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Ltt">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Puppet">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Puppet">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/05/31/%E5%B0%8F%E7%B1%B35sPlus%E5%AE%89%E8%A3%85%E5%8E%9F%E7%94%9F%E7%B3%BB%E7%BB%9F/" class="post-title-link" itemprop="url">小米5sPlus安装原生系统</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-05-31 21:20:42" itemprop="dateCreated datePublished" datetime="2020-05-31T21:20:42+08:00">2020-05-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2020-08-06 19:43:36" itemprop="dateModified" datetime="2020-08-06T19:43:36+08:00">2020-08-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="toc">
+<!-- toc -->
+<ul>
+<li><a href="#di-yi-bu-xian-jie-suo-shou-ji">第一步：先解锁手机</a></li>
+<li><a href="#di-er-bu-shua-yi-ge-di-san-fang-recovery">第二步：刷一个第三方recovery</a></li>
+<li><a href="#di-san-bu-huo-qu-root-quan-xian">第三步： 获取Root权限</a>
+<ul>
+<li><a href="#fang-fa-yi-shua-root-bao">方法一、刷root包</a></li>
+<li><a href="#fang-fa-er-miui-xi-tong-zhong-huo-qu">方法二、 MIUI系统中获取</a></li>
+</ul>
+</li>
+<li><a href="#di-si-bu-huo-qu-rom-bao">第四步： 获取ROM包</a></li>
+<li><a href="#di-wu-bu-an-zhuang-rom-bao">第五步： 安装ROM包</a></li>
+<li><a href="#di-liu-bu-huo-qu-root-quan-xian">第六步：获取Root权限</a>
+<ul>
+<li><a href="#fang-fa-yi-shi-yong-lineageos-zi-dai-de-bu-ding-bao">方法一、使用Lineageos自带的补丁包</a></li>
+<li><a href="#fang-fa-er-shi-yong-supersu">方法二、使用SuperSu</a></li>
+<li><a href="#fang-fa-san-shi-yong-magisk">方法三、使用Magisk</a></li>
+</ul>
+</li>
+<li><a href="#yu-dao-wen-ti">遇到问题</a></li>
+</ul>
+<!-- tocstop -->
+</div>
+<blockquote>
+<p>手机型号：<em><strong>MI 5s Plus</strong></em>    codeName：<strong>natrium</strong></p>
+</blockquote>
+<h2><span id="di-yi-bu-xian-jie-suo-shou-ji">第一步：先解锁手机</span><a href="#di-yi-bu-xian-jie-suo-shou-ji" class="header-anchor">#</a></h2>
+<ol>
+<li>
+<p>登录网站<a href="http://www.miui.com/unlock/index.html" target="_blank" rel="noopener">http://www.miui.com/unlock/index.html</a>，点击立即解锁。</p>
+</li>
+<li>
+<p>提交申请成功后，等待审核通过。(一般申请后马上通过)</p>
+</li>
+<li>
+<p>审核通过后即获解锁资格，然后点击解决工具下载。</p>
+</li>
+<li>
+<p>将下载好的工具压缩包解压，并点击miflash_unlock.exe运行解锁工具。</p>
+</li>
+<li>
+<p>然后设置手机进入Bootloader模式（关机后，同时按住开机键和音量下键）。</p>
+</li>
+<li>
+<p>通过USB连接手机，点击 “解锁”按钮，过程中需要验证小米账号(保证手机登录了有解锁资格的账号)</p>
+</li>
+<li>
+<p>解锁成功后，点击重启手机。</p>
+<p><em>详细解锁教程可以参考<a href="http://www.shuajizhijia.net/news/18550.html" target="_blank" rel="noopener">http://www.shuajizhijia.net/news/18550.html</a></em></p>
+</li>
+</ol>
+<h2><span id="di-er-bu-shua-yi-ge-di-san-fang-recovery">第二步：刷一个第三方recovery</span><a href="#di-er-bu-shua-yi-ge-di-san-fang-recovery" class="header-anchor">#</a></h2>
+<ol>
+<li>
+<p>下载Recovery工具包，链接：<a href="https://pan.baidu.com/s/1wARkj7nArWUlzrI7iLKPBA" target="_blank" rel="noopener">https://pan.baidu.com/s/1wARkj7nArWUlzrI7iLKPBA</a> 密码：<strong>ovkz</strong></p>
+</li>
+<li>
+<p>手机要进入FastBoot模式，进入的方法：在手机关机状态下，按住音量键-和电源键</p>
+</li>
+<li>
+<p>保证手机正常连接电脑</p>
+</li>
+<li>
+<p>然后把上面下载下来的recovery工具包在电脑上进行解压，然后在文件夹里找到【recovery-twrp一键刷入工具.bat】文件直接双击打开运行。</p>
+</li>
+<li>
+<p>过几秒安装完成后会自动打开recovery界面。</p>
+</li>
+<li>
+<p>这个版本是3.2.3，可以自动解密data分区</p>
+<p><em>详细刷recovery教程可以参考<a href="http://bbs.xiaomi.cn/t-25351609-2-o1#comment_top" target="_blank" rel="noopener">http://bbs.xiaomi.cn/t-25351609-2-o1#comment_top</a></em></p>
+</li>
+</ol>
+<h2><span id="di-san-bu-huo-qu-root-quan-xian">第三步： 获取Root权限</span><a href="#di-san-bu-huo-qu-root-quan-xian" class="header-anchor">#</a></h2>
+<h3><span id="fang-fa-yi-shua-root-bao">方法一、刷root包</span><a href="#fang-fa-yi-shua-root-bao" class="header-anchor">#</a></h3>
+<ol>
+<li>
+<p>下载root包，链接：<a href="https://pan.baidu.com/s/13PogRZX2ZUivdb_wOjuzug" target="_blank" rel="noopener">https://pan.baidu.com/s/13PogRZX2ZUivdb_wOjuzug</a> 密码：<strong>rl7v</strong></p>
+</li>
+<li>
+<p>将下载下来的压缩包解压，并将Root-Supersu_Pro_2.74.zip放到手机根目录下</p>
+</li>
+<li>
+<p>进入Recovery界面，点击安装，在根目录下选择压缩包。</p>
+</li>
+<li>
+<p>安装完成后，点重新启动。</p>
+</li>
+</ol>
+<h3><span id="fang-fa-er-miui-xi-tong-zhong-huo-qu">方法二、 MIUI系统中获取</span><a href="#fang-fa-er-miui-xi-tong-zhong-huo-qu" class="header-anchor">#</a></h3>
+<ol>
+<li>安全中心–&gt;应用管理–&gt;权限–&gt;Root权限管理</li>
+<li>点击获取root权限。</li>
+</ol>
+<h2><span id="di-si-bu-huo-qu-rom-bao">第四步： 获取ROM包</span><a href="#di-si-bu-huo-qu-rom-bao" class="header-anchor">#</a></h2>
+<p>AospExtended：<a href="https://downloads.aospextended.com/" target="_blank" rel="noopener">https://downloads.aospextended.com/</a></p>
+<p>Lineageos：<a href="https://download.lineageos.org/" target="_blank" rel="noopener">https://download.lineageos.org/</a></p>
+<h2><span id="di-wu-bu-an-zhuang-rom-bao">第五步： 安装ROM包</span><a href="#di-wu-bu-an-zhuang-rom-bao" class="header-anchor">#</a></h2>
+<ol>
+<li>将下好的ROM包放到手机根目录下</li>
+<li>打开手机的Recovery界面，点击安装，选择ROM包。</li>
+<li>手机卡在开机界面时，先进入Recovery界面再格式化data即可。</li>
+</ol>
+<h2><span id="di-liu-bu-huo-qu-root-quan-xian">第六步：获取Root权限</span><a href="#di-liu-bu-huo-qu-root-quan-xian" class="header-anchor">#</a></h2>
+<h3><span id="fang-fa-yi-shi-yong-lineageos-zi-dai-de-bu-ding-bao">方法一、使用Lineageos自带的补丁包</span><a href="#fang-fa-yi-shi-yong-lineageos-zi-dai-de-bu-ding-bao" class="header-anchor">#</a></h3>
+<ol>
+<li>
+<p>Lineageos的Root补丁包地址：<a href="https://download.lineageos.org/extras" target="_blank" rel="noopener">https://download.lineageos.org/extras</a></p>
+</li>
+<li>
+<p>下载好对应CPU位数及系统版本的Root包后，将压缩包放到手机根目录下</p>
+</li>
+<li>
+<p>打开手机的Recovery界面，选择安装Root包。</p>
+<p>参考网址：<a href="https://tieba.baidu.com/p/4961319803?share=9105&amp;fr=share&amp;red_tag=2572190043" target="_blank" rel="noopener">https://tieba.baidu.com/p/4961319803?share=9105&amp;fr=share&amp;red_tag=2572190043</a></p>
+<p>结果：<strong>失败</strong></p>
+</li>
+</ol>
+<h3><span id="fang-fa-er-shi-yong-supersu">方法二、使用SuperSu</span><a href="#fang-fa-er-shi-yong-supersu" class="header-anchor">#</a></h3>
+<ol>
+<li>
+<p>SuperSu的卡刷包地址：<a href="https://www.lineageosrom.com/2018/09/lineage-os-16-root-android-pie-90-super.html" target="_blank" rel="noopener">https://www.lineageosrom.com/2018/09/lineage-os-16-root-android-pie-90-super.html</a></p>
+</li>
+<li>
+<p>下载好对应CPU位数及系统版本的Root包后，将压缩包放到手机根目录下</p>
+</li>
+<li>
+<p>打开手机的Recovery界面，选择安装Root包。</p>
+</li>
+<li>
+<p>下载SuperSu的app应用并安装。</p>
+<p>结果：<strong>失败</strong></p>
+</li>
+</ol>
+<h3><span id="fang-fa-san-shi-yong-magisk">方法三、使用Magisk</span><a href="#fang-fa-san-shi-yong-magisk" class="header-anchor">#</a></h3>
+<ol>
+<li>
+<p>magisk网址：<a href="https://forum.xda-developers.com/apps/magisk/official-magisk-v7-universal-systemless-t3473445" target="_blank" rel="noopener">https://forum.xda-developers.com/apps/magisk/official-magisk-v7-universal-systemless-t3473445</a></p>
+</li>
+<li>
+<p>两种方法：</p>
+<ul>
+<li>
+<p>支持 <a href="https://twrp.me/Devices/" target="_blank" rel="noopener">TWRP</a> ，直接进入Recovery界面，安装Magisk包。</p>
+</li>
+<li>
+<p>不支持TWRP，使用以下方法：</p>
+<ol>
+<li>
+<p>下载一个magisk manager安装包，并安装。</p>
+</li>
+<li>
+<p>从你的刷机包中提取当前固件的 <strong>boot.img</strong> 文件，将它传入到安装了 Magisk Manager 的手机中</p>
+</li>
+<li>
+<p>进入 Magisk Manager —— 安装（install）—— install —— 修补 boot 镜像文件</p>
+</li>
+<li>
+<p>然后选择传入的 boot.img 文件进行生成，并将生成后的 Patchedboot.img （姑且这么命名） 传输到电脑上。</p>
+</li>
+<li>
+<p>随后我们使用 Magisk 应用对 boot.img 进行重新打包：</p>
+</li>
+<li>
+<p>打开命令行窗口</p>
+</li>
+<li>
+<p>执行 <code>adb reboot bootloader</code> 进入 Bootloader 界面</p>
+</li>
+<li>
+<p>执行 <code>fastboot boot Patchedboot.img</code> 来加载生成后的 boot 分区文件获取<strong>临时 root</strong></p>
+</li>
+<li>
+<p>此时进入系统，你会发现你已经成功安装了 Magisk（如果显示没有安装则为获取失败，请检查操作过程重新尝试），但这还不够，我们还得进入 Magisk Manager，选择安装（install）——install——Direct Install（直接安装）才能将临时 root 转换为永久 root。</p>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+</ol>
+<p><em><strong>注意：安装Magisk之前确保没有安装过Super su，否则无法安装成功。若是之前安装过了，需要格式化data并重新刷系统，才能安装成功。</strong></em></p>
+<p>参考网址：<a href="https://sspai.com/post/53043" target="_blank" rel="noopener">https://sspai.com/post/53043</a></p>
+<p>结果：<strong>成功</strong></p>
+<h2><span id="yu-dao-wen-ti">遇到问题</span><a href="#yu-dao-wen-ti" class="header-anchor">#</a></h2>
+<ol>
+<li>
+<p>WIFI显示叉号，提示无法联网，但是可以上网</p>
+<p>解决方法：</p>
+<ul>
+<li>
+<p>Android 7.0之前版本的系统，执行以下命令：</p>
+<p><code>adb shell &quot;settings put global captive_portal_server captive.lineageos.org.cn&quot;</code></p>
+</li>
+<li>
+<p><strong>Android 7.0之后</strong>的版本需要执行下面的两条命令：</p>
+<p><code>adb shell &quot;settings put global captive_portal_http_url http://captive.lineageos.org.cn/generate_204&quot;;</code></p>
+<p><code>adb shell &quot;settings put global captive_portal_https_url https://captive.lineageos.org.cn/generate_204&quot;</code></p>
+</li>
+</ul>
+<p>参考网址：<a href="https://www.lineageos.org.cn/thread-118-1-1.html" target="_blank" rel="noopener">https://www.lineageos.org.cn/thread-118-1-1.html</a></p>
+</li>
+<li>
+<p><em><strong>一定要科学上网，否则网速会让你绝望</strong></em></p>
+</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://puppet16.github.io/2020/05/31/%E4%BD%BF%E7%94%A8IntDef%E6%B3%A8%E8%A7%A3%E4%BB%A3%E6%9B%BFENUM/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Ltt">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Puppet">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Puppet">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/05/31/%E4%BD%BF%E7%94%A8IntDef%E6%B3%A8%E8%A7%A3%E4%BB%A3%E6%9B%BFENUM/" class="post-title-link" itemprop="url">使用IntDef注解代替ENUM</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-05-31 21:01:29" itemprop="dateCreated datePublished" datetime="2020-05-31T21:01:29+08:00">2020-05-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2020-08-06 19:43:36" itemprop="dateModified" datetime="2020-08-06T19:43:36+08:00">2020-08-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="toc">
+<!-- toc -->
+<ul>
+<li><a href="#yi-qian-yan">一、前言</a></li>
+<li><a href="#er-yi-lai">二、依赖</a></li>
+<li><a href="#san-shi-li">三、实例</a></li>
+<li><a href="#si-retention-shuo-ming">四、Retention说明</a>
+<ul>
+<li><a href="#qi-zhong-retention-you-san-chong-mo-shi">其中Retention有三种模式：</a></li>
+<li><a href="#ru-he-xuan-ze-he-gua-de-zhu-jie-sheng-ming-zhou-qi">如何选择合适的注解生命周期</a></li>
+<li><a href="#retentionpolicy-yuan-ma">RetentionPolicy源码</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+</div>
+<h2><span id="yi-qian-yan">一、前言</span><a href="#yi-qian-yan" class="header-anchor">#</a></h2>
+<p>在android系统中，不推荐使用ENUM类型，因为他占用内存较大，所以一般使用静态常量来代替枚举，但是有些场景我们只需要某几个固定的或一个范围内的值。此时静态常量就没有办法用来检查我们传递的是不是自己想要的值，这个场景下可以使用这两个注解来完成，它会在编译的时候检查我们的赋值是否符合要求，提前发现错误。</p>
+<h2><span id="er-yi-lai">二、依赖</span><a href="#er-yi-lai" class="header-anchor">#</a></h2>
+<p>这两个注解实现需要<code>com.android.support:support-annotations</code>依赖包</p>
+<h2><span id="san-shi-li">三、实例</span><a href="#san-shi-li" class="header-anchor">#</a></h2>
+<p>StringDef用法与IntDef相同，以下为一个IntDef例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">import android.support.annotation.IntDef;</span><br><span class="line">import java.lang.annotation.Retention;</span><br><span class="line">import java.lang.annotation.RetentionPolicy;</span><br><span class="line"></span><br><span class="line">public class IntDefDemo &#123;</span><br><span class="line">    public static final int TEST_ONE &#x3D; 1;</span><br><span class="line">    public static final int TEST_TWO &#x3D; 2;</span><br><span class="line">    public static final int TEST_THREE &#x3D; 3;</span><br><span class="line"></span><br><span class="line">    @IntDef(&#123;TEST_ONE, TEST_TWO, TEST_THREE&#125;)</span><br><span class="line">    @Retention(RetentionPolicy.SOURCE)</span><br><span class="line">    public @interface Test&#123;&#125;</span><br><span class="line"></span><br><span class="line">    private @Test int mTestValue;</span><br><span class="line"></span><br><span class="line">    public void setTestValue(@Test int value) &#123;</span><br><span class="line">        mTestValue &#x3D; value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public @Test int getTestValue() &#123;</span><br><span class="line">        return mTestValue;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2><span id="si-retention-shuo-ming">四、Retention说明</span><a href="#si-retention-shuo-ming" class="header-anchor">#</a></h2>
+<h3><span id="qi-zhong-retention-you-san-chong-mo-shi">其中Retention有三种模式：</span><a href="#qi-zhong-retention-you-san-chong-mo-shi" class="header-anchor">#</a></h3>
+<ul>
+<li><strong><code>RetentionPolicy.SOURCE</code></strong>：注解只保留在源码文件，当Java文件编译成class文件的时候，注解信息会被丢弃，不会保留在编译好的class文件中。生命周期对应<strong>Java源文件(.java文件)</strong></li>
+<li><strong><code>RetentionPolicy.CLASS</code></strong>：注解被保留到class文件，但jvm加载class文件时候被遗弃，<em><strong>默认值</strong></em>。生命周期对应 <strong>.class文件</strong></li>
+<li><strong><code>RetentionPolicy.RUNTIME</code></strong>：注解不仅被保存到class文件中，jvm加载class文件之后，仍然存在，因此可以通过反射机制读取注解的信息。生命周期对应 <strong>内存中的字节码dex</strong><br>
+<br></li>
+</ul>
+<h3><span id="ru-he-xuan-ze-he-gua-de-zhu-jie-sheng-ming-zhou-qi">如何选择合适的注解生命周期</span><a href="#ru-he-xuan-ze-he-gua-de-zhu-jie-sheng-ming-zhou-qi" class="header-anchor">#</a></h3>
+<ol>
+<li>要明确生命周期长度 SOURCE &lt; CLASS &lt; RUNTIME ，所以前者能作用的地方后者一定也能作用。</li>
+<li>一般如果需要在运行时去动态获取注解信息，那只能用 RUNTIME 注解</li>
+<li>如果要在编译时进行一些预处理操作，比如生成一些辅助代码（如 ButterKnife），就用 CLASS注解</li>
+<li>如果只是做一些检查性的操作，比如 @Override 和 @SuppressWarnings，则可选用 SOURCE 注解。</li>
+</ol>
+<h3><span id="retentionpolicy-yuan-ma">RetentionPolicy源码</span><a href="#retentionpolicy-yuan-ma" class="header-anchor">#</a></h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;*</span><br><span class="line"> * Copyright (c) 2003, 2004, Oracle and&#x2F;or its affiliates. All rights reserved.</span><br><span class="line"> * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.</span><br><span class="line"> *</span><br><span class="line"> * This code is free software; you can redistribute it and&#x2F;or modify it</span><br><span class="line"> * under the terms of the GNU General Public License version 2 only, as</span><br><span class="line"> * published by the Free Software Foundation.  Oracle designates this</span><br><span class="line"> * particular file as subject to the &quot;Classpath&quot; exception as provided</span><br><span class="line"> * by Oracle in the LICENSE file that accompanied this code.</span><br><span class="line"> *</span><br><span class="line"> * This code is distributed in the hope that it will be useful, but WITHOUT</span><br><span class="line"> * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or</span><br><span class="line"> * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License</span><br><span class="line"> * version 2 for more details (a copy is included in the LICENSE file that</span><br><span class="line"> * accompanied this code).</span><br><span class="line"> *</span><br><span class="line"> * You should have received a copy of the GNU General Public License version</span><br><span class="line"> * 2 along with this work; if not, write to the Free Software Foundation,</span><br><span class="line"> * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.</span><br><span class="line"> *</span><br><span class="line"> * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA</span><br><span class="line"> * or visit www.oracle.com if you need additional information or have any</span><br><span class="line"> * questions.</span><br><span class="line"> *&#x2F;</span><br><span class="line"></span><br><span class="line">package java.lang.annotation;</span><br><span class="line"></span><br><span class="line">&#x2F;**</span><br><span class="line"> * Annotation retention policy.  The constants of this enumerated type</span><br><span class="line"> * describe the various policies for retaining annotations.  They are used</span><br><span class="line"> * in conjunction with the &#123;@link Retention&#125; meta-annotation type to specify</span><br><span class="line"> * how long annotations are to be retained.</span><br><span class="line"> *</span><br><span class="line"> * @author  Joshua Bloch</span><br><span class="line"> * @since 1.5</span><br><span class="line"> *&#x2F;</span><br><span class="line">public enum RetentionPolicy &#123;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Annotations are to be discarded by the compiler.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    SOURCE,</span><br><span class="line"></span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Annotations are to be recorded in the class file by the compiler</span><br><span class="line">     * but need not be retained by the VM at run time.  This is the default</span><br><span class="line">     * behavior.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    CLASS,</span><br><span class="line"></span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Annotations are to be recorded in the class file by the compiler and</span><br><span class="line">     * retained by the VM at run time, so they may be read reflectively.</span><br><span class="line">     *</span><br><span class="line">     * @see java.lang.reflect.AnnotatedElement</span><br><span class="line">     *&#x2F;</span><br><span class="line">    RUNTIME</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://puppet16.github.io/2020/05/22/MediaPlayer%E8%AF%A6%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Ltt">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Puppet">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Puppet">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/05/22/MediaPlayer%E8%AF%A6%E8%A7%A3/" class="post-title-link" itemprop="url">MediaPlayer 详解</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-05-22 15:50:15" itemprop="dateCreated datePublished" datetime="2020-05-22T15:50:15+08:00">2020-05-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2020-08-06 19:43:36" itemprop="dateModified" datetime="2020-08-06T19:43:36+08:00">2020-08-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="toc">
+<!-- toc -->
+<ul>
+<li><a href="#qian-yan">前言</a></li>
+<li><a href="#yi-zhi-chi-mei-ti-ge-shi">一、支持媒体格式</a>
+<ul>
+<li><a href="#1-yin-pin-zhi-chi">1. 音频支持</a></li>
+<li><a href="#2-shi-pin-zhi-chi">2. 视频支持</a></li>
+<li><a href="#3-tu-pian-zhi-chi">3. 图片支持</a></li>
+<li><a href="#4-wang-luo-xie-yi">4. 网络协议</a></li>
+</ul>
+</li>
+<li><a href="#er-chang-yong-fang-fa">二、常用方法</a></li>
+<li><a href="#san-zhuang-tai-zhuan-huan">三、 状态转换</a></li>
+<li><a href="#si-shi-yong-zhu-yi-shi-xiang">四、使用注意事项</a>
+<ul>
+<li><a href="#1-shi-yong-liu-mei-ti-shi-zhun-bei-fang-fa-shi-yong-prepareasync">1. 使用流媒体时准备方法使用prepareAsync()</a></li>
+<li><a href="#2-hui-shou-zi-yuan">2. 回收资源</a></li>
+<li><a href="#3-setoncompletionlistener-de-shi-yong">3. setOnCompletionListener的使用</a></li>
+</ul>
+</li>
+<li><a href="#wu-bo-fang-jin-du-zhan-shi">五、播放进度展示</a>
+<ul>
+<li><a href="#seekbar-yu-mediaplayer-suo-xu-yao-fang-fa">SeekBar与MediaPlayer所需要方法</a></li>
+<li><a href="#jin-du-tiao-zhan-shi-bu-zou">进度条展示步骤</a>
+<ul>
+<li><a href="#1-chuang-jian-seekbar">1. 创建SeekBar</a></li>
+<li><a href="#2-tian-jia-jin-du-tiao-de-gai-bian-jian-ting-qi">2. 添加进度条的改变监听器</a></li>
+<li><a href="#3-she-zhi-seekbar-zui-da-zhi">3. 设置seekBar最大值</a></li>
+<li><a href="#4-geng-xin-jin-du-tiao">4. 更新进度条</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+</div>
+<h1><span id="qian-yan">前言</span><a href="#qian-yan" class="header-anchor">#</a></h1>
+<blockquote>
+<p>MediaPlayer 是 Android 系统自带的播放器，支持播放各种常见媒体类型，包含了 Audio 和 Video 的播放功能，可以播放存储在应用资源（原始资源）内的媒体文件、文件系统中的独立文件或者通过网络连接获得的数据流中的音频或视频。</p>
+</blockquote>
+<h1><span id="yi-zhi-chi-mei-ti-ge-shi">一、支持媒体格式</span><a href="#yi-zhi-chi-mei-ti-ge-shi" class="header-anchor">#</a></h1>
+<p>下表介绍了 Android 平台中内置的媒体格式支持。括号中注明了不能保证在所有 Android 平台版本上均可用的编解码器，例如：（Android 3.0 及更高版本）。请注意，任何给定的移动设备均可能支持该表中未列出的其他格式或文件类型。</p>
+<p><em><strong>参考：<a href="https://developer.android.com/guide/topics/media/media-formats" target="_blank" rel="noopener">https://developer.android.com/guide/topics/media/media-formats</a></strong></em></p>
+<h2><span id="1-yin-pin-zhi-chi">1. 音频支持</span><a href="#1-yin-pin-zhi-chi" class="header-anchor">#</a></h2>
+<table>
+    <tr>
+        <th>格式/编解码器</th>
+        <th>编码器</th>
+        <th>解码器</th>
+        <th>详细信息</th>
+        <th>支持的文件类型/容器格式</th>
+    </tr>
+    <tr>
+        <td>AAC LC</td>
+        <td style="text-align: center;"><big>•</big></td>
+        <td style="text-align: center;"><big>•</big></td>
+        <td rowspan="2">支持单声道/立体声/5.0/5.1 内容，标准采样率为 8-48 kHz。</td>
+        <td rowspan="4">
+        • 3GPP (.3gp)<br>
+        <nobr>• MPEG-4（.mp4、.m4a）</nobr>
+        • ADTS 原始 AAC（.aac、在 Android 3.1 及更高版本中解码、在 Android 4.0 及更高版本中编码、不支持 ADIF）
+        • MPEG-TS（.ts、不可查找、Android 3.0 及更高版本）</td>
+    </tr>
+    <tr>
+        <td>HE-AACv1 (AAC+)</td>
+        <td style="text-align: center;"><big>•</big><br><small>（Android 4.1 及更高版本）</small></td>
+        <td style="text-align: center;"><big>•</big></td>
+    </tr>
+    <tr>
+        <td>HE-AACv2（增强型 AAC+）</td>
+        <td>&nbsp;</td>
+        <td style="text-align: center;"><big>•</big></td>
+        <td>支持立体声/5.0/5.1 内容，标准采样率为 8-48 kHz。</td>
+    </tr>
+    <tr>
+        <td>AAC ELD（增强型低延迟 AAC）</td>
+        <td style="text-align: center;"><big>•</big><br><small>（Android 4.1 及更高版本）</small></td>
+        <td style="text-align: center;"><big>•</big><br><small>（Android 4.1 及更高版本）</small></td>
+        <td>支持单声道/立体声内容，标准采样率为 16-48 kHz</td>
+    </tr>
+    <tr>
+        <td>AMR-NB</td>
+        <td style="text-align: center;"><big>•</big></td>
+        <td style="text-align: center;"><big>•</big></td>
+        <td>4.75-12.2 kbps，采样率为 8 kHz</td>
+        <td>
+        3GPP (.3gp)</td>
+    </tr>
+    <tr>
+        <td>AMR-WB</td>
+        <td style="text-align: center;"><big>•</big></td>
+        <td style="text-align: center;"><big>•</big></td>
+        <td>有 9 个比特率（介于 6.60-23.85 kbit/s 之间）可供选择，采样率为 16 kHz</td>
+        <td>
+        3GPP (.3gp)</td>
+    </tr>
+    <tr>
+        <td>FLAC</td>
+        <td style="text-align: center;" nowrap><big>•</big><br><small>（Android 4.1 及更高版本）</small></td>
+        <td style="text-align: center;" nowrap><big>•</big><br><small>（Android 3.1 及更高版本）</small></td>
+        <td>单声道 / 立体声（非多声道）。采样率最高可达 48 kHz（但对于输出为 44.1 kHz 的设备，则建议最高不超过 44.1 kHz，因为 48-44.1 kHz 的降采样器不包含低通滤波器）。建议使用 16 位；对于 24 位，不会应用任何抖动。
+        </td>
+        <td>
+        仅支持 FLAC (.flac)</td>
+    </tr>
+    <tr>
+        <td>GSM</td>
+        <td>&nbsp;</td>
+        <td style="text-align: center;"><big>•</big></td>
+        <td>Android 支持在电话设备上进行 GSM 解码</td>
+        <td>GSM (.gsm)</td>
+    </tr>
+    <tr>
+        <td>MIDI</td>
+        <td>&nbsp;</td>
+        <td style="text-align: center;"><big>•</big></td>
+        <td>MIDI 类型 0 和 1。DLS 版本 1 和 2。XMF 和 Mobile XMF。支持铃声格式 RTTTL/RTX、OTA 和 iMelody</td>
+        <td>
+        • 类型 0 和 1（.mid、.xmf、.mxmf）<br>
+        • RTTTL/RTX（.rtttl、.rtx）
+        • OTA (.ota)
+        • iMelody (.imy)</td>
+    </tr>
+    <tr>
+        <td>MP3</td>
+        <td>&nbsp;</td>
+        <td style="text-align: center;"><big>•</big></td>
+        <td>单声道 / 立体声 8-320 Kbps 恒定 (CBR) 或可变比特率 (VBR)
+        </td>
+        <td>
+        MP3 (.mp3)</td>
+    </tr>
+    <tr>
+        <td>Opus</td>
+        <td style="text-align: center;"></td>
+        <td style="text-align: center;"><big>•</big><br><small>（Android 5.0 及更高版本）</small></td>
+        <td></td>
+        <td>
+        Matroska (.mkv)</td>
+    </tr>
+    <tr>
+        <td>PCM/WAVE</td>
+        <td style="text-align: center;"><big>•</big><br><small>（Android 4.1 及更高版本）</small></td>
+        <td style="text-align: center;"><big>•</big></td>
+        <td>8 位和 16 位线性 PCM（比特率最高可达到硬件上限）。以 8000、16000 和 44100 Hz 录制原始 PCM 所需的采样率。</td>
+        <td>
+        WAVE (.wav)</td>
+    </tr>
+    <tr>
+        <td>Vorbis</td>
+        <td>&nbsp;</td>
+        <td style="text-align: center;"><big>•</big></td>
+        <td>&nbsp;</td>
+        <td>
+        • Ogg (.ogg)<br>
+        • Matroska（.mkv、Android 4.0 及更高版本）</td>
+    </tr>
+</table>
+<h2><span id="2-shi-pin-zhi-chi">2. 视频支持</span><a href="#2-shi-pin-zhi-chi" class="header-anchor">#</a></h2>
+<table>
+    <tr>
+        <th>格式/编解码器</th>
+        <th>编码器</th>
+        <th>解码器</th>
+        <th>详细信息</th>
+        <th>支持的文件类型/容器格式</th>
+    </tr>
+    <tr>
+        <td>H.263</td>
+        <td style="text-align: center;"><big>•</big></td>
+        <td style="text-align: center;"><big>•</big></td>
+        <td>对 H.263 的支持在 Android 7.0 及更高版本中并非必需</td>
+        <td>
+        • 3GPP (.3gp)<br>
+        • MPEG-4 (.mp4)</td>
+    </tr>
+    <tr>
+        <td>H.264 AVC<br>Baseline&nbsp;Profile&nbsp;(BP)</td>
+        <td style="text-align: center;" nowrap><big>•</big><br><small>（Android 3.0 及更高版本）</small></td>
+        <td style="text-align: center;" nowrap><big>•</big></td>
+        <td></td>
+        <td>
+        • 3GPP (.3gp)<br>
+        • MPEG-4 (.mp4)
+        • MPEG-TS（.ts、仅限 AAC 音频、不可查找、Android 3.0 及更高版本）</td>
+    </tr>
+    <tr>
+        <td>H.264 AVC<br>Main&nbsp;Profile&nbsp;(MP)</td>
+        <td style="text-align: center;" nowrap><big>•</big><br><small>（Android 6.0 及更高版本）</small></td>
+        <td style="text-align: center;" nowrap><big>•</big></td>
+        <td>解码器为必需项，编码器为推荐项。</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td>H.265 HEVC</td>
+        <td style="text-align: center;" nowrap></td>
+        <td style="text-align: center;" nowrap><big>•</big><br><small>（Android 5.0 及更高版本）</small></td>
+        <td>适用于移动设备的 Main Profile Level 3 和适用于 Android TV 的 Main Profile Level 4.1</td>
+        <td>
+        • MPEG-4 (.mp4)<br>
+        </td>
+    </tr>
+    <tr>
+        <td>MPEG-4 SP</td>
+        <td>&nbsp;</td>
+        <td style="text-align: center;"><big>•</big></td>
+        <td>&nbsp;</td>
+        <td>
+        3GPP (.3gp)</td>
+    </tr>
+    <tr>
+        <td>VP8</td>
+        <td style="text-align: center;" nowrap><big>•</big><br><small>（Android 4.3 及更高版本）</small></td>
+        <td style="text-align: center;" nowrap><big>•</big><br><small>（Android 2.3.3 及更高版本）</small></td>
+        <td>只能在 Android 4.0 及更高版本中流式传输</td>
+        <td>
+        • WebM (.webm)<br>
+        • Matroska（.mkv、Android 4.0 及更高版本）</td>
+    </tr>
+    <tr>
+        <td>VP9</td>
+        <td style="text-align: center;" nowrap></td>
+        <td style="text-align: center;" nowrap><big>•</big><br><small>（Android 4.4 及更高版本）</small></td>
+        <td></td>
+        <td>
+        • WebM (.webm)<br>
+        • Matroska（.mkv、Android 4.0 及更高版本）</td>
+    </tr>
+</table>
+<h2><span id="3-tu-pian-zhi-chi">3. 图片支持</span><a href="#3-tu-pian-zhi-chi" class="header-anchor">#</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">格式 / 编解码器</th>
+<th style="text-align:center">编码器</th>
+<th style="text-align:center">解码器</th>
+<th style="text-align:center">详细信息</th>
+<th style="text-align:left">支持的文件类型 / 容器格式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">BMP</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">•</td>
+<td style="text-align:center"></td>
+<td style="text-align:left">BMP (.bmp)</td>
+</tr>
+<tr>
+<td style="text-align:center">GIF</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">•</td>
+<td style="text-align:center"></td>
+<td style="text-align:left">GIF (.gif)</td>
+</tr>
+<tr>
+<td style="text-align:center">JPEG</td>
+<td style="text-align:center">•</td>
+<td style="text-align:center">•</td>
+<td style="text-align:center">基准式 + 渐进式</td>
+<td style="text-align:left">JPEG (.jpg)</td>
+</tr>
+<tr>
+<td style="text-align:center">PNG</td>
+<td style="text-align:center">•</td>
+<td style="text-align:center">•</td>
+<td style="text-align:center"></td>
+<td style="text-align:left">PNG (.png)</td>
+</tr>
+<tr>
+<td style="text-align:center">WebP</td>
+<td style="text-align:center">•<br>（Android 4.0 及更高版本）<br>无损、透明度、Android 4.2.1 及更高版本）</td>
+<td style="text-align:center">•<br>Android 4.0 及更高版本）<br>无损、透明度、Android 4.2.1 及更高版本）</td>
+<td style="text-align:center"></td>
+<td style="text-align:left">WebP (.webp)</td>
+</tr>
+<tr>
+<td style="text-align:center">HEIF</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">•<br>（Android 8.0 及更高版本）</td>
+<td style="text-align:center"></td>
+<td style="text-align:left">HEIF（.heic；.heif）</td>
+</tr>
+</tbody>
+</table>
+<h2><span id="4-wang-luo-xie-yi">4. 网络协议</span><a href="#4-wang-luo-xie-yi" class="header-anchor">#</a></h2>
+<p>音频和视频播放支持以下网络协议：</p>
+<ul>
+<li>
+<p>RTSP（RTP、SDP）</p>
+</li>
+<li>
+<p>HTTP/HTTPS 渐进式流式传输</p>
+</li>
+<li>
+<p>HTTP/HTTPS 实时流式传输草案协议：</p>
+<ul>
+<li>仅限 MPEG-2 TS 媒体文件</li>
+<li>协议版本 3（Android 4.0 及更高版本）</li>
+<li>协议版本 2 (Android 3.x)</li>
+<li>在 Android 3.0 之前的版本中不支持</li>
+</ul>
+</li>
+<li>
+<p><strong>注意：Android 3.1 之前的版本不支持 HTTPS。</strong></p>
+</li>
+</ul>
+<hr>
+<h1><span id="er-chang-yong-fang-fa">二、常用方法</span><a href="#er-chang-yong-fang-fa" class="header-anchor">#</a></h1>
+<p><em><strong>参考：<a href="https://developer.android.com/reference/android/media/MediaPlayer" target="_blank" rel="noopener">https://developer.android.com/reference/android/media/MediaPlayer</a></strong></em></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">返回结果</th>
+<th style="text-align:left">方法名</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">static MediaPlayer</td>
+<td style="text-align:left">create(Context context, Uri uri, SurfaceHolder holder)</td>
+<td style="text-align:left">指定从Uri对应的资源文件中来装载文件，同时指定了SurfaceHolder对象并返回MediaPlyaer对象，不需要再调用准备方法。</td>
+</tr>
+<tr>
+<td style="text-align:center">static MediaPlayer</td>
+<td style="text-align:left">create(Context context, int resid)</td>
+<td style="text-align:left">指定从资源ID对应的资源文件中来装载文件，并返回新创建的MediaPlyaer对象，不需要再调用准备方法。</td>
+</tr>
+<tr>
+<td style="text-align:center">static MediaPlayer</td>
+<td style="text-align:left">create(Context context, Uri uri)</td>
+<td style="text-align:left">指定从Uri对应的资源文件中来装载文件，并返回新创建的MediaPlayer对象，不需要再调用准备方法。</td>
+</tr>
+<tr>
+<td style="text-align:center">int</td>
+<td style="text-align:left">getCurrentPosition()</td>
+<td style="text-align:left">获取当前播放的位置，<strong>单位毫秒</strong></td>
+</tr>
+<tr>
+<td style="text-align:center">int</td>
+<td style="text-align:left">getDuration()</td>
+<td style="text-align:left">获取音频的时长，<strong>单位毫秒</strong></td>
+</tr>
+<tr>
+<td style="text-align:center">int</td>
+<td style="text-align:left">getVideoHeight()</td>
+<td style="text-align:left">获取视频的高度。</td>
+</tr>
+<tr>
+<td style="text-align:center">int</td>
+<td style="text-align:left">getVideoWidth()</td>
+<td style="text-align:left">获取视频的宽度。</td>
+</tr>
+<tr>
+<td style="text-align:center">boolean</td>
+<td style="text-align:left">isLooping()</td>
+<td style="text-align:left">判断MediaPlayer是否正在循环播放。</td>
+</tr>
+<tr>
+<td style="text-align:center">boolean</td>
+<td style="text-align:left">isPlaying()</td>
+<td style="text-align:left">判断MediaPlayer是否正在播放。</td>
+</tr>
+<tr>
+<td style="text-align:center">void</td>
+<td style="text-align:left">pause()</td>
+<td style="text-align:left">暂停播放。</td>
+</tr>
+<tr>
+<td style="text-align:center">void</td>
+<td style="text-align:left">prepare()</td>
+<td style="text-align:left">准备播放（装载文件），调用此方法会使MediaPlayer进入Prepared状态。</td>
+</tr>
+<tr>
+<td style="text-align:center">void</td>
+<td style="text-align:left">prepareAsync()</td>
+<td style="text-align:left">异步准备播放,需要与setOnPreparedListener联合使用</td>
+</tr>
+<tr>
+<td style="text-align:center">void</td>
+<td style="text-align:left">release()</td>
+<td style="text-align:left">释放媒体资源。</td>
+</tr>
+<tr>
+<td style="text-align:center">void</td>
+<td style="text-align:left">reset()</td>
+<td style="text-align:left">重置MediaPlayer进入IDLE状态。</td>
+</tr>
+<tr>
+<td style="text-align:center">void</td>
+<td style="text-align:left">seekTo(int msec)</td>
+<td style="text-align:left">定位到指定的时间位置。</td>
+</tr>
+<tr>
+<td style="text-align:center">void</td>
+<td style="text-align:left">setAudioStreamType(int streamtype)</td>
+<td style="text-align:left">设置音频流的类型。</td>
+</tr>
+<tr>
+<td style="text-align:center">void</td>
+<td style="text-align:left">setDataSource(String path)</td>
+<td style="text-align:left">指定装载path路径所代表的文件。</td>
+</tr>
+<tr>
+<td style="text-align:center">void</td>
+<td style="text-align:left">setDataSource(Context context, Uri uri, Map&lt;String, String headers)</td>
+<td style="text-align:left">指定装载uri所代表的文件。</td>
+</tr>
+<tr>
+<td style="text-align:center">void</td>
+<td style="text-align:left">setDataSource(Context context, Uri uri)</td>
+<td style="text-align:left">指定装载uri所代表的文件。</td>
+</tr>
+<tr>
+<td style="text-align:center">void</td>
+<td style="text-align:left">setDataSource(FileDescriptor fd, long offset, long length)</td>
+<td style="text-align:left">指定装载fd所代表的文件中从offset开始长度为length的文件内容。</td>
+</tr>
+<tr>
+<td style="text-align:center">void</td>
+<td style="text-align:left">setDataSource(FileDescriptor fd)</td>
+<td style="text-align:left">指定装载fd所代表的文件。</td>
+</tr>
+<tr>
+<td style="text-align:center">void</td>
+<td style="text-align:left">setDisplay(SurfaceHolder sh)</td>
+<td style="text-align:left">设置显示方式。</td>
+</tr>
+<tr>
+<td style="text-align:center">void</td>
+<td style="text-align:left">setLooping(boolean looping)</td>
+<td style="text-align:left">设置是否循环播放。</td>
+</tr>
+<tr>
+<td style="text-align:center">void</td>
+<td style="text-align:left">setNextMediaPlayer(MediaPlayer next)</td>
+<td style="text-align:left">设置当前流媒体播放完毕,下一个播放的MediaPlayer。</td>
+</tr>
+<tr>
+<td style="text-align:center">void</td>
+<td style="text-align:left">setOnBufferingUpdateListener(MediaPlayer.OnBufferingUpdateListener listener)</td>
+<td style="text-align:left">注册一个回调函数,在网络视频流缓冲变化时调用。</td>
+</tr>
+<tr>
+<td style="text-align:center">void</td>
+<td style="text-align:left">setOnCompletionListener(MediaPlayer.OnCompletionListener listener)</td>
+<td style="text-align:left">为MediaPlayer的播放完成事件绑定事件监听器。</td>
+</tr>
+<tr>
+<td style="text-align:center">void</td>
+<td style="text-align:left">setOnErrorListener(MediaPlayer.OnErrorListener listener)</td>
+<td style="text-align:left">为MediaPlayer的播放错误事件绑定事件监听器。</td>
+</tr>
+<tr>
+<td style="text-align:center">void</td>
+<td style="text-align:left">setOnPreparedListener(MediaPlayer.OnPreparedListener listener)</td>
+<td style="text-align:left">当MediaPlayer已经准备完成时触发该监听器。</td>
+</tr>
+<tr>
+<td style="text-align:center">void</td>
+<td style="text-align:left">setOnSeekCompleteListener(MediaPlayer.OnSeekCompleteListener listener)</td>
+<td style="text-align:left">当MediaPlayer里一个定位操作完成时触发该监听器。</td>
+</tr>
+<tr>
+<td style="text-align:center">void</td>
+<td style="text-align:left">setOnVideoSizeChangedListener(MediaPlayer.OnVideoSizeChangedListener listener)</td>
+<td style="text-align:left">注册一个用于监听视频大小改变的监听器。</td>
+</tr>
+<tr>
+<td style="text-align:center">void</td>
+<td style="text-align:left">setScreenOnWhilePlaying(boolean screenOn)</td>
+<td style="text-align:left">设置是否使用SurfaceHolder来显示。</td>
+</tr>
+<tr>
+<td style="text-align:center">void</td>
+<td style="text-align:left">setSurface(Surface surface)</td>
+<td style="text-align:left">设置Surface。</td>
+</tr>
+<tr>
+<td style="text-align:center">void</td>
+<td style="text-align:left">setVideoScalingMode(int mode)</td>
+<td style="text-align:left">设置视频缩放的模式。</td>
+</tr>
+<tr>
+<td style="text-align:center">void</td>
+<td style="text-align:left">setVolume(float leftVolume, float rightVolume)</td>
+<td style="text-align:left">设置播放器的音量。</td>
+</tr>
+<tr>
+<td style="text-align:center">void</td>
+<td style="text-align:left">setWakeMode(Context context, int mode)</td>
+<td style="text-align:left">为MediaPlayer设置低级电源管理行为。</td>
+</tr>
+<tr>
+<td style="text-align:center">void</td>
+<td style="text-align:left">start()</td>
+<td style="text-align:left">开始或恢复播放。</td>
+</tr>
+<tr>
+<td style="text-align:center">void</td>
+<td style="text-align:left">stop()</td>
+<td style="text-align:left">停止播放。</td>
+</tr>
+</tbody>
+</table>
+<h1><span id="san-zhuang-tai-zhuan-huan">三、 状态转换</span><a href="#san-zhuang-tai-zhuan-huan" class="header-anchor">#</a></h1>
+<br>  
+<p><img src="/2020/05/22/MediaPlayer%E8%AF%A6%E8%A7%A3/mediaplayer.gif" alt="mediaPlayer生命周期"></p>
+<p>上面这张状态转换图清晰的列举了主要的方法的调用时序，每种方法只能在一些特定的状态下使用，如果MediaPlayer的状态不正确则会引发<code>IllegalStateException</code>异常。</p>
+<p><font size="5"> <strong>Idle状态：</strong></font><br>
+当使用<code>new()</code>方法创建一个MediaPlayer对象或者调用了其<code>reset()</code>方法时，该MediaPlayer对象就会处于<code>idle</code>状态。在处于<code>Idle</code>状态时，调用<code>getCurrentPosition()</code>, <code>getDuration()</code>, <code>getVideoHeight()</code>,<code>getVideoWidth()</code>,<code>setAudioStreamType(int)</code>, <code>setLooping(boolean)</code>, <code>setVolume(float, float)</code>, <code>pause()</code>, <code>start()</code>, <code>stop()</code>, <code>seekTo(int)</code>, <code>prepare()</code>或者 <code>prepareAsync()</code>方法都会出现相应错误。<em>因为没有装裁资源嘛。</em><br>
+使用<code>new()</code>和调用<code>reset()</code>置成<code>Idle</code>状态有一个重要差别：当一个MediaPlayer对象刚被构建的时候，内部的播放引擎和对象的状态都没有改变，在这个时候调用以上的那些方法，框架将无法回调客户端程序注册的<code>OnErrorListener.onError()</code>方法，所以不会进入<code>Error</code>状态；但若这个MediaPlayer对象调用了<code>reset()</code>方法之后，再调用以上的那些方法，内部的播放引擎就会回调客户端程序注册的<code>OnErrorListener.onError()</code>方法，这时MediaPlayer会进入<code>Error</code>状态。</p>
+<p><strong>提示：</strong> 使用<code>new</code>操作符创建的MediaPlayer对象处于<code>Idle</code>状态，而那些通过重载的<code>create()</code>方法创建的MediaPlayer对象却不是处于<code>Idle</code>状态。如果成功调用了重载的<code>create()</code>方法，则MediaPlayer已经是<code>prepared</code>状态；若调用重载的<code>create()</code>方法失败，则MediaPlayer返回<code>null</code>。</p>
+<p><font size="5"> <strong>End状态：</strong> </font><br>
+通过<code>release()</code>方法可以进入<code>End</code>状态，只要MediaPlayer对象不再被使用，就应当尽快将其通过<code>release()</code>方法释放掉，以释放相关资源。如果MediaPlayer进入了<code>End</code>状态，则不会再进入任何其他状态。</p>
+<p><font size="5"> <strong>Initialized状态：</strong>  </font><br>
+MediaPlayer调用<code>setDataSource()</code>方法成功就进入Initialized状态，表示此时要播放的文件已经设置好了。</p>
+<p><strong>提示：</strong> 若当此MediaPlayer <strong>不在<code>Idle</code></strong> 的状态下，调用了<code>setDataSource()</code>方法，会抛出<code>IllegalStateException</code>异常。</p>
+<p><font size="5"> <strong>Prepared状态：</strong> </font></p>
+<p>载入资源成功之后还需要通过调用<code>prepare()</code>或<code>prepareAsync()</code>方法，这两个方法一个是同步的一个是异步的。其中，<code>prepareAsync()</code>方法需要与<code>setOnPreparedListener</code>配合使用。只有进入<code>Prepared</code>状态，才可以调用<code>start()</code>方法进行文件播放。</p>
+<p><strong>提示：</strong> 当MediaPlayer对象处于<code>Prepared</code>状态的时候，可以调整音频/视频的属性，如音量，播放时是否一直亮屏，循环播放等。</p>
+<p><font size="5"> <strong>Preparing状态：</strong></font><br>
+这个状态主要是和<code>prepareAsync()</code>配合，如果异步准备完成，会触发<code>OnPreparedListener.onPrepared()</code>，进而进入Prepared状态。</p>
+<p><font size="5"> <strong>Started状态：</strong> </font><br>
+在 <code>prepared</code>状态下，就可以调用<code>start()</code>方法，这样MediaPlayer就处于<code>Started</code>状态，这表明MediaPlayer正在播放文件过程中。可以使用<code>isPlaying()</code>测试MediaPlayer是否处于了<code>Started</code>状态。如果播放完毕，而又设置了循环播放，则MediaPlayer仍然会处于<code>Started</code>状态。</p>
+<p><font size="5"> <strong>Paused状态：</strong> </font><br>
+<code>Started</code>状态下MediaPlayer调用<code>pause()</code>方法可以暂停MediaPlayer，从而进入<code>Paused</code>状态，MediaPlayer暂停后再次调用<code>start()</code>则可以继续MediaPlayer的播放，转到<code>Started</code>状态，暂停状态时可以调用<code>seekTo()</code>方法，且不会改变状态。</p>
+<p><font size="5"> <strong>Stop状态：</strong> </font><br>
+<code>Started</code>或者<code>Paused</code>状态下均可调用<code>stop()</code>停止MediaPlayer，而处于<code>Stop</code>状态的MediaPlayer要想重新播放，需要通过<code>prepareAsync()</code>或  <code>prepare()</code>回到先前的<code>Prepared</code>状态重新开始才可以。</p>
+<p><font size="5"> <strong>PlaybackCompleted状态：</strong> </font><br>
+文件正常播放完毕，而又没有设置循环播放的话就进入该状态，并会触发<code>OnCompletionListener</code>的<code>onCompletion()</code>方法。此时可以调用<code>start()</code>方法重新从头播放文件，也可以<code>stop()</code>停止MediaPlayer，或者也可以<code>seekTo()</code>来重新定位播放位置。</p>
+<p><font size="5"> <strong>Error状态：</strong> </font><br>
+在一般情况下，由于种种原因一些播放控制操作可能会失败，如不支持的音频/视频格式，缺少隔行扫描的音频/视频，分辨率太高，流超时等原因，等等会触发会触发<code>OnErrorListener.onError()</code>事件，此时MediaPlayer会进入<code>Error</code>状态，及时捕捉并妥善处理这些错误是很重要的，可以帮助我们及时释放相关的软硬件资源，也可以改善用户体验。<br>
+可以通过<code>setOnErrorListener()</code>设置监听器来监听MediaPlayer是否进入<code>Error</code>状态。如果MediaPlayer进入了<code>Error</code>状态，可以通过调用<code>reset()</code>来恢复，使得MediaPlayer重新返回到<code>Idle</code>状态。</p>
+<h1><span id="si-shi-yong-zhu-yi-shi-xiang">四、使用注意事项</span><a href="#si-shi-yong-zhu-yi-shi-xiang" class="header-anchor">#</a></h1>
+<h2><span id="1-shi-yong-liu-mei-ti-shi-zhun-bei-fang-fa-shi-yong-prepareasync">1. 使用流媒体时准备方法使用prepareAsync()</span><a href="#1-shi-yong-liu-mei-ti-shi-zhun-bei-fang-fa-shi-yong-prepareasync" class="header-anchor">#</a></h2>
+<p>使用<code>start()</code>播放流媒体之前，需要装载流媒体资源。这种情况应该使用<code>prepareAsync()</code>用异步的方式装载流媒体资源。因为流媒体资源的装载是会消耗系统资源的，在一些硬件不理想的设备上，如果使用<code>prepare()</code>同步的方式装载资源，可能会造成UI界面的卡顿，非常影响用户体验的。使用异步方式时，为了避免还没有装载完成就调用<code>start()</code>而报错的问题，需要绑定<code>MediaPlayer.setOnPreparedListener()</code>事件，它将在异步装载完成之后回调。异步装载还有一个好处就是避免装载超时引发ANR（Application Not Responding）错误。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">MediaPlayer mediaPlayer &#x3D; new MediaPlayer();</span><br><span class="line">mediaPlayer.setDataSource(UriPath);</span><br><span class="line">&#x2F;&#x2F; 通过异步的方式装载媒体资源</span><br><span class="line">mediaPlayer.prepareAsync();</span><br><span class="line">mediaPlayer.setOnPreparedListener(new OnPreparedListener() &#123;                    </span><br><span class="line">    @Override</span><br><span class="line">    public void onPrepared(MediaPlayer mp) &#123;</span><br><span class="line">        &#x2F;&#x2F; 装载完毕回调</span><br><span class="line">        mediaPlayer.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h2><span id="2-hui-shou-zi-yuan">2. 回收资源</span><a href="#2-hui-shou-zi-yuan" class="header-anchor">#</a></h2>
+<p>使用完MediaPlayer需要回收资源。在使用完MediaPlayer，不要等待系统自动回收，最好是主动回收资源。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">if (mediaPlayer !&#x3D; null) &#123;</span><br><span class="line">    mediaPlayer.stop();</span><br><span class="line">    mediaPlayer.release();</span><br><span class="line">    mediaPlayer &#x3D; null;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2><span id="3-setoncompletionlistener-de-shi-yong">3. setOnCompletionListener的使用</span><a href="#3-setoncompletionlistener-de-shi-yong" class="header-anchor">#</a></h2>
+<p>setOnCompletionListener监听器在MediaPlayer播放完成后触发。但是，在使用<code>prepareAsync()</code>方法准备资源时出错也会调用该方法，可根据播放器总时长是否为0来判断是成功还是失败，即<code>getDuration() == 0</code>。</p>
+<h1><span id="wu-bo-fang-jin-du-zhan-shi">五、播放进度展示</span><a href="#wu-bo-fang-jin-du-zhan-shi" class="header-anchor">#</a></h1>
+<p>SeekBar可以用来显示播放进度，用户也可以利用SeekBar的滑块来控制音乐的播放。</p>
+<h2><span id="seekbar-yu-mediaplayer-suo-xu-yao-fang-fa">SeekBar与MediaPlayer所需要方法</span><a href="#seekbar-yu-mediaplayer-suo-xu-yao-fang-fa" class="header-anchor">#</a></h2>
+<ul>
+<li>SeekBar:
+<ul>
+<li>
+<p>setProgress（int value）：设置滑块中心的位置。</p>
+</li>
+<li>
+<p>setMax(int value)：设置进度条的最大长度,可以设置为播放器的总时长，这样seeKTo时不需要再转换。</p>
+</li>
+<li>
+<p>setOnSeekBarChangeListener(OnSeekBarChangeListener l)：设置SeekBar的进度改变监听器。</p>
+</li>
+</ul>
+</li>
+<li>MediaPlayer:
+<ul>
+<li>
+<p>getDuration()：获得音乐长度,单位毫秒。</p>
+</li>
+<li>
+<p>getCurrentPosition()：获得现在播放的位置，单位毫秒。</p>
+</li>
+<li>
+<p>seekTo(int msec)：调用seekTo()方法可以调整播放的位置。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2><span id="jin-du-tiao-zhan-shi-bu-zou">进度条展示步骤</span><a href="#jin-du-tiao-zhan-shi-bu-zou" class="header-anchor">#</a></h2>
+<h3><span id="1-chuang-jian-seekbar">1. 创建SeekBar</span><a href="#1-chuang-jian-seekbar" class="header-anchor">#</a></h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">&lt;android.support.constraint.ConstraintLayout</span><br><span class="line">    android:layout_width&#x3D;&quot;match_parent&quot;</span><br><span class="line">    android:layout_height&#x3D;&quot;wrap_content&quot;</span><br><span class="line">    android:orientation&#x3D;&quot;horizontal&quot;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;TextView</span><br><span class="line">        android:layout_width&#x3D;&quot;wrap_content&quot;</span><br><span class="line">        android:layout_height&#x3D;&quot;wrap_content&quot;</span><br><span class="line">        android:minWidth&#x3D;&quot;29dp&quot;</span><br><span class="line">        android:textColor&#x3D;&quot;#FF999999&quot;</span><br><span class="line">        android:textSize&#x3D;&quot;11sp&quot;</span><br><span class="line">        app:layout_constraintBottom_toBottomOf&#x3D;&quot;parent&quot;</span><br><span class="line">        app:layout_constraintLeft_toLeftOf&#x3D;&quot;parent&quot;</span><br><span class="line">        app:layout_constraintTop_toTopOf&#x3D;&quot;parent&quot;</span><br><span class="line">        tools:text&#x3D;&quot;06:52&quot; &#x2F;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;TextView</span><br><span class="line">        android:layout_width&#x3D;&quot;wrap_content&quot;</span><br><span class="line">        android:layout_height&#x3D;&quot;wrap_content&quot;</span><br><span class="line">        android:text&#x3D;&quot;--:--&quot;</span><br><span class="line">        android:textColor&#x3D;&quot;#FF999999&quot;</span><br><span class="line">        android:textSize&#x3D;&quot;11sp&quot;</span><br><span class="line">        android:minWidth&#x3D;&quot;29dp&quot;</span><br><span class="line">        app:layout_constraintBottom_toBottomOf&#x3D;&quot;parent&quot;</span><br><span class="line">        app:layout_constraintRight_toRightOf&#x3D;&quot;parent&quot;</span><br><span class="line">        app:layout_constraintTop_toTopOf&#x3D;&quot;parent&quot;</span><br><span class="line">        tools:text&#x3D;&quot;06:52&quot; &#x2F;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;SeekBar</span><br><span class="line">        android:layout_width&#x3D;&quot;0dp&quot;</span><br><span class="line">        android:layout_height&#x3D;&quot;wrap_content&quot;</span><br><span class="line">        android:max&#x3D;&quot;0&quot;</span><br><span class="line">        android:maxHeight&#x3D;&quot;2dp&quot;</span><br><span class="line">        android:paddingStart&#x3D;&quot;9dp&quot;</span><br><span class="line">        android:paddingEnd&#x3D;&quot;9dp&quot;</span><br><span class="line">        android:progressDrawable&#x3D;&quot;@drawable&#x2F;seekbar_style_audio_work_detail&quot;</span><br><span class="line">        android:splitTrack&#x3D;&quot;false&quot;</span><br><span class="line">        android:thumb&#x3D;&quot;@mipmap&#x2F;ico_audio_work_seek_dot&quot;</span><br><span class="line">        app:layout_constraintBottom_toBottomOf&#x3D;&quot;parent&quot;</span><br><span class="line">        app:layout_constraintLeft_toRightOf&#x3D;&quot;@id&#x2F;audio_tv_current_duration&quot;</span><br><span class="line">        app:layout_constraintRight_toLeftOf&#x3D;&quot;@id&#x2F;audio_tv_total_duration&quot;</span><br><span class="line">        app:layout_constraintTop_toTopOf&#x3D;&quot;parent&quot; &#x2F;&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;android.support.constraint.ConstraintLayout&gt;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>注意：</strong></p>
+<ol>
+<li>若滑块与进度条之间有间隔，则需要添加属性<code>android:splitTrack=&quot;false&quot;</code>。</li>
+<li>若要设置SeekBar左右间距则必须使用<code>android:paddingStart</code>和<code>android:paddingEnd</code>。</li>
+</ol>
+</blockquote>
+<h3><span id="2-tian-jia-jin-du-tiao-de-gai-bian-jian-ting-qi">2. 添加进度条的改变监听器</span><a href="#2-tian-jia-jin-du-tiao-de-gai-bian-jian-ting-qi" class="header-anchor">#</a></h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onStartTrackingTouch(SeekBar seekBar) &#123;</span><br><span class="line">        stopAudioProgressSync();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onStopTrackingTouch(SeekBar seekBar) &#123;</span><br><span class="line">        MediaPlayer.seekTo(seekBar.getProgress());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>说明：</strong></p>
+<ol>
+<li>onProgressChanged (SeekBar seekBar, int progress, boolean fromUser)<br>
+* 进度已经被修改。客户端可以使用fromUser参数区分用户触发的改变还是编程触发的改变<br>
+* <em>progress</em>      当前的进度值。此值的取值范围为0到max之间。Max为用户通过setMax(int)设置的值，默认为100<br>
+* <em>fromUser</em> 如果是用户触发的改变则返回True</li>
+<li>onStartTrackingTouch (SeekBar seekBar)<br>
+* 通知用户已经开始一个触摸拖动手势。客户端可能需要使用这个来禁用seekbar的滑动功能，或是禁止进度条更新。</li>
+<li>onStopTrackingTouch (SeekBar seekBar)<br>
+* 通知用户触摸手势已经结束。户端可能需要使用这个来启用seekbar的滑动功能，或是再次开启进度条更新。</li>
+</ol>
+</blockquote>
+<h3><span id="3-she-zhi-seekbar-zui-da-zhi">3. 设置seekBar最大值</span><a href="#3-she-zhi-seekbar-zui-da-zhi" class="header-anchor">#</a></h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mSeekBar.setMax(mediaPlayer.getDuration());&#x2F;&#x2F;设置SeekBar的长度</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>注意:</strong><br>
+<code>getDuration()</code>方法要在<code>prepare()</code>方法成功之后，否则会出现<code>Attempt to call getDuration without a valid mediaplayer</code>异常</p>
+</blockquote>
+<h3><span id="4-geng-xin-jin-du-tiao">4. 更新进度条</span><a href="#4-geng-xin-jin-du-tiao" class="header-anchor">#</a></h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">private DisposableObserver&lt;Long&gt; mAudioProgressSyncObserver;</span><br><span class="line"></span><br><span class="line">&#x2F;**</span><br><span class="line"> * 关闭音频进度更新计时器</span><br><span class="line"> *&#x2F;</span><br><span class="line">public void stopAudioProgressSync() &#123;</span><br><span class="line">    if (mAudioProgressSyncObserver !&#x3D; null)</span><br><span class="line">        mAudioProgressSyncObserver.dispose();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;**</span><br><span class="line"> * 打开音频进度更新计时器</span><br><span class="line"> *&#x2F;</span><br><span class="line">public void startAudioProgressSync() &#123;</span><br><span class="line">    stopAudioProgressSync();</span><br><span class="line">    mAudioProgressSyncObserver &#x3D; Observable.interval(0, 500, TimeUnit.MILLISECONDS)</span><br><span class="line">            .subscribeOn(Schedulers.io())</span><br><span class="line">            .observeOn(AndroidSchedulers.mainThread())</span><br><span class="line">            .subscribeWith(new DisposableObserver&lt;Long&gt;() &#123;</span><br><span class="line">                @Override</span><br><span class="line">                public void onNext(Long count) &#123;</span><br><span class="line">                    &#x2F;&#x2F;如果当前是播放状态，则更新进度条及当前播放时间</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                @Override</span><br><span class="line">                public void onError(Throwable throwable) &#123;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                @Override</span><br><span class="line">                public void onComplete() &#123;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://puppet16.github.io/2020/05/14/%E4%BD%BF%E7%94%A8Hexo%E5%AE%89%E8%A3%85GitHub%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Ltt">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Puppet">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Puppet">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/05/14/%E4%BD%BF%E7%94%A8Hexo%E5%AE%89%E8%A3%85GitHub%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" class="post-title-link" itemprop="url">使用 Hexo 安装 GitHub 个人博客</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-05-14 16:31:25" itemprop="dateCreated datePublished" datetime="2020-05-14T16:31:25+08:00">2020-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-04-25 17:38:13" itemprop="dateModified" datetime="2023-04-25T17:38:13+08:00">2023-04-25</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="toc">
+<!-- toc -->
+<ul>
+<li><a href="#yi-qian-yan">一、前言</a></li>
+<li><a href="#er-hexo-jian-jie">二、Hexo 简介</a></li>
+<li><a href="#san-da-jian-ji-fa-bu">三、搭建及发布</a>
+<ul>
+<li><a href="#1-an-zhuang-git">1. 安装 Git</a></li>
+<li><a href="#2-an-zhuang-node-js">2. 安装 Node.js</a></li>
+<li><a href="#3-an-zhuang-hexo">3. 安装 Hexo</a></li>
+<li><a href="#4-github-chuang-jian-ge-ren-cang-ku">4. GitHub 创建个人仓库</a></li>
+<li><a href="#5-jiang-hexo-bu-shu-dao-github-shang">5. 将 Hexo 部署到 GitHub 上</a></li>
+<li><a href="#6-she-zhi-ge-ren-yu-ming">6. 设置个人域名</a></li>
+</ul>
+</li>
+<li><a href="#si-hexo-pei-zhi">四、Hexo 配置</a>
+<ul>
+<li><a href="#1-hexo-ji-ben-pei-zhi">1. hexo 基本配置</a>
+<ul>
+<li><a href="#wang-zhan">网站</a></li>
+<li><a href="#wang-zhi">网址</a></li>
+<li><a href="#mu-lu">目录</a></li>
+<li><a href="#front-matter">Front-matter</a></li>
+</ul>
+</li>
+<li><a href="#2-geng-huan-zhu-ti">2. 更换主题</a>
+<ul>
+<li><a href="#an-zhuang">安装</a></li>
+<li><a href="#pei-zhi">配置</a></li>
+<li><a href="#geng-xin">更新</a></li>
+</ul>
+</li>
+<li><a href="#3-git-fen-zhi-duo-zhong-duan-cao-zuo">3. git 分支多终端操作</a>
+<ul>
+<li><a href="#yuan-li">原理</a></li>
+<li><a href="#shang-chuan-fen-zhi">上传分支</a></li>
+<li><a href="#yan-zheng">验证</a></li>
+</ul>
+</li>
+<li><a href="#4-tian-jia-ben-di-tu-pian">4. 添加本地图片</a></li>
+<li><a href="#5-geng-huan-fu-zhu-jie-xi-markdown-de-ku">5. 更换辅助解析 markdown 的库</a>
+<ul>
+<li><a href="#an-zhuang-1">安装</a></li>
+<li><a href="#pei-zhi-1">配置</a></li>
+</ul>
+</li>
+<li><a href="#6-markdown-wen-jian-tian-jia-mu-lu">6. MarkDown 文件添加目录</a>
+<ul>
+<li><a href="#an-zhuang-2">安装</a></li>
+<li><a href="#pei-zhi-2">配置</a></li>
+</ul>
+</li>
+<li><a href="#7-hexo-yin-yong-ben-zhan-wen-zhang">7. Hexo 引用本站文章</a></li>
+</ul>
+</li>
+<li><a href="#wu-yu-dao-de-wen-ti">五、遇到的问题</a>
+<ul>
+<li><a href="#1-bu-shu-shi-bai">1. 部署失败</a></li>
+<li><a href="#2-bu-shu-shi-bai">2. 部署失败</a></li>
+<li><a href="#3-biao-ge-xian-shi-cuo-wu">3. 表格显示错误</a></li>
+<li><a href="#4-biao-ge-xian-shi-guo-duo">4. 表格显示过多</a></li>
+<li><a href="#5-no-layout">5. No Layout</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+</div>
+<h1><a href="#yi-qian-yan" class="header-anchor">#</a><span id="yi-qian-yan">一、前言</span></h1>
+<p>之前一直使用 CSDN 来着，还有有些限制。后来想自己写 MarkDown 文件放到个人仓库里，之后就开始了自己搭建博客。本文基于 Mac 系统。</p>
+<h1><a href="#er-hexo-jian-jie" class="header-anchor">#</a><span id="er-hexo-jian-jie">二、Hexo 简介</span></h1>
+<p>Hexo 是一款基于 Node.js 的静态博客框架，依赖少易于安装使用，可以方便的生成静态网页托管在 GitHub 上，是搭建博客的首选框架。而且 Hexo 对中文的支持非常好。<br>
+&quot;快速、简洁且高效的博客框架&quot;这是它官网上的标语。<br>
+Hexo官网地址：<a target="_blank" rel="noopener" href="https://hexo.io/">https://hexo.io/</a></p>
+<h1><a href="#san-da-jian-ji-fa-bu" class="header-anchor">#</a><span id="san-da-jian-ji-fa-bu">三、搭建及发布</span></h1>
+<blockquote>
+<p>安装及发布步骤：</p>
+<ol>
+<li>安装 Git</li>
+<li>安装 Node.js</li>
+<li>安装 Hexo</li>
+<li>GitHub 创建个人仓库</li>
+<li>将 hexo 部署到 GitHub 上</li>
+<li>设置个人域名</li>
+</ol>
+</blockquote>
+<h2><a href="#1-an-zhuang-git" class="header-anchor">#</a><span id="1-an-zhuang-git">1. 安装 Git</span></h2>
+<p>Mac 系统自带 Git，可以在终端输入<code>git --version</code>看是否已安装，若未安装则在官网上下载安装包安装。<br>
+git官网地址：<a target="_blank" rel="noopener" href="https://git-scm.com/">https://git-scm.com/</a></p>
+<h2><a href="#2-an-zhuang-node-js" class="header-anchor">#</a><span id="2-an-zhuang-node-js">2. 安装 Node.js</span></h2>
+<p>Hexo 是基于 nodeJS 编写的，所以要安装一下 nodeJS 和里面的 npm 工具。<br>
+Nodejs官网：<a target="_blank" rel="noopener" href="https://nodejs.org/en/">https://nodejs.org/en/</a><br>
+从官网上下载安装包安装。之后可用如下命令校验是否安装成功：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">node -v</span><br><span class="line">npm -v</span><br></pre></td></tr></table></figure>
+<h2><a href="#3-an-zhuang-hexo" class="header-anchor">#</a><span id="3-an-zhuang-hexo">3. 安装 Hexo</span></h2>
+<p>先创建一个文件夹 blog，然后<code>cd</code>到这个文件夹下，再输入如下命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+<p>依旧用<code>hexo -v</code>查看一下版本，至此安装完成。</p>
+<ul>
+<li>
+<p>初始化一下 hexo</p>
+<p>命令：<code>hexo init blogName</code><br>
+blogName 自己随意取名。<br>
+新建完成后，这个<code>blogName</code>文件夹目录下有如下文件目录：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">名称</th>
+<th style="text-align:left">功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">node_modules</td>
+<td style="text-align:left">依赖包</td>
+</tr>
+<tr>
+<td style="text-align:left">public</td>
+<td style="text-align:left">存放生成的页面，最后上传个人仓库的也是这个文件夹下内容</td>
+</tr>
+<tr>
+<td style="text-align:left">scaffolds</td>
+<td style="text-align:left">生成文章的一些模板</td>
+</tr>
+<tr>
+<td style="text-align:left">source</td>
+<td style="text-align:left">用来存放你的文章</td>
+</tr>
+<tr>
+<td style="text-align:left">themes</td>
+<td style="text-align:left">主题</td>
+</tr>
+<tr>
+<td style="text-align:left">_config.yml</td>
+<td style="text-align:left">博客的配置文件</td>
+</tr>
+</tbody>
+</table>
+<p>之后<code> cd bolgName</code>进入这个<code>blogName</code>文件夹。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo generate</span><br><span class="line">hexo server</span><br></pre></td></tr></table></figure>
+<p>最后可以使用如上命令打开 hexo 服务，在浏览器里输入<code>localhost:4000</code>就可以看到生成的博客了。最后使用<code>ctrl+c</code>关闭服务。</p>
+</li>
+</ul>
+<h2><a href="#4-github-chuang-jian-ge-ren-cang-ku" class="header-anchor">#</a><span id="4-github-chuang-jian-ge-ren-cang-ku">4. GitHub 创建个人仓库</span></h2>
+<ol>
+<li>首先注册一个 GitHub 账号。</li>
+<li>注册并登录后，点击<code>New respository</code>，新建仓库</li>
+<li>仓库名称为&quot;<code>你的用户名+.github.io</code>&quot;，比如你的用户名为<code>lee</code>，则创建的仓库名为<code>lee.github.io</code></li>
+</ol>
+<h2><a href="#5-jiang-hexo-bu-shu-dao-github-shang" class="header-anchor">#</a><span id="5-jiang-hexo-bu-shu-dao-github-shang">5. 将 Hexo 部署到 GitHub 上</span></h2>
+<p>这一步主要是将 hexo 和 Github 关联起来，也就是将 hexo 生成的文章部署到 GitHub 上，打开配置文件<code>_config.yml</code>，滑到最后，个性如下内容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: https://github.com/yourName/yourName.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+<p>之后需要安装<code>deploy-git</code>，也就是 hexo 的部署命令，这样才能用命令将内容部署到 GitHub 上。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+<p>然后</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo deploy</span><br></pre></td></tr></table></figure>
+<p><strong>hexo 基本命令：</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">命令</th>
+<th style="text-align:left">功能</th>
+<th style="text-align:left">参数说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">hexo init [folder]</td>
+<td style="text-align:left">用于初始化本地文件夹为网站的根目录</td>
+<td style="text-align:left">folder 可选参数，不选默认当前目录</td>
+</tr>
+<tr>
+<td style="text-align:left">hexo new [layout] &lt; title&gt;</td>
+<td style="text-align:left">用于新建文章，可以简写为 <code>hexo n</code></td>
+<td style="text-align:left">layout 可选参数，用以指定文章类型，若无指定则默认由配置文件中的 default_layout 选项决定 <br>  title 必填参数，用以指定文章标题，如果参数值中含有空格，则需要使用双引号包围</td>
+</tr>
+<tr>
+<td style="text-align:left">hexo clean</td>
+<td style="text-align:left">清除之前生成的静态文章等</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">hexo generate</td>
+<td style="text-align:left">生成静态文章，可以简写为 <code>hexo g</code></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">hexo deploy</td>
+<td style="text-align:left">部署文章，可以简写为 <code>hexo d</code></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">hexo server</td>
+<td style="text-align:left">命令用于启动本地服务器，可以简写为 <code>hexo s</code></td>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>过一会儿之后就可以<code>https://yourName.github.io</code>这个网站看到你的博客了！</p>
+<h2><a href="#6-she-zhi-ge-ren-yu-ming" class="header-anchor">#</a><span id="6-she-zhi-ge-ren-yu-ming">6. 设置个人域名</span></h2>
+<p>去阿里云或腾讯云上去买一个域名，未设置。</p>
+<hr>
+<h1><a href="#si-hexo-pei-zhi" class="header-anchor">#</a><span id="si-hexo-pei-zhi">四、Hexo 配置</span></h1>
+<h2><a href="#1-hexo-ji-ben-pei-zhi" class="header-anchor">#</a><span id="1-hexo-ji-ben-pei-zhi">1. hexo 基本配置</span></h2>
+<p>在文件根目录下的<code>_config.yml</code>就是整个 hexo 框架的配置文件了。可以在里面个性大部分配置。<br>
+详细见官网：<a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/configuration">https://hexo.io/zh-cn/docs/configuration</a></p>
+<ul>
+<li>
+<h3><a href="#wang-zhan" class="header-anchor">#</a><span id="wang-zhan">网站</span></h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">参数</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">title</td>
+<td style="text-align:left">网站标题</td>
+</tr>
+<tr>
+<td style="text-align:left">subtitle</td>
+<td style="text-align:left">网站副标题</td>
+</tr>
+<tr>
+<td style="text-align:left">description</td>
+<td style="text-align:left">网站描述</td>
+</tr>
+<tr>
+<td style="text-align:left">keywords</td>
+<td style="text-align:left">网站的关键词。使用半角逗号 , 分隔多个关键词。</td>
+</tr>
+<tr>
+<td style="text-align:left">author</td>
+<td style="text-align:left">您的名字</td>
+</tr>
+<tr>
+<td style="text-align:left">language</td>
+<td style="text-align:left">网站使用的语言。对于简体中文用户来说，使用不同的主题可能需要设置成不同的值，请参考你的主题的文档自行设置，常见的有 zh-Hans 和 zh-CN。</td>
+</tr>
+<tr>
+<td style="text-align:left">timezone</td>
+<td style="text-align:left">网站时区。Hexo 默认使用您电脑的时区。请参考 时区列表 进行设置，如 America/New_York, Japan, 和 UTC 。一般的，对于中国大陆地区可以使用 Asia/Shanghai。</td>
+</tr>
+</tbody>
+</table>
+<p>其中，description 主要用于 SEO，告诉搜索引擎一个关于您站点的简单描述，通常建议在其中包含您网站的关键词。author 参数用于主题显示文章的作者。</p>
+</li>
+<li>
+<h3><a href="#wang-zhi" class="header-anchor">#</a><span id="wang-zhi">网址</span></h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">参数</th>
+<th style="text-align:left">描述</th>
+<th style="text-align:left">默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">url</td>
+<td style="text-align:left">网址</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">root</td>
+<td style="text-align:left">网站根目录</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">permalink</td>
+<td style="text-align:left">文章的<strong>永久链接</strong>格式</td>
+<td style="text-align:left">:year/:month/:day/:title/</td>
+</tr>
+<tr>
+<td style="text-align:left">permalink_defaults</td>
+<td style="text-align:left">永久链接中各部分的默认值</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">pretty_urls</td>
+<td style="text-align:left">改写 permalink 的值来美化 URL</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">pretty_urls.trailing_index</td>
+<td style="text-align:left">是否在永久链接中保留尾部的 index.html，设置为 false 时去除</td>
+<td style="text-align:left">true</td>
+</tr>
+<tr>
+<td style="text-align:left">pretty_urls.trailing_html</td>
+<td style="text-align:left">是否在永久链接中保留尾部的 .html, 设置为 false 时去除 （对尾部的 index.html 无效）</td>
+<td style="text-align:left">true</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>permalink</code></strong>，也就是你生成某个文章时的那个链接格式。<br>
+比如说新建一个文件<code>temp.md</code>，那么这个时候他自动生成的地址就是<code>http://yoursite.com/2020/05/13/temp</code><br>
+详细见官网：<a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/permalinks">https://hexo.io/zh-cn/docs/permalinks</a></p>
+</li>
+<li>
+<h3><a href="#mu-lu" class="header-anchor">#</a><span id="mu-lu">目录</span></h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">参数</th>
+<th style="text-align:left">描述</th>
+<th style="text-align:left">默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">source_dir</td>
+<td style="text-align:left">资源文件夹，这个文件夹用来存放内容。</td>
+<td style="text-align:left">source</td>
+</tr>
+<tr>
+<td style="text-align:left">public_dir</td>
+<td style="text-align:left">公共文件夹，这个文件夹用于存放生成的站点文件。</td>
+<td style="text-align:left">public</td>
+</tr>
+<tr>
+<td style="text-align:left">tag_dir</td>
+<td style="text-align:left">标签文件夹</td>
+<td style="text-align:left">tags</td>
+</tr>
+<tr>
+<td style="text-align:left">archive_dir</td>
+<td style="text-align:left">归档文件夹</td>
+<td style="text-align:left">archives</td>
+</tr>
+<tr>
+<td style="text-align:left">category_dir</td>
+<td style="text-align:left">分类文件夹</td>
+<td style="text-align:left">categories</td>
+</tr>
+<tr>
+<td style="text-align:left">code_dir</td>
+<td style="text-align:left">Include code 文件夹，source_dir 下的子目录</td>
+<td style="text-align:left">downloads/code</td>
+</tr>
+<tr>
+<td style="text-align:left">i18n_dir</td>
+<td style="text-align:left">国际化（i18n）文件夹</td>
+<td style="text-align:left">:lang</td>
+</tr>
+<tr>
+<td style="text-align:left">skip_render</td>
+<td style="text-align:left">跳过指定文件的渲染。匹配到的文件将会被不做改动地复制到 public 目录中。您可使用 glob 表达式来匹配路径。</td>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<h3><a href="#front-matter" class="header-anchor">#</a><span id="front-matter">Front-matter</span></h3>
+<p>Front-matter 是文件最上方以<code>---</code>分隔的区域，用于指定个别文件的变量，举例如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: Hello World</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+<p>以下是预先定义的参数，您可在模板中使用这些参数值并加以利用。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">参数</th>
+<th style="text-align:left">描述</th>
+<th style="text-align:left">默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">layout</td>
+<td style="text-align:left">布局</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">title</td>
+<td style="text-align:left">标题</td>
+<td style="text-align:left">文章的文件名</td>
+</tr>
+<tr>
+<td style="text-align:left">date</td>
+<td style="text-align:left">建立日期</td>
+<td style="text-align:left">文件建立日期</td>
+</tr>
+<tr>
+<td style="text-align:left">updated</td>
+<td style="text-align:left">更新日期</td>
+<td style="text-align:left">文件更新日期</td>
+</tr>
+<tr>
+<td style="text-align:left">comments</td>
+<td style="text-align:left">开启文章的评论功能</td>
+<td style="text-align:left">true</td>
+</tr>
+<tr>
+<td style="text-align:left">tags</td>
+<td style="text-align:left">标签（不适用于分页）</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">categories</td>
+<td style="text-align:left">分类（不适用于分页）</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">permalink</td>
+<td style="text-align:left">覆盖文章网址</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">keywords</td>
+<td style="text-align:left">仅用于 meta 标签和 Open Graph 的关键词（不推荐使用）</td>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>详细见官网：<a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/front-matter">https://hexo.io/zh-cn/docs/front-matter</a></p>
+</li>
+</ul>
+<h2><a href="#2-geng-huan-zhu-ti" class="header-anchor">#</a><span id="2-geng-huan-zhu-ti">2. 更换主题</span></h2>
+<p>Hexo 默认主题为<code>landscape</code>，若感觉不好看，可以到官网主题中选择一个喜欢的主题进行修改。官网主题：<a target="_blank" rel="noopener" href="https://hexo.io/themes/">https://hexo.io/themes/</a><br>
+我选择的是：<code>hexo-theme-Anatole-Core</code><br>
+效果如下：<br>
+<img src="/2020/05/14/%E4%BD%BF%E7%94%A8Hexo%E5%AE%89%E8%A3%85GitHub%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/2020-05-14_16-15-03-hexo-01.png" alt></p>
+<p>git地址如下：<a target="_blank" rel="noopener" href="https://github.com/mrcore/hexo-theme-Anatole-Core">https://github.com/mrcore/hexo-theme-Anatole-Core</a><br>
+使用文档：<a target="_blank" rel="noopener" href="https://github.com/Ben02/hexo-theme-Anatole/wiki/Index-Description">https://github.com/Ben02/hexo-theme-Anatole/wiki/Index-Description</a></p>
+<p><strong>更换主题步骤：</strong></p>
+<ul>
+<li>
+<h3><a href="#an-zhuang" class="header-anchor">#</a><span id="an-zhuang">安装</span></h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/mrcore/hexo-theme-Anatole-Core.git themes/anatole-core</span><br><span class="line"></span><br><span class="line">或者直接下载主题zip包解压至主题目录下，重命名为anatole-core</span><br><span class="line"></span><br><span class="line"># 安装hexo-renderer-pug</span><br><span class="line"></span><br><span class="line">npm install hexo-renderer-pug --save</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<h3><a href="#pei-zhi" class="header-anchor">#</a><span id="pei-zhi">配置</span></h3>
+<p>修改 hexo 根目录下的<code>_config.yml</code> ： <code>theme: anatole-core</code></p>
+<p>其他需要配置的地方请看<code>themes/anatole-core/_comfig.yml</code></p>
+</li>
+<li>
+<h3><a href="#geng-xin" class="header-anchor">#</a><span id="geng-xin">更新</span></h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd themes/anatole-core</span><br><span class="line">git pull</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2><a href="#3-git-fen-zhi-duo-zhong-duan-cao-zuo" class="header-anchor">#</a><span id="3-git-fen-zhi-duo-zhong-duan-cao-zuo">3. git 分支多终端操作</span></h2>
+<ul>
+<li>
+<h3><a href="#yuan-li" class="header-anchor">#</a><span id="yuan-li">原理</span></h3>
+<p>由于<code>hexo d</code>上传部署到 github 的其实是 hexo 编译后的文件，是用来生成网页的，不包含源文件。也就是上传的是在本地目录里自动生成的<code>.deploy_git</code>里面，这是个<strong>隐藏文件夹</strong>。<br>
+其他文件 ，包括我们写在<code>source</code>里面的，和配置文件，主题文件，都没有上传到 github<br>
+所以可以利用 git 的分支管理，将源文件上传到 github 的另一个分支即可。</p>
+</li>
+<li>
+<h3><a href="#shang-chuan-fen-zhi" class="header-anchor">#</a><span id="shang-chuan-fen-zhi">上传分支</span></h3>
+<ol>
+<li>
+<p>在 github 上新建一个 hexo 分支</p>
+</li>
+<li>
+<p>将 hexo 分支内容克隆到本地，再把除。git 文件夹外内容全部删除</p>
+</li>
+<li>
+<p>把除了<code>.deploy_git</code>外的所有博客源文件全部复制进来。</p>
+<p><strong>注意：</strong></p>
+<ul>
+<li>
+<p>复制过来的源文件应该有一个<code>.gitignore</code>，用来忽略一些不需要的文件，如果没有的话，自己新建一个，在里面写上如下内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">.DS_Store</span><br><span class="line">Thumbs.db</span><br><span class="line">db.json</span><br><span class="line">*.log</span><br><span class="line">node_modules/</span><br><span class="line">public/</span><br><span class="line">.deploy*/</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>若之前克隆过 theme 中的主题文件，那么应该把主题文件中的<code>.git</code>文件夹删掉，因为 git 不能嵌套上传，最好是显示隐藏文件，检查一下有没有，否则上传的时候会出错，导致你的主题文件无法上传，这样配置在别的电脑上就用不了了。</p>
+</li>
+<li>
+<p><em>tip: Mac 系统显示与隐藏<strong>隐藏文件</strong>快捷键为：<code>shift + command + .</code></em></p>
+</li>
+</ul>
+</li>
+<li>
+<p>之后将新内容提交到 github，可使用如下命令：</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit –m &quot;add hexo&quot;</span><br><span class="line">git push</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>这样就上传完成了，其中<code>node_modules</code>、<code>public</code>、<code>db.json</code>已经被忽略掉了，不需要上传。</p>
+</li>
+<li>
+<h3><a href="#yan-zheng" class="header-anchor">#</a><span id="yan-zheng">验证</span></h3>
+<p>换台电脑，重走一遍之前的安装流程。之后将代码从 github 上下载下来，重新部署验证。</p>
+</li>
+</ul>
+<h2><a href="#4-tian-jia-ben-di-tu-pian" class="header-anchor">#</a><span id="4-tian-jia-ben-di-tu-pian">4. 添加本地图片</span></h2>
+<ol>
+<li>
+<p>把主页配置文件<code>_config.yml</code>里的<code>post_asset_folder</code>选项设置为<code>true</code></p>
+</li>
+<li>
+<p>在 hexo 目录下执行<code>npm install hexo-asset-image --save</code>安装一个可以上传本地图片的插件，地址：<a target="_blank" rel="noopener" href="https://github.com/xcodebuild/hexo-asset-image">https://github.com/xcodebuild/hexo-asset-image</a></p>
+</li>
+<li>
+<p>之后运行<code>hexo n mdFileName</code>来生成 md 文件，文件位置为<code>/source/_posts</code>, 文件夹内除了 <a target="_blank" rel="noopener" href="http://mdFileName.md">mdFileName.md</a> 文件还有一个同名的文件夹</p>
+</li>
+<li>
+<p>之后若在 <a target="_blank" rel="noopener" href="http://mdFileName.md">mdFileName.md</a> 中引入图片，要先把图片复制到 mdFileName 这个文件夹中，然后只需要在 <a target="_blank" rel="noopener" href="http://mdFileName.md">mdFileName.md</a> 中按照 markdown 的格式引入图片：<code>![你想输入的替代文字](mdFileName/图片名.jpg)</code></p>
+</li>
+<li>
+<p>最后检查一下，运行<code>hexo g</code>生成页面后，进入 public\ 年、月、日、mdFileName.html 文件中查看相关字段，若 html 标签内的语句是<code>&lt;img src=&quot;年/月/日/mdFileName/图片名.png&quot;&gt;</code>，则网页可以正常加载图片。</p>
+<p><strong>注意：</strong> mdFileName 是这个 md 文件的名字，也是同名文件夹的名字。只需要有文件夹名字即可，不需要绝对路径。</p>
+</li>
+</ol>
+<p><em>参考：<a target="_blank" rel="noopener" href="http://wonder4.me/2017/02/20/Using-Local-Image-in-Hexo/">http://wonder4.me/2017/02/20/Using-Local-Image-in-Hexo/</a></em></p>
+<h2><a href="#5-geng-huan-fu-zhu-jie-xi-markdown-de-ku" class="header-anchor">#</a><span id="5-geng-huan-fu-zhu-jie-xi-markdown-de-ku">5. 更换辅助解析 markdown 的库</span></h2>
+<p><code>hexo-renderer-markdown-it</code>提供了更丰富的 Markdown 解析和渲染。</p>
+<ul>
+<li>
+<h3><a href="#an-zhuang" class="header-anchor">#</a><span id="an-zhuang">安装</span></h3>
+<ol>
+<li>
+<p>卸载 Hexo 默认自带的 Markdown 渲染器</p>
+   <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm un hexo-renderer-marked --save</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>安装 hexo-renderer-markdown-it 插件</p>
+   <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i hexo-renderer-markdown-it --save</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+<li>
+<h3><a href="#pei-zhi" class="header-anchor">#</a><span id="pei-zhi">配置</span></h3>
+<p><code>hexo-renderer-markdown-it</code>的所有配置，均在<code>Hexo</code>的主要配置文件<code>_config.yml</code>中进行配置。<br>
+<code>hexo-renderer-markdown-it</code>提供的高级配置，在<code>Hexo</code>的<code>_config.yml</code>文件中配置以下内容：</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">markdown:</span><br><span class="line">  render:</span><br><span class="line">    html: true</span><br><span class="line">    xhtmlOut: false</span><br><span class="line">    breaks: true</span><br><span class="line">    linkify: true</span><br><span class="line">    typographer: true</span><br><span class="line">    quotes: &#x27;“”‘’&#x27;</span><br><span class="line">  plugins:</span><br><span class="line">    - markdown-it-abbr</span><br><span class="line">    - markdown-it-footnote</span><br><span class="line">    - markdown-it-ins</span><br><span class="line">    - markdown-it-sub</span><br><span class="line">    - markdown-it-sup</span><br><span class="line">  anchors:</span><br><span class="line">    level: 1</span><br><span class="line">    collisionSuffix: &#x27;v&#x27;</span><br><span class="line">    permalink: false</span><br><span class="line">    permalinkClass: header-anchor</span><br><span class="line">    permalinkSymbol: ¶</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p><em><strong>详解见：</strong></em></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/588ab3d22eb8">https://www.jianshu.com/p/588ab3d22eb8</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/markdown-it/markdown-it">https://github.com/markdown-it/markdown-it</a></li>
+</ul>
+</blockquote>
+<h2><a href="#6-markdown-wen-jian-tian-jia-mu-lu" class="header-anchor">#</a><span id="6-markdown-wen-jian-tian-jia-mu-lu">6. MarkDown 文件添加目录</span></h2>
+<p>MD 正常语法<code>[TOC]</code>，解析器解析不了，需要下载一个插件<code>hexo-toc</code></p>
+<ul>
+<li>
+<h3><a href="#an-zhuang" class="header-anchor">#</a><span id="an-zhuang">安装</span></h3>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-toc --save</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<h3><a href="#pei-zhi" class="header-anchor">#</a><span id="pei-zhi">配置</span></h3>
+<p><code>hexo-toc</code>的所有配置，均在<code>Hexo</code>的主要配置文件<code>_config.yml</code>中进行配置。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 目录插件</span><br><span class="line">toc:</span><br><span class="line">  maxdepth: 3</span><br><span class="line">  class: toc</span><br><span class="line">  slugify: transliteration</span><br><span class="line">  decodeEntities: false</span><br><span class="line">  anchor:</span><br><span class="line">    position: after</span><br><span class="line">    symbol: &#x27;#&#x27;</span><br><span class="line">    style: header-anchor</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>之后，在 md 文件开头添加<code>&lt;！-- toc --&gt;</code>，解析成网页后会自动生成文章目录。</p>
+<blockquote>
+<p><em><strong>详解见：</strong></em> <a target="_blank" rel="noopener" href="https://www.npmjs.com/package/hexo-toc">https://www.npmjs.com/package/hexo-toc</a></p>
+</blockquote>
+<h2><a href="#7-hexo-yin-yong-ben-zhan-wen-zhang" class="header-anchor">#</a><span id="7-hexo-yin-yong-ben-zhan-wen-zhang">7. Hexo 引用本站文章</span></h2>
+<p>在编写文章的过程中，有时需要引用本站内的其他文章。此时可以通过内置的标签插件<code>post_link</code>来实现引用。<br>
+<strong>语法：</strong> <code>&#123;％ post_link 文章文件名（不需要后缀） 文章标题（可选项） %&#125;</code><br>
+<strong>说明：</strong> 符号都是英文状态下的，文章标题不写默认显示的是文章文件名<br>
+<strong>举例：</strong> 引用文章 ADB常用命令，则语句如下：<br>
+            <code>&#123;％ post_link ADB常用命令 %&#125;</code><br>
+            或者修改显示标题<br>
+            <code>&#123;％ post_link ADB常用命令 ADB %&#125;</code></p>
+<hr>
+<h1><a href="#wu-yu-dao-de-wen-ti" class="header-anchor">#</a><span id="wu-yu-dao-de-wen-ti">五、遇到的问题</span></h1>
+<h2><a href="#1-bu-shu-shi-bai" class="header-anchor">#</a><span id="1-bu-shu-shi-bai">1. 部署失败</span></h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">FATAL Something&#x27;s wrong. Maybe you can find the solution here: https://hexo.io/docs/troubleshooting.html</span><br><span class="line">TypeError [ERR_INVALID_ARG_TYPE]: The &quot;mode&quot; argument must be integer. Received an instance of Object</span><br></pre></td></tr></table></figure>
+<p><strong>原因：</strong> 之前装的是 node14, node 版本太高了。<br>
+<strong>解决方案：</strong>  换成低版本的 node，比如 node12.14。<br>
+因为是回退版本，所以需要先卸载高版本的 node, 再安装低版本的 node.<br>
+官网下载 node.pkg 安装包的通过如下命令卸载 node</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo rm -rf /usr/local/&#123;bin/&#123;node,npm&#125;,lib/node_modules/npm,lib/node,share/man/*/node.*&#125;</span><br></pre></td></tr></table></figure>
+<p><em>卸载node参考：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/6dcfc0d3ea40">https://www.jianshu.com/p/6dcfc0d3ea40</a></em></p>
+<h2><a href="#2-bu-shu-shi-bai" class="header-anchor">#</a><span id="2-bu-shu-shi-bai">2. 部署失败</span></h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ERROR Process failed: _posts/使用Hexo安装GitHub个人博客.md</span><br><span class="line">YAMLException: end of the stream or a document separator is expected at line 4, column 1:</span><br><span class="line">    Hexo是一款基于Node.js的静态博客框架，依赖少易于安装使 ...</span><br><span class="line">    ^</span><br><span class="line">    at generateError (/Users/ltt/projects/puppet16.github.io/node_modules/js-yaml/lib/js-yaml/loader.js:167:10)</span><br><span class="line">    at throwError (/Users/ltt/projects/puppet16.github.io/node_modules/js-yaml/lib/js-yaml/loader.js:173:9)</span><br><span class="line">    at readDocument (/Users/ltt/projects/puppet16.github.io/node_modules/js-yaml/lib/js-yaml/loader.js:1539:5)</span><br><span class="line">    at loadDocuments (/Users/ltt/projects/puppet16.github.io/node_modules/js-yaml/lib/js-yaml/loader.js:1575:5)</span><br></pre></td></tr></table></figure>
+<p><strong>原因：</strong> md 文件要加一个 title 和 date 的头<br>
+<strong>解决方案：</strong> 在 md 文件开始位置添加如下代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: Hello World</span><br><span class="line">date: 2013/7/13 20:46:25</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+<h2><a href="#3-biao-ge-xian-shi-cuo-wu" class="header-anchor">#</a><span id="3-biao-ge-xian-shi-cuo-wu">3. 表格显示错误</span></h2>
+<p>显示效果如图：<br>
+<img src="/2020/05/14/%E4%BD%BF%E7%94%A8Hexo%E5%AE%89%E8%A3%85GitHub%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/2020-05-14_16-15-03-hexo-02.png" alt><br>
+<strong>原因：</strong> 未严格按照表格格式书写，没有加对齐方式<br>
+<strong>解决方案：</strong> 添加对齐方式</p>
+<h2><a href="#4-biao-ge-xian-shi-guo-duo" class="header-anchor">#</a><span id="4-biao-ge-xian-shi-guo-duo">4. 表格显示过多</span></h2>
+<p><strong>问题：</strong> 表格下一行的文字也算成了表格<br>
+<strong>原因：</strong> 在表格最后一行没有两个空格<br>
+<strong>解决方案：</strong> 在表格最后一行添加两个空格表示换行，再回车加一个空行</p>
+<h2><a href="#5-no-layout" class="header-anchor">#</a><span id="5-no-layout">5. No Layout</span></h2>
+<p><strong>问题：</strong> 在多端操作时执行<code>hexo g</code>时警告：WARN  No layout: index.html</p>
+<p><strong>原因 1：</strong> 缺少必要插件</p>
+<p><strong>解决文案：</strong> 运行命令<code>npm ls --depth 0</code>，以获取相关插件信息，如下图</p>
+<p><img src="/2020/05/14/%E4%BD%BF%E7%94%A8Hexo%E5%AE%89%E8%A3%85GitHub%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/2020-05-14_16-15-03-hexo-03.png" alt></p>
+<p>可以看出缺少图片相关插件，使用相应命令安装上即可。</p>
+<p><strong>原因 2：</strong> 所用的主题文件是空，主题这个 git 仓库和 hexo 博客目录的 Git 仓库产生嵌套的冲突</p>
+<p><strong>解决方案：</strong> 删除冲突的主题文件内的 git 文件夹，重新提交</p>
+<hr>
+<p><em>搭建 Hexo 参考文章：<a target="_blank" rel="noopener" href="https://blog.csdn.net/sinat_37781304/article/details/82729029">https://blog.csdn.net/sinat_37781304/article/details/82729029<br>
+</a></em><br>
+<em>Hexo常用命令参考：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/a2d298e26dcd">https://www.jianshu.com/p/a2d298e26dcd</a></em></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" title="Previous page" aria-label="Previous page" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
+  </nav>
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ltt</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
