@@ -1,212 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="Ltt"><title>kotlin学习系列七：反射 · Puppet</title><meta name="description" content="一、前言
+二、反射的基本概念
 
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
-  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+1. 反射概念
+2. 反射的依赖
 
-<link rel="stylesheet" href="/css/main.css">
+1. 添加反射库依赖
 
 
+3. 反射常见用途
+4. 反射常用的数据结构
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
-
-<script class="next-config" data-name="main" type="application/json">{"hostname":"puppet16.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.15.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
-
-    <meta name="description" content="一、前言 二、反射的基本概念  1. 反射概念 2. 反射的依赖  1. 添加反射库依赖   3. 反射常见用途 4. 反射常用的数据结构  1. kotlin常用反射数据结构 2. kotlin与java的反射数据结构对比   5. Kotlin中使用反射  1. 在Kotlin中使用Java反射和Kotlin反射优缺点 2. 使用Kotlin反射 3. KClass 4. KCallab">
-<meta property="og:type" content="article">
-<meta property="og:title" content="kotlin学习系列七：反射">
-<meta property="og:url" content="http://puppet16.github.io/2021/03/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%83/index.html">
-<meta property="og:site_name" content="Puppet">
-<meta property="og:description" content="一、前言 二、反射的基本概念  1. 反射概念 2. 反射的依赖  1. 添加反射库依赖   3. 反射常见用途 4. 反射常用的数据结构  1. kotlin常用反射数据结构 2. kotlin与java的反射数据结构对比   5. Kotlin中使用反射  1. 在Kotlin中使用Java反射和Kotlin反射优缺点 2. 使用Kotlin反射 3. KClass 4. KCallab">
-<meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://puppet16.github.io/2021/03/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%83/kotlin_reflection_dependences.png">
-<meta property="og:image" content="http://puppet16.github.io/2021/03/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%83/reflection_compare.png">
-<meta property="og:image" content="http://puppet16.github.io/2021/03/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%83/reflection_classloader.png">
-<meta property="og:image" content="http://puppet16.github.io/2021/03/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%83/reflection_plugin_struct.png">
-<meta property="og:image" content="http://puppet16.github.io/2021/03/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%83/reflection_project_jar_location.png">
-<meta property="article:published_time" content="2021-03-15T03:03:02.000Z">
-<meta property="article:modified_time" content="2023-03-22T07:38:12.396Z">
-<meta property="article:author" content="Ltt">
-<meta property="article:tag" content="Kotlin">
-<meta property="article:tag" content="反射">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://puppet16.github.io/2021/03/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%83/kotlin_reflection_dependences.png">
+1. kotlin常用反射数据结构
+2. kotlin与java的反射数据结构对比
 
 
-<link rel="canonical" href="http://puppet16.github.io/2021/03/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%83/">
+5. Kotlin中使用反射
 
-
-
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://puppet16.github.io/2021/03/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%83/","path":"2021/03/15/kotlin学习系列七/","title":"kotlin学习系列七：反射"}</script>
-
-<script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>kotlin学习系列七：反射 | Puppet</title>
-  
-
-
-
-
-
-
-
-
-  <noscript>
-    <link rel="stylesheet" href="/css/noscript.css">
-  </noscript>
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
-  <div class="headband"></div>
-
-  <main class="main">
-    <div class="column">
-      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
-  <div class="site-nav-toggle">
-    <div class="toggle" aria-label="Toggle navigation bar" role="button">
-    </div>
-  </div>
-
-  <div class="site-meta">
-
-    <a href="/" class="brand" rel="start">
-      <i class="logo-line"></i>
-      <p class="site-title">Puppet</p>
-      <i class="logo-line"></i>
-    </a>
-  </div>
-
-  <div class="site-nav-right">
-    <div class="toggle popup-trigger" aria-label="Search" role="button">
-    </div>
-  </div>
-</div>
-
-
-
-
-
-
-
-</header>
-        
-  
-  <aside class="sidebar">
-
-    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
-      <ul class="sidebar-nav">
-        <li class="sidebar-nav-toc">
-          Table of Contents
-        </li>
-        <li class="sidebar-nav-overview">
-          Overview
-        </li>
-      </ul>
-
-      <div class="sidebar-panel-container">
-        <!--noindex-->
-        <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">一、前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">二、反射的基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">2.1.</span> <span class="nav-text">1. 反射概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">2.2.</span> <span class="nav-text">2. 反射的依赖</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">2.2.1.</span> <span class="nav-text">1. 添加反射库依赖</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">2.3.</span> <span class="nav-text">3. 反射常见用途</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">2.4.</span> <span class="nav-text">4. 反射常用的数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">2.4.1.</span> <span class="nav-text">1. kotlin常用反射数据结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">2.4.2.</span> <span class="nav-text">2. kotlin与java的反射数据结构对比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">2.5.</span> <span class="nav-text">5. Kotlin中使用反射</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">2.5.1.</span> <span class="nav-text">1. 在Kotlin中使用Java反射和Kotlin反射优缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">2.5.2.</span> <span class="nav-text">2. 使用Kotlin反射</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">2.5.3.</span> <span class="nav-text">3. KClass</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">2.5.4.</span> <span class="nav-text">4. KCallable</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">2.5.5.</span> <span class="nav-text">5. KParameter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">2.5.6.</span> <span class="nav-text">6. KType</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">2.5.7.</span> <span class="nav-text">7. KClass与KType区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">2.5.8.</span> <span class="nav-text">8. 类型擦除</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">2.5.9.</span> <span class="nav-text">9. 总结</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text">三、 示例 – 获取泛型实参</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">3.1.</span> <span class="nav-text">1. 获取Function返回值的类型实参</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">3.1.1.</span> <span class="nav-text">1. 通过Kotlin反射获取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">3.1.2.</span> <span class="nav-text">2. 通过Java反射获取</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">3.2.</span> <span class="nav-text">2. 在抽象父类里获取该父类泛型的实参</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">4.</span> <span class="nav-text">四、 示例 – 为数据类实现DeepCopy</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">4.1.</span> <span class="nav-text">1. 数据类自带的copy方法只是浅拷贝</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">4.2.</span> <span class="nav-text">2. 为数据类添加深拷贝方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">5.</span> <span class="nav-text">五、 示例 – Model映射</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">5.1.</span> <span class="nav-text">1. 通过Map转为任意类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">5.2.</span> <span class="nav-text">2. 通过任意类型映射为任意类型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">6.</span> <span class="nav-text">六、 示例 – 可释放对象引用的不可空类型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">7.</span> <span class="nav-text">七、 插件化加载类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">7.1.</span> <span class="nav-text">1. ClassLoader</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">7.1.1.</span> <span class="nav-text">1. ClassLoader的双亲委派机制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">7.2.</span> <span class="nav-text">2. 插件化加载类实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">7.2.1.</span> <span class="nav-text">1. 创建plugin接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">7.2.2.</span> <span class="nav-text">2. 创建两个继承plugin接口的类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">7.2.3.</span> <span class="nav-text">3. 将实现类所在Module打包成jar</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">7.2.4.</span> <span class="nav-text">4. 为两个实现接口的类添加配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">7.2.5.</span> <span class="nav-text">5. 递归监听文件夹</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">7.2.6.</span> <span class="nav-text">6. 创建自定义类加载器</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">8.</span> <span class="nav-text">八、参考文章</span></a></li></ol></div>
-        </div>
-        <!--/noindex-->
-
-        <div class="site-overview-wrap sidebar-panel">
-          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">Ltt</p>
-  <div class="site-description" itemprop="description"></div>
-</div>
-<div class="site-state-wrap animated">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-        <a href="/archives/">
-          <span class="site-state-item-count">27</span>
-          <span class="site-state-item-name">posts</span>
-        </a>
-      </div>
-      <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">34</span>
-        <span class="site-state-item-name">tags</span>
-      </div>
-  </nav>
-</div>
-
-        </div>
-      </div>
-    </div>
-
-    
-  </aside>
-
-
-    </div>
-
-    <div class="main-inner post posts-expand">
-
-
-  
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://puppet16.github.io/2021/03/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%83/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Ltt">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Puppet">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="kotlin学习系列七：反射 | Puppet">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          kotlin学习系列七：反射
-        </h1>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-03-15 11:03:02" itemprop="dateCreated datePublished" datetime="2021-03-15T11:03:02+08:00">2021-03-15</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-03-22 15:38:12" itemprop="dateModified" datetime="2023-03-22T15:38:12+08:00">2023-03-22</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-        <div class="toc">
+1. 在Kotlin中使用Java反射"><meta name="keywords" content="技术博客,Hexo,Android,Linux,HTML,Java"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.webp"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/insight.css"><link rel="stylesheet" href="/css/search.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><script src="/js/jquery.js"></script><meta name="generator" content="Hexo 6.3.0"></head><body><div class="page-top animated fadeInDown"><div class="nav"><li> <a href="/">Home</a></li><li> <a href="/archives">Archives</a></li><li> <a href="/tags">Tags</a></li><li> <a href="/about">About</a></li><li> <a href="/links">Links</a></li></div><div class="information"><div class="nav_right_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li><li><a class="fa fa-search" onclick="openWindow();"></a></li></div><div class="avatar"><img src="/images/logo.webp"></div></div></div><div class="sidebar animated fadeInDown"><div class="sidebar-top"><div class="logo-title"><div class="title"><img src="/images/logo@2x.webp" style="width:220px;" alt="favicon"><h3 title=""><a href="/">Puppet</a></h3><div class="description"><p>心之所愿，无事不成。<br> Nothing is impossible to a willing heart.</p></div></div><ul class="social-links"><li><a target="_blank" rel="noopener" href="https://github.com/puppet16"><i class="fa fa-github"></i></a></li><li><a href="mailto:mailto:2542469086@qq.com"><i class="fa fa-envelope"></i></a></li><li><a target="_blank" rel="noopener" href="http://sighttp.qq.com/authd?IDKEY=http://sighttp.qq.com/authd?IDKEY="><i class="fa fa-qq"></i></a></li><li><a target="_blank" rel="noopener" href="https://zhihu.com/"><i class="fa fa-mortar-board"></i></a></li></ul></div></div><div class="footer"><div class="p"> <span> 全站CC-BY-SA-3.0 </span><i class="fa fa-star"></i><span> Ltt</span></div><div class="by_farbox"><span>Powered by </span><a href="https://hexo.io/zh-cn/" target="_blank">Hexo </a><span> & </span><span>Anatolo </span></div><div class="beian"></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>kotlin学习系列七：反射</a></h3></div><div class="post-content"><p><div class="toc">
 <!-- toc -->
 <ul>
 <li><a href="#yi-qian-yan">一、前言</a></li>
@@ -829,94 +639,16 @@
 <li><a href="https://blog.csdn.net/xyang81/article/details/7292380#NetWorkClassLoader" target="_blank" rel="noopener">深入分析Java ClassLoader原理</a></li>
 <li><a href="https://zhuanlan.zhihu.com/p/94847256" target="_blank" rel="noopener">这篇文章绝对让你深刻理解java类的加载以及ClassLoader源码分析</a></li>
 </ol>
-
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/Kotlin/" rel="tag"># Kotlin</a>
-              <a href="/tags/%E5%8F%8D%E5%B0%84/" rel="tag"># 反射</a>
-          </div>
-
-        
-
-          <div class="post-nav">
-            <div class="post-nav-item">
-                <a href="/2021/03/08/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AD/" rel="prev" title="kotlin学习系列六：泛型">
-                  <i class="fa fa-chevron-left"></i> kotlin学习系列六：泛型
-                </a>
-            </div>
-            <div class="post-nav-item">
-                <a href="/2021/03/23/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AB/" rel="next" title="kotlin 学习系列八：注解">
-                  kotlin 学习系列八：注解 <i class="fa fa-chevron-right"></i>
-                </a>
-            </div>
-          </div>
-    </footer>
-  </article>
-</div>
-
-
-
-
-
-
-</div>
-  </main>
-
-  <footer class="footer">
-    <div class="footer-inner">
-
-
-<div class="copyright">
-  &copy; 
-  <span itemprop="copyrightYear">2023</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Ltt</span>
-</div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
-  </div>
-
-    </div>
-  </footer>
-
-  
-  <div class="toggle sidebar-toggle" role="button">
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-  </div>
-  <div class="sidebar-dimmer"></div>
-  <div class="back-to-top" role="button" aria-label="Back to top">
-    <i class="fa fa-arrow-up fa-lg"></i>
-    <span>0%</span>
-  </div>
-
-<noscript>
-  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
-</noscript>
-
-
-  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
-
-  
-
-
-
-
-  
-
-
-
-
-
-</body>
-</html>
+</p><div class="tip">本文采用CC-BY-SA-3.0协议，转载请注明出处<br>Author: Ltt</div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2021-03-15</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Kotlin/" title="Kotlin">Kotlin </a><i class="fa fa-tag"></i><a class="tag" href="/tags/反射/" title="反射">反射 </a><span class="leancloud_visitors"></span><span>About 10156 words, 33 min 51 sec  read</span></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="" onclick="javascript:join_favorite()" ref="sidebar"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://puppet16.github.io/2021/03/15/kotlin学习系列七/,Puppet,kotlin学习系列七：反射,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2021/03/23/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AB/" title="kotlin 学习系列八：注解">Previous</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2021/03/08/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AD/" title="kotlin学习系列六：泛型">Next</a></li></ul></div><script src="/js/visitors.js"></script><a id="comments"></a><div id="vcomments" style="margin:0 30px;"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//cdn.jsdelivr.net/gh/xcss/valine@latest/dist/Valine.min.js"></script><script>var valine = new Valine({
+  el:'#vcomments',
+  notify:false || false, 
+  verify:false|| false, 
+  app_id:'xpSQCFiXzEQnCBUKrP6EHIUF-gzGzoHsz',
+  app_key:'Ev5N03MrqLzS683mu92hf4RO',
+  placeholder:'行至水穷处，坐看云起时...',
+  path: window.location.pathname,
+  serverURLs: '',
+  visitor:true,
+  recordIP:true,
+  avatar:'mm'
+})</script></div></div></div></div><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/add-bookmark.js"></script><script>(function(window){var INSIGHT_CONFIG={TRANSLATION:{POSTS:"Posts",PAGES:"Pages",CATEGORIES:"Categories",TAGS:"Tags",UNTITLED:"(Untitled)",},CONTENT_URL:"/content.json",};window.INSIGHT_CONFIG=INSIGHT_CONFIG})(window);</script><script src="/js/insight.js" defer></script><div class="searchbox ins-search"><div class="searchbox-container ins-search-container"><div class="searchbox-input-wrapper"><input class="searchbox-input ins-search-input" type="text" placeholder="Search..."><span class="searchbox-close"><a class="fa fa-times-circle" onclick="closeWindow();"></a></span></div><div class="searchbox-result-wrapper ins-section-wrapper"><div class="ins-section-container"><p>Seraching...</p></div></div></div></div></body></html>

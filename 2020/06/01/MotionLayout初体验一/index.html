@@ -1,52 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="Ltt"><title>MotionLayout 初体验一 · Puppet</title><meta name="description" content="前言
+使用
 
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
-  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+1. 添加依赖
+2. 创建MotionLayout布局
+3、属性说明：
 
-<link rel="stylesheet" href="/css/main.css">
-
-
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
-
-<script class="next-config" data-name="main" type="application/json">{"hostname":"puppet16.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.15.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
-
-    <meta name="description" content="前言 使用  1. 添加依赖 2. 创建MotionLayout布局 3、属性说明：  1. 插值属性 2. 自定义属性 3. 其它MotionLayout属性        前言# MotionLayout是一种布局类型，为ConstraintLayout子类，可以帮助管理应用程序中的运动和组件动画。 MotionLayout是为了弥合布局过渡和复杂运动处理之间的差距。可以根据功能将其视为">
-<meta property="og:type" content="article">
-<meta property="og:title" content="MotionLayout 初体验一">
-<meta property="og:url" content="http://puppet16.github.io/2020/06/01/MotionLayout%E5%88%9D%E4%BD%93%E9%AA%8C%E4%B8%80/index.html">
-<meta property="og:site_name" content="Puppet">
-<meta property="og:description" content="前言 使用  1. 添加依赖 2. 创建MotionLayout布局 3、属性说明：  1. 插值属性 2. 自定义属性 3. 其它MotionLayout属性        前言# MotionLayout是一种布局类型，为ConstraintLayout子类，可以帮助管理应用程序中的运动和组件动画。 MotionLayout是为了弥合布局过渡和复杂运动处理之间的差距。可以根据功能将其视为">
-<meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://puppet16.github.io/2020/06/01/MotionLayout%E5%88%9D%E4%BD%93%E9%AA%8C%E4%B8%80/motionlayout_1.png">
-<meta property="article:published_time" content="2020-06-01T08:39:21.000Z">
-<meta property="article:modified_time" content="2020-08-06T11:43:36.000Z">
-<meta property="article:author" content="Ltt">
-<meta property="article:tag" content="Android">
-<meta property="article:tag" content="MotionLayout">
-<meta property="article:tag" content="ConstraintLayout">
-<meta property="article:tag" content="Animate">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://puppet16.github.io/2020/06/01/MotionLayout%E5%88%9D%E4%BD%93%E9%AA%8C%E4%B8%80/motionlayout_1.png">
-
-
-<link rel="canonical" href="http://puppet16.github.io/2020/06/01/MotionLayout%E5%88%9D%E4%BD%93%E9%AA%8C%E4%B8%80/">
-
-
-
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://puppet16.github.io/2020/06/01/MotionLayout%E5%88%9D%E4%BD%93%E9%AA%8C%E4%B8%80/","path":"2020/06/01/MotionLayout初体验一/","title":"MotionLayout 初体验一"}</script>
-
-<script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>MotionLayout 初体验一 | Puppet</title>
-  
+1. 插值属性
+2. 自定义属性
+3. 其它MotionLayout属性
 
 
 
@@ -54,157 +15,8 @@
 
 
 
-
-  <noscript>
-    <link rel="stylesheet" href="/css/noscript.css">
-  </noscript>
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
-  <div class="headband"></div>
-
-  <main class="main">
-    <div class="column">
-      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
-  <div class="site-nav-toggle">
-    <div class="toggle" aria-label="Toggle navigation bar" role="button">
-    </div>
-  </div>
-
-  <div class="site-meta">
-
-    <a href="/" class="brand" rel="start">
-      <i class="logo-line"></i>
-      <p class="site-title">Puppet</p>
-      <i class="logo-line"></i>
-    </a>
-  </div>
-
-  <div class="site-nav-right">
-    <div class="toggle popup-trigger" aria-label="Search" role="button">
-    </div>
-  </div>
-</div>
-
-
-
-
-
-
-
-</header>
-        
-  
-  <aside class="sidebar">
-
-    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
-      <ul class="sidebar-nav">
-        <li class="sidebar-nav-toc">
-          Table of Contents
-        </li>
-        <li class="sidebar-nav-overview">
-          Overview
-        </li>
-      </ul>
-
-      <div class="sidebar-panel-container">
-        <!--noindex-->
-        <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">2.1.</span> <span class="nav-text">1. 添加依赖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">2.2.</span> <span class="nav-text">2. 创建MotionLayout布局</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">2.3.</span> <span class="nav-text">3、属性说明：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">2.3.1.</span> <span class="nav-text">1. 插值属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">2.3.2.</span> <span class="nav-text">2. 自定义属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">2.3.3.</span> <span class="nav-text">3. 其它MotionLayout属性</span></a></li></ol></li></ol></li></ol></div>
-        </div>
-        <!--/noindex-->
-
-        <div class="site-overview-wrap sidebar-panel">
-          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">Ltt</p>
-  <div class="site-description" itemprop="description"></div>
-</div>
-<div class="site-state-wrap animated">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-        <a href="/archives/">
-          <span class="site-state-item-count">27</span>
-          <span class="site-state-item-name">posts</span>
-        </a>
-      </div>
-      <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">34</span>
-        <span class="site-state-item-name">tags</span>
-      </div>
-  </nav>
-</div>
-
-        </div>
-      </div>
-    </div>
-
-    
-  </aside>
-
-
-    </div>
-
-    <div class="main-inner post posts-expand">
-
-
-  
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://puppet16.github.io/2020/06/01/MotionLayout%E5%88%9D%E4%BD%93%E9%AA%8C%E4%B8%80/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Ltt">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Puppet">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="MotionLayout 初体验一 | Puppet">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          MotionLayout 初体验一
-        </h1>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2020-06-01 16:39:21" itemprop="dateCreated datePublished" datetime="2020-06-01T16:39:21+08:00">2020-06-01</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2020-08-06 19:43:36" itemprop="dateModified" datetime="2020-08-06T19:43:36+08:00">2020-08-06</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-        <div class="toc">
+前言#
+MotionLayout是一种布局类型，为ConstraintLayout子类，可以帮助管理应用程序中的运动和组件动"><meta name="keywords" content="技术博客,Hexo,Android,Linux,HTML,Java"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.webp"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/insight.css"><link rel="stylesheet" href="/css/search.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><script src="/js/jquery.js"></script><meta name="generator" content="Hexo 6.3.0"></head><body><div class="page-top animated fadeInDown"><div class="nav"><li> <a href="/">Home</a></li><li> <a href="/archives">Archives</a></li><li> <a href="/tags">Tags</a></li><li> <a href="/about">About</a></li><li> <a href="/links">Links</a></li></div><div class="information"><div class="nav_right_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li><li><a class="fa fa-search" onclick="openWindow();"></a></li></div><div class="avatar"><img src="/images/logo.webp"></div></div></div><div class="sidebar animated fadeInDown"><div class="sidebar-top"><div class="logo-title"><div class="title"><img src="/images/logo@2x.webp" style="width:220px;" alt="favicon"><h3 title=""><a href="/">Puppet</a></h3><div class="description"><p>心之所愿，无事不成。<br> Nothing is impossible to a willing heart.</p></div></div><ul class="social-links"><li><a target="_blank" rel="noopener" href="https://github.com/puppet16"><i class="fa fa-github"></i></a></li><li><a href="mailto:mailto:2542469086@qq.com"><i class="fa fa-envelope"></i></a></li><li><a target="_blank" rel="noopener" href="http://sighttp.qq.com/authd?IDKEY=http://sighttp.qq.com/authd?IDKEY="><i class="fa fa-qq"></i></a></li><li><a target="_blank" rel="noopener" href="https://zhihu.com/"><i class="fa fa-mortar-board"></i></a></li></ul></div></div><div class="footer"><div class="p"> <span> 全站CC-BY-SA-3.0 </span><i class="fa fa-star"></i><span> Ltt</span></div><div class="by_farbox"><span>Powered by </span><a href="https://hexo.io/zh-cn/" target="_blank">Hexo </a><span> & </span><span>Anatolo </span></div><div class="beian"></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>MotionLayout 初体验一</a></h3></div><div class="post-content"><p><div class="toc">
 <!-- toc -->
 <ul>
 <li><a href="#qian-yan">前言</a></li>
@@ -331,96 +143,16 @@
 <li><a href="https://codelabs.developers.google.com/codelabs/motion-layout/#2" target="_blank" rel="noopener">使用MotionLayout对Android Apps进行动画处理（codelab）</a></li>
 </ul>
 </blockquote>
-
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/Android/" rel="tag"># Android</a>
-              <a href="/tags/MotionLayout/" rel="tag"># MotionLayout</a>
-              <a href="/tags/ConstraintLayout/" rel="tag"># ConstraintLayout</a>
-              <a href="/tags/Animate/" rel="tag"># Animate</a>
-          </div>
-
-        
-
-          <div class="post-nav">
-            <div class="post-nav-item">
-                <a href="/2020/06/01/ADB%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" rel="prev" title="ADB常用命令">
-                  <i class="fa fa-chevron-left"></i> ADB常用命令
-                </a>
-            </div>
-            <div class="post-nav-item">
-                <a href="/2020/06/11/%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97%E4%B8%89/" rel="next" title="源码系列三：View被添加到屏幕窗口上的源码流程">
-                  源码系列三：View被添加到屏幕窗口上的源码流程 <i class="fa fa-chevron-right"></i>
-                </a>
-            </div>
-          </div>
-    </footer>
-  </article>
-</div>
-
-
-
-
-
-
-</div>
-  </main>
-
-  <footer class="footer">
-    <div class="footer-inner">
-
-
-<div class="copyright">
-  &copy; 
-  <span itemprop="copyrightYear">2023</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Ltt</span>
-</div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
-  </div>
-
-    </div>
-  </footer>
-
-  
-  <div class="toggle sidebar-toggle" role="button">
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-  </div>
-  <div class="sidebar-dimmer"></div>
-  <div class="back-to-top" role="button" aria-label="Back to top">
-    <i class="fa fa-arrow-up fa-lg"></i>
-    <span>0%</span>
-  </div>
-
-<noscript>
-  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
-</noscript>
-
-
-  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
-
-  
-
-
-
-
-  
-
-
-
-
-
-</body>
-</html>
+</p><div class="tip">本文采用CC-BY-SA-3.0协议，转载请注明出处<br>Author: Ltt</div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2020-06-01</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Android/" title="Android">Android </a><i class="fa fa-tag"></i><a class="tag" href="/tags/MotionLayout/" title="MotionLayout">MotionLayout </a><i class="fa fa-tag"></i><a class="tag" href="/tags/ConstraintLayout/" title="ConstraintLayout">ConstraintLayout </a><i class="fa fa-tag"></i><a class="tag" href="/tags/Animate/" title="Animate">Animate </a><span class="leancloud_visitors"></span><span>About 1692 words, 5 min 38 sec  read</span></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="" onclick="javascript:join_favorite()" ref="sidebar"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://puppet16.github.io/2020/06/01/MotionLayout初体验一/,Puppet,MotionLayout 初体验一,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2020/06/11/%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97%E4%B8%89/" title="源码系列三：View被添加到屏幕窗口上的源码流程">Previous</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2020/06/01/ADB%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" title="ADB常用命令">Next</a></li></ul></div><script src="/js/visitors.js"></script><a id="comments"></a><div id="vcomments" style="margin:0 30px;"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//cdn.jsdelivr.net/gh/xcss/valine@latest/dist/Valine.min.js"></script><script>var valine = new Valine({
+  el:'#vcomments',
+  notify:false || false, 
+  verify:false|| false, 
+  app_id:'xpSQCFiXzEQnCBUKrP6EHIUF-gzGzoHsz',
+  app_key:'Ev5N03MrqLzS683mu92hf4RO',
+  placeholder:'行至水穷处，坐看云起时...',
+  path: window.location.pathname,
+  serverURLs: '',
+  visitor:true,
+  recordIP:true,
+  avatar:'mm'
+})</script></div></div></div></div><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/add-bookmark.js"></script><script>(function(window){var INSIGHT_CONFIG={TRANSLATION:{POSTS:"Posts",PAGES:"Pages",CATEGORIES:"Categories",TAGS:"Tags",UNTITLED:"(Untitled)",},CONTENT_URL:"/content.json",};window.INSIGHT_CONFIG=INSIGHT_CONFIG})(window);</script><script src="/js/insight.js" defer></script><div class="searchbox ins-search"><div class="searchbox-container ins-search-container"><div class="searchbox-input-wrapper"><input class="searchbox-input ins-search-input" type="text" placeholder="Search..."><span class="searchbox-close"><a class="fa fa-times-circle" onclick="closeWindow();"></a></span></div><div class="searchbox-result-wrapper ins-section-wrapper"><div class="ins-section-container"><p>Seraching...</p></div></div></div></div></body></html>

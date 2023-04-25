@@ -1,211 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="Ltt"><title>Kotlin学习系列五：类型进阶 · Puppet</title><meta name="description" content="一、前言
+二、 类的构造器
 
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
-  <link rel="mask-icon" href="/images/logo.svg" color="#222">
-
-<link rel="stylesheet" href="/css/main.css">
+1. 基本写法
+2. 类的继承
+3. 副构造器
+4. 构造同名的工厂函数
 
 
+三、 类与成员的可见性
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
-
-<script class="next-config" data-name="main" type="application/json">{"hostname":"puppet16.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.15.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
-
-    <meta name="description" content="一、前言 二、 类的构造器  1. 基本写法 2. 类的继承 3. 副构造器 4. 构造同名的工厂函数   三、 类与成员的可见性  1. 可见性对比 2. 修饰对象 3. internal与default的对比 4. 构造器的可见性 5. 属性的可见性 6. 顶级声明的可见性   四、 类属性的延迟初始化  1. 延迟初始化原因 2. 延迟初始化实现  1. 为需要延迟初始化的成员赋空值">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Kotlin学习系列五：类型进阶">
-<meta property="og:url" content="http://puppet16.github.io/2021/02/02/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%BA%94/index.html">
-<meta property="og:site_name" content="Puppet">
-<meta property="og:description" content="一、前言 二、 类的构造器  1. 基本写法 2. 类的继承 3. 副构造器 4. 构造同名的工厂函数   三、 类与成员的可见性  1. 可见性对比 2. 修饰对象 3. internal与default的对比 4. 构造器的可见性 5. 属性的可见性 6. 顶级声明的可见性   四、 类属性的延迟初始化  1. 延迟初始化原因 2. 延迟初始化实现  1. 为需要延迟初始化的成员赋空值">
-<meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://puppet16.github.io/2021/02/02/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%BA%94/kotlin_proxy_properties_1.png">
-<meta property="og:image" content="http://puppet16.github.io/2021/02/02/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%BA%94/kotlin_proxy_properties_2.png">
-<meta property="og:image" content="http://puppet16.github.io/2021/02/02/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%BA%94/kotlin_proxy_properties_3.png">
-<meta property="og:image" content="http://puppet16.github.io/2021/02/02/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%BA%94/kotlin_moshi_generated_path.png">
-<meta property="article:published_time" content="2021-02-02T02:24:05.000Z">
-<meta property="article:modified_time" content="2023-03-16T11:24:27.915Z">
-<meta property="article:author" content="Ltt">
-<meta property="article:tag" content="Kotlin">
-<meta property="article:tag" content="类型">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://puppet16.github.io/2021/02/02/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%BA%94/kotlin_proxy_properties_1.png">
+1. 可见性对比
+2. 修饰对象
+3. internal与default的对比
+4. 构造器的可见性
+5. 属性的可见性
+6. 顶级声明的可见性
 
 
-<link rel="canonical" href="http://puppet16.github.io/2021/02/02/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%BA%94/">
-
-
-
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://puppet16.github.io/2021/02/02/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%BA%94/","path":"2021/02/02/kotlin学习系列五/","title":"Kotlin学习系列五：类型进阶"}</script>
-
-<script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Kotlin学习系列五：类型进阶 | Puppet</title>
-  
-
-
-
-
-
-
-
-
-  <noscript>
-    <link rel="stylesheet" href="/css/noscript.css">
-  </noscript>
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
-  <div class="headband"></div>
-
-  <main class="main">
-    <div class="column">
-      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
-  <div class="site-nav-toggle">
-    <div class="toggle" aria-label="Toggle navigation bar" role="button">
-    </div>
-  </div>
-
-  <div class="site-meta">
-
-    <a href="/" class="brand" rel="start">
-      <i class="logo-line"></i>
-      <p class="site-title">Puppet</p>
-      <i class="logo-line"></i>
-    </a>
-  </div>
-
-  <div class="site-nav-right">
-    <div class="toggle popup-trigger" aria-label="Search" role="button">
-    </div>
-  </div>
-</div>
-
-
-
-
-
-
-
-</header>
-        
-  
-  <aside class="sidebar">
-
-    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
-      <ul class="sidebar-nav">
-        <li class="sidebar-nav-toc">
-          Table of Contents
-        </li>
-        <li class="sidebar-nav-overview">
-          Overview
-        </li>
-      </ul>
-
-      <div class="sidebar-panel-container">
-        <!--noindex-->
-        <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">一、前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">二、 类的构造器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">2.1.</span> <span class="nav-text">1. 基本写法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">2.2.</span> <span class="nav-text">2. 类的继承</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">2.3.</span> <span class="nav-text">3. 副构造器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">2.4.</span> <span class="nav-text">4. 构造同名的工厂函数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text">三、 类与成员的可见性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">3.1.</span> <span class="nav-text">1. 可见性对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">3.2.</span> <span class="nav-text">2. 修饰对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">3.3.</span> <span class="nav-text">3. internal与default的对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">3.4.</span> <span class="nav-text">4. 构造器的可见性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">3.5.</span> <span class="nav-text">5. 属性的可见性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">3.6.</span> <span class="nav-text">6. 顶级声明的可见性</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">4.</span> <span class="nav-text">四、 类属性的延迟初始化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">4.1.</span> <span class="nav-text">1. 延迟初始化原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">4.2.</span> <span class="nav-text">2. 延迟初始化实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">4.2.1.</span> <span class="nav-text">1. 为需要延迟初始化的成员赋空值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">4.2.2.</span> <span class="nav-text">2. 使用关键字lateinit</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">4.2.3.</span> <span class="nav-text">3. 使用lazy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">4.2.4.</span> <span class="nav-text">4. 方案对比</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">5.</span> <span class="nav-text">五、 代理(委托) Delegate</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">5.1.</span> <span class="nav-text">1. 接口代理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">5.2.</span> <span class="nav-text">2. 属性代理(委托)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">5.2.1.</span> <span class="nav-text">1. 直接委托</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">5.2.2.</span> <span class="nav-text">2. lazy 懒加载委托</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">5.2.3.</span> <span class="nav-text">3. Delegates.observable 观察者委托</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">5.2.4.</span> <span class="nav-text">4. 自定义属性代理类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">5.2.5.</span> <span class="nav-text">5. 自定义属性代理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">5.2.6.</span> <span class="nav-text">6. 委托案例-1：属性可见性封装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">5.2.7.</span> <span class="nav-text">7. 委托案例-2：数据与 View 的绑定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">5.2.8.</span> <span class="nav-text">8. 委托案例-3：ViewModel 委托</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">6.</span> <span class="nav-text">六、 单例 object</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">6.1.</span> <span class="nav-text">1. 单例定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">6.2.</span> <span class="nav-text">2. 访问object的成员</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">6.3.</span> <span class="nav-text">3. 静态成员@JvmStatic</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">6.3.1.</span> <span class="nav-text">1. 在单例中使用@JvmStatic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">6.3.2.</span> <span class="nav-text">2. 在普通类中使用@JvmStatic</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">6.4.</span> <span class="nav-text">4. @JvmField</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">6.4.1.</span> <span class="nav-text">1. 在单例中使用@JvmField</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">6.4.2.</span> <span class="nav-text">2. 在普通类中使用@JvmField</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">6.5.</span> <span class="nav-text">5. object的构造器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">7.</span> <span class="nav-text">七、内部类inner class</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">7.1.</span> <span class="nav-text">1. 内部类定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">7.2.</span> <span class="nav-text">2. 内部类实例化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">7.3.</span> <span class="nav-text">3. 单例object的内部object</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">7.4.</span> <span class="nav-text">4. 匿名内部类</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">8.</span> <span class="nav-text">八、数据类data class</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">8.1.</span> <span class="nav-text">1. 数据类定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">8.2.</span> <span class="nav-text">2. component</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">8.3.</span> <span class="nav-text">3. 数据类解构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">8.4.</span> <span class="nav-text">4. JavaBean 与 data class 区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">8.5.</span> <span class="nav-text">5. data class 总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">9.</span> <span class="nav-text">九、枚举类enum class</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">9.1.</span> <span class="nav-text">1. 枚举类定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">9.2.</span> <span class="nav-text">2. 枚举类属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">9.3.</span> <span class="nav-text">3. 枚举类构造器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">9.4.</span> <span class="nav-text">4. 枚举类实现接口</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">9.4.1.</span> <span class="nav-text">1. 统一实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">9.4.2.</span> <span class="nav-text">2. 各自实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">9.5.</span> <span class="nav-text">5. 为枚举定义扩展</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">9.6.</span> <span class="nav-text">6. 枚举类条件分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">9.7.</span> <span class="nav-text">7. 枚举类比较大小</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">9.8.</span> <span class="nav-text">8. 枚举类区间</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">10.</span> <span class="nav-text">十、密封类sealed class</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">10.1.</span> <span class="nav-text">1. 密封类概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">10.2.</span> <span class="nav-text">2. 密封类定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">10.3.</span> <span class="nav-text">3. 密封类的子类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">10.4.</span> <span class="nav-text">4. 密封类子类分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">10.5.</span> <span class="nav-text">5. 密封类使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">10.6.</span> <span class="nav-text">6. 密封类和枚举类对比</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">11.</span> <span class="nav-text">十一、内联类inline class</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">11.1.</span> <span class="nav-text">1. 内联类概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">11.2.</span> <span class="nav-text">2. 内联类定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">11.3.</span> <span class="nav-text">3. 内联类方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">11.4.</span> <span class="nav-text">4. 内联类属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">11.5.</span> <span class="nav-text">5. 内联类继承关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">11.6.</span> <span class="nav-text">6. 内联类编译优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">11.7.</span> <span class="nav-text">7. 内联类使用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">11.7.1.</span> <span class="nav-text">1. 内联类官方例子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">11.7.2.</span> <span class="nav-text">2. 使用内联类模拟枚举</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">11.8.</span> <span class="nav-text">8. 内联类的限制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">11.9.</span> <span class="nav-text">9. 别名 (typealias) 与内联类 (inline class) 区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">12.</span> <span class="nav-text">十二、示例 - 数据类序列化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">12.1.</span> <span class="nav-text">1. 引入工具</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">12.1.1.</span> <span class="nav-text">1. Gson</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">12.1.2.</span> <span class="nav-text">2. Moshi</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">12.1.3.</span> <span class="nav-text">3. Kotlinx.serialization</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">12.2.</span> <span class="nav-text">2. 示例代码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">12.2.1.</span> <span class="nav-text">1. 简单序列化json</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">12.2.2.</span> <span class="nav-text">2. 带默认参数的json序列化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-number">12.2.2.1.</span> <span class="nav-text">1. Gson处理默认参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-number">12.2.2.2.</span> <span class="nav-text">2. Moshi处理默认参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-number">12.2.2.3.</span> <span class="nav-text">3. K.S处理默认参数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">12.2.3.</span> <span class="nav-text">3. 带init块或成员初始化的数据类序列化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-number">12.2.3.1.</span> <span class="nav-text">1. Gson序列化带init块的数据类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-number">12.2.3.2.</span> <span class="nav-text">2. Moshi序列化带init块的数据类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-number">12.2.3.3.</span> <span class="nav-text">3. K.S序列化带init块的数据类</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">12.3.</span> <span class="nav-text">3. 框架对比</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">13.</span> <span class="nav-text">十三、示例 -  递归整型列表</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">14.</span> <span class="nav-text">十四、参考文章</span></a></li></ol></div>
-        </div>
-        <!--/noindex-->
-
-        <div class="site-overview-wrap sidebar-panel">
-          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">Ltt</p>
-  <div class="site-description" itemprop="description"></div>
-</div>
-<div class="site-state-wrap animated">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-        <a href="/archives/">
-          <span class="site-state-item-count">27</span>
-          <span class="site-state-item-name">posts</span>
-        </a>
-      </div>
-      <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">34</span>
-        <span class="site-state-item-name">tags</span>
-      </div>
-  </nav>
-</div>
-
-        </div>
-      </div>
-    </div>
-
-    
-  </aside>
-
-
-    </div>
-
-    <div class="main-inner post posts-expand">
-
-
-  
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://puppet16.github.io/2021/02/02/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%BA%94/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Ltt">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Puppet">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="Kotlin学习系列五：类型进阶 | Puppet">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          Kotlin学习系列五：类型进阶
-        </h1>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-02-02 10:24:05" itemprop="dateCreated datePublished" datetime="2021-02-02T10:24:05+08:00">2021-02-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-03-16 19:24:27" itemprop="dateModified" datetime="2023-03-16T19:24:27+08:00">2023-03-16</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-        <div class="toc">
+四、 类属性的延"><meta name="keywords" content="技术博客,Hexo,Android,Linux,HTML,Java"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.webp"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/insight.css"><link rel="stylesheet" href="/css/search.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><script src="/js/jquery.js"></script><meta name="generator" content="Hexo 6.3.0"></head><body><div class="page-top animated fadeInDown"><div class="nav"><li> <a href="/">Home</a></li><li> <a href="/archives">Archives</a></li><li> <a href="/tags">Tags</a></li><li> <a href="/about">About</a></li><li> <a href="/links">Links</a></li></div><div class="information"><div class="nav_right_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li><li><a class="fa fa-search" onclick="openWindow();"></a></li></div><div class="avatar"><img src="/images/logo.webp"></div></div></div><div class="sidebar animated fadeInDown"><div class="sidebar-top"><div class="logo-title"><div class="title"><img src="/images/logo@2x.webp" style="width:220px;" alt="favicon"><h3 title=""><a href="/">Puppet</a></h3><div class="description"><p>心之所愿，无事不成。<br> Nothing is impossible to a willing heart.</p></div></div><ul class="social-links"><li><a target="_blank" rel="noopener" href="https://github.com/puppet16"><i class="fa fa-github"></i></a></li><li><a href="mailto:mailto:2542469086@qq.com"><i class="fa fa-envelope"></i></a></li><li><a target="_blank" rel="noopener" href="http://sighttp.qq.com/authd?IDKEY=http://sighttp.qq.com/authd?IDKEY="><i class="fa fa-qq"></i></a></li><li><a target="_blank" rel="noopener" href="https://zhihu.com/"><i class="fa fa-mortar-board"></i></a></li></ul></div></div><div class="footer"><div class="p"> <span> 全站CC-BY-SA-3.0 </span><i class="fa fa-star"></i><span> Ltt</span></div><div class="by_farbox"><span>Powered by </span><a href="https://hexo.io/zh-cn/" target="_blank">Hexo </a><span> & </span><span>Anatolo </span></div><div class="beian"></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>Kotlin学习系列五：类型进阶</a></h3></div><div class="post-content"><p><div class="toc">
 <!-- toc -->
 <ul>
 <li><a href="#yi-qian-yan">一、前言</a></li>
@@ -1564,94 +1376,16 @@
 <li><a href="https://www.kotlincn.net/docs/reference/compiler-plugins.html" target="_blank" rel="noopener">https://www.kotlincn.net/docs/reference/compiler-plugins.html</a></li>
 <li><a href="https://www.kotlincn.net/docs/reference/kapt.html" target="_blank" rel="noopener">https://www.kotlincn.net/docs/reference/kapt.html</a></li>
 </ol>
-
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/Kotlin/" rel="tag"># Kotlin</a>
-              <a href="/tags/%E7%B1%BB%E5%9E%8B/" rel="tag"># 类型</a>
-          </div>
-
-        
-
-          <div class="post-nav">
-            <div class="post-nav-item">
-                <a href="/2021/01/22/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%9B%9B/" rel="prev" title="Kotlin学习系列四：函数进阶">
-                  <i class="fa fa-chevron-left"></i> Kotlin学习系列四：函数进阶
-                </a>
-            </div>
-            <div class="post-nav-item">
-                <a href="/2021/03/08/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AD/" rel="next" title="kotlin学习系列六：泛型">
-                  kotlin学习系列六：泛型 <i class="fa fa-chevron-right"></i>
-                </a>
-            </div>
-          </div>
-    </footer>
-  </article>
-</div>
-
-
-
-
-
-
-</div>
-  </main>
-
-  <footer class="footer">
-    <div class="footer-inner">
-
-
-<div class="copyright">
-  &copy; 
-  <span itemprop="copyrightYear">2023</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Ltt</span>
-</div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
-  </div>
-
-    </div>
-  </footer>
-
-  
-  <div class="toggle sidebar-toggle" role="button">
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-  </div>
-  <div class="sidebar-dimmer"></div>
-  <div class="back-to-top" role="button" aria-label="Back to top">
-    <i class="fa fa-arrow-up fa-lg"></i>
-    <span>0%</span>
-  </div>
-
-<noscript>
-  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
-</noscript>
-
-
-  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
-
-  
-
-
-
-
-  
-
-
-
-
-
-</body>
-</html>
+</p><div class="tip">本文采用CC-BY-SA-3.0协议，转载请注明出处<br>Author: Ltt</div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2021-02-02</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Kotlin/" title="Kotlin">Kotlin </a><i class="fa fa-tag"></i><a class="tag" href="/tags/类型/" title="类型">类型 </a><span class="leancloud_visitors"></span><span>About 17203 words, 57 min 20 sec  read</span></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="" onclick="javascript:join_favorite()" ref="sidebar"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://puppet16.github.io/2021/02/02/kotlin学习系列五/,Puppet,Kotlin学习系列五：类型进阶,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2021/03/08/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AD/" title="kotlin学习系列六：泛型">Previous</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2021/01/22/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%9B%9B/" title="Kotlin学习系列四：函数进阶">Next</a></li></ul></div><script src="/js/visitors.js"></script><a id="comments"></a><div id="vcomments" style="margin:0 30px;"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//cdn.jsdelivr.net/gh/xcss/valine@latest/dist/Valine.min.js"></script><script>var valine = new Valine({
+  el:'#vcomments',
+  notify:false || false, 
+  verify:false|| false, 
+  app_id:'xpSQCFiXzEQnCBUKrP6EHIUF-gzGzoHsz',
+  app_key:'Ev5N03MrqLzS683mu92hf4RO',
+  placeholder:'行至水穷处，坐看云起时...',
+  path: window.location.pathname,
+  serverURLs: '',
+  visitor:true,
+  recordIP:true,
+  avatar:'mm'
+})</script></div></div></div></div><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/add-bookmark.js"></script><script>(function(window){var INSIGHT_CONFIG={TRANSLATION:{POSTS:"Posts",PAGES:"Pages",CATEGORIES:"Categories",TAGS:"Tags",UNTITLED:"(Untitled)",},CONTENT_URL:"/content.json",};window.INSIGHT_CONFIG=INSIGHT_CONFIG})(window);</script><script src="/js/insight.js" defer></script><div class="searchbox ins-search"><div class="searchbox-container ins-search-container"><div class="searchbox-input-wrapper"><input class="searchbox-input ins-search-input" type="text" placeholder="Search..."><span class="searchbox-close"><a class="fa fa-times-circle" onclick="closeWindow();"></a></span></div><div class="searchbox-result-wrapper ins-section-wrapper"><div class="ins-section-container"><p>Seraching...</p></div></div></div></div></body></html>
