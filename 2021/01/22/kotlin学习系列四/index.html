@@ -90,7 +90,13 @@
 </li>
 <li><a href="#3-map-cao-zuo">3. map 操作</a>
 <ul>
-<li><a href="#java-zhong-steam-he-kotlin-zhong-de-assequence-dui-bi"><strong><code>java</code>中<code>steam()</code>和<code>kotlin</code>中的<code>asSequence()</code>对比：</strong></a></li>
+<li><a href="#java-zhong-steam-he-kotlin-zhong-de-assequence-dui-bi"><strong><code>java</code>中<code>steam()</code>和<code>kotlin</code>中的<code>asSequence()</code>对比：</strong></a>
+<ul>
+<li><a href="#1-java-zhong-steam-hou-zai-bian-huan-ji-he">1. java 中 steam() 后再变换集合</a></li>
+<li><a href="#2-kotlin-zhong-assequence-hou-zai-bian-huan-ji-he">2. kotlin 中 asSequence() 后再变换集合</a></li>
+<li><a href="#3-kotlin-zhong-zhi-jie-dui-ji-he-jin-xing-bian-huan">3. <code>kotlin</code>中直接对集合进行变换</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#3-flatmap-bian-huan">3. flatMap 变换</a></li>
@@ -173,13 +179,13 @@
 <a href="/2021/03/23/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AB/" title="kotlin 学习系列八：注解">kotlin学习系列八：注解</a>
 </li>
 <li>
-<a href="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/" title="kotlin学习系列九：协程初解">kotlin学习系列九：协程初解</a>
+<a href="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/" title="kotlin学习系列九：协程一">kotlin学习系列九：协程初解</a>
 </li>
 <li>
-<a href="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%8D%81/" title="kotlin学习系列十：协程Job、Deferred、CoroutineContext">kotlin学习系列十：协程进阶</a>
+<a href="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%8D%81/" title="kotlin学习系列十：协程二">kotlin学习系列十：协程进阶</a>
 </li>
 <li>
-<a href="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%8D%81%E4%B8%80/" title="kotlin学习系列十一：协程应用">kotlin学习系列十一：协程应用</a>
+<a href="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%8D%81%E4%B8%80/" title="kotlin学习系列十一：协程三">kotlin学习系列十一：协程应用</a>
 </li>
 </ul>
 </li>
@@ -718,7 +724,7 @@
 <p><img src="/2021/01/22/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%9B%9B/kotlin_lookup_class5.png" alt></p>
 </li>
 </ol>
-</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2021-01-22</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Kotlin/" title="Kotlin">Kotlin </a><i class="fa fa-tag"></i><a class="tag" href="/tags/函数/" title="函数">函数 </a><span class="leancloud_visitors"></span><span>大约8319个字, 27分钟43秒读完</span></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="" onclick="javascript:join_favorite()" ref="sidebar"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://puppet16.github.io/2021/01/22/kotlin学习系列四/,Puppet,Kotlin学习系列四：函数进阶,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2021/02/02/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%BA%94/" title="Kotlin学习系列五：类型进阶">上一篇</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2021/01/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%89/" title="Kotlin学习系列三：表达式">下一篇</a></li></ul></div><script src="/js/visitors.js"></script><a id="comments"></a><div id="vcomments" style="margin:0 30px;"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//cdn.jsdelivr.net/gh/xcss/valine@latest/dist/Valine.min.js"></script><script>var valine = new Valine({
+</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2021-01-22</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Kotlin/" title="Kotlin">Kotlin </a><i class="fa fa-tag"></i><a class="tag" href="/tags/函数/" title="函数">函数 </a><span class="leancloud_visitors"></span><span>大约8348个字, 27分钟49秒读完</span></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="" onclick="javascript:join_favorite()" ref="sidebar"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://puppet16.github.io/2021/01/22/kotlin学习系列四/,Puppet,Kotlin学习系列四：函数进阶,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2021/02/02/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%BA%94/" title="Kotlin学习系列五：类型进阶">上一篇</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2021/01/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%89/" title="Kotlin学习系列三：表达式">下一篇</a></li></ul></div><script src="/js/visitors.js"></script><a id="comments"></a><div id="vcomments" style="margin:0 30px;"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//cdn.jsdelivr.net/gh/xcss/valine@latest/dist/Valine.min.js"></script><script>var valine = new Valine({
   el:'#vcomments',
   notify:false || false, 
   verify:false|| false, 

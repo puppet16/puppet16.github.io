@@ -109,7 +109,12 @@
 <li><a href="#2-ji-yu-fan-xing-shi-xian-model-shi-li-de-zhu-ru">2. 基于泛型实现<code>Model</code>实例的注入</a>
 <ul>
 <li><a href="#1-shi-yong-zhu-ru-de-di-fang">1. 使用注入的地方</a></li>
-<li><a href="#2-tong-guo-dai-li-fang-shi-shi-xian-zhu-ru">2. 通过代理方式实现注入</a></li>
+<li><a href="#2-tong-guo-dai-li-fang-shi-shi-xian-zhu-ru">2. 通过代理方式实现注入</a>
+<ul>
+<li><a href="#1-shi-xian-fang-shi-yi">1. 实现方式一</a></li>
+<li><a href="#shi-xian-fang-shi-er">实现方式二</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -149,13 +154,13 @@
 <a href="/2021/03/23/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AB/" title="kotlin 学习系列八：注解">kotlin学习系列八：注解</a>
 </li>
 <li>
-<a href="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/" title="kotlin学习系列九：协程初解">kotlin学习系列九：协程初解</a>
+<a href="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/" title="kotlin学习系列九：协程一">kotlin学习系列九：协程初解</a>
 </li>
 <li>
-<a href="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%8D%81/" title="kotlin学习系列十：协程Job、Deferred、CoroutineContext">kotlin学习系列十：协程进阶</a>
+<a href="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%8D%81/" title="kotlin学习系列十：协程二">kotlin学习系列十：协程进阶</a>
 </li>
 <li>
-<a href="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%8D%81%E4%B8%80/" title="kotlin学习系列十一：协程应用">kotlin学习系列十一：协程应用</a>
+<a href="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%8D%81%E4%B8%80/" title="kotlin学习系列十一：协程三">kotlin学习系列十一：协程应用</a>
 </li>
 </ul>
 </li>
@@ -607,7 +612,7 @@
 <li><a target="_blank" rel="noopener" href="https://blog.csdn.net/bluishglc/article/details/60739183">Scala之自身类型(Self Type)</a></li>
 <li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/49738603">教你如何攻克Kotlin中泛型型变的难点(下篇)</a></li>
 </ol>
-</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2021-03-08</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Kotlin/" title="Kotlin">Kotlin </a><i class="fa fa-tag"></i><a class="tag" href="/tags/泛型/" title="泛型">泛型 </a><span class="leancloud_visitors"></span><span>大约13167个字, 43分钟53秒读完</span></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="" onclick="javascript:join_favorite()" ref="sidebar"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://puppet16.github.io/2021/03/08/kotlin学习系列六/,Puppet,kotlin学习系列六：泛型,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2021/03/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%83/" title="kotlin学习系列七：反射">上一篇</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2021/02/02/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%BA%94/" title="Kotlin学习系列五：类型进阶">下一篇</a></li></ul></div><script src="/js/visitors.js"></script><a id="comments"></a><div id="vcomments" style="margin:0 30px;"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//cdn.jsdelivr.net/gh/xcss/valine@latest/dist/Valine.min.js"></script><script>var valine = new Valine({
+</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2021-03-08</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Kotlin/" title="Kotlin">Kotlin </a><i class="fa fa-tag"></i><a class="tag" href="/tags/泛型/" title="泛型">泛型 </a><span class="leancloud_visitors"></span><span>大约13177个字, 43分钟55秒读完</span></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="" onclick="javascript:join_favorite()" ref="sidebar"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://puppet16.github.io/2021/03/08/kotlin学习系列六/,Puppet,kotlin学习系列六：泛型,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2021/03/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%83/" title="kotlin学习系列七：反射">上一篇</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2021/02/02/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%BA%94/" title="Kotlin学习系列五：类型进阶">下一篇</a></li></ul></div><script src="/js/visitors.js"></script><a id="comments"></a><div id="vcomments" style="margin:0 30px;"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//cdn.jsdelivr.net/gh/xcss/valine@latest/dist/Valine.min.js"></script><script>var valine = new Valine({
   el:'#vcomments',
   notify:false || false, 
   verify:false|| false, 

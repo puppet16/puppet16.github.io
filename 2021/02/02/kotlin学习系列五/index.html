@@ -162,8 +162,20 @@
 <li><a href="#2-shi-li-dai-ma">2. 示例代码</a>
 <ul>
 <li><a href="#1-jian-dan-xu-lie-hua-json">1. 简单序列化json</a></li>
-<li><a href="#2-dai-mo-ren-can-shu-de-json-xu-lie-hua">2. 带默认参数的json序列化</a></li>
-<li><a href="#3-dai-init-kuai-huo-cheng-yuan-chu-shi-hua-de-shu-ju-lei-xu-lie-hua">3. 带init块或成员初始化的数据类序列化</a></li>
+<li><a href="#2-dai-mo-ren-can-shu-de-json-xu-lie-hua">2. 带默认参数的json序列化</a>
+<ul>
+<li><a href="#1-gson-chu-li-mo-ren-can-shu">1. Gson处理默认参数</a></li>
+<li><a href="#2-moshi-chu-li-mo-ren-can-shu">2. Moshi处理默认参数</a></li>
+<li><a href="#3-k-s-chu-li-mo-ren-can-shu">3. K.S处理默认参数</a></li>
+</ul>
+</li>
+<li><a href="#3-dai-init-kuai-huo-cheng-yuan-chu-shi-hua-de-shu-ju-lei-xu-lie-hua">3. 带init块或成员初始化的数据类序列化</a>
+<ul>
+<li><a href="#1-gson-xu-lie-hua-dai-init-kuai-de-shu-ju-lei">1. Gson序列化带init块的数据类</a></li>
+<li><a href="#2-moshi-xu-lie-hua-dai-init-kuai-de-shu-ju-lei">2. Moshi序列化带init块的数据类</a></li>
+<li><a href="#3-k-s-xu-lie-hua-dai-init-kuai-de-shu-ju-lei">3. K.S序列化带init块的数据类</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#3-kuang-jia-dui-bi">3. 框架对比</a></li>
@@ -205,13 +217,13 @@
 <a href="/2021/03/23/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AB/" title="kotlin 学习系列八：注解">kotlin学习系列八：注解</a>
 </li>
 <li>
-<a href="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/" title="kotlin学习系列九：协程初解">kotlin学习系列九：协程初解</a>
+<a href="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/" title="kotlin学习系列九：协程一">kotlin学习系列九：协程初解</a>
 </li>
 <li>
-<a href="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%8D%81/" title="kotlin学习系列十：协程Job、Deferred、CoroutineContext">kotlin学习系列十：协程进阶</a>
+<a href="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%8D%81/" title="kotlin学习系列十：协程二">kotlin学习系列十：协程进阶</a>
 </li>
 <li>
-<a href="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%8D%81%E4%B8%80/" title="kotlin学习系列十一：协程应用">kotlin学习系列十一：协程应用</a>
+<a href="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%8D%81%E4%B8%80/" title="kotlin学习系列十一：协程三">kotlin学习系列十一：协程应用</a>
 </li>
 </ul>
 </li>
@@ -1376,7 +1388,7 @@
 <li><a target="_blank" rel="noopener" href="https://www.kotlincn.net/docs/reference/compiler-plugins.html">https://www.kotlincn.net/docs/reference/compiler-plugins.html</a></li>
 <li><a target="_blank" rel="noopener" href="https://www.kotlincn.net/docs/reference/kapt.html">https://www.kotlincn.net/docs/reference/kapt.html</a></li>
 </ol>
-</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2021-02-02</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Kotlin/" title="Kotlin">Kotlin </a><i class="fa fa-tag"></i><a class="tag" href="/tags/类型/" title="类型">类型 </a><span class="leancloud_visitors"></span><span>大约17633个字, 58分钟46秒读完</span></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="" onclick="javascript:join_favorite()" ref="sidebar"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://puppet16.github.io/2021/02/02/kotlin学习系列五/,Puppet,Kotlin学习系列五：类型进阶,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2021/03/08/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AD/" title="kotlin学习系列六：泛型">上一篇</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2021/01/22/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%9B%9B/" title="Kotlin学习系列四：函数进阶">下一篇</a></li></ul></div><script src="/js/visitors.js"></script><a id="comments"></a><div id="vcomments" style="margin:0 30px;"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//cdn.jsdelivr.net/gh/xcss/valine@latest/dist/Valine.min.js"></script><script>var valine = new Valine({
+</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2021-02-02</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Kotlin/" title="Kotlin">Kotlin </a><i class="fa fa-tag"></i><a class="tag" href="/tags/类型/" title="类型">类型 </a><span class="leancloud_visitors"></span><span>大约17689个字, 58分钟57秒读完</span></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="" onclick="javascript:join_favorite()" ref="sidebar"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://puppet16.github.io/2021/02/02/kotlin学习系列五/,Puppet,Kotlin学习系列五：类型进阶,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2021/03/08/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AD/" title="kotlin学习系列六：泛型">上一篇</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2021/01/22/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%9B%9B/" title="Kotlin学习系列四：函数进阶">下一篇</a></li></ul></div><script src="/js/visitors.js"></script><a id="comments"></a><div id="vcomments" style="margin:0 30px;"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//cdn.jsdelivr.net/gh/xcss/valine@latest/dist/Valine.min.js"></script><script>var valine = new Valine({
   el:'#vcomments',
   notify:false || false, 
   verify:false|| false, 

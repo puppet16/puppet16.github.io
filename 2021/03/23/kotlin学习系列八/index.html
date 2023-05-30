@@ -90,8 +90,19 @@
 <li><a href="#5-shi-xian-zhu-jie-chu-li-qi-ban-model-ying-she">5. 实现注解处理器版 <code>Model</code> 映射</a>
 <ul>
 <li><a href="#1-chuang-jian-zhu-jie">1. 创建注解</a></li>
-<li><a href="#2-chuang-jian-zhu-jie-chu-li-qi">2. 创建注解处理器</a></li>
-<li><a href="#3-ce-shi-zhu-jie-chu-li-qi">3. 测试注解处理器</a></li>
+<li><a href="#2-chuang-jian-zhu-jie-chu-li-qi">2. 创建注解处理器</a>
+<ul>
+<li><a href="#1-tian-jia-yi-lai-bao">1. 添加依赖包</a></li>
+<li><a href="#2-chuang-jian-chu-li-qi">2. 创建处理器</a></li>
+<li><a href="#3-tian-jia-chu-li-qi-sheng-ming">3. 添加处理器声明</a></li>
+</ul>
+</li>
+<li><a href="#3-ce-shi-zhu-jie-chu-li-qi">3. 测试注解处理器</a>
+<ul>
+<li><a href="#1-build-gradle-kts-pei-zhi">1. <code>build.gradle.kts</code>配置</a></li>
+<li><a href="#2-chuang-jian-ce-shi-wen-jian">2. 创建测试文件</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -108,7 +119,12 @@
 <li><a href="#3-noarg-cha-jian">3. <code>NoArg</code>插件</a>
 <ul>
 <li><a href="#1-noarg-cha-jian-jie-shao">1. <code>NoArg</code>插件介绍</a></li>
-<li><a href="#2-noarg-cha-jian-yuan-ma">2. <code>NoArg</code>插件源码</a></li>
+<li><a href="#2-noarg-cha-jian-yuan-ma">2. <code>NoArg</code>插件源码</a>
+<ul>
+<li><a href="#1-noarg-gradle-guan-jian-yuan-ma">1. <code>NoArg-Gradle</code>关键源码</a></li>
+<li><a href="#2-noarg-intellij-guan-jian-yuan-ma">2. <code>NoArg-Intellij</code>关键源码</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#4-qi-ta-shi-yong-cha-jian">4. 其它实用插件</a></li>
@@ -150,13 +166,13 @@
 <a href="/2021/03/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%83/" title="kotlin学习系列七：反射">kotlin学习系列七：反射</a>
 </li>
 <li>
-<a href="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/" title="kotlin学习系列九：协程初解">kotlin学习系列九：协程初解</a>
+<a href="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/" title="kotlin学习系列九：协程一">kotlin学习系列九：协程初解</a>
 </li>
 <li>
-<a href="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%8D%81/" title="kotlin学习系列十：协程Job、Deferred、CoroutineContext">kotlin学习系列十：协程进阶</a>
+<a href="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%8D%81/" title="kotlin学习系列十：协程二">kotlin学习系列十：协程进阶</a>
 </li>
 <li>
-<a href="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%8D%81%E4%B8%80/" title="kotlin学习系列十一：协程应用">kotlin学习系列十一：协程应用</a>
+<a href="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%8D%81%E4%B8%80/" title="kotlin学习系列十一：协程三">kotlin学习系列十一：协程应用</a>
 </li>
 </ul>
 </li>
@@ -1019,7 +1035,7 @@
 <li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/899063e8452e">java-apt的实现之Element详解</a></li>
 <li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_26000415/article/details/82352764">javax.lang.model.element源码解析</a></li>
 </ol>
-</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2021-03-23</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Kotlin/" title="Kotlin">Kotlin </a><i class="fa fa-tag"></i><a class="tag" href="/tags/注解/" title="注解">注解 </a><span class="leancloud_visitors"></span><span>大约15847个字, 52分钟49秒读完</span></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="" onclick="javascript:join_favorite()" ref="sidebar"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://puppet16.github.io/2021/03/23/kotlin学习系列八/,Puppet,kotlin 学习系列八：注解,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/" title="kotlin学习系列九：协程一">上一篇</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2021/03/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%83/" title="kotlin学习系列七：反射">下一篇</a></li></ul></div><script src="/js/visitors.js"></script><a id="comments"></a><div id="vcomments" style="margin:0 30px;"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//cdn.jsdelivr.net/gh/xcss/valine@latest/dist/Valine.min.js"></script><script>var valine = new Valine({
+</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2021-03-23</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Kotlin/" title="Kotlin">Kotlin </a><i class="fa fa-tag"></i><a class="tag" href="/tags/注解/" title="注解">注解 </a><span class="leancloud_visitors"></span><span>大约15887个字, 52分钟57秒读完</span></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="" onclick="javascript:join_favorite()" ref="sidebar"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://puppet16.github.io/2021/03/23/kotlin学习系列八/,Puppet,kotlin 学习系列八：注解,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/" title="kotlin学习系列九：协程一">上一篇</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2021/03/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%83/" title="kotlin学习系列七：反射">下一篇</a></li></ul></div><script src="/js/visitors.js"></script><a id="comments"></a><div id="vcomments" style="margin:0 30px;"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//cdn.jsdelivr.net/gh/xcss/valine@latest/dist/Valine.min.js"></script><script>var valine = new Valine({
   el:'#vcomments',
   notify:false || false, 
   verify:false|| false, 
