@@ -23,33 +23,33 @@
 2"><meta name="keywords" content="技术博客,Hexo,Android,Linux,HTML,Java"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.webp"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/insight.css"><link rel="stylesheet" href="/css/search.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><script src="/js/jquery.js"></script><meta name="generator" content="Hexo 6.3.0"></head><body><div class="page-top animated fadeInDown"><div class="nav"><li> <a href="/">首页</a></li><li> <a href="/archives">归档</a></li><li> <a href="/tags">标签</a></li><li> <a href="/about">关于</a></li></div><div class="information"><div class="nav_right_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"></div></div></div><div class="sidebar animated fadeInDown"><div class="sidebar-top"><div class="logo-title"><div class="title"><img src="/images/logo@2x.webp" style="width:220px;" alt="favicon"><h3 title=""><a href="/">Puppet</a></h3><div class="description"><p>心之所愿，无事不成。<br> Nothing is impossible to a willing heart.</p></div></div><ul class="social-links"><li><a target="_blank" rel="noopener" href="https://github.com/puppet16"><i class="fa fa-github"></i></a></li><li><a href="mailto:mailto:2542469086@qq.com"><i class="fa fa-envelope"></i></a></li><li><a target="_blank" rel="noopener" href="http://sighttp.qq.com/authd?IDKEY=http://sighttp.qq.com/authd?IDKEY="><i class="fa fa-qq"></i></a></li><li><a target="_blank" rel="noopener" href="https://zhihu.com/"><i class="fa fa-mortar-board"></i></a></li></ul></div></div><div class="footer"><div class="p"> <span> 全站CC-BY-SA-3.0 </span><i class="fa fa-star"></i><span> Ltt</span></div><div class="by_farbox"><span>Powered by </span><a href="https://hexo.io/zh-cn/" target="_blank">Hexo </a><span> & </span><span>Anatolo </span></div><div class="beian"></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>kotlin 学习系列八：注解</a></h3></div><div class="post-content"><p><div class="toc">
 <!-- toc -->
 <ul>
-<li><a href="#yi-qian-yan">一、前言</a></li>
-<li><a href="#er-zhu-jie-de-ji-ben-gai-nian">二、注解的基本概念</a>
+<li><a href="#%E4%B8%80-%E5%89%8D%E8%A8%80">一、前言</a></li>
+<li><a href="#%E4%BA%8C-%E6%B3%A8%E8%A7%A3%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5">二、注解的基本概念</a>
 <ul>
-<li><a href="#1-zhu-jie-ding-yi">1. 注解定义</a></li>
-<li><a href="#2-xian-ding-biao-zhu-dui-xiang-target">2. 限定标注对象<code>@Target</code></a></li>
-<li><a href="#3-zhi-ding-zuo-yong-shi-ji">3. 指定作用时机</a></li>
-<li><a href="#4-tian-jia-can-shu">4. 添加参数</a></li>
-<li><a href="#5-zhu-jie-shi-yong">5. 注解使用</a></li>
-<li><a href="#6-ming-que-zhu-jie-de-biao-zhu-dui-xiang">6. 明确注解的标注对象</a></li>
+<li><a href="#1-%E6%B3%A8%E8%A7%A3%E5%AE%9A%E4%B9%89">1. 注解定义</a></li>
+<li><a href="#2-%E9%99%90%E5%AE%9A%E6%A0%87%E6%B3%A8%E5%AF%B9%E8%B1%A1target">2. 限定标注对象<code>@Target</code></a></li>
+<li><a href="#3-%E6%8C%87%E5%AE%9A%E4%BD%9C%E7%94%A8%E6%97%B6%E6%9C%BA">3. 指定作用时机</a></li>
+<li><a href="#4-%E6%B7%BB%E5%8A%A0%E5%8F%82%E6%95%B0">4. 添加参数</a></li>
+<li><a href="#5-%E6%B3%A8%E8%A7%A3%E4%BD%BF%E7%94%A8">5. 注解使用</a></li>
+<li><a href="#6-%E6%98%8E%E7%A1%AE%E6%B3%A8%E8%A7%A3%E7%9A%84%E6%A0%87%E6%B3%A8%E5%AF%B9%E8%B1%A1">6. 明确注解的标注对象</a></li>
 </ul>
 </li>
-<li><a href="#san-nei-zhi-zhu-jie">三、内置注解</a>
+<li><a href="#%E4%B8%89-%E5%86%85%E7%BD%AE%E6%B3%A8%E8%A7%A3">三、内置注解</a>
 <ul>
-<li><a href="#1-yuan-zhu-jie">1. 元注解</a>
+<li><a href="#1-%E5%85%83%E6%B3%A8%E8%A7%A3">1. 元注解</a>
 <ul>
 <li><a href="#1-target">1 <code>@Target</code></a></li>
 <li><a href="#2-retention">2. <code>@Retention</code></a></li>
 </ul>
 </li>
-<li><a href="#2-biao-zhun-ku-tong-yong-zhu-jie">2. 标准库通用注解</a>
+<li><a href="#2-%E6%A0%87%E5%87%86%E5%BA%93%E9%80%9A%E7%94%A8%E6%B3%A8%E8%A7%A3">2. 标准库通用注解</a>
 <ul>
 <li><a href="#1-metadata">1. <code>@Metadata</code></a></li>
 <li><a href="#2-unsafevariance">2. <code>@UnsafeVariance</code></a></li>
 <li><a href="#3-suppress">3. <code>@Suppress</code></a></li>
 </ul>
 </li>
-<li><a href="#3-yu-java-xu-ni-ji-jiao-hu-de-zhu-jie">3. 与<code>Java</code>虚拟机交互的注解</a>
+<li><a href="#3-%E4%B8%8Ejava%E8%99%9A%E6%8B%9F%E6%9C%BA%E4%BA%A4%E4%BA%92%E7%9A%84%E6%B3%A8%E8%A7%A3">3. 与<code>Java</code>虚拟机交互的注解</a>
 <ul>
 <li><a href="#1-jvmfield">1. <code>@JvmField</code></a></li>
 <li><a href="#2-jvmname">2. <code>@JvmName</code></a></li>
@@ -63,79 +63,79 @@
 </li>
 </ul>
 </li>
-<li><a href="#si-shi-li-fang-retrofit-fan-she-du-qu-zhu-jie-qing-qiu-wang-luo">四、 示例 – 仿 <code>Retrofit</code>反射读取注解请求网络</a>
+<li><a href="#%E5%9B%9B-%E7%A4%BA%E4%BE%8B-%E4%BB%BF-retrofit%E5%8F%8D%E5%B0%84%E8%AF%BB%E5%8F%96%E6%B3%A8%E8%A7%A3%E8%AF%B7%E6%B1%82%E7%BD%91%E7%BB%9C">四、 示例 – 仿 <code>Retrofit</code>反射读取注解请求网络</a>
 <ul>
-<li><a href="#1-chuang-jian-yi-xie-xu-yao-de-zhu-jie">1. 创建一些需要的注解</a></li>
-<li><a href="#2-chuang-jian-jie-xi-dan-li-retroapi">2. 创建解析单例<code>RetroApi</code></a></li>
-<li><a href="#3-ce-shi-fan-she-du-qu-zhu-jie-qing-qiu-wang-luo-gong-neng">3. 测试反射读取注解请求网络功能</a></li>
+<li><a href="#1-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%BA%9B%E9%9C%80%E8%A6%81%E7%9A%84%E6%B3%A8%E8%A7%A3">1. 创建一些需要的注解</a></li>
+<li><a href="#2-%E5%88%9B%E5%BB%BA%E8%A7%A3%E6%9E%90%E5%8D%95%E4%BE%8Bretroapi">2. 创建解析单例<code>RetroApi</code></a></li>
+<li><a href="#3-%E6%B5%8B%E8%AF%95%E5%8F%8D%E5%B0%84%E8%AF%BB%E5%8F%96%E6%B3%A8%E8%A7%A3%E8%AF%B7%E6%B1%82%E7%BD%91%E7%BB%9C%E5%8A%9F%E8%83%BD">3. 测试反射读取注解请求网络功能</a></li>
 </ul>
 </li>
-<li><a href="#wu-shi-li-zhu-jie-jia-chi-fan-she-ban-model-ying-she">五、示例 – 注解加持反射版<code>Model</code>映射</a>
+<li><a href="#%E4%BA%94-%E7%A4%BA%E4%BE%8B-%E6%B3%A8%E8%A7%A3%E5%8A%A0%E6%8C%81%E5%8F%8D%E5%B0%84%E7%89%88model%E6%98%A0%E5%B0%84">五、示例 – 注解加持反射版<code>Model</code>映射</a>
 <ul>
-<li><a href="#1-chuang-jian-zhi-chi-dan-ge-shu-xing-bie-ming-de-zhu-jie-fildname">1. 创建支持单个属性别名的注解<code>FildName</code></a></li>
-<li><a href="#2-chuang-jian-zhi-chi-shu-ju-lei-de-zhu-jie-mappingstrategy">2. 创建支持数据类的注解<code>MappingStrategy</code></a></li>
+<li><a href="#1-%E5%88%9B%E5%BB%BA%E6%94%AF%E6%8C%81%E5%8D%95%E4%B8%AA%E5%B1%9E%E6%80%A7%E5%88%AB%E5%90%8D%E7%9A%84%E6%B3%A8%E8%A7%A3fildname">1. 创建支持单个属性别名的注解<code>FildName</code></a></li>
+<li><a href="#2-%E5%88%9B%E5%BB%BA%E6%94%AF%E6%8C%81%E6%95%B0%E6%8D%AE%E7%B1%BB%E7%9A%84%E6%B3%A8%E8%A7%A3mappingstrategy">2. 创建支持数据类的注解<code>MappingStrategy</code></a></li>
 </ul>
 </li>
-<li><a href="#liu-shi-li-zhu-jie-chu-li-qi-ban-model-ying-she">六、 示例 – 注解处理器版 <code>Model</code> 映射</a>
+<li><a href="#%E5%85%AD-%E7%A4%BA%E4%BE%8B-%E6%B3%A8%E8%A7%A3%E5%A4%84%E7%90%86%E5%99%A8%E7%89%88-model-%E6%98%A0%E5%B0%84">六、 示例 – 注解处理器版 <code>Model</code> 映射</a>
 <ul>
-<li><a href="#1-jian-shu-java-bian-yi-guo-cheng">1. 简述<code>java</code>编译过程</a></li>
-<li><a href="#2-kai-yuan-ku-kotlinpoet">2. 开源库<code>KotlinPoet</code></a></li>
-<li><a href="#3-zhu-jie-chu-li-qi-abstractprocessor">3. 注解处理器<code>AbstractProcessor</code></a>
+<li><a href="#1-%E7%AE%80%E8%BF%B0java%E7%BC%96%E8%AF%91%E8%BF%87%E7%A8%8B">1. 简述<code>java</code>编译过程</a></li>
+<li><a href="#2-%E5%BC%80%E6%BA%90%E5%BA%93kotlinpoet">2. 开源库<code>KotlinPoet</code></a></li>
+<li><a href="#3-%E6%B3%A8%E8%A7%A3%E5%A4%84%E7%90%86%E5%99%A8abstractprocessor">3. 注解处理器<code>AbstractProcessor</code></a>
 <ul>
-<li><a href="#1-zi-ding-yi-zhu-jie-chu-li-qi">1. 自定义注解处理器</a></li>
-<li><a href="#2-sheng-ming-zi-ding-yi-zhu-jie-chu-li-qi">2. 声明自定义注解处理器</a></li>
+<li><a href="#1-%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B3%A8%E8%A7%A3%E5%A4%84%E7%90%86%E5%99%A8">1. 自定义注解处理器</a></li>
+<li><a href="#2-%E5%A3%B0%E6%98%8E%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B3%A8%E8%A7%A3%E5%A4%84%E7%90%86%E5%99%A8">2. 声明自定义注解处理器</a></li>
 </ul>
 </li>
-<li><a href="#4-zhu-jie-jie-xi-qi-element">4. 注解解析器<code>Element</code></a></li>
-<li><a href="#5-shi-xian-zhu-jie-chu-li-qi-ban-model-ying-she">5. 实现注解处理器版 <code>Model</code> 映射</a>
+<li><a href="#4-%E6%B3%A8%E8%A7%A3%E8%A7%A3%E6%9E%90%E5%99%A8element">4. 注解解析器<code>Element</code></a></li>
+<li><a href="#5-%E5%AE%9E%E7%8E%B0%E6%B3%A8%E8%A7%A3%E5%A4%84%E7%90%86%E5%99%A8%E7%89%88-model-%E6%98%A0%E5%B0%84">5. 实现注解处理器版 <code>Model</code> 映射</a>
 <ul>
-<li><a href="#1-chuang-jian-zhu-jie">1. 创建注解</a></li>
-<li><a href="#2-chuang-jian-zhu-jie-chu-li-qi">2. 创建注解处理器</a>
+<li><a href="#1-%E5%88%9B%E5%BB%BA%E6%B3%A8%E8%A7%A3">1. 创建注解</a></li>
+<li><a href="#2-%E5%88%9B%E5%BB%BA%E6%B3%A8%E8%A7%A3%E5%A4%84%E7%90%86%E5%99%A8">2. 创建注解处理器</a>
 <ul>
-<li><a href="#1-tian-jia-yi-lai-bao">1. 添加依赖包</a></li>
-<li><a href="#2-chuang-jian-chu-li-qi">2. 创建处理器</a></li>
-<li><a href="#3-tian-jia-chu-li-qi-sheng-ming">3. 添加处理器声明</a></li>
+<li><a href="#1-%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96%E5%8C%85">1. 添加依赖包</a></li>
+<li><a href="#2-%E5%88%9B%E5%BB%BA%E5%A4%84%E7%90%86%E5%99%A8">2. 创建处理器</a></li>
+<li><a href="#3-%E6%B7%BB%E5%8A%A0%E5%A4%84%E7%90%86%E5%99%A8%E5%A3%B0%E6%98%8E">3. 添加处理器声明</a></li>
 </ul>
 </li>
-<li><a href="#3-ce-shi-zhu-jie-chu-li-qi">3. 测试注解处理器</a>
+<li><a href="#3-%E6%B5%8B%E8%AF%95%E6%B3%A8%E8%A7%A3%E5%A4%84%E7%90%86%E5%99%A8">3. 测试注解处理器</a>
 <ul>
-<li><a href="#1-build-gradle-kts-pei-zhi">1. <code>build.gradle.kts</code>配置</a></li>
-<li><a href="#2-chuang-jian-ce-shi-wen-jian">2. 创建测试文件</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#qi-kotlin-bian-yi-qi-cha-jian">七、<code>Kotlin</code>编译器插件</a>
-<ul>
-<li><a href="#1-bian-yi-qi-cha-jian-gong-zuo-ji-zhi">1. 编译器插件工作机制</a></li>
-<li><a href="#2-allopen-cha-jian">2. <code>AllOpen</code>插件</a>
-<ul>
-<li><a href="#1-allopen-cha-jian-jie-shao">1. <code>AllOpen</code>插件介绍</a></li>
-<li><a href="#2-allopen-cha-jian-yuan-ma">2. <code>AllOpen</code>插件源码</a></li>
-</ul>
-</li>
-<li><a href="#3-noarg-cha-jian">3. <code>NoArg</code>插件</a>
-<ul>
-<li><a href="#1-noarg-cha-jian-jie-shao">1. <code>NoArg</code>插件介绍</a></li>
-<li><a href="#2-noarg-cha-jian-yuan-ma">2. <code>NoArg</code>插件源码</a>
-<ul>
-<li><a href="#1-noarg-gradle-guan-jian-yuan-ma">1. <code>NoArg-Gradle</code>关键源码</a></li>
-<li><a href="#2-noarg-intellij-guan-jian-yuan-ma">2. <code>NoArg-Intellij</code>关键源码</a></li>
+<li><a href="#1-buildgradlekts%E9%85%8D%E7%BD%AE">1. <code>build.gradle.kts</code>配置</a></li>
+<li><a href="#2-%E5%88%9B%E5%BB%BA%E6%B5%8B%E8%AF%95%E6%96%87%E4%BB%B6">2. 创建测试文件</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#4-qi-ta-shi-yong-cha-jian">4. 其它实用插件</a></li>
-<li><a href="#5-zong-jie">5. 总结</a></li>
 </ul>
 </li>
-<li><a href="#ba-can-kao-wen-zhang">八、 参考文章</a></li>
+<li><a href="#%E4%B8%83-kotlin%E7%BC%96%E8%AF%91%E5%99%A8%E6%8F%92%E4%BB%B6">七、<code>Kotlin</code>编译器插件</a>
+<ul>
+<li><a href="#1-%E7%BC%96%E8%AF%91%E5%99%A8%E6%8F%92%E4%BB%B6%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6">1. 编译器插件工作机制</a></li>
+<li><a href="#2-allopen%E6%8F%92%E4%BB%B6">2. <code>AllOpen</code>插件</a>
+<ul>
+<li><a href="#1-allopen%E6%8F%92%E4%BB%B6%E4%BB%8B%E7%BB%8D">1. <code>AllOpen</code>插件介绍</a></li>
+<li><a href="#2-allopen%E6%8F%92%E4%BB%B6%E6%BA%90%E7%A0%81">2. <code>AllOpen</code>插件源码</a></li>
+</ul>
+</li>
+<li><a href="#3-noarg%E6%8F%92%E4%BB%B6">3. <code>NoArg</code>插件</a>
+<ul>
+<li><a href="#1-noarg%E6%8F%92%E4%BB%B6%E4%BB%8B%E7%BB%8D">1. <code>NoArg</code>插件介绍</a></li>
+<li><a href="#2-noarg%E6%8F%92%E4%BB%B6%E6%BA%90%E7%A0%81">2. <code>NoArg</code>插件源码</a>
+<ul>
+<li><a href="#1-noarg-gradle%E5%85%B3%E9%94%AE%E6%BA%90%E7%A0%81">1. <code>NoArg-Gradle</code>关键源码</a></li>
+<li><a href="#2-noarg-intellij%E5%85%B3%E9%94%AE%E6%BA%90%E7%A0%81">2. <code>NoArg-Intellij</code>关键源码</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#4-%E5%85%B6%E5%AE%83%E5%AE%9E%E7%94%A8%E6%8F%92%E4%BB%B6">4. 其它实用插件</a></li>
+<li><a href="#5-%E6%80%BB%E7%BB%93">5. 总结</a></li>
+</ul>
+</li>
+<li><a href="#%E5%85%AB-%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0">八、 参考文章</a></li>
 </ul>
 <!-- tocstop -->
 </div>
-<h1><span id="yi-qian-yan">一、前言</span><a href="#yi-qian-yan" class="header-anchor">#</a></h1>
+<h1><a href="#一-前言" class="header-anchor">#</a><span id="一-前言">一、前言</span></h1>
 <ol>
 <li>本文主要讲述<strong>Kotlin 注解</strong></li>
 <li><em>本文是对<a target="_blank" rel="noopener" href="https://github.com/enbandari">Bennyhuo老师</a>讲解的<code>Kotlin</code>系列视频的总结笔记</em></li>
@@ -177,7 +177,7 @@
 </ul>
 </li>
 </ol>
-<h1><span id="er-zhu-jie-de-ji-ben-gai-nian">二、注解的基本概念</span><a href="#er-zhu-jie-de-ji-ben-gai-nian" class="header-anchor">#</a></h1>
+<h1><a href="#二-注解的基本概念" class="header-anchor">#</a><span id="二-注解的基本概念">二、注解的基本概念</span></h1>
 <p><strong>注解</strong> 实际上就是一种代码标签，它作用的对象是代码。实际上，注解几乎无处不在，比如说，经常能在<code>Kotlin</code>标准库当中看见“<code>@Deprecated</code>&quot; 这样的注解，它代表了被标注的代码“已废弃”。在 <code>Java</code> 中，最常见的是 “<code>@Override</code>&quot; 这个注解，它代表了重写。</p>
 <p><strong>注解</strong> 可以给特定的注解代码标注一些额外的信息。然而这些信息可以选择不同保留时期，比如源码期、编译期、运行期。然后在不同时期，可以通过某种方式获取标签的信息来处理实际的代码逻辑，这种方式常常就是我们所说的 <strong>反射</strong>。</p>
 <p>总结如下：</p>
@@ -186,7 +186,7 @@
 <li>注解可以对类、函数、函数参数、属性等做标注</li>
 <li>注解的信息可用于源码级、编译期、运行时</li>
 </ol>
-<h2><span id="1-zhu-jie-ding-yi">1. 注解定义</span><a href="#1-zhu-jie-ding-yi" class="header-anchor">#</a></h2>
+<h2><a href="#1-注解定义" class="header-anchor">#</a><span id="1-注解定义">1. 注解定义</span></h2>
 <p><code>Kotlin</code> 的源代码中，提供了很多内置的注解，比如<code>@Deprecated</code>、<code>@JvmStatic</code>、<code>@JvmOverloads</code>等等。除了<code>Kotlin</code>默认就有的注解以外，我们也可以定义自己的注解。</p>
 <p>定义注解类使用关键字 <strong><code>annotation</code></strong></p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">annotation</span> <span class="keyword">class</span> <span class="title class_">State</span></span><br></pre></td></tr></table></figure>
@@ -206,7 +206,7 @@
 <li><code>@MustBeDocumented</code>，指定被修饰的注解应该包含在生成的 <code>API</code> 文档中显示，这个注解一般用于 <code>SDK</code> 当中。</li>
 </ul>
 <p>这里，需要注意的是 <code>Target</code> 和 <code>Retention</code> 的取值</p>
-<h2><span id="2-xian-ding-biao-zhu-dui-xiang-target">2. 限定标注对象<code>@Target</code></span><a href="#2-xian-ding-biao-zhu-dui-xiang-target" class="header-anchor">#</a></h2>
+<h2><a href="#2-限定标注对象target" class="header-anchor">#</a><span id="2-限定标注对象target">2. 限定标注对象<code>@Target</code></span></h2>
 <p>定义注解类时，限定定义的注解的标注对象使用 <strong>注解<code>@Target</code></strong></p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">@Target(CLASS, FUNCTION, PROPERTY, ANNOTATION_CLASS, CONSTRUCTOR, PROPERTY_SETTER, PROPERTY_GETTER, TYPEALIAS)</span></span><br><span class="line"><span class="meta">@MustBeDocumented</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">annotation</span> <span class="keyword">class</span> <span class="title class_">Deprecated</span>(</span><br><span class="line">    <span class="keyword">val</span> message: String,</span><br><span class="line">    <span class="keyword">val</span> replaceWith: ReplaceWith = ReplaceWith(<span class="string">&quot;&quot;</span>),</span><br><span class="line">    <span class="keyword">val</span> level: DeprecationLevel = DeprecationLevel.WARNING</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 <p><strong>说明：</strong></p>
@@ -221,7 +221,7 @@
 </li>
 <li>注意<code>Target</code>和<code>AnnotationTarget</code>都是包<code>kotlin.annotation</code>下的类</li>
 </ol>
-<h2><span id="3-zhi-ding-zuo-yong-shi-ji">3. 指定作用时机</span><a href="#3-zhi-ding-zuo-yong-shi-ji" class="header-anchor">#</a></h2>
+<h2><a href="#3-指定作用时机" class="header-anchor">#</a><span id="3-指定作用时机">3. 指定作用时机</span></h2>
 <p>定义注解类时，指定作用时机使用 <strong>注解<code>@Retention</code></strong></p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Retention(AnnotationRetention.RUNTIME)</span></span><br><span class="line"><span class="meta">@Target(AnnotationTarget.CLASS)</span></span><br><span class="line"><span class="keyword">annotation</span> <span class="keyword">class</span> <span class="title class_">State</span></span><br></pre></td></tr></table></figure>
 <p><strong>说明：</strong></p>
@@ -235,7 +235,7 @@
 </ol>
 </li>
 </ol>
-<h2><span id="4-tian-jia-can-shu">4. 添加参数</span><a href="#4-tian-jia-can-shu" class="header-anchor">#</a></h2>
+<h2><a href="#4-添加参数" class="header-anchor">#</a><span id="4-添加参数">4. 添加参数</span></h2>
 <p>可以为注解类添加参数，与一般类添加主构造器参数一致</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Retention(AnnotationRetention.RUNTIME)</span></span><br><span class="line"><span class="meta">@Target(AnnotationTarget.CLASS)</span></span><br><span class="line"><span class="keyword">annotation</span> <span class="keyword">class</span> <span class="title class_">State</span>(<span class="keyword">val</span> status:String)</span><br></pre></td></tr></table></figure>
 <p><strong>说明：</strong></p>
@@ -250,20 +250,20 @@
 </ul>
 </li>
 </ol>
-<h2><span id="5-zhu-jie-shi-yong">5. 注解使用</span><a href="#5-zhu-jie-shi-yong" class="header-anchor">#</a></h2>
+<h2><a href="#5-注解使用" class="header-anchor">#</a><span id="5-注解使用">5. 注解使用</span></h2>
 <p>直接在对应的限定对象上添加注解即可</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@State(<span class="string">&quot;ready&quot;</span>)</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Start</span></span><br></pre></td></tr></table></figure>
-<h2><span id="6-ming-que-zhu-jie-de-biao-zhu-dui-xiang">6. 明确注解的标注对象</span><a href="#6-ming-que-zhu-jie-de-biao-zhu-dui-xiang" class="header-anchor">#</a></h2>
+<h2><a href="#6-明确注解的标注对象" class="header-anchor">#</a><span id="6-明确注解的标注对象">6. 明确注解的标注对象</span></h2>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@get:JvmName</span>(<span class="string">&quot;getStudentName&quot;</span>)</span><br><span class="line"><span class="keyword">var</span> name:String = <span class="string">&quot;Lee&quot;</span></span><br></pre></td></tr></table></figure>
 <p><strong>说明：</strong></p>
 <ol>
 <li>如上定义了一个属性<code>name</code>，而注解<code>@get:JvmName(&quot;getStudentName&quot;)</code>作用是将<code>name</code>的<code>getter</code>方法名字指定为<code>getStudentName</code></li>
 <li>变更名字的操作还可以指定为<code>receiver</code>、<code>get</code>、<code>file</code>等</li>
 </ol>
-<h1><span id="san-nei-zhi-zhu-jie">三、内置注解</span><a href="#san-nei-zhi-zhu-jie" class="header-anchor">#</a></h1>
-<h2><span id="1-yuan-zhu-jie">1. 元注解</span><a href="#1-yuan-zhu-jie" class="header-anchor">#</a></h2>
+<h1><a href="#三-内置注解" class="header-anchor">#</a><span id="三-内置注解">三、内置注解</span></h1>
+<h2><a href="#1-元注解" class="header-anchor">#</a><span id="1-元注解">1. 元注解</span></h2>
 <p><strong>元注解</strong> 是为其他注解进行说明的注解，当自定义一个新的注解类型时，其中可以使用元注解。元注解位于<code>kotlin.annotation.*</code>包下</p>
-<h3><span id="1-target">1 <code>@Target</code></span><a href="#1-target" class="header-anchor">#</a></h3>
+<h3><a href="#1-target" class="header-anchor">#</a><span id="1-target">1 <code>@Target</code></span></h3>
 <p><code>@Target</code> 用来 <strong>指定一个新注解的使用目标</strong>。<br>
 <code>@Target</code> 注解有一个 <code>allowedTargets</code> 属性，该属性用来设置注解的使用目标，<code>allowedTargets</code> 是 <code>kotlin.annotation.AnnotationTarget</code> 枚举类型。<br>
 <code>AnnotationTarget</code>描述 <code>Kotlin</code> 代码中可以被注解的元素类型，它有 <strong>15</strong> 个枚举常量。如下：</p>
@@ -338,7 +338,7 @@
 </tr>
 </tbody>
 </table>
-<h3><span id="2-retention">2. <code>@Retention</code></span><a href="#2-retention" class="header-anchor">#</a></h3>
+<h3><a href="#2-retention" class="header-anchor">#</a><span id="2-retention">2. <code>@Retention</code></span></h3>
 <p><code>@Retention</code> 用来指定一个新注解的有效范围。<br>
 <code>@Retention</code> 注解有一个 <code>value</code> 属性，该属性用来设置保留期，<code>value</code> 是 <code>kotlin.annotation.AnnotationRetention</code> 枚举类型。<br>
 <code>AnnotationRetention</code> 描述注解保留期，它有 <strong>3</strong> 个常量，如下：</p>
@@ -365,9 +365,9 @@
 </tr>
 </tbody>
 </table>
-<h2><span id="2-biao-zhun-ku-tong-yong-zhu-jie">2. 标准库通用注解</span><a href="#2-biao-zhun-ku-tong-yong-zhu-jie" class="header-anchor">#</a></h2>
+<h2><a href="#2-标准库通用注解" class="header-anchor">#</a><span id="2-标准库通用注解">2. 标准库通用注解</span></h2>
 <p><strong>标准库通用注解</strong> 位于<code>kotlin.*</code></p>
-<h3><span id="1-metadata">1. <code>@Metadata</code></span><a href="#1-metadata" class="header-anchor">#</a></h3>
+<h3><a href="#1-metadata" class="header-anchor">#</a><span id="1-metadata">1. <code>@Metadata</code></span></h3>
 <p><code>Java</code> 反射对于 <code>Kotlin</code> 的很多特性都无法访问和识别，而<code>Kotlin</code> 的反射可以访问和识别，就是因为注解<code>@Metadata</code></p>
 <p><code>@Metadata</code>会由<code>Kotlin</code>的编译器添加到由编译器生成的<code>class</code>文件中，它可以被编译器和反射读取。</p>
 <p><code>Kotlin</code> 反射过程中，注解的内容解析之后会实例化一个叫做 <code>KotlinClassHeader</code> 的类。下表为注解中的属性与类中成员对应关系：</p>
@@ -421,11 +421,11 @@
 <p><strong>说明：</strong></p>
 <p><strong>d1：</strong> 存储了自定义格式的元数据，官方声称针对不同的类型格式不定，甚至可以为空，研究发现目前采用 <strong>Protobuf</strong> 进行序列化存储。<strong>这些数据会被 <code>Kotlin</code> 反射读取，是反射的一个非常重要的数据来源</strong>。其中包含不限于 <strong>类型、函数、属性等的可见性、类型是否可空、函数是否为 suspend</strong>等等信息。</p>
 <p><strong>d2：</strong> 存储明文字符串字面量，主要存储 <code>Jvm</code> 签名等信息。之所以这样设计，主要是为了将这些字符串在运行时直接加载到虚拟机内存的常量池中予以复用，减少内存开销。</p>
-<h3><span id="2-unsafevariance">2. <code>@UnsafeVariance</code></span><a href="#2-unsafevariance" class="header-anchor">#</a></h3>
+<h3><a href="#2-unsafevariance" class="header-anchor">#</a><span id="2-unsafevariance">2. <code>@UnsafeVariance</code></span></h3>
 <p>该注解用于泛型破除型变限制</p>
 <p><strong>源码如下：</strong></p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target(TYPE)</span></span><br><span class="line"><span class="meta">@Retention(SOURCE)</span></span><br><span class="line"><span class="meta">@MustBeDocumented</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">annotation</span> <span class="keyword">class</span> <span class="title class_">UnsafeVariance</span></span><br></pre></td></tr></table></figure>
-<h3><span id="3-suppress">3. <code>@Suppress</code></span><a href="#3-suppress" class="header-anchor">#</a></h3>
+<h3><a href="#3-suppress" class="header-anchor">#</a><span id="3-suppress">3. <code>@Suppress</code></span></h3>
 <p>在 <code>Java</code> 中，使用注解 <code>@SuppressWarnings(&quot;xxx&quot;)</code> 消除一些编译时的警告<br>
 在 <code>Kotlin</code> 中，使用内置的 <code>@Suppress(&quot;xxx&quot;)</code> 消除一些编译时的警告</p>
 <p>使用时，将警告类型作为参数传入注解入参</p>
@@ -437,11 +437,11 @@
 </ol>
 <p><strong>注解的源码如下：</strong></p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target(CLASS, ANNOTATION_CLASS, PROPERTY, FIELD, LOCAL_VARIABLE, VALUE_PARAMETER,</span></span><br><span class="line"><span class="meta">        CONSTRUCTOR, FUNCTION, PROPERTY_GETTER, PROPERTY_SETTER, TYPE, EXPRESSION, FILE, TYPEALIAS)</span></span><br><span class="line"><span class="meta">@Retention(SOURCE)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">annotation</span> <span class="keyword">class</span> <span class="title class_">Suppress</span>(<span class="keyword">vararg</span> <span class="keyword">val</span> names: String)</span><br></pre></td></tr></table></figure>
-<h2><span id="3-yu-java-xu-ni-ji-jiao-hu-de-zhu-jie">3. 与<code>Java</code>虚拟机交互的注解</span><a href="#3-yu-java-xu-ni-ji-jiao-hu-de-zhu-jie" class="header-anchor">#</a></h2>
+<h2><a href="#3-与java虚拟机交互的注解" class="header-anchor">#</a><span id="3-与java虚拟机交互的注解">3. 与<code>Java</code>虚拟机交互的注解</span></h2>
 <p>用于与<code>Java</code>虚拟机交互的注解，位于<code>kotlin.jvm.*</code></p>
 <p>官网源码：<a target="_blank" rel="noopener" href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/">https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/</a><br>
 参考文章：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/eb091dd229f6">正确使用Kotlin注解，兼容Java代码</a></p>
-<h3><span id="1-jvmfield">1. <code>@JvmField</code></span><a href="#1-jvmfield" class="header-anchor">#</a></h3>
+<h3><a href="#1-jvmfield" class="header-anchor">#</a><span id="1-jvmfield">1. <code>@JvmField</code></span></h3>
 <p>使<code>Kotlin</code>编译器不再对该字段生成<code>getter/setter</code>，且其作用域为<code>public</code></p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span>(<span class="keyword">var</span> name:String, <span class="keyword">var</span> age:<span class="built_in">Int</span>)</span><br></pre></td></tr></table></figure>
 <p>反编译上述代码<code>class</code>文件后代码如下：</p>
@@ -454,7 +454,7 @@
 <ol>
 <li>可以看到添加注解<code>JvmField</code>后，<code>name</code>属性没有了<code>getter/setter</code>，但是作用域从<code>private</code>变为了<code>public</code></li>
 </ol>
-<h3><span id="2-jvmname">2. <code>@JvmName</code></span><a href="#2-jvmname" class="header-anchor">#</a></h3>
+<h3><a href="#2-jvmname" class="header-anchor">#</a><span id="2-jvmname">2. <code>@JvmName</code></span></h3>
 <p>告诉使<code>Kotlin</code>编译器生成的<code>Java</code>类或者方法的名称<br>
 <strong>注意：该注解只能用于函数、属性的 <code>getter/setter</code>、文件</strong></p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.ltt.projectcollection.kotlin.annotationlab</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> kotlinField: <span class="built_in">Int</span> = <span class="number">2</span></span><br><span class="line">    <span class="keyword">set</span>(value) &#123;</span><br><span class="line">        field = value</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">get</span>() &#123;</span><br><span class="line">        <span class="keyword">return</span> field</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">kotlinFunction</span><span class="params">()</span></span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    kotlinFunction()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -470,7 +470,7 @@
 <li><code>Kotlin</code>可以正常使用添加了注解<code>@JvmName</code>的对象，但是编译器会自动替换成<code>@JvmName</code>声明的名字</li>
 <li><code>Java</code>直接使用<code>@JvmName</code>修改后的名字，由此可以用来应对各种类名修改以后的兼容性问题</li>
 </ol>
-<h3><span id="3-jvmmultifileclass">3. <code>@JvmMultifileClass</code></span><a href="#3-jvmmultifileclass" class="header-anchor">#</a></h3>
+<h3><a href="#3-jvmmultifileclass" class="header-anchor">#</a><span id="3-jvmmultifileclass">3. <code>@JvmMultifileClass</code></span></h3>
 <p><code>Kotlin</code>编译器会将多个文件生成一个类，该文件具有在此文件中 <strong>声明的顶级函数和属性</strong> 作为其中的一部分，<code>JvmName</code>注解提供了相应的多文件的名称</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//MultiClassA.kt</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@file:JvmName</span>(<span class="string">&quot;Utils&quot;</span>)</span><br><span class="line"><span class="meta">@file:JvmMultifileClass</span></span><br><span class="line"><span class="keyword">package</span> cn.ltt.projectcollection.kotlin.annotationlab.multiclasstest</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">getDeviceId</span><span class="params">()</span></span> : String = <span class="string">&quot;deviceId&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">lateinit</span> <span class="keyword">var</span> id: String</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">val</span> DEVICE_ID_DEFAULT = <span class="string">&quot;123&quot;</span></span><br></pre></td></tr></table></figure>
 <p>反编译上述代码<code>class</code>文件后代码如下：</p>
@@ -485,7 +485,7 @@
 <li>通过反编译的代码可以看出，添加了<code>@JvmMultifileClass</code>注解，在生成自己的类文件同时还会生成一个由<code>@JvmName</code>提供名字的公共类，然后，两个添加了<code>@JvmMultifileClass</code>注解的<code>Kotlin</code>文件中的顶级函数、属性的都可以在公共类中调用。</li>
 <li>即将两个添加了<code>@JvmMultifileClass</code>注解的文件<code>MultiClassA.kt</code>、<code>MultiClassB.kt</code> 合并到了公共类<code>Utils</code>中，注解可以消除我们去手动创建一个公共类，向公共类中添加方法更加灵活和方便</li>
 </ol>
-<h3><span id="4-jvmoverloads">4. <code>@JvmOverloads</code></span><a href="#4-jvmoverloads" class="header-anchor">#</a></h3>
+<h3><a href="#4-jvmoverloads" class="header-anchor">#</a><span id="4-jvmoverloads">4. <code>@JvmOverloads</code></span></h3>
 <p>Kotlin编译器为添加该注解的函数生成替换默认参数值的重载</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">defaultParamFun</span><span class="params">(x:<span class="type">Int</span> = <span class="number">5</span>, y:<span class="type">String</span>, z: <span class="type">Long</span> = <span class="number">0</span>L)</span></span> &#123;</span><br><span class="line">    println(<span class="string">&quot;x:<span class="variable">$x</span>, y:<span class="variable">$y</span>, z: <span class="variable">$z</span>&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>反编译上述代码<code>class</code>文件后代码如下：</p>
@@ -500,7 +500,7 @@
 <li>该注解应该使用在带默认参数的函数上，由此可以让<code>Java</code>享受到<code>Koltin</code>的 <strong>默认参数</strong>的特性</li>
 <li>重载的规则是顺序重载，<strong>只有有默认值的参数会参与重载</strong></li>
 </ol>
-<h3><span id="5-jvmstatic">5. <code>@JvmStatic</code></span><a href="#5-jvmstatic" class="header-anchor">#</a></h3>
+<h3><a href="#5-jvmstatic" class="header-anchor">#</a><span id="5-jvmstatic">5. <code>@JvmStatic</code></span></h3>
 <p>对 <strong>函数</strong>使用该注解，<code>kotlin</code>编译器将生成另一个静态方法<br>
 对 <strong>属性</strong>使用该注解，<code>kotlin</code>编译器将生成其他的<code>setter</code>和<code>getter</code>方法<br>
 <strong>作用：</strong> 消除<code>Java</code>调用<code>Kotlin</code>的<code>companion object</code>对象时不能直接调用其静态方法和属性的问题<br>
@@ -522,7 +522,7 @@
 <ol>
 <li>可以看到添加了注解 <code>@JvmStatic</code>后的属性和函数都会在伴生对象所在的类中生成各自对应的静态方法，虽然<code>Companio</code>n这个静态内部类还在，但是<code>Java</code>现在就不需要再借助<code>Companion</code>类而可以直接调用对应的静态方法和属性</li>
 </ol>
-<h3><span id="6-synchronized">6. <code>@Synchronized</code></span><a href="#6-synchronized" class="header-anchor">#</a></h3>
+<h3><a href="#6-synchronized" class="header-anchor">#</a><span id="6-synchronized">6. <code>@Synchronized</code></span></h3>
 <p><code>Kotlin</code>语言不支持<code>synchronized</code>关键字，使用该注解生成同步方法</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Synchronized</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">start</span><span class="params">()</span></span> &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>反编译上述代码<code>class</code>文件后代码如下：</p>
@@ -532,7 +532,7 @@
 <li>注解<code>@Synchronized</code>只能添加在 <strong>函数、属性的<code>getter/setter</code>方法</strong></li>
 <li>设置了该注解的函数编译器生成<code>java</code>方法时会自动添加一个<code>synchronized</code>关键字</li>
 </ol>
-<h3><span id="7-volatile">7. <code>@Volatile</code></span><a href="#7-volatile" class="header-anchor">#</a></h3>
+<h3><a href="#7-volatile" class="header-anchor">#</a><span id="7-volatile">7. <code>@Volatile</code></span></h3>
 <p>该注解对应<code>Java</code>端的关键字<code>volatile</code>，功能与其一致</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Volatile</span></span><br><span class="line"><span class="keyword">lateinit</span> <span class="keyword">var</span> name: String</span><br></pre></td></tr></table></figure>
 <p>反编译上述代码<code>class</code>文件后代码如下：</p>
@@ -542,7 +542,7 @@
 <li>注解<code>@Volatile</code>只用于属性</li>
 <li>设置了该注解的属性编译器生成<code>java</code>变量时会自动添加一个<code>volatile</code>关键字</li>
 </ol>
-<h3><span id="8-throws">8. <code>@Throws</code></span><a href="#8-throws" class="header-anchor">#</a></h3>
+<h3><a href="#8-throws" class="header-anchor">#</a><span id="8-throws">8. <code>@Throws</code></span></h3>
 <p><strong><code>Checked exception</code>:</strong> 继承自 <code>Exception</code> 类。代码需要处理 <code>API</code> 抛出的 <code>checked exception</code>，要么用 <code>catch</code> 语句，要么直接用 <code>throws</code> 语句抛出去。可以理解为 <strong>编译时异常</strong>，不处理编译不能通过。</p>
 <p>由于<code>Kotlin</code>语言不支持<code>CE</code><em>(Checked Exception)</em>，为了兼容这种写法，<code>Kotlin</code>语言增加了<code>@Throws</code>注解，该注解的接收一个可变参数，参数类型是多个异常的<code>KClass</code>实例。<code>Kotlin</code>编译器通过读取注解参数，在生成的字节码中自动添加<code>CE</code>声明</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Throws(IllegalAccessException::class)</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">hello</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -552,8 +552,8 @@
 <ol>
 <li>注解只能用于 <strong>函数、属性的<code>getter/setter</code>、构造器</strong>上</li>
 </ol>
-<h1><span id="si-shi-li-fang-retrofit-fan-she-du-qu-zhu-jie-qing-qiu-wang-luo">四、 示例 – 仿 <code>Retrofit</code>反射读取注解请求网络</span><a href="#si-shi-li-fang-retrofit-fan-she-du-qu-zhu-jie-qing-qiu-wang-luo" class="header-anchor">#</a></h1>
-<h2><span id="1-chuang-jian-yi-xie-xu-yao-de-zhu-jie">1. 创建一些需要的注解</span><a href="#1-chuang-jian-yi-xie-xu-yao-de-zhu-jie" class="header-anchor">#</a></h2>
+<h1><a href="#四-示例-仿-retrofit反射读取注解请求网络" class="header-anchor">#</a><span id="四-示例-仿-retrofit反射读取注解请求网络">四、 示例 – 仿 <code>Retrofit</code>反射读取注解请求网络</span></h1>
+<h2><a href="#1-创建一些需要的注解" class="header-anchor">#</a><span id="1-创建一些需要的注解">1. 创建一些需要的注解</span></h2>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">data</span> <span class="keyword">class</span> <span class="title class_">User</span>(</span><br><span class="line">    <span class="keyword">var</span> login: String,</span><br><span class="line">    <span class="keyword">var</span> location: String,</span><br><span class="line">    <span class="keyword">var</span> avatar_url: String,</span><br><span class="line">    <span class="keyword">var</span> bio: String)</span><br><span class="line"></span><br><span class="line"><span class="meta">@Retention(AnnotationRetention.RUNTIME)</span></span><br><span class="line"><span class="meta">@Target(AnnotationTarget.CLASS)</span></span><br><span class="line"><span class="keyword">annotation</span> <span class="keyword">class</span> <span class="title class_">Api</span>(<span class="keyword">val</span> url: String)</span><br><span class="line"></span><br><span class="line"><span class="meta">@Retention(AnnotationRetention.RUNTIME)</span></span><br><span class="line"><span class="meta">@Target(AnnotationTarget.FUNCTION)</span></span><br><span class="line"><span class="keyword">annotation</span> <span class="keyword">class</span> <span class="title class_">Get</span>(<span class="keyword">val</span> url: String = <span class="string">&quot;&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@Api(<span class="string">&quot;https://api.github.com&quot;</span>)</span></span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">GitHubApi</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Api(<span class="string">&quot;users&quot;</span>)</span></span><br><span class="line">    <span class="keyword">interface</span> <span class="title class_">Users</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Get(<span class="string">&quot;&#123;name&#125;&quot;</span>)</span></span><br><span class="line">        <span class="function"><span class="keyword">fun</span> <span class="title">get</span><span class="params">(name: <span class="type">String</span>)</span></span>: User</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Get(<span class="string">&quot;&#123;name&#125;/followers&quot;</span>)</span></span><br><span class="line">        <span class="function"><span class="keyword">fun</span> <span class="title">followers</span><span class="params">(name: <span class="type">String</span>)</span></span>: List&lt;User&gt;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Api(<span class="string">&quot;repos&quot;</span>)</span></span><br><span class="line">    <span class="keyword">interface</span> <span class="title class_">Repos</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Get(<span class="string">&quot;&#123;owner&#125;/&#123;repo&#125;/forks&quot;</span>)</span></span><br><span class="line">        <span class="function"><span class="keyword">fun</span> <span class="title">forks</span><span class="params">(owner: <span class="type">String</span>, repo: <span class="type">String</span>)</span></span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>说明：</strong></p>
 <ol>
@@ -573,7 +573,7 @@
 </ol>
 </li>
 </ol>
-<h2><span id="2-chuang-jian-jie-xi-dan-li-retroapi">2. 创建解析单例<code>RetroApi</code></span><a href="#2-chuang-jian-jie-xi-dan-li-retroapi" class="header-anchor">#</a></h2>
+<h2><a href="#2-创建解析单例retroapi" class="header-anchor">#</a><span id="2-创建解析单例retroapi">2. 创建解析单例<code>RetroApi</code></span></h2>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">object</span> RetroApi &#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">val</span> PATH_PATTERN = <span class="string">&quot;&quot;&quot;(\&#123;(\w+)\&#125;)&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> okHttp = OkHttpClient()</span><br><span class="line">    <span class="keyword">val</span> gson = Gson()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> enclosing = &#123;</span><br><span class="line">        cls: Class&lt;*&gt; -&gt;</span><br><span class="line">        <span class="keyword">var</span> currentCls: Class&lt;*&gt;? = cls</span><br><span class="line">        sequence &#123;</span><br><span class="line">            <span class="keyword">while</span>(currentCls != <span class="literal">null</span>)&#123;</span><br><span class="line">                currentCls = currentCls?.also &#123; yield(it) &#125;?.enclosingClass</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;<span class="keyword">reified</span> T&gt;</span> <span class="title">create</span><span class="params">()</span></span>: T &#123;</span><br><span class="line">        <span class="keyword">val</span> functionMap = T::<span class="keyword">class</span>.functions.map&#123; it.name to it &#125;.toMap()</span><br><span class="line">        <span class="keyword">val</span> interfaces = enclosing(T::<span class="keyword">class</span>.java).takeWhile &#123; it.isInterface &#125;.toList()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">val</span> apiPath = interfaces.foldRight(StringBuilder()) &#123;</span><br><span class="line">            clazz, acc -&gt;</span><br><span class="line">            acc.append(clazz.getAnnotation(Api::<span class="keyword">class</span>.java)</span><br><span class="line">                ?.url?.takeIf &#123; it.isNotEmpty() &#125;</span><br><span class="line">                ?:clazz.name).append(<span class="string">&quot;/&quot;</span>)</span><br><span class="line">        &#125;.toString()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> Proxy.newProxyInstance(RetroApi.javaClass.classLoader, arrayOf(T::<span class="keyword">class</span>.java)) &#123;</span><br><span class="line">            proxy, method, args -&gt;</span><br><span class="line">            functionMap[method.name]?.takeIf &#123; it.isAbstract &#125;?.let &#123;</span><br><span class="line">                function -&gt;</span><br><span class="line">                <span class="keyword">val</span> parameterMap = function.valueParameters.map &#123;</span><br><span class="line">                    it.name to args[it.index - <span class="number">1</span>]</span><br><span class="line">                &#125;.toMap()</span><br><span class="line"></span><br><span class="line">                <span class="comment">//&#123;name&#125;</span></span><br><span class="line">                <span class="keyword">val</span> endPoint = function.findAnnotation&lt;Get&gt;()!!.url.takeIf &#123; it.isNotEmpty() &#125;?: function.name</span><br><span class="line">                <span class="keyword">val</span> compiledEndPoint = Regex(PATH_PATTERN).findAll(endPoint).map &#123;</span><br><span class="line">                    matchResult -&gt;</span><br><span class="line">                    matchResult.groups[<span class="number">1</span>]!!.range to parameterMap[matchResult.groups[<span class="number">2</span>]!!.value]</span><br><span class="line">                &#125;.fold(endPoint) &#123;</span><br><span class="line">                    acc, pair -&gt;</span><br><span class="line">                    acc.replaceRange(pair.first, pair.second.toString())</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">val</span> url = apiPath + compiledEndPoint</span><br><span class="line">                println(url)</span><br><span class="line"></span><br><span class="line">                okHttp.newCall(Request.Builder().url(url).<span class="keyword">get</span>().build()).execute().body?.charStream()?.use &#123;</span><br><span class="line">                    gson.fromJson(JsonReader(it), method.genericReturnType)</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">as</span> T</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>说明：</strong></p>
 <ol>
@@ -615,7 +615,7 @@
 </ol>
 </li>
 </ol>
-<h2><span id="3-ce-shi-fan-she-du-qu-zhu-jie-qing-qiu-wang-luo-gong-neng">3. 测试反射读取注解请求网络功能</span><a href="#3-ce-shi-fan-she-du-qu-zhu-jie-qing-qiu-wang-luo-gong-neng" class="header-anchor">#</a></h2>
+<h2><a href="#3-测试反射读取注解请求网络功能" class="header-anchor">#</a><span id="3-测试反射读取注解请求网络功能">3. 测试反射读取注解请求网络功能</span></h2>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> usersApi = RetroApi.create&lt;GitHubApi.Users&gt;()</span><br><span class="line">    println(usersApi.<span class="keyword">get</span>(<span class="string">&quot;puppet16&quot;</span>))</span><br><span class="line">    println(usersApi.followers(<span class="string">&quot;puppet16&quot;</span>).map &#123; it.login &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>打印结果如下：</strong></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">https:<span class="comment">//api.github.com/users/puppet16</span></span><br><span class="line">User(login=puppet16, location=Beijing, avatar_url=https:<span class="comment">//avatars.githubusercontent.com/u/14159272?v=4, bio=A day is a miniature of eternity. )</span></span><br><span class="line">https:<span class="comment">//api.github.com/users/puppet16/followers</span></span><br><span class="line">[xLily, lianxiaolei, Fakekid]</span><br></pre></td></tr></table></figure>
@@ -625,7 +625,7 @@
 <li>先获取了用户名为<code>puppet16</code>的<code>GitHub</code>账号信息</li>
 <li>又获取了用户名为<code>puppet16</code>的<code>GitHub</code>账号的关注列表</li>
 </ol>
-<h1><span id="wu-shi-li-zhu-jie-jia-chi-fan-she-ban-model-ying-she">五、示例 – 注解加持反射版<code>Model</code>映射</span><a href="#wu-shi-li-zhu-jie-jia-chi-fan-she-ban-model-ying-she" class="header-anchor">#</a></h1>
+<h1><a href="#五-示例-注解加持反射版model映射" class="header-anchor">#</a><span id="五-示例-注解加持反射版model映射">五、示例 – 注解加持反射版<code>Model</code>映射</span></h1>
 <p>在<a href="/2021/03/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%83/" title="kotlin学习系列七：反射">kotlin学习系列七：反射</a>中的 <strong>示例 – Model映射</strong>章节中，讲到可以通过<code>map</code>映射为任意类型数据类，但是当前实现有缺陷： <code>map</code>中的 <code>key</code>值必须与数据类的属性名字一致</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;<span class="keyword">reified</span> To : Any&gt;</span> Map<span class="type">&lt;String, Any?&gt;</span>.<span class="title">mapAs</span><span class="params">()</span></span>: To &#123;</span><br><span class="line">    <span class="keyword">return</span> To::<span class="keyword">class</span>.primaryConstructor!!.let &#123;</span><br><span class="line">        it.parameters.map &#123;</span><br><span class="line">            parameter -&gt;</span><br><span class="line">            parameter to (<span class="keyword">this</span>[parameter.name] ?: <span class="keyword">if</span>(parameter.type.isMarkedNullable) <span class="literal">null</span></span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">throw</span> IllegalArgumentException(<span class="string">&quot;<span class="subst">$&#123;parameter.name&#125;</span> is required but missing.&quot;</span>))</span><br><span class="line">        &#125;.toMap()</span><br><span class="line">                .let(it::callBy)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>说明：</strong></p>
@@ -633,7 +633,7 @@
 <li><code>map</code>中的<code>key</code>值与数据类中的构造方法中的属性名称对应，若<code>map</code>中没有构造方法中参数的值，则判断这个参数是否可以为<code>null</code>，若可以则返回空，否则直接抛异常</li>
 <li>判断<code>map</code>中有没有构造方法中参数的值的依据是：将构造方法中的参数名当作了<code>key</code>值去<code>map</code>中取<code>value</code>，如此就必须保证<code>map</code>中存储的<code>key</code>必须与数据类中的构造方法中的属性名称相同</li>
 </ol>
-<h2><span id="1-chuang-jian-zhi-chi-dan-ge-shu-xing-bie-ming-de-zhu-jie-fildname">1. 创建支持单个属性别名的注解<code>FildName</code></span><a href="#1-chuang-jian-zhi-chi-dan-ge-shu-xing-bie-ming-de-zhu-jie-fildname" class="header-anchor">#</a></h2>
+<h2><a href="#1-创建支持单个属性别名的注解fildname" class="header-anchor">#</a><span id="1-创建支持单个属性别名的注解fildname">1. 创建支持单个属性别名的注解<code>FildName</code></span></h2>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">@Target(AnnotationTarget.VALUE_PARAMETER)</span></span><br><span class="line"><span class="keyword">annotation</span> <span class="keyword">class</span> <span class="title class_">FieldName</span>(<span class="keyword">val</span> name: String)</span><br><span class="line"></span><br><span class="line"><span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;<span class="keyword">reified</span> To : Any&gt;</span> Map<span class="type">&lt;String, Any?&gt;</span>.<span class="title">mapAs</span><span class="params">()</span></span>: To &#123;</span><br><span class="line">    <span class="keyword">return</span> To::<span class="keyword">class</span>.primaryConstructor!!.let &#123;</span><br><span class="line">        it.parameters.map &#123; parameter -&gt;</span><br><span class="line">            parameter to (<span class="keyword">this</span>[parameter.name]</span><br><span class="line">                ?: (parameter.annotations.filterIsInstance&lt;FieldName&gt;().firstOrNull()?.name?.let(<span class="keyword">this</span>::<span class="keyword">get</span>))</span><br><span class="line">                ?: <span class="keyword">if</span> (parameter.type.isMarkedNullable) <span class="literal">null</span></span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">throw</span> IllegalArgumentException(<span class="string">&quot;<span class="subst">$&#123;parameter.name&#125;</span> is required but missing.&quot;</span>))</span><br><span class="line">        &#125;.toMap()</span><br><span class="line">            .let(it::callBy)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">data</span> <span class="keyword">class</span> <span class="title class_">Human</span>(<span class="keyword">val</span> name: String,</span><br><span class="line">                 <span class="meta">@FieldName(<span class="string">&quot;avatar_url&quot;</span>)</span></span><br><span class="line">                 <span class="keyword">val</span> avatarUrl: String,</span><br><span class="line">                 <span class="meta">@FieldName(<span class="string">&quot;detail_url&quot;</span>)</span></span><br><span class="line">                 <span class="keyword">val</span> detailUrl: String)</span><br><span class="line"></span><br><span class="line"><span class="keyword">data</span> <span class="keyword">class</span> <span class="title class_">Person</span>(</span><br><span class="line">        <span class="keyword">var</span> id: <span class="built_in">Int</span>,</span><br><span class="line">        <span class="keyword">var</span> name: String,</span><br><span class="line">        <span class="keyword">var</span> avatar_url: String,</span><br><span class="line">        <span class="keyword">var</span> smallUrl: String,</span><br><span class="line">        <span class="keyword">var</span> detail_url: String</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> personMap = mapOf(</span><br><span class="line">            <span class="string">&quot;id&quot;</span> to <span class="number">0</span>,</span><br><span class="line">            <span class="string">&quot;name&quot;</span> to <span class="string">&quot;Lee&quot;</span>,</span><br><span class="line">            <span class="string">&quot;avatar_url&quot;</span> to <span class="string">&quot;https://api.github.com/users/Lee&quot;</span>,</span><br><span class="line">            <span class="string">&quot;detail_url&quot;</span> to <span class="string">&quot;https://api.github.com/users/Lee&quot;</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> humanFromMap: Human = personMap.mapAs()</span><br><span class="line">    println(humanFromMap)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>打印结果：</strong></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Human(name=Lee, avatarUrl=https:<span class="comment">//api.github.com/users/Lee, detailUrl=https://api.github.com/users/Lee)</span></span><br></pre></td></tr></table></figure>
@@ -644,7 +644,7 @@
 <li>通过<code>parameter.annotations</code>获取标注在该参数上的所有注解，再通过<code>filterIsInstance&lt;FieldName&gt;()</code>筛选中注解<code>FieldName</code>的实例组成的列表，再通过<code>firstOrNull()</code>方法，取第一个实例，再取其<code>name</code>属性值，再将<code>name</code>中的属性值作为<code>key</code>值，去<code>map</code>中取<code>value</code></li>
 <li>该注解只能给单个的属性修改<code>name</code>，若有多个不匹配的属性则要添加多个比较繁琐</li>
 </ol>
-<h2><span id="2-chuang-jian-zhi-chi-shu-ju-lei-de-zhu-jie-mappingstrategy">2. 创建支持数据类的注解<code>MappingStrategy</code></span><a href="#2-chuang-jian-zhi-chi-shu-ju-lei-de-zhu-jie-mappingstrategy" class="header-anchor">#</a></h2>
+<h2><a href="#2-创建支持数据类的注解mappingstrategy" class="header-anchor">#</a><span id="2-创建支持数据类的注解mappingstrategy">2. 创建支持数据类的注解<code>MappingStrategy</code></span></h2>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">@Target(AnnotationTarget.CLASS)</span></span><br><span class="line"><span class="keyword">annotation</span> <span class="keyword">class</span> <span class="title class_">MappingStrategy</span>(<span class="keyword">val</span> klass: KClass&lt;<span class="keyword">out</span> NameStrategy&gt;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">NameStrategy</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">mapTo</span><span class="params">(name: <span class="type">String</span>)</span></span>: String</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">object</span> UnderScoreToCamel : NameStrategy &#123;</span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">mapTo</span><span class="params">(name: <span class="type">String</span>)</span></span>: String &#123;</span><br><span class="line">        <span class="keyword">return</span> name.toCharArray().fold(StringBuilder()) &#123; acc, c -&gt;</span><br><span class="line">            <span class="keyword">when</span> (acc.lastOrNull()) &#123;</span><br><span class="line">                <span class="string">&#x27;_&#x27;</span> -&gt; acc[acc.lastIndex] = c.toUpperCase()</span><br><span class="line">                <span class="keyword">else</span> -&gt; acc.append(c)</span><br><span class="line">            &#125;</span><br><span class="line">            acc</span><br><span class="line">        &#125;.toString()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">object</span> CamelToUnderScore : NameStrategy &#123;</span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">mapTo</span><span class="params">(name: <span class="type">String</span>)</span></span>: String &#123;</span><br><span class="line">        <span class="keyword">return</span> name.toCharArray().fold(StringBuilder()) &#123; acc, c -&gt;</span><br><span class="line">            <span class="keyword">when</span> &#123;</span><br><span class="line">                c.isUpperCase() -&gt; acc.append(<span class="string">&#x27;_&#x27;</span>).append(c.toLowerCase())</span><br><span class="line">                <span class="keyword">else</span> -&gt; acc.append(c)</span><br><span class="line">            &#125;</span><br><span class="line">            acc</span><br><span class="line">        &#125;.toString()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;<span class="keyword">reified</span> To : Any&gt;</span> Map<span class="type">&lt;String, Any?&gt;</span>.<span class="title">mapAs</span><span class="params">()</span></span>: To &#123;</span><br><span class="line">    <span class="keyword">return</span> To::<span class="keyword">class</span>.primaryConstructor!!.let &#123;</span><br><span class="line">        it.parameters.map &#123; parameter -&gt;</span><br><span class="line">            parameter to (<span class="keyword">this</span>[parameter.name]</span><br><span class="line">                    ?: (parameter.annotations.filterIsInstance&lt;FieldName&gt;().firstOrNull()?.name?.let(<span class="keyword">this</span>::<span class="keyword">get</span>))</span><br><span class="line">                    ?: To::<span class="keyword">class</span>.findAnnotation&lt;MappingStrategy&gt;()?.klass?.objectInstance?.mapTo(parameter.name!!)?.let(<span class="keyword">this</span>::<span class="keyword">get</span>)</span><br><span class="line">                    ?: <span class="keyword">if</span> (parameter.type.isMarkedNullable) <span class="literal">null</span></span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">throw</span> IllegalArgumentException(<span class="string">&quot;<span class="subst">$&#123;parameter.name&#125;</span> is required but missing.&quot;</span>))</span><br><span class="line">        &#125;.toMap()</span><br><span class="line">                .let(it::callBy)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@MappingStrategy(CamelToUnderScore::class)</span></span><br><span class="line"><span class="keyword">data</span> <span class="keyword">class</span> <span class="title class_">Human</span>(<span class="keyword">val</span> name: String,</span><br><span class="line">                 <span class="keyword">val</span> avatarUrl: String,</span><br><span class="line">                 <span class="keyword">val</span> detailUrl: String)</span><br><span class="line"></span><br><span class="line"><span class="keyword">data</span> <span class="keyword">class</span> <span class="title class_">Person</span>(</span><br><span class="line">        <span class="keyword">var</span> id: <span class="built_in">Int</span>,</span><br><span class="line">        <span class="keyword">var</span> name: String,</span><br><span class="line">        <span class="keyword">var</span> avatar_url: String,</span><br><span class="line">        <span class="keyword">var</span> smallUrl: String,</span><br><span class="line">        <span class="keyword">var</span> detail_url: String</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> personMap = mapOf(</span><br><span class="line">            <span class="string">&quot;id&quot;</span> to <span class="number">0</span>,</span><br><span class="line">            <span class="string">&quot;name&quot;</span> to <span class="string">&quot;Lee&quot;</span>,</span><br><span class="line">            <span class="string">&quot;avatar_url&quot;</span> to <span class="string">&quot;https://api.github.com/users/Lee&quot;</span>,</span><br><span class="line">            <span class="string">&quot;detail_url&quot;</span> to <span class="string">&quot;https://api.github.com/users/Lee&quot;</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> humanFromMap: Human = personMap.mapAs()</span><br><span class="line">    println(humanFromMap)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>打印结果：</strong></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Human(name=Lee, avatarUrl=https:<span class="comment">//api.github.com/users/Lee, detailUrl=https://api.github.com/users/Lee)</span></span><br></pre></td></tr></table></figure>
@@ -666,12 +666,12 @@
 </li>
 <li>给<code>Human</code>数据类添加注解<code>MappingStrategy</code>，可以看到该数据类中属性名字是驼峰类型的，而<code>Person</code>中对应的属性名字是下划线类型的，要将<code>person</code>转为<code>human</code>，则策略类使用<code>CamelToUnderScore</code>，否则无法在<code>map</code>中找到应对的属性名</li>
 </ol>
-<h1><span id="liu-shi-li-zhu-jie-chu-li-qi-ban-model-ying-she">六、 示例 – 注解处理器版 <code>Model</code> 映射</span><a href="#liu-shi-li-zhu-jie-chu-li-qi-ban-model-ying-she" class="header-anchor">#</a></h1>
+<h1><a href="#六-示例-注解处理器版-model-映射" class="header-anchor">#</a><span id="六-示例-注解处理器版-model-映射">六、 示例 – 注解处理器版 <code>Model</code> 映射</span></h1>
 <blockquote>
 <p>上一章节中讲述通过注解处理不同命名风格的属性的映射，但是每次都要调用自己写的<code>mapAs()</code>。<br>
 本章主要讲如何通过注解处理器自动生成<code>modul</code>自己的<code>mapAs()</code>方法</p>
 </blockquote>
-<h2><span id="1-jian-shu-java-bian-yi-guo-cheng">1. 简述<code>java</code>编译过程</span><a href="#1-jian-shu-java-bian-yi-guo-cheng" class="header-anchor">#</a></h2>
+<h2><a href="#1-简述java编译过程" class="header-anchor">#</a><span id="1-简述java编译过程">1. 简述<code>java</code>编译过程</span></h2>
 <p><strong>编译流程：</strong></p>
 <ol>
 <li>词法分析：词法分析的输入是 <strong>源程序</strong> <em>(即<code>java</code>文件)</em>，输出是识别出的 <strong>记号流</strong>。目的是识别单词。单词至少分以下几类：关键字 <em>(保留字)</em>、标识符、字面量、特殊符号</li>
@@ -697,7 +697,7 @@
 <li>生成<code>Java</code>代码： <strong>JavaPoet</strong></li>
 <li>生成<code>Kotlin</code>代码： <strong>KotlinPoet</strong></li>
 </ul>
-<h2><span id="2-kai-yuan-ku-kotlinpoet">2. 开源库<code>KotlinPoet</code></span><a href="#2-kai-yuan-ku-kotlinpoet" class="header-anchor">#</a></h2>
+<h2><a href="#2-开源库kotlinpoet" class="header-anchor">#</a><span id="2-开源库kotlinpoet">2. 开源库<code>KotlinPoet</code></span></h2>
 <p><strong>官网：</strong> <a target="_blank" rel="noopener" href="https://square.github.io/kotlinpoet/">KotlinPoet</a></p>
 <p><code>KotlinPoet</code>是一个用于生成扩展名为<code>.kt</code>的<code>kotlin</code>文件的开源库，他支持<code>Kotlin</code>和<code>Java</code>语句</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> personClass = ClassName(<span class="string">&quot;cn.lee.kotlin&quot;</span>, <span class="string">&quot;Person&quot;</span>)</span><br><span class="line"><span class="keyword">val</span> file = FileSpec.builder(<span class="string">&quot;cn.lee.kotlin&quot;</span>, <span class="string">&quot;KotlinPoetTest&quot;</span>)</span><br><span class="line">         .addType(TypeSpec.classBuilder(<span class="string">&quot;Person&quot;</span>)</span><br><span class="line">               .primaryConstructor(FunSpec.constructorBuilder()</span><br><span class="line">                        .addParameter(<span class="string">&quot;name&quot;</span>, String::<span class="keyword">class</span>)</span><br><span class="line">                        .build())</span><br><span class="line">               .addProperty(PropertySpec.builder(<span class="string">&quot;name&quot;</span>, String::<span class="keyword">class</span>)</span><br><span class="line">                        .initializer(<span class="string">&quot;name&quot;</span>)</span><br><span class="line">                        .build())</span><br><span class="line">               .addProperty(PropertySpec.builder(<span class="string">&quot;age&quot;</span>, <span class="built_in">Int</span>::<span class="keyword">class</span>)</span><br><span class="line">                        .initializer(<span class="string">&quot;18&quot;</span>)</span><br><span class="line">                        .build())</span><br><span class="line">               .addFunction(FunSpec.builder(<span class="string">&quot;printContent&quot;</span>)</span><br><span class="line">                        .addStatement(<span class="string">&quot;println(%P)&quot;</span>, <span class="string">&quot;name= \$name&quot;</span>)</span><br><span class="line">                        .build())</span><br><span class="line">               .build())</span><br><span class="line">         .addFunction(FunSpec.builder(<span class="string">&quot;main&quot;</span>)</span><br><span class="line">               .addParameter(<span class="string">&quot;args&quot;</span>, String::<span class="keyword">class</span>, KModifier.VARARG)</span><br><span class="line">               .addStatement(<span class="string">&quot;%T(args[0]).printContent()&quot;</span>, personClass)</span><br><span class="line">               .build())</span><br><span class="line">         .build()</span><br><span class="line">file.writeTo(System.<span class="keyword">out</span>)</span><br></pre></td></tr></table></figure>
@@ -770,8 +770,8 @@
 <li>上述代码生成的文件<code>KotlinPoetTest.kt</code>地址：module名称/build/generated/source/kapt/debug/cn/lee/kotlin<br>
 <img src="/2021/03/23/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AB/apt_file_generate.png" alt></li>
 </ol>
-<h2><span id="3-zhu-jie-chu-li-qi-abstractprocessor">3. 注解处理器<code>AbstractProcessor</code></span><a href="#3-zhu-jie-chu-li-qi-abstractprocessor" class="header-anchor">#</a></h2>
-<h3><span id="1-zi-ding-yi-zhu-jie-chu-li-qi">1. 自定义注解处理器</span><a href="#1-zi-ding-yi-zhu-jie-chu-li-qi" class="header-anchor">#</a></h3>
+<h2><a href="#3-注解处理器abstractprocessor" class="header-anchor">#</a><span id="3-注解处理器abstractprocessor">3. 注解处理器<code>AbstractProcessor</code></span></h2>
+<h3><a href="#1-自定义注解处理器" class="header-anchor">#</a><span id="1-自定义注解处理器">1. 自定义注解处理器</span></h3>
 <p><code>AbstractProcessor</code>类是<code>Java API</code>提供的扫描源码并解析注解的框架，可以继承该抽象类来实现自己的解析注解逻辑。</p>
 <p>自定义注解处理器所在的类是帮助我们生成需要的代码源文件的，我们最后需要的是他生成的文件，最后打包进apk也是他生成的文件，自定义注解处理器所在的类本身是不需要打包的，所以自定义注解处理类不需要放到打包的工程<code>Module</code>中。</p>
 <p>继承<code>AbstractProcessor</code>的类需要实现以下四个方法：</p>
@@ -791,14 +791,14 @@
 <li><code>getSupportedAnnotationTypes()</code>方法<br>
 指定这个注解处理器是注册给哪个注解的。<strong>注意:</strong> 它的返回值是一个字符串的集合，包含本处理器想要处理的注解类型的合法全称，即注解器所支持的注解类型集合，如果没有这样的类型，则返回一个空集合，<strong>该方法可以使用注解 <code>@SupportedAnnotationTypes</code>替代</strong></li>
 </ul>
-<h3><span id="2-sheng-ming-zi-ding-yi-zhu-jie-chu-li-qi">2. 声明自定义注解处理器</span><a href="#2-sheng-ming-zi-ding-yi-zhu-jie-chu-li-qi" class="header-anchor">#</a></h3>
+<h3><a href="#2-声明自定义注解处理器" class="header-anchor">#</a><span id="2-声明自定义注解处理器">2. 声明自定义注解处理器</span></h3>
 <ol>
 <li>需要在处理器所在<code>module</code>的<code>main</code>目录中创建<code>resources</code>文件夹</li>
 <li>再在<code>resources</code>文件夹下创建<code>META-INF.services</code>的文件夹</li>
 <li>最后在<code>META-INF.services</code>的文件夹中创建文件<code>javax.annotation.processing.Processor</code></li>
 <li>之后在该文件中写入自定义注解处理器的类全称</li>
 </ol>
-<h2><span id="4-zhu-jie-jie-xi-qi-element">4. 注解解析器<code>Element</code></span><a href="#4-zhu-jie-jie-xi-qi-element" class="header-anchor">#</a></h2>
+<h2><a href="#4-注解解析器element" class="header-anchor">#</a><span id="4-注解解析器element">4. 注解解析器<code>Element</code></span></h2>
 <p><code>element</code>指的是一系列与之相关的接口集合，它们位于<code>javax.lang.model.element</code>包下面。<br>
 <code>element</code>是代表程序的一个元素，这个元素可以是：<strong>包、类/接口、属性变量、方法/方法形参、泛型参数</strong>。<br>
 <code>element</code>是<code>java-apt</code> <em>(编译时注解处理器)</em> 技术的基础<br>
@@ -814,8 +814,8 @@
 <li><code>TypeParameterElement</code> 代表泛型类,接口,方法或者构造器的形式类型参数。一个类型参数就对应的一个类型变量</li>
 <li><code>ExecutableElement</code> 代表一个类或者接口的方法,构造器,或者初始块(静态或者实例的),包括注解类型。是<code>Parameterizable</code>的子接口</li>
 </ol>
-<h2><span id="5-shi-xian-zhu-jie-chu-li-qi-ban-model-ying-she">5. 实现注解处理器版 <code>Model</code> 映射</span><a href="#5-shi-xian-zhu-jie-chu-li-qi-ban-model-ying-she" class="header-anchor">#</a></h2>
-<h3><span id="1-chuang-jian-zhu-jie">1. 创建注解</span><a href="#1-chuang-jian-zhu-jie" class="header-anchor">#</a></h3>
+<h2><a href="#5-实现注解处理器版-model-映射" class="header-anchor">#</a><span id="5-实现注解处理器版-model-映射">5. 实现注解处理器版 <code>Model</code> 映射</span></h2>
+<h3><a href="#1-创建注解" class="header-anchor">#</a><span id="1-创建注解">1. 创建注解</span></h3>
 <p>在自己创建的目录<code>apt</code>下创建 名为<code>annotations</code>的<code>module</code></p>
 <p><img src="/2021/03/23/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AB/apt_annotations.png" alt></p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//build.gradle</span></span><br><span class="line"></span><br><span class="line">plugins &#123;</span><br><span class="line">    id <span class="string">&#x27;java&#x27;</span></span><br><span class="line">    id <span class="string">&#x27;org.jetbrains.kotlin.jvm&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">group <span class="string">&#x27;cn.lee.kotlin&#x27;</span></span><br><span class="line">version <span class="string">&#x27;1.0-SNAPSHOT&#x27;</span></span><br><span class="line"></span><br><span class="line">sourceCompatibility = <span class="number">1.8</span></span><br><span class="line"></span><br><span class="line">repositories &#123;</span><br><span class="line">    mavenCentral()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dependencies &#123;</span><br><span class="line">    implementation <span class="string">&quot;org.jetbrains.kotlin:kotlin-stdlib-jdk8&quot;</span></span><br><span class="line">    testImplementation group: <span class="string">&#x27;junit&#x27;</span>, name: <span class="string">&#x27;junit&#x27;</span>, version: <span class="string">&#x27;4.12&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">compileKotlin &#123;</span><br><span class="line">    kotlinOptions.jvmTarget = <span class="string">&quot;1.8&quot;</span></span><br><span class="line">&#125;</span><br><span class="line">compileTestKotlin &#123;</span><br><span class="line">    kotlinOptions.jvmTarget = <span class="string">&quot;1.8&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -825,8 +825,8 @@
 <li>在该<code>module</code>中创建了一个注解类<code>ModelMap</code></li>
 <li>该注解类作用于类上，且注解信息记录在编译之后的二进制文件中，但对反射不可见</li>
 </ol>
-<h3><span id="2-chuang-jian-zhu-jie-chu-li-qi">2. 创建注解处理器</span><a href="#2-chuang-jian-zhu-jie-chu-li-qi" class="header-anchor">#</a></h3>
-<h4><span id="1-tian-jia-yi-lai-bao">1. 添加依赖包</span><a href="#1-tian-jia-yi-lai-bao" class="header-anchor">#</a></h4>
+<h3><a href="#2-创建注解处理器" class="header-anchor">#</a><span id="2-创建注解处理器">2. 创建注解处理器</span></h3>
+<h4><a href="#1-添加依赖包" class="header-anchor">#</a><span id="1-添加依赖包">1. 添加依赖包</span></h4>
 <p>在自己创建的目录<code>apt</code>下创建 名为<code>compiler</code>的<code>module</code></p>
 <p><img src="/2021/03/23/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AB/apt_compiler.png" alt></p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//build.gradle</span></span><br><span class="line"></span><br><span class="line">plugins &#123;</span><br><span class="line">    id <span class="string">&#x27;java&#x27;</span></span><br><span class="line">    id <span class="string">&#x27;org.jetbrains.kotlin.jvm&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">group <span class="string">&#x27;cn.lee.kotlin&#x27;</span></span><br><span class="line">version <span class="string">&#x27;1.0-SNAPSHOT&#x27;</span></span><br><span class="line"></span><br><span class="line">sourceCompatibility = <span class="number">1.8</span></span><br><span class="line"></span><br><span class="line">repositories &#123;</span><br><span class="line">    jcenter()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dependencies &#123;</span><br><span class="line">    implementation <span class="string">&quot;org.jetbrains.kotlin:kotlin-stdlib-jdk8&quot;</span></span><br><span class="line"></span><br><span class="line">    implementation <span class="string">&quot;com.squareup:kotlinpoet:1.4.3&quot;</span></span><br><span class="line">    implementation <span class="string">&quot;com.bennyhuo.aptutils:aptutils:1.7.1&quot;</span></span><br><span class="line">    implementation project(<span class="string">&quot;:apt:annotations&quot;</span>)</span><br><span class="line"></span><br><span class="line">    testImplementation group: <span class="string">&#x27;junit&#x27;</span>, name: <span class="string">&#x27;junit&#x27;</span>, version: <span class="string">&#x27;4.12&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">compileKotlin &#123;</span><br><span class="line">    kotlinOptions.jvmTarget = <span class="string">&quot;1.8&quot;</span></span><br><span class="line">&#125;</span><br><span class="line">compileTestKotlin &#123;</span><br><span class="line">    kotlinOptions.jvmTarget = <span class="string">&quot;1.8&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -836,7 +836,7 @@
 <li>注解处理器要根据注解生成对应<code>Kotlin</code>代码，所以添加<code>KotlinPoet</code>的依赖</li>
 <li>为了方便的编写注解处理器，添加了<code>bennyhuo</code>老师的开源库<code>aptutils</code></li>
 </ol>
-<h4><span id="2-chuang-jian-chu-li-qi">2. 创建处理器</span><a href="#2-chuang-jian-chu-li-qi" class="header-anchor">#</a></h4>
+<h4><a href="#2-创建处理器" class="header-anchor">#</a><span id="2-创建处理器">2. 创建处理器</span></h4>
 <p>创建文件名为<code>ModelMapProcessor</code>的注解处理器</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//ModelMapProcessor.kt</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@SupportedAnnotationTypes(<span class="string">&quot;cn.lee.kotlin.annotations.apt.ModelMap&quot;</span>)</span></span><br><span class="line"><span class="meta">@SupportedSourceVersion(SourceVersion.RELEASE_8)</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ModelMapProcessor</span>: <span class="type">AbstractProcessor</span>() &#123;</span><br><span class="line">   <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">init</span><span class="params">(processingEnv: <span class="type">ProcessingEnvironment</span>)</span></span> &#123;</span><br><span class="line">      <span class="keyword">super</span>.<span class="keyword">init</span>(processingEnv)</span><br><span class="line">      AptContext.<span class="keyword">init</span>(processingEnv)</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">process</span><span class="params">(annotations: <span class="type">MutableSet</span>&lt;<span class="type">out</span> <span class="type">TypeElement</span>&gt;, roundEnv: <span class="type">RoundEnvironment</span>)</span></span>: <span class="built_in">Boolean</span> &#123;</span><br><span class="line">      roundEnv.getElementsAnnotatedWith(ModelMap::<span class="keyword">class</span>.java)</span><br><span class="line">         .forEach &#123;</span><br><span class="line">               element -&gt;</span><br><span class="line">               element.enclosedElements.filterIsInstance&lt;ExecutableElement&gt;()</span><br><span class="line">                  .firstOrNull &#123; it.simpleName() == <span class="string">&quot;&lt;init&gt;&quot;</span> &#125;</span><br><span class="line">                  ?.let &#123;</span><br><span class="line">                     <span class="keyword">val</span> typeElement = element <span class="keyword">as</span> TypeElement</span><br><span class="line">                     FileSpec.builder(typeElement.packageName(), <span class="string">&quot;<span class="subst">$&#123;typeElement.simpleName()&#125;</span>\$\$ModelMap&quot;</span>)</span><br><span class="line">                           .addFunction(</span><br><span class="line">                              FunSpec.builder(<span class="string">&quot;toMap&quot;</span>)</span><br><span class="line">                                 .receiver(typeElement.asType().asKotlinTypeName())</span><br><span class="line">                                 .addStatement(<span class="string">&quot;return mapOf(<span class="subst">$&#123;it.parameters.joinToString &#123;<span class="string">&quot;&quot;&quot;&quot;<span class="subst">$&#123;it.simpleName()&#125;</span>&quot; to <span class="subst">$&#123;it.simpleName()&#125;</span>&quot;&quot;&quot;</span> &#125;</span>&#125;)&quot;</span>)</span><br><span class="line">                                 .build()</span><br><span class="line">                           )</span><br><span class="line">                           .addFunction(</span><br><span class="line">                              FunSpec.builder(<span class="string">&quot;to<span class="subst">$&#123;typeElement.simpleName()&#125;</span>&quot;</span>)</span><br><span class="line">                                 .addTypeVariable(TypeVariableName(<span class="string">&quot;V&quot;</span>))</span><br><span class="line">                                 .receiver(MAP.parameterizedBy(STRING, TypeVariableName(<span class="string">&quot;V&quot;</span>)))</span><br><span class="line">                                 .addStatement(</span><br><span class="line">                                       <span class="string">&quot;return <span class="subst">$&#123;typeElement.simpleName()&#125;</span>(<span class="subst">$&#123;it.parameters.joinToString&#123; <span class="string">&quot;&quot;&quot;this[&quot;<span class="subst">$&#123;it.simpleName()&#125;</span>&quot;] as %T &quot;&quot;&quot;</span> &#125;</span> &#125;)&quot;</span>,</span><br><span class="line">                                       *it.parameters.map &#123; it.asType().asKotlinTypeName() &#125;.toTypedArray()</span><br><span class="line">                                 )</span><br><span class="line">                                 .build()</span><br><span class="line">                           )</span><br><span class="line">                           .build().writeToFile()</span><br><span class="line">                  &#125;</span><br><span class="line">         &#125;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>说明：</strong></p>
@@ -875,16 +875,16 @@
 </ol>
 </li>
 </ol>
-<h4><span id="3-tian-jia-chu-li-qi-sheng-ming">3. 添加处理器声明</span><a href="#3-tian-jia-chu-li-qi-sheng-ming" class="header-anchor">#</a></h4>
+<h4><a href="#3-添加处理器声明" class="header-anchor">#</a><span id="3-添加处理器声明">3. 添加处理器声明</span></h4>
 <p>创建好注解处理器后，我们需要告诉编译器在编译的时候使用哪个注解处理器<br>
 <img src="/2021/03/23/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AB/apt_compiler.png" alt></p>
 <p><strong>说明：</strong></p>
 <ol>
 <li>在<code>javax.annotation.processing.Processor</code>文件中写入自定义注解处理器的类全称：<code>cn.lee.kotlin.annotations.apt.compiler.ModelMapProcessor</code></li>
 </ol>
-<h3><span id="3-ce-shi-zhu-jie-chu-li-qi">3. 测试注解处理器</span><a href="#3-ce-shi-zhu-jie-chu-li-qi" class="header-anchor">#</a></h3>
+<h3><a href="#3-测试注解处理器" class="header-anchor">#</a><span id="3-测试注解处理器">3. 测试注解处理器</span></h3>
 <p>在主<code>Module</code>下进行测试</p>
-<h4><span id="1-build-gradle-kts-pei-zhi">1. <code>build.gradle.kts</code>配置</span><a href="#1-build-gradle-kts-pei-zhi" class="header-anchor">#</a></h4>
+<h4><a href="#1-buildgradlekts配置" class="header-anchor">#</a><span id="1-buildgradlekts配置">1. <code>build.gradle.kts</code>配置</span></h4>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//build.gradle.kts</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.jetbrains.kotlin.config.KotlinCompilerVersion</span><br><span class="line">plugins &#123;</span><br><span class="line">    id (<span class="string">&quot;com.android.application&quot;</span>)</span><br><span class="line">    id (<span class="string">&quot;kotlin-android&quot;</span>)</span><br><span class="line">    kotlin(<span class="string">&quot;kapt&quot;</span>)</span><br><span class="line">    kotlin(<span class="string">&quot;jvm&quot;</span>) version <span class="string">&quot;1.4.30&quot;</span></span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">android &#123;</span><br><span class="line">    ...</span><br><span class="line">    compileOptions &#123;</span><br><span class="line">        sourceCompatibility = JavaVersion.VERSION_1_8</span><br><span class="line">        targetCompatibility = JavaVersion.VERSION_1_8</span><br><span class="line">        kotlinOptions.jvmTarget  = <span class="string">&quot;1.8&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">dependencies &#123;</span><br><span class="line">    ...</span><br><span class="line">    implementation(kotlin(<span class="string">&quot;stdlib-jdk8&quot;</span>, KotlinCompilerVersion.VERSION))</span><br><span class="line">    <span class="comment">//注解处理器示例</span></span><br><span class="line">    kapt (project(<span class="string">&quot;:apt:compiler&quot;</span>))</span><br><span class="line">    implementation (project(<span class="string">&quot;:apt:annotations&quot;</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>说明：</strong></p>
 <ol>
@@ -894,7 +894,7 @@
 <li>自定义注解处理器所在的<code>module</code>并不是运行时的依赖，我们只需要处理器生成的文件</li>
 <li><a target="_blank" rel="noopener" href="http://www.kotlincn.net/docs/reference/kapt.html">Kapt官网</a></li>
 </ol>
-<h4><span id="2-chuang-jian-ce-shi-wen-jian">2. 创建测试文件</span><a href="#2-chuang-jian-ce-shi-wen-jian" class="header-anchor">#</a></h4>
+<h4><a href="#2-创建测试文件" class="header-anchor">#</a><span id="2-创建测试文件">2. 创建测试文件</span></h4>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> cn.lee.kotlin.annotations.apt.ModelMap</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> person = Person(<span class="string">&quot;Lee&quot;</span>, <span class="number">18</span>)</span><br><span class="line">    <span class="keyword">val</span> human = person.toMap().toHuman()</span><br><span class="line">    println(person)</span><br><span class="line">    println(human)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//fun Human.toMap() = mapOf(&quot;name&quot; to name, &quot;age&quot; to age)</span></span><br><span class="line"><span class="comment">//fun &lt;V&gt; Map&lt;String, V&gt;.toHuman() = Human(this[&quot;name&quot;] as String , this[&quot;age&quot;] as Int)</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@ModelMap</span></span><br><span class="line"><span class="keyword">data</span> <span class="keyword">class</span> <span class="title class_">Human</span>(<span class="keyword">val</span> name: String, <span class="keyword">val</span> age :<span class="built_in">Int</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@ModelMap</span></span><br><span class="line"><span class="keyword">data</span> <span class="keyword">class</span> <span class="title class_">Person</span>(<span class="keyword">val</span> name: String, <span class="keyword">val</span> age :<span class="built_in">Int</span>, <span class="keyword">val</span> address:String = <span class="string">&quot;china&quot;</span>)</span><br></pre></td></tr></table></figure>
 <p>打印结果如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Person(name=Lee, age=<span class="number">18</span>, address=china)</span><br><span class="line">Human(name=Lee, age=<span class="number">18</span>)</span><br></pre></td></tr></table></figure>
@@ -913,18 +913,18 @@
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Person$$ModelMap.kt</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">package</span> cn.ltt.projectcollection.kotlin.annotationlab</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> kotlin.<span class="built_in">Int</span></span><br><span class="line"><span class="keyword">import</span> kotlin.String</span><br><span class="line"><span class="keyword">import</span> kotlin.collections.Map</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> Person.<span class="title">toMap</span><span class="params">()</span></span> = mapOf(<span class="string">&quot;name&quot;</span> to name, <span class="string">&quot;age&quot;</span> to age, <span class="string">&quot;address&quot;</span> to address)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="type">&lt;V&gt;</span> Map<span class="type">&lt;String, V&gt;</span>.<span class="title">toPerson</span><span class="params">()</span></span> = Person(<span class="keyword">this</span>[<span class="string">&quot;name&quot;</span>] <span class="keyword">as</span> String , <span class="keyword">this</span>[<span class="string">&quot;age&quot;</span>] <span class="keyword">as</span> <span class="built_in">Int</span> ,</span><br><span class="line">   <span class="keyword">this</span>[<span class="string">&quot;address&quot;</span>] <span class="keyword">as</span> String )</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<h1><span id="qi-kotlin-bian-yi-qi-cha-jian">七、<code>Kotlin</code>编译器插件</span><a href="#qi-kotlin-bian-yi-qi-cha-jian" class="header-anchor">#</a></h1>
-<h2><span id="1-bian-yi-qi-cha-jian-gong-zuo-ji-zhi">1. 编译器插件工作机制</span><a href="#1-bian-yi-qi-cha-jian-gong-zuo-ji-zhi" class="header-anchor">#</a></h2>
+<h1><a href="#七-kotlin编译器插件" class="header-anchor">#</a><span id="七-kotlin编译器插件">七、<code>Kotlin</code>编译器插件</span></h1>
+<h2><a href="#1-编译器插件工作机制" class="header-anchor">#</a><span id="1-编译器插件工作机制">1. 编译器插件工作机制</span></h2>
 <p>在<code>Java</code>平台上，会将<code>*.kt</code>文件编译为<code>*.class</code>文件，而编译器插件会基于编译好的<code>*.class</code>文件直接修改该文件的内容，注解处理器会创建新的类参与编译。</p>
-<h2><span id="2-allopen-cha-jian">2. <code>AllOpen</code>插件</span><a href="#2-allopen-cha-jian" class="header-anchor">#</a></h2>
-<h3><span id="1-allopen-cha-jian-jie-shao">1. <code>AllOpen</code>插件介绍</span><a href="#1-allopen-cha-jian-jie-shao" class="header-anchor">#</a></h3>
+<h2><a href="#2-allopen插件" class="header-anchor">#</a><span id="2-allopen插件">2. <code>AllOpen</code>插件</span></h2>
+<h3><a href="#1-allopen插件介绍" class="header-anchor">#</a><span id="1-allopen插件介绍">1. <code>AllOpen</code>插件介绍</span></h3>
 <p><code>Kotlin</code> 的类及其成员默认是 <code>final</code> 的，可以使用<code>AllOpen</code>插件去掉<code>final</code>修饰符</p>
 <p><code>AllOpen</code>插件包括两个插件：</p>
 <ol>
 <li><code>AllOpen-Intellij</code>：为开发者提供便利，可以在编写代码时直接继承由<code>AllOpen</code>插件去掉<code>final</code>修饰符的类</li>
 <li><code>AllOpen-Gradle</code>：真正完成编译器插件逻辑</li>
 </ol>
-<h3><span id="2-allopen-cha-jian-yuan-ma">2. <code>AllOpen</code>插件源码</span><a href="#2-allopen-cha-jian-yuan-ma" class="header-anchor">#</a></h3>
+<h3><a href="#2-allopen插件源码" class="header-anchor">#</a><span id="2-allopen插件源码">2. <code>AllOpen</code>插件源码</span></h3>
 <p>源码地址：<a target="_blank" rel="noopener" href="https://github.com/JetBrains/kotlin/blob/master/plugins/allopen/allopen-cli/src/AllOpenDeclarationAttributeAltererExtension.kt">https://github.com/JetBrains/kotlin/blob/master/plugins/allopen/allopen-cli/src/AllOpenDeclarationAttributeAltererExtension.kt</a></p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//AllOpenDeclarationAttributeAltererExtension.kt</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">package</span> org.jetbrains.kotlin.allopen</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"><span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">AbstractAllOpenDeclarationAttributeAltererExtension</span> : <span class="type">DeclarationAttributeAltererExtension</span>, <span class="type">AnnotationBasedExtension</span> &#123;</span><br><span class="line">    <span class="keyword">companion</span> <span class="keyword">object</span> &#123;</span><br><span class="line">        <span class="keyword">val</span> ANNOTATIONS_FOR_TESTS = listOf(<span class="string">&quot;AllOpen&quot;</span>, <span class="string">&quot;AllOpen2&quot;</span>, <span class="string">&quot;test.AllOpen&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">refineDeclarationModality</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">        modifierListOwner: <span class="type">KtModifierListOwner</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        declaration: <span class="type">DeclarationDescriptor</span>?,</span></span></span><br><span class="line"><span class="params"><span class="function">        containingDeclaration: <span class="type">DeclarationDescriptor</span>?,</span></span></span><br><span class="line"><span class="params"><span class="function">        currentModality: <span class="type">Modality</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        isImplicitModality: <span class="type">Boolean</span></span></span></span><br><span class="line"><span class="params"><span class="function">    )</span></span>: Modality? &#123;</span><br><span class="line">        <span class="keyword">if</span> (currentModality != Modality.FINAL || modifierListOwner.isPrivate()) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">val</span> descriptor = declaration <span class="keyword">as</span>? ClassDescriptor ?: containingDeclaration ?: <span class="keyword">return</span> <span class="literal">null</span></span><br><span class="line">        <span class="keyword">if</span> (descriptor.hasSpecialAnnotation(modifierListOwner)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">if</span> (!isImplicitModality &amp;&amp; modifierListOwner.hasModifier(KtTokens.FINAL_KEYWORD))</span><br><span class="line">                Modality.FINAL <span class="comment">// Explicit final</span></span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                Modality.OPEN</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>说明：</strong></p>
@@ -935,16 +935,16 @@
 <li>之后判断类是否被对应的注解标注，若没有则不做处理</li>
 <li>之后再判断是否手动添加的<code>final</code>，若是手动添加的则返回<code>final</code>，否则返回<code>open</code></li>
 </ol>
-<h2><span id="3-noarg-cha-jian">3. <code>NoArg</code>插件</span><a href="#3-noarg-cha-jian" class="header-anchor">#</a></h2>
-<h3><span id="1-noarg-cha-jian-jie-shao">1. <code>NoArg</code>插件介绍</span><a href="#1-noarg-cha-jian-jie-shao" class="header-anchor">#</a></h3>
+<h2><a href="#3-noarg插件" class="header-anchor">#</a><span id="3-noarg插件">3. <code>NoArg</code>插件</span></h2>
+<h3><a href="#1-noarg插件介绍" class="header-anchor">#</a><span id="1-noarg插件介绍">1. <code>NoArg</code>插件介绍</span></h3>
 <p><code>NoArg</code>插件，给数据类加一个注解，使用数据类在编译时生成一个无参构造器，但无法在代码里直接访问该构造器，只能通过反射拿到</p>
 <p><code>NoArg</code>插件包括两个插件：</p>
 <ol>
 <li><code>NoArg-Intellij</code>：为开发者提供便利，可以在反编译时直接看到生成的无参构造器</li>
 <li><code>NoArg-Gradle</code>：真正完成编译器插件逻辑</li>
 </ol>
-<h3><span id="2-noarg-cha-jian-yuan-ma">2. <code>NoArg</code>插件源码</span><a href="#2-noarg-cha-jian-yuan-ma" class="header-anchor">#</a></h3>
-<h4><span id="1-noarg-gradle-guan-jian-yuan-ma">1. <code>NoArg-Gradle</code>关键源码</span><a href="#1-noarg-gradle-guan-jian-yuan-ma" class="header-anchor">#</a></h4>
+<h3><a href="#2-noarg插件源码" class="header-anchor">#</a><span id="2-noarg插件源码">2. <code>NoArg</code>插件源码</span></h3>
+<h4><a href="#1-noarg-gradle关键源码" class="header-anchor">#</a><span id="1-noarg-gradle关键源码">1. <code>NoArg-Gradle</code>关键源码</span></h4>
 <p>源码地址：<a target="_blank" rel="noopener" href="https://github.com/JetBrains/kotlin/blob/master/plugins/noarg/noarg-cli/src/AbstractNoArgExpressionCodegenExtension.kt">https://github.com/JetBrains/kotlin/blob/master/plugins/noarg/noarg-cli/src/AbstractNoArgExpressionCodegenExtension.kt</a></p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//AbstractNoArgExpressionCodegenExtension.kt</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">package</span> org.jetbrains.kotlin.noarg</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">AbstractNoArgExpressionCodegenExtension</span>(<span class="keyword">val</span> invokeInitializers: <span class="built_in">Boolean</span>) : ExpressionCodegenExtension,</span><br><span class="line">    AnnotationBasedExtension &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">fun</span> ImplementationBodyCodegen.<span class="title">generateNoArgConstructor</span><span class="params">()</span></span> &#123;</span><br><span class="line">        ...</span><br><span class="line">        functionCodegen.generateMethod(JvmDeclarationOrigin.NO_ORIGIN, constructorDescriptor, <span class="keyword">object</span> : CodegenBased(state) &#123;</span><br><span class="line">            <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">doGenerateBody</span><span class="params">(codegen: <span class="type">ExpressionCodegen</span>, signature: <span class="type">JvmMethodSignature</span>)</span></span> &#123;</span><br><span class="line">                codegen.v.load(<span class="number">0</span>, AsmTypes.OBJECT_TYPE)</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (isParentASealedClassWithDefaultConstructor) &#123;</span><br><span class="line">                    codegen.v.aconst(<span class="literal">null</span>)</span><br><span class="line">                    codegen.v.visitMethodInsn(</span><br><span class="line">                        Opcodes.INVOKESPECIAL, superClassInternalName, <span class="string">&quot;&lt;init&gt;&quot;</span>,</span><br><span class="line">                        <span class="string">&quot;(Lkotlin/jvm/internal/DefaultConstructorMarker;)V&quot;</span>, <span class="literal">false</span></span><br><span class="line">                    )</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    codegen.v.visitMethodInsn(Opcodes.INVOKESPECIAL, superClassInternalName, <span class="string">&quot;&lt;init&gt;&quot;</span>, <span class="string">&quot;()V&quot;</span>, <span class="literal">false</span>)</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (invokeInitializers) &#123;</span><br><span class="line">                    generateInitializers(codegen)</span><br><span class="line">                &#125;</span><br><span class="line">                codegen.v.visitInsn(Opcodes.RETURN)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>说明：</strong></p>
@@ -952,14 +952,14 @@
 <li>因为要添加一个无参的构造器，所以直接对字节码进行操作</li>
 <li>其中有一条语句判断<code>invokeInitializers</code>是否为<code>true</code>：为<code>true</code>，则执行<code>generateInitializers()</code>方法，该方法用于生成构造器</li>
 </ol>
-<h4><span id="2-noarg-intellij-guan-jian-yuan-ma">2. <code>NoArg-Intellij</code>关键源码</span><a href="#2-noarg-intellij-guan-jian-yuan-ma" class="header-anchor">#</a></h4>
+<h4><a href="#2-noarg-intellij关键源码" class="header-anchor">#</a><span id="2-noarg-intellij关键源码">2. <code>NoArg-Intellij</code>关键源码</span></h4>
 <p>源码地址：<a target="_blank" rel="noopener" href="https://github.com/JetBrains/kotlin/blob/master/plugins/noarg/noarg-ide/src/IdeArgExpressionCodegenExtension.kt">https://github.com/JetBrains/kotlin/blob/master/plugins/noarg/noarg-ide/src/IdeArgExpressionCodegenExtension.kt</a></p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//IdeArgExpressionCodegenExtension.kt</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">package</span> org.jetbrains.kotlin.noarg.ide</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">IdeNoArgExpressionCodegenExtension</span>(project: Project) : AbstractNoArgExpressionCodegenExtension(invokeInitializers = <span class="literal">false</span>) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">val</span> cachedAnnotationsNames = CachedAnnotationNames(project, NO_ARG_ANNOTATION_OPTION_PREFIX)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">getAnnotationFqNames</span><span class="params">(modifierListOwner: <span class="type">KtModifierListOwner</span>?)</span></span>: List&lt;String&gt; =</span><br><span class="line">        cachedAnnotationsNames.getAnnotationNames(modifierListOwner)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>说明：</strong></p>
 <ol>
 <li><code>invokeInitializers</code>设置为了<code>false</code>，所以<code>IntelliJ</code>反编译<code>Kotlin</code>看不到<code>invokeInitializers</code>为<code>true</code>的效果</li>
 </ol>
-<h2><span id="4-qi-ta-shi-yong-cha-jian">4. 其它实用插件</span><a href="#4-qi-ta-shi-yong-cha-jian" class="header-anchor">#</a></h2>
+<h2><a href="#4-其它实用插件" class="header-anchor">#</a><span id="4-其它实用插件">4. 其它实用插件</span></h2>
 <p><img src="/2021/03/23/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AB/compiler_plugin_count.png" alt></p>
 <table>
 <thead>
@@ -982,7 +982,7 @@
 </tr>
 </tbody>
 </table>
-<h2><span id="5-zong-jie">5. 总结</span><a href="#5-zong-jie" class="header-anchor">#</a></h2>
+<h2><a href="#5-总结" class="header-anchor">#</a><span id="5-总结">5. 总结</span></h2>
 <p><code>Kotlin</code>编译器插件不仅支持<code>Java</code>平台，还支持<code>Js</code>平台、<code>Native</code>平台等，是跨平台的</p>
 <table>
 <thead>
@@ -1025,7 +1025,7 @@
 </tr>
 </tbody>
 </table>
-<h1><span id="ba-can-kao-wen-zhang">八、 参考文章</span><a href="#ba-can-kao-wen-zhang" class="header-anchor">#</a></h1>
+<h1><a href="#八-参考文章" class="header-anchor">#</a><span id="八-参考文章">八、 参考文章</span></h1>
 <ol>
 <li><a target="_blank" rel="noopener" href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-metadata/">https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-metadata/</a></li>
 <li><a target="_blank" rel="noopener" href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/">https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/</a></li>

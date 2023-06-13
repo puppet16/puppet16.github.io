@@ -19,33 +19,33 @@
 五、播放进度展示"><meta name="keywords" content="技术博客,Hexo,Android,Linux,HTML,Java"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.webp"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/insight.css"><link rel="stylesheet" href="/css/search.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><script src="/js/jquery.js"></script><meta name="generator" content="Hexo 6.3.0"></head><body><div class="page-top animated fadeInDown"><div class="nav"><li> <a href="/">首页</a></li><li> <a href="/archives">归档</a></li><li> <a href="/tags">标签</a></li><li> <a href="/about">关于</a></li></div><div class="information"><div class="nav_right_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"></div></div></div><div class="sidebar animated fadeInDown"><div class="sidebar-top"><div class="logo-title"><div class="title"><img src="/images/logo@2x.webp" style="width:220px;" alt="favicon"><h3 title=""><a href="/">Puppet</a></h3><div class="description"><p>心之所愿，无事不成。<br> Nothing is impossible to a willing heart.</p></div></div><ul class="social-links"><li><a target="_blank" rel="noopener" href="https://github.com/puppet16"><i class="fa fa-github"></i></a></li><li><a href="mailto:mailto:2542469086@qq.com"><i class="fa fa-envelope"></i></a></li><li><a target="_blank" rel="noopener" href="http://sighttp.qq.com/authd?IDKEY=http://sighttp.qq.com/authd?IDKEY="><i class="fa fa-qq"></i></a></li><li><a target="_blank" rel="noopener" href="https://zhihu.com/"><i class="fa fa-mortar-board"></i></a></li></ul></div></div><div class="footer"><div class="p"> <span> 全站CC-BY-SA-3.0 </span><i class="fa fa-star"></i><span> Ltt</span></div><div class="by_farbox"><span>Powered by </span><a href="https://hexo.io/zh-cn/" target="_blank">Hexo </a><span> & </span><span>Anatolo </span></div><div class="beian"></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>MediaPlayer 详解</a></h3></div><div class="post-content"><p><div class="toc">
 <!-- toc -->
 <ul>
-<li><a href="#qian-yan">前言</a></li>
-<li><a href="#yi-zhi-chi-mei-ti-ge-shi">一、支持媒体格式</a>
+<li><a href="#%E5%89%8D%E8%A8%80">前言</a></li>
+<li><a href="#%E4%B8%80-%E6%94%AF%E6%8C%81%E5%AA%92%E4%BD%93%E6%A0%BC%E5%BC%8F">一、支持媒体格式</a>
 <ul>
-<li><a href="#1-yin-pin-zhi-chi">1. 音频支持</a></li>
-<li><a href="#2-shi-pin-zhi-chi">2. 视频支持</a></li>
-<li><a href="#3-tu-pian-zhi-chi">3. 图片支持</a></li>
-<li><a href="#4-wang-luo-xie-yi">4. 网络协议</a></li>
+<li><a href="#1-%E9%9F%B3%E9%A2%91%E6%94%AF%E6%8C%81">1. 音频支持</a></li>
+<li><a href="#2-%E8%A7%86%E9%A2%91%E6%94%AF%E6%8C%81">2. 视频支持</a></li>
+<li><a href="#3-%E5%9B%BE%E7%89%87%E6%94%AF%E6%8C%81">3. 图片支持</a></li>
+<li><a href="#4-%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE">4. 网络协议</a></li>
 </ul>
 </li>
-<li><a href="#er-chang-yong-fang-fa">二、常用方法</a></li>
-<li><a href="#san-zhuang-tai-zhuan-huan">三、 状态转换</a></li>
-<li><a href="#si-shi-yong-zhu-yi-shi-xiang">四、使用注意事项</a>
+<li><a href="#%E4%BA%8C-%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95">二、常用方法</a></li>
+<li><a href="#%E4%B8%89-%E7%8A%B6%E6%80%81%E8%BD%AC%E6%8D%A2">三、 状态转换</a></li>
+<li><a href="#%E5%9B%9B-%E4%BD%BF%E7%94%A8%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9">四、使用注意事项</a>
 <ul>
-<li><a href="#1-shi-yong-liu-mei-ti-shi-zhun-bei-fang-fa-shi-yong-prepareasync">1. 使用流媒体时准备方法使用prepareAsync()</a></li>
-<li><a href="#2-hui-shou-zi-yuan">2. 回收资源</a></li>
-<li><a href="#3-setoncompletionlistener-de-shi-yong">3. setOnCompletionListener的使用</a></li>
+<li><a href="#1-%E4%BD%BF%E7%94%A8%E6%B5%81%E5%AA%92%E4%BD%93%E6%97%B6%E5%87%86%E5%A4%87%E6%96%B9%E6%B3%95%E4%BD%BF%E7%94%A8prepareasync">1. 使用流媒体时准备方法使用prepareAsync()</a></li>
+<li><a href="#2-%E5%9B%9E%E6%94%B6%E8%B5%84%E6%BA%90">2. 回收资源</a></li>
+<li><a href="#3-setoncompletionlistener%E7%9A%84%E4%BD%BF%E7%94%A8">3. setOnCompletionListener的使用</a></li>
 </ul>
 </li>
-<li><a href="#wu-bo-fang-jin-du-zhan-shi">五、播放进度展示</a>
+<li><a href="#%E4%BA%94-%E6%92%AD%E6%94%BE%E8%BF%9B%E5%BA%A6%E5%B1%95%E7%A4%BA">五、播放进度展示</a>
 <ul>
-<li><a href="#seekbar-yu-mediaplayer-suo-xu-yao-fang-fa">SeekBar与MediaPlayer所需要方法</a></li>
-<li><a href="#jin-du-tiao-zhan-shi-bu-zou">进度条展示步骤</a>
+<li><a href="#seekbar%E4%B8%8Emediaplayer%E6%89%80%E9%9C%80%E8%A6%81%E6%96%B9%E6%B3%95">SeekBar与MediaPlayer所需要方法</a></li>
+<li><a href="#%E8%BF%9B%E5%BA%A6%E6%9D%A1%E5%B1%95%E7%A4%BA%E6%AD%A5%E9%AA%A4">进度条展示步骤</a>
 <ul>
-<li><a href="#1-chuang-jian-seekbar">1. 创建SeekBar</a></li>
-<li><a href="#2-tian-jia-jin-du-tiao-de-gai-bian-jian-ting-qi">2. 添加进度条的改变监听器</a></li>
-<li><a href="#3-she-zhi-seekbar-zui-da-zhi">3. 设置seekBar最大值</a></li>
-<li><a href="#4-geng-xin-jin-du-tiao">4. 更新进度条</a></li>
+<li><a href="#1-%E5%88%9B%E5%BB%BAseekbar">1. 创建SeekBar</a></li>
+<li><a href="#2-%E6%B7%BB%E5%8A%A0%E8%BF%9B%E5%BA%A6%E6%9D%A1%E7%9A%84%E6%94%B9%E5%8F%98%E7%9B%91%E5%90%AC%E5%99%A8">2. 添加进度条的改变监听器</a></li>
+<li><a href="#3-%E8%AE%BE%E7%BD%AEseekbar%E6%9C%80%E5%A4%A7%E5%80%BC">3. 设置seekBar最大值</a></li>
+<li><a href="#4-%E6%9B%B4%E6%96%B0%E8%BF%9B%E5%BA%A6%E6%9D%A1">4. 更新进度条</a></li>
 </ul>
 </li>
 </ul>
@@ -53,14 +53,14 @@
 </ul>
 <!-- tocstop -->
 </div>
-<h1><span id="qian-yan">前言</span><a href="#qian-yan" class="header-anchor">#</a></h1>
+<h1><a href="#前言" class="header-anchor">#</a><span id="前言">前言</span></h1>
 <blockquote>
 <p>MediaPlayer 是 Android 系统自带的播放器，支持播放各种常见媒体类型，包含了 Audio 和 Video 的播放功能，可以播放存储在应用资源（原始资源）内的媒体文件、文件系统中的独立文件或者通过网络连接获得的数据流中的音频或视频。</p>
 </blockquote>
-<h1><span id="yi-zhi-chi-mei-ti-ge-shi">一、支持媒体格式</span><a href="#yi-zhi-chi-mei-ti-ge-shi" class="header-anchor">#</a></h1>
+<h1><a href="#一-支持媒体格式" class="header-anchor">#</a><span id="一-支持媒体格式">一、支持媒体格式</span></h1>
 <p>下表介绍了 Android 平台中内置的媒体格式支持。括号中注明了不能保证在所有 Android 平台版本上均可用的编解码器，例如：（Android 3.0 及更高版本）。请注意，任何给定的移动设备均可能支持该表中未列出的其他格式或文件类型。</p>
 <p><em><strong>参考：<a target="_blank" rel="noopener" href="https://developer.android.com/guide/topics/media/media-formats">https://developer.android.com/guide/topics/media/media-formats</a></strong></em></p>
-<h2><span id="1-yin-pin-zhi-chi">1. 音频支持</span><a href="#1-yin-pin-zhi-chi" class="header-anchor">#</a></h2>
+<h2><a href="#1-音频支持" class="header-anchor">#</a><span id="1-音频支持">1. 音频支持</span></h2>
 <table>
     <tr>
         <th>格式/编解码器</th>
@@ -175,7 +175,7 @@
         • Matroska（.mkv、Android 4.0 及更高版本）</td>
     </tr>
 </table>
-<h2><span id="2-shi-pin-zhi-chi">2. 视频支持</span><a href="#2-shi-pin-zhi-chi" class="header-anchor">#</a></h2>
+<h2><a href="#2-视频支持" class="header-anchor">#</a><span id="2-视频支持">2. 视频支持</span></h2>
 <table>
     <tr>
         <th>格式/编解码器</th>
@@ -247,7 +247,7 @@
         • Matroska（.mkv、Android 4.0 及更高版本）</td>
     </tr>
 </table>
-<h2><span id="3-tu-pian-zhi-chi">3. 图片支持</span><a href="#3-tu-pian-zhi-chi" class="header-anchor">#</a></h2>
+<h2><a href="#3-图片支持" class="header-anchor">#</a><span id="3-图片支持">3. 图片支持</span></h2>
 <table>
 <thead>
 <tr>
@@ -303,7 +303,7 @@
 </tr>
 </tbody>
 </table>
-<h2><span id="4-wang-luo-xie-yi">4. 网络协议</span><a href="#4-wang-luo-xie-yi" class="header-anchor">#</a></h2>
+<h2><a href="#4-网络协议" class="header-anchor">#</a><span id="4-网络协议">4. 网络协议</span></h2>
 <p>音频和视频播放支持以下网络协议：</p>
 <ul>
 <li>
@@ -326,7 +326,7 @@
 </li>
 </ul>
 <hr>
-<h1><span id="er-chang-yong-fang-fa">二、常用方法</span><a href="#er-chang-yong-fang-fa" class="header-anchor">#</a></h1>
+<h1><a href="#二-常用方法" class="header-anchor">#</a><span id="二-常用方法">二、常用方法</span></h1>
 <p><em><strong>参考：<a target="_blank" rel="noopener" href="https://developer.android.com/reference/android/media/MediaPlayer">https://developer.android.com/reference/android/media/MediaPlayer</a></strong></em></p>
 <table>
 <thead>
@@ -524,7 +524,7 @@
 </tr>
 </tbody>
 </table>
-<h1><span id="san-zhuang-tai-zhuan-huan">三、 状态转换</span><a href="#san-zhuang-tai-zhuan-huan" class="header-anchor">#</a></h1>
+<h1><a href="#三-状态转换" class="header-anchor">#</a><span id="三-状态转换">三、 状态转换</span></h1>
 <br>  
 <p><img src="/2020/05/22/MediaPlayer%E8%AF%A6%E8%A7%A3/mediaplayer.gif" alt></p>
 <p>上面这张状态转换图清晰的列举了主要的方法的调用时序，每种方法只能在一些特定的状态下使用，如果MediaPlayer的状态不正确则会引发<code>IllegalStateException</code>异常。</p>
@@ -553,18 +553,18 @@ MediaPlayer调用<code>setDataSource()</code>方法成功就进入Initialized状
 <p><font size="5"> <strong>Error状态：</strong> </font><br>
 在一般情况下，由于种种原因一些播放控制操作可能会失败，如不支持的音频/视频格式，缺少隔行扫描的音频/视频，分辨率太高，流超时等原因，等等会触发会触发<code>OnErrorListener.onError()</code>事件，此时MediaPlayer会进入<code>Error</code>状态，及时捕捉并妥善处理这些错误是很重要的，可以帮助我们及时释放相关的软硬件资源，也可以改善用户体验。<br>
 可以通过<code>setOnErrorListener()</code>设置监听器来监听MediaPlayer是否进入<code>Error</code>状态。如果MediaPlayer进入了<code>Error</code>状态，可以通过调用<code>reset()</code>来恢复，使得MediaPlayer重新返回到<code>Idle</code>状态。</p>
-<h1><span id="si-shi-yong-zhu-yi-shi-xiang">四、使用注意事项</span><a href="#si-shi-yong-zhu-yi-shi-xiang" class="header-anchor">#</a></h1>
-<h2><span id="1-shi-yong-liu-mei-ti-shi-zhun-bei-fang-fa-shi-yong-prepareasync">1. 使用流媒体时准备方法使用prepareAsync()</span><a href="#1-shi-yong-liu-mei-ti-shi-zhun-bei-fang-fa-shi-yong-prepareasync" class="header-anchor">#</a></h2>
+<h1><a href="#四-使用注意事项" class="header-anchor">#</a><span id="四-使用注意事项">四、使用注意事项</span></h1>
+<h2><a href="#1-使用流媒体时准备方法使用prepareasync" class="header-anchor">#</a><span id="1-使用流媒体时准备方法使用prepareasync">1. 使用流媒体时准备方法使用prepareAsync()</span></h2>
 <p>使用<code>start()</code>播放流媒体之前，需要装载流媒体资源。这种情况应该使用<code>prepareAsync()</code>用异步的方式装载流媒体资源。因为流媒体资源的装载是会消耗系统资源的，在一些硬件不理想的设备上，如果使用<code>prepare()</code>同步的方式装载资源，可能会造成UI界面的卡顿，非常影响用户体验的。使用异步方式时，为了避免还没有装载完成就调用<code>start()</code>而报错的问题，需要绑定<code>MediaPlayer.setOnPreparedListener()</code>事件，它将在异步装载完成之后回调。异步装载还有一个好处就是避免装载超时引发ANR（Application Not Responding）错误。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">MediaPlayer mediaPlayer = new MediaPlayer();</span><br><span class="line">mediaPlayer.setDataSource(UriPath);</span><br><span class="line">// 通过异步的方式装载媒体资源</span><br><span class="line">mediaPlayer.prepareAsync();</span><br><span class="line">mediaPlayer.setOnPreparedListener(new OnPreparedListener() &#123;                    </span><br><span class="line">    @Override</span><br><span class="line">    public void onPrepared(MediaPlayer mp) &#123;</span><br><span class="line">        // 装载完毕回调</span><br><span class="line">        mediaPlayer.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<h2><span id="2-hui-shou-zi-yuan">2. 回收资源</span><a href="#2-hui-shou-zi-yuan" class="header-anchor">#</a></h2>
+<h2><a href="#2-回收资源" class="header-anchor">#</a><span id="2-回收资源">2. 回收资源</span></h2>
 <p>使用完MediaPlayer需要回收资源。在使用完MediaPlayer，不要等待系统自动回收，最好是主动回收资源。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">if (mediaPlayer != null) &#123;</span><br><span class="line">    mediaPlayer.stop();</span><br><span class="line">    mediaPlayer.release();</span><br><span class="line">    mediaPlayer = null;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2><span id="3-setoncompletionlistener-de-shi-yong">3. setOnCompletionListener的使用</span><a href="#3-setoncompletionlistener-de-shi-yong" class="header-anchor">#</a></h2>
+<h2><a href="#3-setoncompletionlistener的使用" class="header-anchor">#</a><span id="3-setoncompletionlistener的使用">3. setOnCompletionListener的使用</span></h2>
 <p>setOnCompletionListener监听器在MediaPlayer播放完成后触发。但是，在使用<code>prepareAsync()</code>方法准备资源时出错也会调用该方法，可根据播放器总时长是否为0来判断是成功还是失败，即<code>getDuration() == 0</code>。</p>
-<h1><span id="wu-bo-fang-jin-du-zhan-shi">五、播放进度展示</span><a href="#wu-bo-fang-jin-du-zhan-shi" class="header-anchor">#</a></h1>
+<h1><a href="#五-播放进度展示" class="header-anchor">#</a><span id="五-播放进度展示">五、播放进度展示</span></h1>
 <p>SeekBar可以用来显示播放进度，用户也可以利用SeekBar的滑块来控制音乐的播放。</p>
-<h2><span id="seekbar-yu-mediaplayer-suo-xu-yao-fang-fa">SeekBar与MediaPlayer所需要方法</span><a href="#seekbar-yu-mediaplayer-suo-xu-yao-fang-fa" class="header-anchor">#</a></h2>
+<h2><a href="#seekbar与mediaplayer所需要方法" class="header-anchor">#</a><span id="seekbar与mediaplayer所需要方法">SeekBar与MediaPlayer所需要方法</span></h2>
 <ul>
 <li>SeekBar:
 <ul>
@@ -593,8 +593,8 @@ MediaPlayer调用<code>setDataSource()</code>方法成功就进入Initialized状
 </ul>
 </li>
 </ul>
-<h2><span id="jin-du-tiao-zhan-shi-bu-zou">进度条展示步骤</span><a href="#jin-du-tiao-zhan-shi-bu-zou" class="header-anchor">#</a></h2>
-<h3><span id="1-chuang-jian-seekbar">1. 创建SeekBar</span><a href="#1-chuang-jian-seekbar" class="header-anchor">#</a></h3>
+<h2><a href="#进度条展示步骤" class="header-anchor">#</a><span id="进度条展示步骤">进度条展示步骤</span></h2>
+<h3><a href="#1-创建seekbar" class="header-anchor">#</a><span id="1-创建seekbar">1. 创建SeekBar</span></h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">&lt;android.support.constraint.ConstraintLayout</span><br><span class="line">    android:layout_width=&quot;match_parent&quot;</span><br><span class="line">    android:layout_height=&quot;wrap_content&quot;</span><br><span class="line">    android:orientation=&quot;horizontal&quot;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;TextView</span><br><span class="line">        android:layout_width=&quot;wrap_content&quot;</span><br><span class="line">        android:layout_height=&quot;wrap_content&quot;</span><br><span class="line">        android:minWidth=&quot;29dp&quot;</span><br><span class="line">        android:textColor=&quot;#FF999999&quot;</span><br><span class="line">        android:textSize=&quot;11sp&quot;</span><br><span class="line">        app:layout_constraintBottom_toBottomOf=&quot;parent&quot;</span><br><span class="line">        app:layout_constraintLeft_toLeftOf=&quot;parent&quot;</span><br><span class="line">        app:layout_constraintTop_toTopOf=&quot;parent&quot;</span><br><span class="line">        tools:text=&quot;06:52&quot; /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;TextView</span><br><span class="line">        android:layout_width=&quot;wrap_content&quot;</span><br><span class="line">        android:layout_height=&quot;wrap_content&quot;</span><br><span class="line">        android:text=&quot;--:--&quot;</span><br><span class="line">        android:textColor=&quot;#FF999999&quot;</span><br><span class="line">        android:textSize=&quot;11sp&quot;</span><br><span class="line">        android:minWidth=&quot;29dp&quot;</span><br><span class="line">        app:layout_constraintBottom_toBottomOf=&quot;parent&quot;</span><br><span class="line">        app:layout_constraintRight_toRightOf=&quot;parent&quot;</span><br><span class="line">        app:layout_constraintTop_toTopOf=&quot;parent&quot;</span><br><span class="line">        tools:text=&quot;06:52&quot; /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;SeekBar</span><br><span class="line">        android:layout_width=&quot;0dp&quot;</span><br><span class="line">        android:layout_height=&quot;wrap_content&quot;</span><br><span class="line">        android:max=&quot;0&quot;</span><br><span class="line">        android:maxHeight=&quot;2dp&quot;</span><br><span class="line">        android:paddingStart=&quot;9dp&quot;</span><br><span class="line">        android:paddingEnd=&quot;9dp&quot;</span><br><span class="line">        android:progressDrawable=&quot;@drawable/seekbar_style_audio_work_detail&quot;</span><br><span class="line">        android:splitTrack=&quot;false&quot;</span><br><span class="line">        android:thumb=&quot;@mipmap/ico_audio_work_seek_dot&quot;</span><br><span class="line">        app:layout_constraintBottom_toBottomOf=&quot;parent&quot;</span><br><span class="line">        app:layout_constraintLeft_toRightOf=&quot;@id/audio_tv_current_duration&quot;</span><br><span class="line">        app:layout_constraintRight_toLeftOf=&quot;@id/audio_tv_total_duration&quot;</span><br><span class="line">        app:layout_constraintTop_toTopOf=&quot;parent&quot; /&gt;</span><br><span class="line"></span><br><span class="line">&lt;/android.support.constraint.ConstraintLayout&gt;</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p><strong>注意：</strong></p>
@@ -603,7 +603,7 @@ MediaPlayer调用<code>setDataSource()</code>方法成功就进入Initialized状
 <li>若要设置SeekBar左右间距则必须使用<code>android:paddingStart</code>和<code>android:paddingEnd</code>。</li>
 </ol>
 </blockquote>
-<h3><span id="2-tian-jia-jin-du-tiao-de-gai-bian-jian-ting-qi">2. 添加进度条的改变监听器</span><a href="#2-tian-jia-jin-du-tiao-de-gai-bian-jian-ting-qi" class="header-anchor">#</a></h3>
+<h3><a href="#2-添加进度条的改变监听器" class="header-anchor">#</a><span id="2-添加进度条的改变监听器">2. 添加进度条的改变监听器</span></h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onStartTrackingTouch(SeekBar seekBar) &#123;</span><br><span class="line">        stopAudioProgressSync();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onStopTrackingTouch(SeekBar seekBar) &#123;</span><br><span class="line">        MediaPlayer.seekTo(seekBar.getProgress());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p><strong>说明：</strong></p>
@@ -618,13 +618,13 @@ MediaPlayer调用<code>setDataSource()</code>方法成功就进入Initialized状
 * 通知用户触摸手势已经结束。户端可能需要使用这个来启用seekbar的滑动功能，或是再次开启进度条更新。</li>
 </ol>
 </blockquote>
-<h3><span id="3-she-zhi-seekbar-zui-da-zhi">3. 设置seekBar最大值</span><a href="#3-she-zhi-seekbar-zui-da-zhi" class="header-anchor">#</a></h3>
+<h3><a href="#3-设置seekbar最大值" class="header-anchor">#</a><span id="3-设置seekbar最大值">3. 设置seekBar最大值</span></h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mSeekBar.setMax(mediaPlayer.getDuration());//设置SeekBar的长度</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p><strong>注意:</strong><br>
 <code>getDuration()</code>方法要在<code>prepare()</code>方法成功之后，否则会出现<code>Attempt to call getDuration without a valid mediaplayer</code>异常</p>
 </blockquote>
-<h3><span id="4-geng-xin-jin-du-tiao">4. 更新进度条</span><a href="#4-geng-xin-jin-du-tiao" class="header-anchor">#</a></h3>
+<h3><a href="#4-更新进度条" class="header-anchor">#</a><span id="4-更新进度条">4. 更新进度条</span></h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">private DisposableObserver&lt;Long&gt; mAudioProgressSyncObserver;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 关闭音频进度更新计时器</span><br><span class="line"> */</span><br><span class="line">public void stopAudioProgressSync() &#123;</span><br><span class="line">    if (mAudioProgressSyncObserver != null)</span><br><span class="line">        mAudioProgressSyncObserver.dispose();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 打开音频进度更新计时器</span><br><span class="line"> */</span><br><span class="line">public void startAudioProgressSync() &#123;</span><br><span class="line">    stopAudioProgressSync();</span><br><span class="line">    mAudioProgressSyncObserver = Observable.interval(0, 500, TimeUnit.MILLISECONDS)</span><br><span class="line">            .subscribeOn(Schedulers.io())</span><br><span class="line">            .observeOn(AndroidSchedulers.mainThread())</span><br><span class="line">            .subscribeWith(new DisposableObserver&lt;Long&gt;() &#123;</span><br><span class="line">                @Override</span><br><span class="line">                public void onNext(Long count) &#123;</span><br><span class="line">                    //如果当前是播放状态，则更新进度条及当前播放时间</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                @Override</span><br><span class="line">                public void onError(Throwable throwable) &#123;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                @Override</span><br><span class="line">                public void onComplete() &#123;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2020-05-22</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Android/" title="Android">Android </a><i class="fa fa-tag"></i><a class="tag" href="/tags/MediaPlayer/" title="MediaPlayer">MediaPlayer </a><span class="leancloud_visitors"></span><span>大约4502个字, 15分钟0秒读完</span></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="" onclick="javascript:join_favorite()" ref="sidebar"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://puppet16.github.io/2020/05/22/MediaPlayer详解/,Puppet,MediaPlayer 详解,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2020/05/31/%E4%BD%BF%E7%94%A8IntDef%E6%B3%A8%E8%A7%A3%E4%BB%A3%E6%9B%BFENUM/" title="使用IntDef注解代替ENUM">上一篇</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2020/05/14/%E4%BD%BF%E7%94%A8Hexo%E5%AE%89%E8%A3%85GitHub%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" title="使用 Hexo 安装 GitHub 个人博客">下一篇</a></li></ul></div><script src="/js/visitors.js"></script><a id="comments"></a><div id="vcomments" style="margin:0 30px;"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//cdn.jsdelivr.net/gh/xcss/valine@latest/dist/Valine.min.js"></script><script>var valine = new Valine({
   el:'#vcomments',
