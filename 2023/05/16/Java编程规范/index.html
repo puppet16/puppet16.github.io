@@ -1,0 +1,410 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="Ltt"><title>Java编程规范 · Puppet</title><meta name="description" content="Java 编码规范
+
+注释规范
+代码风格
+编码规范
+
+文件命名
+类
+变量
+函数
+
+
+文件组织规则
+常见用法规则
+
+
+
+
+
+#Java 编码规范
+#注释规范
+
+类注释
+
+12345/**  * @作者  * @功能  * @时间  */
+
+方法注释
+
+123456/**  * @作者  * @功能  "><meta name="keywords" content="技术博客,Hexo,Android,Linux,HTML,Java"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.webp"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/insight.css"><link rel="stylesheet" href="/css/search.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><script src="/js/jquery.js"></script><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body><div class="page-top animated fadeInDown"><div class="nav"><li> <a href="/">首页</a></li><li> <a href="/archives">归档</a></li><li> <a href="/tags">标签</a></li><li> <a href="/about">关于</a></li></div><div class="information"><div class="nav_right_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"></div></div></div><div class="sidebar animated fadeInDown"><div class="sidebar-top"><div class="logo-title"><div class="title"><img src="/images/logo@2x.webp" style="width:220px;" alt="favicon"><h3 title=""><a href="/">Puppet</a></h3><div class="description"><p>心之所愿，无事不成。<br> Nothing is impossible to a willing heart.</p></div></div><ul class="social-links"><li><a target="_blank" rel="noopener" href="https://github.com/puppet16"><i class="fa fa-github"></i></a></li><li><a href="mailto:mailto:2542469086@qq.com"><i class="fa fa-envelope"></i></a></li><li><a target="_blank" rel="noopener" href="http://sighttp.qq.com/authd?IDKEY=http://sighttp.qq.com/authd?IDKEY="><i class="fa fa-qq"></i></a></li><li><a target="_blank" rel="noopener" href="https://zhihu.com/"><i class="fa fa-mortar-board"></i></a></li></ul></div></div><div class="footer"><div class="p"> <span> 全站CC-BY-SA-3.0 </span><i class="fa fa-star"></i><span> Ltt</span></div><div class="by_farbox"><span>Powered by </span><a href="https://hexo.io/zh-cn/" target="_blank">Hexo </a><span> & </span><span>Anatolo </span></div><div class="beian"></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>Java编程规范</a></h3></div><div class="post-content"><p><div class="toc">
+<!-- toc -->
+<ul>
+<li><a href="#java-%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83">Java 编码规范</a>
+<ul>
+<li><a href="#%E6%B3%A8%E9%87%8A%E8%A7%84%E8%8C%83">注释规范</a></li>
+<li><a href="#%E4%BB%A3%E7%A0%81%E9%A3%8E%E6%A0%BC">代码风格</a></li>
+<li><a href="#%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83">编码规范</a>
+<ul>
+<li><a href="#%E6%96%87%E4%BB%B6%E5%91%BD%E5%90%8D">文件命名</a></li>
+<li><a href="#%E7%B1%BB">类</a></li>
+<li><a href="#%E5%8F%98%E9%87%8F">变量</a></li>
+<li><a href="#%E5%87%BD%E6%95%B0">函数</a></li>
+</ul>
+</li>
+<li><a href="#%E6%96%87%E4%BB%B6%E7%BB%84%E7%BB%87%E8%A7%84%E5%88%99">文件组织规则</a></li>
+<li><a href="#%E5%B8%B8%E8%A7%81%E7%94%A8%E6%B3%95%E8%A7%84%E5%88%99">常见用法规则</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+</div>
+<h1><a href="#java-编码规范" class="header-anchor">#</a><span id="java-编码规范">Java 编码规范</span></h1>
+<h2><a href="#注释规范" class="header-anchor">#</a><span id="注释规范">注释规范</span></h2>
+<ol>
+<li>类注释</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">  * @作者</span><br><span class="line">  * @功能</span><br><span class="line">  * @时间</span><br><span class="line">  */</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>方法注释</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">  * @作者</span><br><span class="line">  * @功能</span><br><span class="line">  * @参数介绍</span><br><span class="line">  * @返回值介绍</span><br><span class="line">  */</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>成员变量及常量注释</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">  * 变量用途</span><br><span class="line">  */</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>局部变量注释</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">// 功能用途 这里注意有一个空格 缩进同变量起始位置一样</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>代码块注释</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">  * 代码块的功能和基本介绍起始位置和结束位置</span><br><span class="line">  */</span><br></pre></td></tr></table></figure>
+<ol start="6">
+<li>注释排版 保持每个人自己统一就行</li>
+</ol>
+<h2><a href="#代码风格" class="header-anchor">#</a><span id="代码风格">代码风格</span></h2>
+<ul>
+<li>下列位置应该使用空格以使代码结构清晰，提高代码可读性：</li>
+</ul>
+<ol>
+<li>
+<p>开始、类的定义、以及if、for、do、while、switch、case语句中的代码都要采用缩进方式；</p>
+</li>
+<li>
+<p>对齐：程序块的分界符左大括号&quot;{&quot; 和右大括号&quot;}&quot;都另起一行，尾部大括号一行并且位于同一列，同时与引用它们的语句左对齐；对齐只使用TAB键，不使用空格键；不允许把多个短语句写在一行中，即一行只写一条语句；if、for、do、while、case、switch、default等语句自占一行。且都需需要用大括号包裹</p>
+</li>
+<li>
+<p>换行：一行的长度超过80个字符需要换行</p>
+</li>
+<li>
+<p>二元操作符前后都需要有空格， ‘.’ 除外；</p>
+</li>
+<li>
+<p>参数列表中的逗号 ‘,’ 后面；</p>
+</li>
+<li>
+<p>for 循环中的表达式之间，分号 ‘;’ 后面；</p>
+</li>
+<li>
+<p>foreach 循环中冒号 ‘:’ 前后；</p>
+</li>
+<li>
+<p>方法名 ( 包括声明和调用 ) 和左括号 ‘(’ 之间 不需要 空格；</p>
+</li>
+<li>
+<p>小括号与内部字符之间 不需要 空格；</p>
+</li>
+<li>
+<p>没有必要 增加若干空格来使某一行的字符与上一行对应位置的字符对齐。</p>
+</li>
+<li>
+<p>多行注释中，换行后星号 ‘’ 之前至少放置一个空格，为实现与首行注释的星号 '’ 对齐；</p>
+</li>
+<li>
+<p>注释星号 ‘*’ 与注释内容 如果处于同一行，两者 之间放置一个空格；</p>
+</li>
+<li>
+<p>注释的双斜线与注释内容之间有且仅有一个空格；</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">错误用例</span><br><span class="line"></span><br><span class="line">// 小括号 与内部字符间不需要空格</span><br><span class="line">if ( a == b ) </span><br><span class="line"> </span><br><span class="line">//  没有 必要追求多行 对齐 </span><br><span class="line">int              a = 3; </span><br><span class="line">long             b = 4L; </span><br><span class="line">StringBuilder sb = new StringBuilder(); </span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">正确用法</span><br><span class="line">if (a == b) &#123;</span><br><span class="line">	...</span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line">for (int i = 0; i &lt; 10; i++) &#123; </span><br><span class="line"> 		a += i; </span><br><span class="line">&#125; </span><br><span class="line"> </span><br><span class="line">for (String usrName : usrList) &#123; </span><br><span class="line">  		usrAge = usrInfoClass.getUsrAge(usrName); </span><br><span class="line">   	usrInfoClass.showUser(usrName, usrAge); </span><br><span class="line">&#125; </span><br><span class="line"> </span><br><span class="line">int a = 3; </span><br><span class="line">long b = 4L; </span><br><span class="line">StringBuffer sb = new StringBuffer(); </span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2><a href="#编码规范" class="header-anchor">#</a><span id="编码规范">编码规范</span></h2>
+<h3><a href="#文件命名" class="header-anchor">#</a><span id="文件命名">文件命名</span></h3>
+<ul>
+<li>
+<p>资源文件</p>
+<ol>
+<li>layout 必须以module名字或缩写作为前缀避免面重复命名</li>
+</ol>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">activity: module_activity_</span><br><span class="line"></span><br><span class="line">fragment: module_fragment_</span><br><span class="line"></span><br><span class="line">dialog:  module_dialog_</span><br><span class="line"></span><br><span class="line">include: module_include_</span><br><span class="line"></span><br><span class="line">itemview: module_item_</span><br><span class="line"></span><br><span class="line">Layout: module_layout_</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3><a href="#类" class="header-anchor">#</a><span id="类">类</span></h3>
+<ul>
+<li>
+<p>命名需要使用大驼峰规则命名 注意 关键字 类名 和 {} 之间加一个空格</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public class MyClass &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>Bean类</p>
+<ol>
+<li>
+<p>只允许有成员变量和 get set函数</p>
+</li>
+<li>
+<p>一般也要加上toString()方法</p>
+</li>
+</ol>
+</li>
+<li>
+<p>接口类</p>
+<ol>
+<li>
+<p>命名必须以大写字母<code>I</code>开头标识这是个接口类</p>
+</li>
+<li>
+<p>接口类函数定义不可以使用对方法进行public private等属性修饰</p>
+</li>
+</ol>
+</li>
+<li>
+<p>抽象类</p>
+<ol>
+<li>需要以<code>Abs</code>开头或者以<code>Base</code>开头 标识这个是个抽象类或者基类需要子类实现才可以用</li>
+</ol>
+</li>
+<li>
+<p>测试类</p>
+<ol>
+<li>命名用Test结尾</li>
+</ol>
+</li>
+<li>
+<p>枚举类</p>
+<ol>
+<li>
+<p>用enum后缀</p>
+</li>
+<li>
+<p>成员全部用大写用下换线分割单词 如 SUCCESS_MSG</p>
+</li>
+</ol>
+</li>
+<li>
+<p>异常类</p>
+<ol>
+<li>Exception结尾</li>
+</ol>
+</li>
+<li>
+<p>接口实现类</p>
+<ol>
+<li>接口实现类用 接口名加Impl结尾 如接口为<code>ICacheSeivice</code> 实现类用<code>CacheSeiviceImpl</code></li>
+</ol>
+</li>
+<li>
+<p>其他</p>
+<ol>
+<li>类定义用其功能后缀 如Config Dao Service Container Manager Module等</li>
+</ol>
+</li>
+</ul>
+<h3><a href="#变量" class="header-anchor">#</a><span id="变量">变量</span></h3>
+<ul>
+<li>
+<p>命名规范</p>
+<ol>
+<li>
+<p>常量全部用大写用下换线分割单词 如 SUCCESS_CODE</p>
+</li>
+<li>
+<p>成员变量使用小驼峰以m开头如 mTteacherCode</p>
+</li>
+<li>
+<p>局部变量使用小驼峰如 teacherCode</p>
+</li>
+<li>
+<p>bool 可以用 can has is 不必遵循m开头 或者用able结尾 从意义上能区分是bool值就可以</p>
+</li>
+</ol>
+</li>
+<li>
+<p>变量排版</p>
+<ol>
+<li>Private Protect Public 等同一类权限范围的函数或变量尽量排布在同一个区域内</li>
+</ol>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">private String mDate;</span><br><span class="line">private String mCode;</span><br><span class="line">private List&lt;String&gt; mList;</span><br><span class="line"></span><br><span class="line">protected String mPrtDate;</span><br><span class="line">protected String mPrtcode;</span><br><span class="line">protected List&lt;String&gt; mPrtList;</span><br><span class="line"></span><br><span class="line">public String mPrtDate;</span><br><span class="line">public String mPrtcode;</span><br><span class="line">public List&lt;String&gt; mPrtList;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>变量定义</p>
+<ol>
+<li>变量尽量使用有意义的命名拒绝使用魔鬼变量如 list1 list2 data1 data2</li>
+<li>尽量不要使用无法理解的字母缩写如果必须用需要添加必要注释</li>
+<li>定义数组时，方括号 &quot; [] &quot; 是类型的一部分，所以方括号 &quot; [] &quot; 应放在数据类型后，不要放在变量名后</li>
+</ol>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">错误示范</span><br><span class="line">byte rcvBuf [] = new byte[MAX_RECV_BUF_SIZE]; </span><br></pre></td></tr></table></figure>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">正确示范</span><br><span class="line">byte [] rcvBuf = new byte[MAX_RECV_BUF_SIZE]; </span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>变量定义一个变量独占一行不允许一行定义多个变量</li>
+</ol>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">错误示范</span><br><span class="line">private String data1,data2;</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">正确示范</span><br><span class="line">private String data1；</span><br><span class="line">private String data2;</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>修饰符使用规则 如果有多个修饰符，修饰符按照如下顺序排列：</li>
+</ol>
+<p><code>public protected private abstract static final transient volatile synchronized native strictfp</code></p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">错误示范</span><br><span class="line">public final static int MAX_USER_CNT = 1024;</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">正确示范</span><br><span class="line">public static final int MAX_USER_CNT = 1024;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3><a href="#函数" class="header-anchor">#</a><span id="函数">函数</span></h3>
+<ul>
+<li>
+<p>命名及书写规则</p>
+<ol>
+<li>采用小驼峰规则命名<code>public void getData() &#123;&#125;</code></li>
+<li>注意多个参数逗号后面要加空格 结尾的入参变量和小括号之间不需要空格小括号面的开始大括号和小括号之间加空格函数结束的大括号需要单独一行 如果是空函数可以缩写成{}不需要换行</li>
+</ol>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public void getData(String a, String a2) &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>函数排版</p>
+<ol>
+<li>Private Protect Public 等同一类权限范围的函数或变量尽量排布在同一个区域内</li>
+</ol>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 共有</span><br><span class="line"> */</span><br><span class="line">public void fun5()&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public void fun6()&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 保护</span><br><span class="line"> */</span><br><span class="line">protected void fun3()&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">protected void fun4()&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 私有</span><br><span class="line"> */</span><br><span class="line">private void fun1()&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">private void fun2()&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>方法声明</li>
+</ol>
+<p>良好的程序设计应该尽可能减小类与类之间耦合，所遵循的经验法则是：尽量限制成员函数的可见性。如果成员函数没必要公有 (public)，就定义为保护 (protected)；没必要保护 (protected)，就定义为私有 (private) 原则就是尽量保证封装性。</p>
+<ol start="3">
+<li>方法排版顺序</li>
+</ol>
+<p>声明顺序：构造方法、静态公共方法、静态私有方法、公共方法、受保护方法、私有方法</p>
+<ol start="4">
+<li>
+<p>避免参数过多<br>
+一般入参不宜超过五个 如果过多可以考虑将函数拆分 或者封装成对象</p>
+</li>
+<li>
+<p>尽量减少使用参数做逻辑控制</p>
+</li>
+</ol>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">如下所示将一个函数拆分成两个方法</span><br><span class="line"></span><br><span class="line">public void buyCourse(long useId, long coureseId, boolean isSVip) &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">public void buyCourse(long useId, long coureseId) &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public void buyCourseForVip(long useId, long coureseId) &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="6">
+<li>函数定义需遵守单一功能原则</li>
+</ol>
+<p>不要再一个函数里处理过多的逻辑 一个函数只做自己的事就好 如果处理的逻辑过多就要考虑拆分成多个函数</p>
+<ol start="7">
+<li></li>
+</ol>
+</li>
+</ul>
+<h2><a href="#文件组织规则" class="header-anchor">#</a><span id="文件组织规则">文件组织规则</span></h2>
+<ul>
+<li>
+<p>注意文件大小尽量控制文件内代码不要过多，保持文件的单一功能</p>
+</li>
+<li>
+<p>功能独立切与业务无关的通用功能封装成lib_库</p>
+</li>
+<li>
+<p>功能独立的业务相关功能代码写成module_库</p>
+</li>
+<li>
+<p>代码文件结构要划分清楚 根据功能或者模块 划分成不同的目录下 入口类尽量暴露在最外侧方便阅读代码时找到入手点</p>
+</li>
+</ul>
+<h2><a href="#常见用法规则" class="header-anchor">#</a><span id="常见用法规则">常见用法规则</span></h2>
+<ul>
+<li>
+<p>异常</p>
+<ol>
+<li>
+<p>捕获异常并不是为了防止程序崩溃 而是要处理它 处理不了的要出log方便定位问题</p>
+</li>
+<li>
+<p>可能产生多个异常的代码要分别捕获处理避免使用单一catch来统一处理</p>
+</li>
+<li>
+<p>不可用try catch包裹过多的代码尽量精准捕获定位 准确定位问题可能发生的位置</p>
+</li>
+<li>
+<p>异常捕获后在catch内添加日志输出并添加方便查验的tag</p>
+</li>
+<li>
+<p>集合类变量不可以直接使用isEmpty判断要考虑 null的情况</p>
+</li>
+<li></li>
+</ol>
+</li>
+<li>
+<p>编程习惯</p>
+<ol>
+<li>多层判断条件不利于代码可读性</li>
+</ol>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">调整执行顺序体检结束嵌套 多个if嵌套使用是可以考虑建能够提前结束函数的判断条件前置减少if else的嵌套使用	</span><br><span class="line">如果涉及到的判断条件以后有增加的可能可以采用`map`注册的方式来优化替代if或者switch过于复杂的问题</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>
+<p>map list 数组等 遍历的时候不可以进行添加和删减操作 如果必须做请使用迭代器或者加锁</p>
+</li>
+<li>
+<p>类对象尽量减少context上下文的持有，需要时可以在类内部的函数上将context作为入参传入减少持有context造成的内存泄漏 如果必须使用可以考虑持有ApplicationContext.</p>
+</li>
+<li>
+<p>使用Handler 尽量使用静态内部类重载Handler对象 并且用弱引用以减少内存泄漏的风险</p>
+</li>
+<li>
+<p>处理String 的时候尽量使用 StringBuffer来代替</p>
+</li>
+<li>
+<p>函数内定义的局部变量应遵循就近原则 禁止在一个地方定义 在很远的地方才使用 影响代码可读性</p>
+</li>
+<li>
+<p>所有重载的方法必须加@Override注解</p>
+</li>
+<li>
+<p>不再推荐使用又要兼容旧代码的 变量和方法需要加注解<code>@Deprecated </code>添加描述注释</p>
+</li>
+<li>
+<p>注解需要注意每个注解都要独占一行</p>
+</li>
+<li>
+<p>使用while 或者 doWhile 循环的时候必须 结束循环的条件</p>
+</li>
+<li>
+<p>严禁使用if (true) while (true)这种实现无限循环</p>
+</li>
+<li>
+<p>多线程共享变量时要注意考虑线程安全使用线程安全类型或者加锁</p>
+</li>
+<li>
+<p>耗时操作不可以在主线程中进行操作</p>
+</li>
+<li>
+<p>代码设计上在耗时操作完成后的回调帮助调用者切回UI线程</p>
+</li>
+<li>
+<p>方法入参尽量减少 map Object JsonObject String 来代替Json字符串等无法推断的类型字段名如有特殊需求请添加详细的注释并 提供完整json的定义demo</p>
+</li>
+<li>
+<p>Android需要传输过程序列化的类推荐使用Parcelable 需要持久化存储的使用Serializable</p>
+</li>
+<li>
+<p>map遍历使用entrySet代替keySet遍历 减少遍历测试</p>
+</li>
+<li>
+<p>包装类如果Integer使用equals比较 基础类型如int可以使用 ==</p>
+</li>
+</ol>
+</li>
+</ul>
+</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2023-05-16</span><i class="fa fa-tag"></i><a class="tag" href="/tags/编程规范/" title="编程规范">编程规范 </a><i class="fa fa-tag"></i><a class="tag" href="/tags/Java/" title="Java">Java </a><span class="leancloud_visitors"></span><span>大约2642个字, 8分钟48秒读完</span></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="" onclick="javascript:join_favorite()" ref="sidebar"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://puppet16.github.io/2023/05/16/Java编程规范/,Puppet,Java编程规范,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2023/05/16/Kotlin%E7%BC%96%E7%A8%8B%E8%A7%84%E8%8C%83/" title="Kotlin编程规范">上一篇</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2023/04/06/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E7%95%AA%E5%A4%96%E7%AF%87/" title="kotlin学习系列番外篇">下一篇</a></li></ul></div><script src="/js/visitors.js"></script><a id="comments"></a><div id="vcomments" style="margin:0 30px;"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//cdn.jsdelivr.net/gh/xcss/valine@latest/dist/Valine.min.js"></script><script>var valine = new Valine({
+  el:'#vcomments',
+  notify:false || false, 
+  verify:false|| false, 
+  app_id:'xpSQCFiXzEQnCBUKrP6EHIUF-gzGzoHsz',
+  app_key:'Ev5N03MrqLzS683mu92hf4RO',
+  placeholder:'行至水穷处，坐看云起时...',
+  path: window.location.pathname,
+  serverURLs: '',
+  visitor:true,
+  recordIP:true,
+  avatar:'mm'
+})</script></div></div></div></div><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/add-bookmark.js"></script><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"debug":false,"model":{"scale":1,"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"left","hOffset":0,"vOffset":20},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"dialog":{"enable":false,"hitokoto":true}});</script></body></html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="Ltt"><title>Java成员方法执行顺序 · Puppet</title><meta name="description" content="一、三个成员方法：
+二、代码实例
+三、结论
+
+
+
+#一、三个成员方法：
+
+
+普通初始化块：直接在类里写花括号，初始化块只在创建Java对象时隐式执行,而且在执行构造器之前执行。例子如下：
+12345public class XXX &amp;#123;    &amp;#123;        //普通初始化块的可"><meta name="keywords" content="技术博客,Hexo,Android,Linux,HTML,Java"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.webp"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/insight.css"><link rel="stylesheet" href="/css/search.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><script src="/js/jquery.js"></script><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body><div class="page-top animated fadeInDown"><div class="nav"><li> <a href="/">首页</a></li><li> <a href="/archives">归档</a></li><li> <a href="/tags">标签</a></li><li> <a href="/about">关于</a></li></div><div class="information"><div class="nav_right_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"></div></div></div><div class="sidebar animated fadeInDown"><div class="sidebar-top"><div class="logo-title"><div class="title"><img src="/images/logo@2x.webp" style="width:220px;" alt="favicon"><h3 title=""><a href="/">Puppet</a></h3><div class="description"><p>心之所愿，无事不成。<br> Nothing is impossible to a willing heart.</p></div></div><ul class="social-links"><li><a target="_blank" rel="noopener" href="https://github.com/puppet16"><i class="fa fa-github"></i></a></li><li><a href="mailto:mailto:2542469086@qq.com"><i class="fa fa-envelope"></i></a></li><li><a target="_blank" rel="noopener" href="http://sighttp.qq.com/authd?IDKEY=http://sighttp.qq.com/authd?IDKEY="><i class="fa fa-qq"></i></a></li><li><a target="_blank" rel="noopener" href="https://zhihu.com/"><i class="fa fa-mortar-board"></i></a></li></ul></div></div><div class="footer"><div class="p"> <span> 全站CC-BY-SA-3.0 </span><i class="fa fa-star"></i><span> Ltt</span></div><div class="by_farbox"><span>Powered by </span><a href="https://hexo.io/zh-cn/" target="_blank">Hexo </a><span> & </span><span>Anatolo </span></div><div class="beian"></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>Java成员方法执行顺序</a></h3></div><div class="post-content"><p><div class="toc">
+<!-- toc -->
+<ul>
+<li><a href="#%E4%B8%80-%E4%B8%89%E4%B8%AA%E6%88%90%E5%91%98%E6%96%B9%E6%B3%95">一、三个成员方法：</a></li>
+<li><a href="#%E4%BA%8C-%E4%BB%A3%E7%A0%81%E5%AE%9E%E4%BE%8B">二、代码实例</a></li>
+<li><a href="#%E4%B8%89-%E7%BB%93%E8%AE%BA">三、结论</a></li>
+</ul>
+<!-- tocstop -->
+</div>
+<h2><a href="#一-三个成员方法" class="header-anchor">#</a><span id="一-三个成员方法">一、三个成员方法：</span></h2>
+<ol>
+<li>
+<p><strong>普通初始化块</strong>：直接在类里写花括号，初始化块只在<strong>创建Java对象时</strong>隐式执行,而且在执行构造器之前执行。例子如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public class XXX &#123;</span><br><span class="line">    &#123;</span><br><span class="line">        //普通初始化块的可执行性代码</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>静态初始化块</strong>：就是定义普通初始化块时使用了static修饰符，静态初始化块只在<strong>在类初始化阶段执行</strong>，而不是在创建对象时才执行，所以只会调用一次。例子如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public class XXX &#123;</span><br><span class="line">    static &#123;</span><br><span class="line">        //静态初始化块的可执行性代码</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>构造方法</strong>：与类名同名的方法，，在创建Java对象时执行。例子如下:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public class A &#123;</span><br><span class="line">    A () &#123;</span><br><span class="line">        //构造方法的可执行性代码</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2><a href="#二-代码实例" class="header-anchor">#</a><span id="二-代码实例">二、代码实例</span></h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public class FatherClass &#123;</span><br><span class="line"></span><br><span class="line">    int value = 11;</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line">        value = 12;</span><br><span class="line">        Log.d(&quot;Extends&quot;,&quot;普通初始化块-Father&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    static &#123;</span><br><span class="line">         Log.d(&quot;Extends&quot;,&quot;静态初始化块-Father&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    FatherClass () &#123;</span><br><span class="line">        Log.d(&quot;Extends&quot;,&quot;构造方法-Father&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public class ChildClass extends FatherClass &#123;</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line">        Log.d(&quot;Extends&quot;,&quot;普通初始化块-ChildClass&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    static &#123;</span><br><span class="line">         Log.d(&quot;Extends&quot;,&quot;静态初始化块-ChildClass&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ChildClass() &#123;</span><br><span class="line">        Log.d(&quot;Extends&quot;,&quot;构造方法-ChildClass&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>执行：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ChildClass childClass = new ChildClass();</span><br><span class="line">Log.d(&quot;Extends&quot;,&quot;value值：&quot;+childClass.value);</span><br></pre></td></tr></table></figure>
+<p>输出结果为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">D/Extends: 静态初始化块-Father</span><br><span class="line">D/Extends: 静态初始化块-ChildClass</span><br><span class="line">D/Extends: 普通初始化块-Father</span><br><span class="line">D/Extends: 构造方法-Father</span><br><span class="line">D/Extends: 普通初始化块-ChildClass</span><br><span class="line">D/Extends: 构造方法-ChildClass</span><br><span class="line">D/Extends: value值：12</span><br></pre></td></tr></table></figure>
+<h2><a href="#三-结论" class="header-anchor">#</a><span id="三-结论">三、结论</span></h2>
+<ol>
+<li>
+<p>单个类执行顺序为：静态初始化块—&gt;普通初始化块—&gt;构造方法。但是静态初始化块只会执行一次。</p>
+</li>
+<li>
+<p>继承父类后调用子类时执行顺序为：父类静态初始化块—&gt;子类静态初始化块—&gt;父类普通初始化块—&gt;父类构造方法—&gt;子类普通初始化块—&gt;子类构造方法。</p>
+</li>
+<li>
+<p>关于普通赋值：普通初始化块、声明实例变量指定的默认值都可以是对象的初始化代码，执行顺序与代码中的排列顺序相同。如FatherClass中，先执行int value = 11;再执行了value = 12；所以value结果为12。若是将int value == 11;放于普通初始化块后，如</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">   value = 12;</span><br><span class="line">   Log.d(&quot;Extends&quot;,&quot;普通初始化块-Father&quot;);</span><br><span class="line">&#125;</span><br><span class="line">int value = 11;</span><br></pre></td></tr></table></figure>
+<p>则value的值为11。</p>
+</li>
+<li>
+<p>关于静态变量赋值：与普通赋值一致。</p>
+</li>
+</ol>
+<p><em>参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/wft1990/p/7998353.html">https://www.cnblogs.com/wft1990/p/7998353.html</a></em></p>
+<p>          <em><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_34626097/article/details/83352293">https://blog.csdn.net/qq_34626097/article/details/83352293</a></em></p>
+<p>          <em><a target="_blank" rel="noopener" href="https://blog.csdn.net/china_songlei/article/details/79696583">https://blog.csdn.net/china_songlei/article/details/79696583</a></em></p>
+</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2020-05-31</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Java/" title="Java">Java </a><span class="leancloud_visitors"></span><span>大约682个字, 2分钟16秒读完</span></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="" onclick="javascript:join_favorite()" ref="sidebar"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://puppet16.github.io/2020/05/31/Java成员方法执行顺序/,Puppet,Java成员方法执行顺序,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2020/05/31/Recyclerview%E5%8A%A0%E8%BD%BD%E5%9B%BE%E7%89%87%E9%94%99%E4%BD%8D/" title="Recyclerview加载图片错位">上一篇</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2020/05/31/Gradle%E7%89%88%E6%9C%AC%E4%BB%8E2-3%E5%8D%87%E5%88%B03-3-2%E9%97%AE%E9%A2%98%E9%9B%86%E9%94%A6/" title="Gradle版本从2.3升到3.3.2问题集锦">下一篇</a></li></ul></div><script src="/js/visitors.js"></script><a id="comments"></a><div id="vcomments" style="margin:0 30px;"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//cdn.jsdelivr.net/gh/xcss/valine@latest/dist/Valine.min.js"></script><script>var valine = new Valine({
+  el:'#vcomments',
+  notify:false || false, 
+  verify:false|| false, 
+  app_id:'xpSQCFiXzEQnCBUKrP6EHIUF-gzGzoHsz',
+  app_key:'Ev5N03MrqLzS683mu92hf4RO',
+  placeholder:'行至水穷处，坐看云起时...',
+  path: window.location.pathname,
+  serverURLs: '',
+  visitor:true,
+  recordIP:true,
+  avatar:'mm'
+})</script></div></div></div></div><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/add-bookmark.js"></script><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"debug":false,"model":{"scale":1,"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"left","hOffset":0,"vOffset":20},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"dialog":{"enable":false,"hitokoto":true}});</script></body></html>

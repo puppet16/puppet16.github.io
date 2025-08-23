@@ -1,0 +1,392 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="Ltt"><title>ADB常用命令 · Puppet</title><meta name="description" content="一、查看当前连接设备
+二、为命令指定目标设备
+三、断开无线连接的设备
+四、应用管理
+
+1. 查看应用列表
+2. 安装APK
+3. 卸载应用
+4. 清除应用数据与缓存
+5. 查看顶部Activity
+6. 查看应用详细信息
+7. 强制停止应用
+
+
+五、文件管理
+
+1. 复制设备里的文件到电脑
+2. 复"><meta name="keywords" content="技术博客,Hexo,Android,Linux,HTML,Java"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.webp"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/insight.css"><link rel="stylesheet" href="/css/search.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><script src="/js/jquery.js"></script><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body><div class="page-top animated fadeInDown"><div class="nav"><li> <a href="/">首页</a></li><li> <a href="/archives">归档</a></li><li> <a href="/tags">标签</a></li><li> <a href="/about">关于</a></li></div><div class="information"><div class="nav_right_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"></div></div></div><div class="sidebar animated fadeInDown"><div class="sidebar-top"><div class="logo-title"><div class="title"><img src="/images/logo@2x.webp" style="width:220px;" alt="favicon"><h3 title=""><a href="/">Puppet</a></h3><div class="description"><p>心之所愿，无事不成。<br> Nothing is impossible to a willing heart.</p></div></div><ul class="social-links"><li><a target="_blank" rel="noopener" href="https://github.com/puppet16"><i class="fa fa-github"></i></a></li><li><a href="mailto:mailto:2542469086@qq.com"><i class="fa fa-envelope"></i></a></li><li><a target="_blank" rel="noopener" href="http://sighttp.qq.com/authd?IDKEY=http://sighttp.qq.com/authd?IDKEY="><i class="fa fa-qq"></i></a></li><li><a target="_blank" rel="noopener" href="https://zhihu.com/"><i class="fa fa-mortar-board"></i></a></li></ul></div></div><div class="footer"><div class="p"> <span> 全站CC-BY-SA-3.0 </span><i class="fa fa-star"></i><span> Ltt</span></div><div class="by_farbox"><span>Powered by </span><a href="https://hexo.io/zh-cn/" target="_blank">Hexo </a><span> & </span><span>Anatolo </span></div><div class="beian"></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>ADB常用命令</a></h3></div><div class="post-content"><p><div class="toc">
+<!-- toc -->
+<ul>
+<li><a href="#%E4%B8%80-%E6%9F%A5%E7%9C%8B%E5%BD%93%E5%89%8D%E8%BF%9E%E6%8E%A5%E8%AE%BE%E5%A4%87">一、查看当前连接设备</a></li>
+<li><a href="#%E4%BA%8C-%E4%B8%BA%E5%91%BD%E4%BB%A4%E6%8C%87%E5%AE%9A%E7%9B%AE%E6%A0%87%E8%AE%BE%E5%A4%87">二、为命令指定目标设备</a></li>
+<li><a href="#%E4%B8%89-%E6%96%AD%E5%BC%80%E6%97%A0%E7%BA%BF%E8%BF%9E%E6%8E%A5%E7%9A%84%E8%AE%BE%E5%A4%87">三、断开无线连接的设备</a></li>
+<li><a href="#%E5%9B%9B-%E5%BA%94%E7%94%A8%E7%AE%A1%E7%90%86">四、应用管理</a>
+<ul>
+<li><a href="#1-%E6%9F%A5%E7%9C%8B%E5%BA%94%E7%94%A8%E5%88%97%E8%A1%A8">1. 查看应用列表</a></li>
+<li><a href="#2-%E5%AE%89%E8%A3%85apk">2. 安装APK</a></li>
+<li><a href="#3-%E5%8D%B8%E8%BD%BD%E5%BA%94%E7%94%A8">3. 卸载应用</a></li>
+<li><a href="#4-%E6%B8%85%E9%99%A4%E5%BA%94%E7%94%A8%E6%95%B0%E6%8D%AE%E4%B8%8E%E7%BC%93%E5%AD%98">4. 清除应用数据与缓存</a></li>
+<li><a href="#5-%E6%9F%A5%E7%9C%8B%E9%A1%B6%E9%83%A8activity">5. 查看顶部Activity</a></li>
+<li><a href="#6-%E6%9F%A5%E7%9C%8B%E5%BA%94%E7%94%A8%E8%AF%A6%E7%BB%86%E4%BF%A1%E6%81%AF">6. 查看应用详细信息</a></li>
+<li><a href="#7-%E5%BC%BA%E5%88%B6%E5%81%9C%E6%AD%A2%E5%BA%94%E7%94%A8">7. 强制停止应用</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BA%94-%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86">五、文件管理</a>
+<ul>
+<li><a href="#1-%E5%A4%8D%E5%88%B6%E8%AE%BE%E5%A4%87%E9%87%8C%E7%9A%84%E6%96%87%E4%BB%B6%E5%88%B0%E7%94%B5%E8%84%91">1. 复制设备里的文件到电脑</a></li>
+<li><a href="#2-%E5%A4%8D%E5%88%B6%E7%94%B5%E8%84%91%E9%87%8C%E7%9A%84%E6%96%87%E4%BB%B6%E5%88%B0%E8%AE%BE%E5%A4%87">2. 复制电脑里的文件到设备</a></li>
+</ul>
+</li>
+<li><a href="#%E5%85%AD-%E6%9F%A5%E7%9C%8B%E8%AE%BE%E5%A4%87%E4%BF%A1%E6%81%AF">六、查看设备信息</a>
+<ul>
+<li><a href="#1-%E6%9F%A5%E7%9C%8B%E5%9E%8B%E5%8F%B7">1. 查看型号</a></li>
+<li><a href="#2-%E7%94%B5%E6%B1%A0%E7%8A%B6%E5%86%B5">2. 电池状况</a></li>
+<li><a href="#3-%E5%B1%8F%E5%B9%95%E5%88%86%E8%BE%A8%E7%8E%87">3. 屏幕分辨率</a></li>
+<li><a href="#4-%E5%B1%8F%E5%B9%95%E5%AF%86%E5%BA%A6">4. 屏幕密度</a></li>
+<li><a href="#5-%E6%98%BE%E7%A4%BA%E5%B1%8F%E5%8F%82%E6%95%B0">5. 显示屏参数</a></li>
+<li><a href="#6-ip-%E5%9C%B0%E5%9D%80">6. <code>IP</code> 地址</a></li>
+<li><a href="#7-%E6%9B%B4%E5%A4%9A%E7%A1%AC%E4%BB%B6%E4%B8%8E%E7%B3%BB%E7%BB%9F%E5%B1%9E%E6%80%A7">7. 更多硬件与系统属性</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+</div> 
+<h2><a href="#一-查看当前连接设备" class="header-anchor">#</a><span id="一-查看当前连接设备">一、查看当前连接设备</span></h2>
+<p><strong>命令格式：</strong><br>
+<code>adb devices</code></p>
+<h2><a href="#二-为命令指定目标设备" class="header-anchor">#</a><span id="二-为命令指定目标设备">二、为命令指定目标设备</span></h2>
+<p>如果有多个设备/模拟器连接，则需要为命令指定目标设备。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>-d</strong></td>
+<td><strong>指定当前唯一通过 USB 连接的 Android 设备为命令目标</strong></td>
+</tr>
+<tr>
+<td style="text-align:center">-e</td>
+<td>指定当前唯一运行的模拟器为命令目标</td>
+</tr>
+<tr>
+<td style="text-align:center">-s <serialnumber></serialnumber></td>
+<td>指定相应 serialNumber 号的设备/模拟器为命令目标</td>
+</tr>
+<tr>
+<td style="text-align:center">其中<code>serialNumber</code>使用<code>adb devices</code>命令获取，如下</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">localhost:zs_student_android ltt$ adb devices</span><br><span class="line">List of devices attached</span><br><span class="line">e68e6c20        device</span><br><span class="line">10.201.62.78:5555       device</span><br></pre></td></tr></table></figure>
+<p>输出里的 e68e6c20、10.201.62.78:5555 即为 serialNumber。示例如下:<br>
+<code>adb -s 10.201.62.78:5555 install test.apk</code></p>
+<h2><a href="#三-断开无线连接的设备" class="header-anchor">#</a><span id="三-断开无线连接的设备">三、断开无线连接的设备</span></h2>
+<p><strong>命令格式：</strong><br>
+<code>adb disconnect &lt;device-ip-address&gt;</code></p>
+<h2><a href="#四-应用管理" class="header-anchor">#</a><span id="四-应用管理">四、应用管理</span></h2>
+<h3><a href="#1-查看应用列表" class="header-anchor">#</a><span id="1-查看应用列表">1. 查看应用列表</span></h3>
+<p><strong>命令格式：</strong><br>
+<code>adb shell pm list packages [-f] [-d] [-e] [-s] [-3] [-i] [-u] [--user USER_ID] [FILTER]</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">参数</th>
+<th>显示列表</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">无</td>
+<td>所有应用</td>
+</tr>
+<tr>
+<td style="text-align:center">-f</td>
+<td>显示应用关联的 apk 文件</td>
+</tr>
+<tr>
+<td style="text-align:center">-d</td>
+<td>只显示 disabled 的应用</td>
+</tr>
+<tr>
+<td style="text-align:center">-e</td>
+<td>只显示 enabled 的应用</td>
+</tr>
+<tr>
+<td style="text-align:center">-s</td>
+<td>只显示系统应用</td>
+</tr>
+<tr>
+<td style="text-align:center">-3</td>
+<td>只显示第三方应用</td>
+</tr>
+<tr>
+<td style="text-align:center">-i</td>
+<td>显示应用的 installer</td>
+</tr>
+<tr>
+<td style="text-align:center">-u</td>
+<td>包含已卸载应用</td>
+</tr>
+<tr>
+<td style="text-align:center"><filter></filter></td>
+<td>包名包含 <filter> 字符串</filter></td>
+</tr>
+</tbody>
+</table>
+<h3><a href="#2-安装apk" class="header-anchor">#</a><span id="2-安装apk">2. 安装APK</span></h3>
+<p><strong>命令格式：</strong><br>
+<code>adb install [-lrtsdg] &lt;path_to_apk&gt;</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">-l</td>
+<td>将应用安装到保护目录 /mnt/asec</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>-r</strong></td>
+<td><strong>允许覆盖安装</strong></td>
+</tr>
+<tr>
+<td style="text-align:center">-t</td>
+<td>允许安装 AndroidManifest.xml 里 application 指定 android:testOnly=“true” 的应用</td>
+</tr>
+<tr>
+<td style="text-align:center">-s</td>
+<td>将应用安装到 sdcard</td>
+</tr>
+<tr>
+<td style="text-align:center">-d</td>
+<td>允许降级覆盖安装</td>
+</tr>
+<tr>
+<td style="text-align:center">-g</td>
+<td>授予所有运行时权限</td>
+</tr>
+<tr>
+<td style="text-align:center">运行命令后成功输出如下：</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">localhost:zs_student_android ltt$ adb -d install -r debug.apk </span><br><span class="line">Performing Streamed Install</span><br><span class="line">Success  </span><br></pre></td></tr></table></figure>
+<h3><a href="#3-卸载应用" class="header-anchor">#</a><span id="3-卸载应用">3. 卸载应用</span></h3>
+<p><strong>命令格式：</strong><br>
+<code>adb uninstall [-k] &lt;packagename&gt;</code><br>
+说明：<packagename> 表示应用的包名，-k 参数可选，表示卸载应用但保留数据和缓存目录</packagename></p>
+<h3><a href="#4-清除应用数据与缓存" class="header-anchor">#</a><span id="4-清除应用数据与缓存">4. 清除应用数据与缓存</span></h3>
+<p><strong>命令格式：</strong><br>
+<code>adb shell pm clear &lt;packagename&gt;</code><br>
+说明：<packagename> 表示应用名包，这条命令的效果相当于在设置里的应用信息界面点击了「清除缓存」和「清除数据」。</packagename></p>
+<h3><a href="#5-查看顶部activity" class="header-anchor">#</a><span id="5-查看顶部activity">5. 查看顶部Activity</span></h3>
+<p><code>adb shell dumpsys activity top</code></p>
+<h3><a href="#6-查看应用详细信息" class="header-anchor">#</a><span id="6-查看应用详细信息">6. 查看应用详细信息</span></h3>
+<p><strong>命令格式：</strong><br>
+<code>adb shell dumpsys package &lt;packagename&gt;</code><br>
+说明：输出中包含很多信息，包括 Activity Resolver Table、Registered ContentProviders、包名、userId、安装后的文件资源代码等路径、版本信息、权限信息和授予状态、签名版本信息等。</p>
+<h3><a href="#7-强制停止应用" class="header-anchor">#</a><span id="7-强制停止应用">7. 强制停止应用</span></h3>
+<p>命令格式：<br>
+<code>adb shell am force-stop &lt;packagename&gt;</code></p>
+<h2><a href="#五-文件管理" class="header-anchor">#</a><span id="五-文件管理">五、文件管理</span></h2>
+<h3><a href="#1-复制设备里的文件到电脑" class="header-anchor">#</a><span id="1-复制设备里的文件到电脑">1. 复制设备里的文件到电脑</span></h3>
+<p><strong>命令格式：</strong><br>
+<code>adb pull &lt;设备里的文件路径&gt; [电脑上的目录]</code><br>
+说明：其中 电脑上的目录 参数可以省略，默认复制到当前目录。<br>
+<em>小技巧：设备上的文件路径可能需要 root 权限才能访问，如果你的设备已经 root 过，可以先使用 adb shell 和 su 命令在 adb shell 里获取 root 权限后，先 cp /path/on/device /sdcard/filename 将文件复制到 sdcard，然后 adb pull /sdcard/filename /path/on/pc。</em></p>
+<h3><a href="#2-复制电脑里的文件到设备" class="header-anchor">#</a><span id="2-复制电脑里的文件到设备">2. 复制电脑里的文件到设备</span></h3>
+<p><strong>命令格式：</strong><br>
+<code>adb push &lt;电脑上的文件路径&gt; &lt;设备里的目录&gt;</code><br>
+<em>小技巧：设备上的文件路径普通权限可能无法直接写入，如果你的设备已经 root 过，可以先 adb push /path/on/pc /sdcard/filename，然后 adb shell 和 su 在 adb shell 里获取 root 权限后，cp /sdcard/filename /path/on/device。</em></p>
+<h2><a href="#六-查看设备信息" class="header-anchor">#</a><span id="六-查看设备信息">六、查看设备信息</span></h2>
+<h3><a href="#1-查看型号" class="header-anchor">#</a><span id="1-查看型号">1. 查看型号</span></h3>
+<p><strong>命令格式：</strong><br>
+<code>adb shell getprop ro.product.model</code><br>
+输出示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">localhost:zs_student_android ltt$ adb -d shell</span><br><span class="line">natrium:/ $ getprop ro.product.model</span><br><span class="line">MI 5s Plus</span><br></pre></td></tr></table></figure>
+<h3><a href="#2-电池状况" class="header-anchor">#</a><span id="2-电池状况">2. 电池状况</span></h3>
+<p><strong>命令格式：</strong><br>
+<code>adb shell dumpsys battery</code><br>
+输出示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">localhost:zs_student_android ltt$ adb -d shell</span><br><span class="line">natrium:/ $ dumpsys battery</span><br><span class="line">Current Battery Service state:</span><br><span class="line">  AC powered: false</span><br><span class="line">  USB powered: true</span><br><span class="line">  Wireless powered: false</span><br><span class="line">  Max charging current: 500000</span><br><span class="line">  Max charging voltage: 5000000</span><br><span class="line">  Charge counter: 3057193</span><br><span class="line">  status: 2</span><br><span class="line">  health: 2</span><br><span class="line">  present: true</span><br><span class="line">  level: 100</span><br><span class="line">  scale: 100</span><br><span class="line">  voltage: 4322</span><br><span class="line">  temperature: 355</span><br><span class="line">  technology: Li-poly</span><br><span class="line">natrium:/ $ </span><br></pre></td></tr></table></figure>
+<h3><a href="#3-屏幕分辨率" class="header-anchor">#</a><span id="3-屏幕分辨率">3. 屏幕分辨率</span></h3>
+<p><strong>命令格式：</strong><br>
+<code>adb shell wm size</code><br>
+输出示例:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">natrium:/ $ wm size          </span><br><span class="line">Physical size: 1080x1920</span><br><span class="line">natrium:/ $ </span><br></pre></td></tr></table></figure>
+<h3><a href="#4-屏幕密度" class="header-anchor">#</a><span id="4-屏幕密度">4. 屏幕密度</span></h3>
+<p><strong>命令格式：</strong><br>
+<code>adb shell wm density</code><br>
+输出示例:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">natrium:/ $  wm density</span><br><span class="line">Physical density: 480</span><br><span class="line">natrium:/ $ </span><br></pre></td></tr></table></figure>
+<h3><a href="#5-显示屏参数" class="header-anchor">#</a><span id="5-显示屏参数">5. 显示屏参数</span></h3>
+<p><strong>命令格式：</strong><br>
+<code>adb shell dumpsys window displays</code><br>
+输出示例:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">natrium:/ $ dumpsys window displays</span><br><span class="line">WINDOW MANAGER DISPLAY CONTENTS (dumpsys window displays)</span><br><span class="line">  Display: mDisplayId=0</span><br><span class="line">    init=1080x1920 480dpi cur=1080x1920 app=1080x1920 rng=1080x1008-1920x1848</span><br><span class="line">    deferred=false mLayoutNeeded=false mTouchExcludeRegion=SkRegion((0,0,1080,1920))</span><br></pre></td></tr></table></figure>
+<h3><a href="#6-ip-地址" class="header-anchor">#</a><span id="6-ip-地址">6. <code>IP</code> 地址</span></h3>
+<p><strong>命令格式：</strong><br>
+<code>adb shell ifconfig | grep Mask</code><br>
+输出示例:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">|natrium:/ $ ifconfig</span><br><span class="line">lo        Link encap:UNSPEC  </span><br><span class="line">          inet addr:127.0.0.1  Mask:255.0.0.0 </span><br><span class="line">          inet6 addr: ::1/128 Scope: Host</span><br><span class="line">          UP LOOPBACK RUNNING  MTU:65536  Metric:1</span><br><span class="line">          RX packets:36944 errors:0 dropped:0 overruns:0 frame:0 </span><br><span class="line">          TX packets:36944 errors:0 dropped:0 overruns:0 carrier:0 </span><br><span class="line">          collisions:0 txqueuelen:0 </span><br><span class="line">          RX bytes:3245483 TX bytes:3245483 </span><br><span class="line"></span><br><span class="line">dummy0    Link encap:UNSPEC  </span><br><span class="line">          inet6 addr: fe80::b4e7:cfff:fef9:4fae/64 Scope: Link</span><br><span class="line">          UP BROADCAST RUNNING NOARP  MTU:1500  Metric:1</span><br><span class="line">          RX packets:0 errors:0 dropped:0 overruns:0 frame:0 </span><br><span class="line">          TX packets:166 errors:0 dropped:0 overruns:0 carrier:0 </span><br><span class="line">          collisions:0 txqueuelen:0 </span><br><span class="line">          RX bytes:0 TX bytes:11620 </span><br><span class="line"></span><br><span class="line">wlan0     Link encap:UNSPEC    Driver cnss_wlan_pci</span><br><span class="line">          inet addr:10.211.56.115  Bcast:10.211.63.255  Mask:255.255.248.0 </span><br><span class="line">          inet6 addr: fe80::c60b:cbff:fe82:a158/64 Scope: Link</span><br><span class="line">          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1</span><br><span class="line">          RX packets:7718005 errors:0 dropped:0 overruns:0 frame:0 </span><br><span class="line">          TX packets:867328 errors:0 dropped:3 overruns:0 carrier:0 </span><br><span class="line">          collisions:0 txqueuelen:3000 </span><br><span class="line">          RX bytes:2542947775 TX bytes:120155558 </span><br><span class="line"></span><br><span class="line">rmnet_ipa0 Link encap:UNSPEC  </span><br><span class="line">          UP RUNNING  MTU:2000  Metric:1</span><br><span class="line">          RX packets:0 errors:0 dropped:0 overruns:0 frame:0 </span><br><span class="line">          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0 </span><br><span class="line">          collisions:0 txqueuelen:1000 </span><br><span class="line">          RX bytes:0 TX bytes:0 </span><br></pre></td></tr></table></figure>
+<h3><a href="#7-更多硬件与系统属性" class="header-anchor">#</a><span id="7-更多硬件与系统属性">7. 更多硬件与系统属性</span></h3>
+<p><strong>命令格式：</strong><br>
+<code>adb shell cat /system/build.prop</code><br>
+<strong>说明：</strong><br>
+这会输出很多信息，包括前面几个小节提到的「型号」等。<br>
+输出里还包括一些其它有用的信息，它们也可通过 adb shell getprop &lt;属性名&gt; 命令单独查看，列举一部分属性如下：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">属性名</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">ro.build.version.sdk</td>
+<td>SDK 版本</td>
+</tr>
+<tr>
+<td style="text-align:center">ro.build.version.release</td>
+<td>Android 系统版本</td>
+</tr>
+<tr>
+<td style="text-align:center">ro.build.version.security_patch</td>
+<td>Android 安全补丁程序级别</td>
+</tr>
+<tr>
+<td style="text-align:center">ro.product.model</td>
+<td>型号</td>
+</tr>
+<tr>
+<td style="text-align:center">ro.product.brand</td>
+<td>品牌</td>
+</tr>
+<tr>
+<td style="text-align:center"><a target="_blank" rel="noopener" href="http://ro.product.name">ro.product.name</a></td>
+<td>设备名</td>
+</tr>
+<tr>
+<td style="text-align:center">ro.product.board</td>
+<td>处理器型号</td>
+</tr>
+<tr>
+<td style="text-align:center">ro.product.cpu.abilist</td>
+<td>CPU 支持的 abi 列表[节注一]</td>
+</tr>
+<tr>
+<td style="text-align:center">persist.sys.isUsbOtgEnabled</td>
+<td>是否支持 OTG</td>
+</tr>
+<tr>
+<td style="text-align:center">dalvik.vm.heapsize</td>
+<td>每个应用程序的内存上限</td>
+</tr>
+<tr>
+<td style="text-align:center">ro.sf.lcd_density</td>
+<td>屏幕密度</td>
+</tr>
+<tr>
+<td style="text-align:center">输出示例：</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<pre><code>
+:/ # cat /system/build.prop
+
+# begin build properties
+# autogenerated by buildinfo.sh
+ro.build.id=PQ3A.190801.002
+ro.build.display.id=lineage_natrium-userdebug 9 PQ3A.190801.002 cd6bf65336
+ro.build.version.incremental=cd6bf65336
+ro.build.version.sdk=28
+ro.build.version.preview_sdk=0
+ro.build.version.codename=REL
+ro.build.version.all_codenames=REL
+ro.build.version.release=9
+ro.build.version.security_patch=2019-11-05
+ro.build.version.base_os=
+ro.build.version.min_supported_target_sdk=17
+ro.build.date=Tue Dec 10 11:41:15 UTC 2019
+ro.build.date.utc=1575978075
+ro.build.type=userdebug
+ro.build.user=buildkite-agent
+ro.build.host=lineageos-buildkite
+ro.build.tags=release-keys
+ro.build.flavor=lineage_natrium-userdebug
+ro.product.model=MI 5s Plus
+ro.product.brand=Xiaomi
+ro.product.name=natrium
+ro.product.device=natrium
+# ro.product.cpu.abi and ro.product.cpu.abi2 are obsolete,
+# use ro.product.cpu.abilist instead.
+ro.product.cpu.abi=arm64-v8a
+ro.product.cpu.abilist=arm64-v8a,armeabi-v7a,armeabi
+ro.product.cpu.abilist32=armeabi-v7a,armeabi
+ro.product.cpu.abilist64=arm64-v8a
+ro.product.manufacturer=Xiaomi
+ro.product.locale=en-US
+ro.wifi.channels=
+# ro.build.product is obsolete; use ro.product.device
+ro.build.product=natrium
+# Do not try to parse description, fingerprint, or thumbprint
+ro.build.description=natrium-user 7.0 NRD90M V9.6.2.0.NBGMIFD release-keys
+ro.build.fingerprint=Xiaomi/natrium/natrium:7.0/NRD90M/V9.6.2.0.NBGMIFD:user/release-keys
+ro.build.characteristics=default
+ro.lineage.device=natrium
+# end build properties
+
+#
+# ADDITIONAL_BUILD_PROPERTIES
+#
+ro.treble.enabled=false
+persist.sys.dalvik.vm.lib.2=libart.so
+dalvik.vm.isa.arm64.variant=kryo
+dalvik.vm.isa.arm64.features=default
+dalvik.vm.isa.arm.variant=kryo
+dalvik.vm.isa.arm.features=default
+dalvik.vm.lockprof.threshold=500
+net.bt.name=Android
+dalvik.vm.stack-trace-dir=/data/anr
+ro.lineage.version=16.0-20191210-NIGHTLY-natrium
+ro.lineage.releasetype=NIGHTLY
+ro.lineage.build.version=16.0
+ro.modversion=16.0-20191210-NIGHTLY-natrium
+ro.lineagelegal.url=https://lineageos.org/legal
+ro.lineage.display.version=16.0-20191210-NIGHTLY-natrium
+ro.lineage.build.version.plat.sdk=9
+ro.lineage.build.version.plat.rev=0
+ro.build.expect.modem=2018-11-21 10:46:10,8.11.23
+ro.expect.recovery_id=0xdba5ab1265429e5480be01f327fb9860e39a1735000000000000000000000000
+</code></pre>
+<p><em>小提示：没有root可能会提示<code>cat: /system/build.prop: Permission denied</code>，这时在adb shell 里直接执行<code>su</code>就会看到用户命令提示符由”$”变成了”#”表示adb shell获取了root权限(仅限手机已root，且有su包)</em></p>
+<p><em><strong>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/zhonglunshun/article/details/78362439">玩转ADB命令（ADB命令使用大全）https://blog.csdn.net/zhonglunshun/article/details/78362439</a></strong></em></p>
+</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2020-06-01</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Android/" title="Android">Android </a><i class="fa fa-tag"></i><a class="tag" href="/tags/ADB/" title="ADB">ADB </a><span class="leancloud_visitors"></span><span>大约2058个字, 6分钟51秒读完</span></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="" onclick="javascript:join_favorite()" ref="sidebar"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://puppet16.github.io/2020/06/01/ADB常用命令/,Puppet,ADB常用命令,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2020/06/01/MotionLayout%E5%88%9D%E4%BD%93%E9%AA%8C%E4%B8%80/" title="MotionLayout 初体验一">上一篇</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2020/05/31/fitSystemWindow%E6%B2%89%E6%B5%B8%E7%8A%B6%E6%80%81%E6%A0%8F%E4%B8%8E%E9%94%AE%E7%9B%98%E5%86%B2%E7%AA%81%E9%97%AE%E9%A2%98/" title="fitSystemWindow沉浸状态栏与键盘冲突问题">下一篇</a></li></ul></div><script src="/js/visitors.js"></script><a id="comments"></a><div id="vcomments" style="margin:0 30px;"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//cdn.jsdelivr.net/gh/xcss/valine@latest/dist/Valine.min.js"></script><script>var valine = new Valine({
+  el:'#vcomments',
+  notify:false || false, 
+  verify:false|| false, 
+  app_id:'xpSQCFiXzEQnCBUKrP6EHIUF-gzGzoHsz',
+  app_key:'Ev5N03MrqLzS683mu92hf4RO',
+  placeholder:'行至水穷处，坐看云起时...',
+  path: window.location.pathname,
+  serverURLs: '',
+  visitor:true,
+  recordIP:true,
+  avatar:'mm'
+})</script></div></div></div></div><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/add-bookmark.js"></script><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"debug":false,"model":{"scale":1,"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"left","hOffset":0,"vOffset":20},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"dialog":{"enable":false,"hitokoto":true}});</script></body></html>

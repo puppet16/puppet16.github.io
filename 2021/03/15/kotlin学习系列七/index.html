@@ -1,0 +1,658 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="Ltt"><title>kotlin学习系列七：反射 · Puppet</title><meta name="description" content="一、前言
+二、反射的基本概念
+
+1. 反射概念
+2. 反射的依赖
+
+1. 添加反射库依赖
+
+
+3. 反射常见用途
+4. 反射常用的数据结构
+
+1. kotlin常用反射数据结构
+2. kotlin与java的反射数据结构对比
+
+
+5. Kotlin中使用反射
+
+1. 在Kotlin中使用Java反射"><meta name="keywords" content="技术博客,Hexo,Android,Linux,HTML,Java"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.webp"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/insight.css"><link rel="stylesheet" href="/css/search.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><script src="/js/jquery.js"></script><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body><div class="page-top animated fadeInDown"><div class="nav"><li> <a href="/">首页</a></li><li> <a href="/archives">归档</a></li><li> <a href="/tags">标签</a></li><li> <a href="/about">关于</a></li></div><div class="information"><div class="nav_right_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"></div></div></div><div class="sidebar animated fadeInDown"><div class="sidebar-top"><div class="logo-title"><div class="title"><img src="/images/logo@2x.webp" style="width:220px;" alt="favicon"><h3 title=""><a href="/">Puppet</a></h3><div class="description"><p>心之所愿，无事不成。<br> Nothing is impossible to a willing heart.</p></div></div><ul class="social-links"><li><a target="_blank" rel="noopener" href="https://github.com/puppet16"><i class="fa fa-github"></i></a></li><li><a href="mailto:mailto:2542469086@qq.com"><i class="fa fa-envelope"></i></a></li><li><a target="_blank" rel="noopener" href="http://sighttp.qq.com/authd?IDKEY=http://sighttp.qq.com/authd?IDKEY="><i class="fa fa-qq"></i></a></li><li><a target="_blank" rel="noopener" href="https://zhihu.com/"><i class="fa fa-mortar-board"></i></a></li></ul></div></div><div class="footer"><div class="p"> <span> 全站CC-BY-SA-3.0 </span><i class="fa fa-star"></i><span> Ltt</span></div><div class="by_farbox"><span>Powered by </span><a href="https://hexo.io/zh-cn/" target="_blank">Hexo </a><span> & </span><span>Anatolo </span></div><div class="beian"></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>kotlin学习系列七：反射</a></h3></div><div class="post-content"><p><div class="toc">
+<!-- toc -->
+<ul>
+<li><a href="#%E4%B8%80-%E5%89%8D%E8%A8%80">一、前言</a></li>
+<li><a href="#%E4%BA%8C-%E5%8F%8D%E5%B0%84%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5">二、反射的基本概念</a>
+<ul>
+<li><a href="#1-%E5%8F%8D%E5%B0%84%E6%A6%82%E5%BF%B5">1. 反射概念</a></li>
+<li><a href="#2-%E5%8F%8D%E5%B0%84%E7%9A%84%E4%BE%9D%E8%B5%96">2. 反射的依赖</a>
+<ul>
+<li><a href="#1-%E6%B7%BB%E5%8A%A0%E5%8F%8D%E5%B0%84%E5%BA%93%E4%BE%9D%E8%B5%96">1. 添加反射库依赖</a></li>
+</ul>
+</li>
+<li><a href="#3-%E5%8F%8D%E5%B0%84%E5%B8%B8%E8%A7%81%E7%94%A8%E9%80%94">3. 反射常见用途</a></li>
+<li><a href="#4-%E5%8F%8D%E5%B0%84%E5%B8%B8%E7%94%A8%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84">4. 反射常用的数据结构</a>
+<ul>
+<li><a href="#1-kotlin%E5%B8%B8%E7%94%A8%E5%8F%8D%E5%B0%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84">1. kotlin常用反射数据结构</a></li>
+<li><a href="#2-kotlin%E4%B8%8Ejava%E7%9A%84%E5%8F%8D%E5%B0%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%AF%B9%E6%AF%94">2. kotlin与java的反射数据结构对比</a></li>
+</ul>
+</li>
+<li><a href="#5-kotlin%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%8F%8D%E5%B0%84">5. Kotlin中使用反射</a>
+<ul>
+<li><a href="#1-%E5%9C%A8kotlin%E4%B8%AD%E4%BD%BF%E7%94%A8java%E5%8F%8D%E5%B0%84%E5%92%8Ckotlin%E5%8F%8D%E5%B0%84%E4%BC%98%E7%BC%BA%E7%82%B9">1. 在<code>Kotlin</code>中使用<code>Java</code>反射和<code>Kotlin</code>反射优缺点</a></li>
+<li><a href="#2-%E4%BD%BF%E7%94%A8kotlin%E5%8F%8D%E5%B0%84">2. 使用<code>Kotlin</code>反射</a></li>
+<li><a href="#3-kclass">3. <code>KClass</code></a></li>
+<li><a href="#4-kcallable">4. <code>KCallable</code></a></li>
+<li><a href="#5-kparameter">5. <code>KParameter</code></a></li>
+<li><a href="#6-ktype">6. <code>KType</code></a></li>
+<li><a href="#7-kclass%E4%B8%8Ektype%E5%8C%BA%E5%88%AB">7. <code>KClass</code>与<code>KType</code>区别</a></li>
+<li><a href="#8-%E7%B1%BB%E5%9E%8B%E6%93%A6%E9%99%A4">8. 类型擦除</a></li>
+<li><a href="#9-%E6%80%BB%E7%BB%93">9. 总结</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E4%B8%89-%E7%A4%BA%E4%BE%8B-%E8%8E%B7%E5%8F%96%E6%B3%9B%E5%9E%8B%E5%AE%9E%E5%8F%82">三、 示例 – 获取泛型实参</a>
+<ul>
+<li><a href="#1-%E8%8E%B7%E5%8F%96function%E8%BF%94%E5%9B%9E%E5%80%BC%E7%9A%84%E7%B1%BB%E5%9E%8B%E5%AE%9E%E5%8F%82">1. 获取<code>Function</code>返回值的类型实参</a>
+<ul>
+<li><a href="#1-%E9%80%9A%E8%BF%87kotlin%E5%8F%8D%E5%B0%84%E8%8E%B7%E5%8F%96">1. 通过<code>Kotlin</code>反射获取</a></li>
+<li><a href="#2-%E9%80%9A%E8%BF%87java%E5%8F%8D%E5%B0%84%E8%8E%B7%E5%8F%96">2. 通过<code>Java</code>反射获取</a></li>
+</ul>
+</li>
+<li><a href="#2-%E5%9C%A8%E6%8A%BD%E8%B1%A1%E7%88%B6%E7%B1%BB%E9%87%8C%E8%8E%B7%E5%8F%96%E8%AF%A5%E7%88%B6%E7%B1%BB%E6%B3%9B%E5%9E%8B%E7%9A%84%E5%AE%9E%E5%8F%82">2. 在抽象父类里获取该父类泛型的实参</a></li>
+</ul>
+</li>
+<li><a href="#%E5%9B%9B-%E7%A4%BA%E4%BE%8B-%E4%B8%BA%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%AE%9E%E7%8E%B0deepcopy">四、 示例 – 为数据类实现<code>DeepCopy</code></a>
+<ul>
+<li><a href="#1-%E6%95%B0%E6%8D%AE%E7%B1%BB%E8%87%AA%E5%B8%A6%E7%9A%84copy%E6%96%B9%E6%B3%95%E5%8F%AA%E6%98%AF%E6%B5%85%E6%8B%B7%E8%B4%9D">1. 数据类自带的<code>copy</code>方法只是浅拷贝</a></li>
+<li><a href="#2-%E4%B8%BA%E6%95%B0%E6%8D%AE%E7%B1%BB%E6%B7%BB%E5%8A%A0%E6%B7%B1%E6%8B%B7%E8%B4%9D%E6%96%B9%E6%B3%95">2. 为数据类添加深拷贝方法</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BA%94-%E7%A4%BA%E4%BE%8B-model%E6%98%A0%E5%B0%84">五、 示例 – Model映射</a>
+<ul>
+<li><a href="#1-%E9%80%9A%E8%BF%87map%E8%BD%AC%E4%B8%BA%E4%BB%BB%E6%84%8F%E7%B1%BB%E5%9E%8B">1. 通过<code>Map</code>转为任意类型</a></li>
+<li><a href="#2-%E9%80%9A%E8%BF%87%E4%BB%BB%E6%84%8F%E7%B1%BB%E5%9E%8B%E6%98%A0%E5%B0%84%E4%B8%BA%E4%BB%BB%E6%84%8F%E7%B1%BB%E5%9E%8B">2. 通过任意类型映射为任意类型</a></li>
+</ul>
+</li>
+<li><a href="#%E5%85%AD-%E7%A4%BA%E4%BE%8B-%E5%8F%AF%E9%87%8A%E6%94%BE%E5%AF%B9%E8%B1%A1%E5%BC%95%E7%94%A8%E7%9A%84%E4%B8%8D%E5%8F%AF%E7%A9%BA%E7%B1%BB%E5%9E%8B">六、 示例 – 可释放对象引用的不可空类型</a></li>
+<li><a href="#%E4%B8%83-%E6%8F%92%E4%BB%B6%E5%8C%96%E5%8A%A0%E8%BD%BD%E7%B1%BB">七、 插件化加载类</a>
+<ul>
+<li><a href="#1-classloader">1. <code>ClassLoader</code></a>
+<ul>
+<li><a href="#1-classloader%E7%9A%84%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B6">1. <code>ClassLoader</code>的双亲委派机制</a></li>
+</ul>
+</li>
+<li><a href="#2-%E6%8F%92%E4%BB%B6%E5%8C%96%E5%8A%A0%E8%BD%BD%E7%B1%BB%E5%AE%9E%E7%8E%B0">2. 插件化加载类实现</a>
+<ul>
+<li><a href="#1-%E5%88%9B%E5%BB%BAplugin%E6%8E%A5%E5%8F%A3">1. 创建<code>plugin</code>接口</a></li>
+<li><a href="#2-%E5%88%9B%E5%BB%BA%E4%B8%A4%E4%B8%AA%E7%BB%A7%E6%89%BFplugin%E6%8E%A5%E5%8F%A3%E7%9A%84%E7%B1%BB">2. 创建两个继承<code>plugin</code>接口的类</a></li>
+<li><a href="#3-%E5%B0%86%E5%AE%9E%E7%8E%B0%E7%B1%BB%E6%89%80%E5%9C%A8module%E6%89%93%E5%8C%85%E6%88%90jar">3. 将实现类所在<code>Module</code>打包成<code>jar</code></a></li>
+<li><a href="#4-%E4%B8%BA%E4%B8%A4%E4%B8%AA%E5%AE%9E%E7%8E%B0%E6%8E%A5%E5%8F%A3%E7%9A%84%E7%B1%BB%E6%B7%BB%E5%8A%A0%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6">4. 为两个实现接口的类添加配置文件</a></li>
+<li><a href="#5-%E9%80%92%E5%BD%92%E7%9B%91%E5%90%AC%E6%96%87%E4%BB%B6%E5%A4%B9">5. 递归监听文件夹</a></li>
+<li><a href="#6-%E5%88%9B%E5%BB%BA%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8">6. 创建自定义类加载器</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E5%85%AB-%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0">八、参考文章</a></li>
+</ul>
+<!-- tocstop -->
+</div>
+<h1><a href="#一-前言" class="header-anchor">#</a><span id="一-前言">一、前言</span></h1>
+<ol>
+<li>本文主要讲述<strong>Kotlin 反射</strong></li>
+<li><em>本文是对<a target="_blank" rel="noopener" href="https://github.com/enbandari">Bennyhuo老师</a>讲解的<code>Kotlin</code>系列视频的总结笔记</em></li>
+<li><strong>Kotlin官网：<a target="_blank" rel="noopener" href="https://kotlinlang.org/">https://kotlinlang.org/</a></strong></li>
+<li><strong>Kotlin中文官网：<a target="_blank" rel="noopener" href="https://www.kotlincn.net/">https://www.kotlincn.net/</a></strong></li>
+<li><strong>Kotlin源码：<a target="_blank" rel="noopener" href="https://github.com/JetBrains/kotlin">https://github.com/JetBrains/kotlin</a></strong></li>
+<li>Kotlin 学习系列文章：
+<ul>
+<li>
+<a href="/2020/12/07/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%80/" title="Kotlin学习系列一：内置类型">kotlin学习系列一：内置类型</a>
+</li>
+<li>
+<a href="/2020/12/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%BA%8C/" title="Kotlin学习系列二：类与接口初解">kotlin学习系列二：类与接口初解</a>
+</li>
+<li>
+<a href="/2021/01/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%89/" title="Kotlin学习系列三：表达式">kotlin学习系列三：表达式</a>
+</li>
+<li>
+<a href="/2021/01/22/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%9B%9B/" title="Kotlin学习系列四：函数进阶">kotlin学习系列四：函数进阶</a>
+</li>
+<li>
+<a href="/2021/02/02/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%BA%94/" title="Kotlin学习系列五：类型进阶">kotlin学习系列五：类型进阶</a>
+</li>
+<li>
+<a href="/2021/03/08/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AD/" title="kotlin学习系列六：泛型">kotlin学习系列六：泛型</a>
+</li>
+<li>
+<a href="/2021/03/23/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AB/" title="kotlin 学习系列八：注解">kotlin学习系列八：注解</a>
+</li>
+<li>
+<a href="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/" title="kotlin学习系列九：协程一">kotlin学习系列九：协程初解</a>
+</li>
+<li>
+<a href="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%8D%81/" title="kotlin学习系列十：协程二">kotlin学习系列十：协程进阶</a>
+</li>
+<li>
+<a href="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%8D%81%E4%B8%80/" title="kotlin学习系列十一：协程三">kotlin学习系列十一：协程应用</a>
+</li>
+</ul>
+</li>
+</ol>
+<h1><a href="#二-反射的基本概念" class="header-anchor">#</a><span id="二-反射的基本概念">二、反射的基本概念</span></h1>
+<h2><a href="#1-反射概念" class="header-anchor">#</a><span id="1-反射概念">1. 反射概念</span></h2>
+<ol>
+<li>反射是允许程序在运行时访问程序结构的一类特性</li>
+<li>程序结构包括：类、接口、方法、属性等语法特性</li>
+</ol>
+<p>总的来看，<code>Kotlin</code> 反射具备这三个特质：</p>
+<ul>
+<li><strong>感知</strong> 程序的状态，包含程序的运行状态，还有源代码结构；</li>
+<li>修改程序的状态；</li>
+<li>根据程序的状态，<strong>调整</strong>自身的决策行为。</li>
+</ul>
+<h2><a href="#2-反射的依赖" class="header-anchor">#</a><span id="2-反射的依赖">2. 反射的依赖</span></h2>
+<p><img src="/2021/03/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%83/kotlin_reflection_dependences.png" alt></p>
+<p><strong>说明：</strong></p>
+<ol>
+<li><code>Java</code>中有反射的概念，<code>Java</code>的<code>JDK</code>中包含了<code>Java</code>的反射<code>API</code></li>
+<li>对于<code>Kotlin</code>来说，<code>Kotlin</code>自己做了一套反射的<code>API</code>,是一个独立的库</li>
+</ol>
+<h3><a href="#1-添加反射库依赖" class="header-anchor">#</a><span id="1-添加反射库依赖">1. 添加反射库依赖</span></h3>
+<p>在 <code>Kotlin</code> 当中，反射库并没有直接集成到标准库当中。这是为了方便一些对程序安装包敏感的应用，可以根据实际需求来选择是否要用 <code>Kotlin</code> 反射。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">dependencies &#123;</span><br><span class="line">    implementation(kotlin(“stdlib-jdk8”, KotlinCompilerVersion.VERSION))</span><br><span class="line">    implementation(”org.jetbrains.kotlin:kotlin-reflect”)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>使用<code>Kotlin</code>的反射，需要单独引入依赖库<code>kotlin-reflect</code></li>
+<li><code>stdlib</code>是<code>Kotlin</code>的标准库</li>
+</ol>
+<h2><a href="#3-反射常见用途" class="header-anchor">#</a><span id="3-反射常见用途">3. 反射常见用途</span></h2>
+<ol>
+<li>列出类型的所有属性 <em>(java-&gt;filed，kotlin-&gt;property)</em>、方法 <em>(java-&gt;method，kotlin-&gt;funtion)</em>、内部类等等</li>
+<li>调用给定名称及签名的方法或访问指定名称的属性</li>
+<li>通过签名信息获取泛型实参的具体类型</li>
+<li>访问运行时注解及其信息完成注入或者配置操作</li>
+</ol>
+<h2><a href="#4-反射常用的数据结构" class="header-anchor">#</a><span id="4-反射常用的数据结构">4. 反射常用的数据结构</span></h2>
+<h3><a href="#1-kotlin常用反射数据结构" class="header-anchor">#</a><span id="1-kotlin常用反射数据结构">1. kotlin常用反射数据结构</span></h3>
+<table>
+<thead>
+<tr>
+<th>数据结构</th>
+<th>概念及使用说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>KType</td>
+<td>描述未擦除的类型或泛型参数等，例如：Map&lt;String,Int&gt;;<br>可通过typeOf或者以下类型获取对应的父类、属性、函数参数等</td>
+</tr>
+<tr>
+<td>KClass</td>
+<td>描述对象的实际类型，不包含泛型参数，例如：Map; <br> 可通过对象、类型名直接获得</td>
+</tr>
+<tr>
+<td>KProperty</td>
+<td>描述属性，可通过属性引用、属性所在类的KClass获取</td>
+</tr>
+<tr>
+<td>KFunction</td>
+<td>描述函数，可通过函数引用、函数所在类的KClass获取</td>
+</tr>
+</tbody>
+</table>
+<p><strong>说明：</strong></p>
+<ol>
+<li><code>KType</code>描述的是类型，与写出来的类型是一致的，而<code>KClass</code>描述的是真实的类型，编译完成后的泛型擦除掉的类型。</li>
+<li>属性包括<code>backing-field</code>、<code>getter</code>、<code>setter</code>，<code>KProperty</code>有对应属性可以获取到<code>getter</code>、<code>setter</code></li>
+</ol>
+<h3><a href="#2-kotlin与java的反射数据结构对比" class="header-anchor">#</a><span id="2-kotlin与java的反射数据结构对比">2. kotlin与java的反射数据结构对比</span></h3>
+<p><img src="/2021/03/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%83/reflection_compare.png" alt></p>
+<p><strong>说明：</strong></p>
+<ol>
+<li><code>KType</code>基本对应<code>Java</code>中的<code>Type</code>，使用场景也类似</li>
+<li><code>KClass</code>对应<code>Java</code>中的<code>Class</code></li>
+<li><code>KProperty</code>与<code>Java</code>中的<code>Field</code>作用类似，但是<code>KProperty</code>功能更强大</li>
+<li><code>KFunction</code>与<code>Java</code>中的<code>Method</code>作用类似。<code>Java</code>中没有函数的概念，只有方法的概念。而<code>Function</code>既可以当顶级函数使用，也可以当作方法使用</li>
+</ol>
+<h2><a href="#5-kotlin中使用反射" class="header-anchor">#</a><span id="5-kotlin中使用反射">5. Kotlin中使用反射</span></h2>
+<h3><a href="#1-在kotlin中使用java反射和kotlin反射优缺点" class="header-anchor">#</a><span id="1-在kotlin中使用java反射和kotlin反射优缺点">1. 在<code>Kotlin</code>中使用<code>Java</code>反射和<code>Kotlin</code>反射优缺点</span></h3>
+<p><code>Kotlin</code>中也可以使用<code>Java</code>反射</p>
+<ul>
+<li>
+<p><code>Java</code>反射</p>
+<ul>
+<li>优点：无需引入额外依赖，首次使用速度相对较快</li>
+<li>缺点：无法访问Kotlin语法特性，需对Kotlin生成的字节码足够了解</li>
+</ul>
+</li>
+<li>
+<p><code>Kotlin</code>反射</p>
+<ul>
+<li>优点：支持访问Kotlin几乎所有特性，API设计更友好</li>
+<li>缺点：引用Kotlin反射库(2.5MB，编译后400KB)，首次调用慢</li>
+</ul>
+</li>
+</ul>
+<p><code>Kotlin</code>反射首次调用慢的原因：<code>Kotlin</code>反射信息是写到注解<code>@Metadata</code>中，而这些信息序列化为二进制，首次调用会获取注解，并将信息反序列化。</p>
+<h3><a href="#2-使用kotlin反射" class="header-anchor">#</a><span id="2-使用kotlin反射">2. 使用<code>Kotlin</code>反射</span></h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//java</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> NoSuchFieldException &#123;</span><br><span class="line">    Class&lt;String&gt; cls = String.class;</span><br><span class="line">    Class&lt;? <span class="keyword">extends</span> <span class="title class_">Object</span>&gt; clsOfObj = String.class;</span><br><span class="line">    <span class="type">Field</span> <span class="variable">field</span> <span class="operator">=</span> cls.getDeclaredField(<span class="string">&quot;value&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//kotlin</span></span><br><span class="line"><span class="meta">@ExperimentalStdlibApi</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> cls: KClass&lt;String&gt; = String::<span class="keyword">class</span></span><br><span class="line">    <span class="title class_">val</span> <span class="title">mapCls</span> = <span class="title">Map</span>:<span class="type">:class</span></span><br><span class="line">    println(mapCls)</span><br><span class="line">    <span class="keyword">val</span> property = cls.declaredMemberProperties.firstOrNull()</span><br><span class="line">    <span class="keyword">val</span> mapType = typeOf&lt;Map&lt;String, <span class="built_in">Int</span>&gt;&gt;()</span><br><span class="line">    cls.members.forEach &#123;</span><br><span class="line">        println(it.name)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>如上所示，先获取<code>String</code>类的<code>KClass</code>，然后通过方法<code>declaredMemberProperties</code>获取声明在<code>String</code>类中的属性</li>
+<li>使用<code>::class</code>获取某个类的<code>KClass</code></li>
+<li><code>Java</code>的<code>Class</code>与<code>Kotin</code>的<code>KClass</code>相互转化:
+<ul>
+<li><code>Java</code>的<code>Class</code>转换为<code>KClass</code>：在<code>Class</code>类后加<code>.kotlin</code></li>
+<li><code>Kotlin</code>的<code>KClass</code>转换为<code>Class</code>：在<code>KClass</code>类后加<code>.java</code></li>
+</ul>
+</li>
+</ol>
+<h3><a href="#3-kclass" class="header-anchor">#</a><span id="3-kclass">3. <code>KClass</code></span></h3>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">actual</span> <span class="keyword">interface</span> <span class="title class_">KClass</span>&lt;<span class="type">T : Any</span>&gt; : <span class="type">KDeclarationContainer</span>, <span class="type">KAnnotatedElement</span>, <span class="type">KClassifier</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">actual</span> <span class="keyword">val</span> simpleName: String?</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">actual</span> <span class="keyword">val</span> qualifiedName: String?</span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="keyword">val</span> members: Collection&lt;KCallable&lt;*&gt;&gt;</span><br><span class="line">    <span class="comment">// 省略部分代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个 <code>KClass</code> 其实就代表了一个 <code>Kotlin</code> 类，通过 对象 <code>::class</code>，我们就可以拿到这个对象的<code>KClass</code></p>
+<ul>
+<li>
+<p><code>simpleName</code>，类的名称，对于匿名内部类，则为 <code>null</code>；</p>
+</li>
+<li>
+<p><code>qualifiedName</code>，完整的类名；</p>
+</li>
+<li>
+<p><code>members</code>，所有成员属性和方法，类型是<code>Collection&lt;Kcallable&lt;*&gt;&gt;</code>；</p>
+</li>
+<li>
+<p><code>constructors</code>，类的所有构造函数，类型是<code>Collection&lt;KFunction&lt;T&gt;&gt;</code>；</p>
+</li>
+<li>
+<p><code>nestedClasses</code>，类的所有嵌套类，类型是<code>Collection&lt;KClass&lt;*&gt;&gt;</code>；</p>
+</li>
+<li>
+<p><code>visibility</code>，类的可见性，类型是<code>KVisibility?</code>，分别是这几种情况，<code>PUBLIC</code>、<code>PROTECTED</code>、<code>INTERNAL</code>、<code>PRIVATE</code>；</p>
+</li>
+<li>
+<p><code>is</code>开头的函数：判断是否为某个类型：</p>
+<ul>
+<li><code>isAbstract</code>，是不是抽象类</li>
+<li><code>isCompanion</code>，是不是伴生对象</li>
+<li><code>isFinal</code>，是不是 <code>final</code>；</li>
+<li><code>isOpen</code>，是不是 <code>open</code>；</li>
+<li><code>isSealed</code>，是不是密封的；</li>
+<li><code>isData</code>，是不是数据类；</li>
+<li><code>isInner</code>，是不是内部类；</li>
+<li><code>isFun</code>，是不是函数式接口；</li>
+<li><code>isValue</code>，是不是 <code>Value Class</code></li>
+</ul>
+</li>
+<li>
+<p><code>nestedClasses()</code>：获取内部类</p>
+</li>
+<li>
+<p><code>objectInstance()</code>：获取<code>object</code>实例，如果调用的<code>KClass</code>是单例类，可通过该方法直接获取单例类的实例</p>
+</li>
+<li>
+<p><code>supertypes()</code>：获取父类的<code>KType</code>列表。</p>
+</li>
+<li>
+<p><code>declaredMemberProperties</code>只能获取声明在某个类中的属性，拿不到该类的扩展属性。</p>
+  <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> cls: KClass&lt;String&gt; = String::<span class="keyword">class</span></span><br><span class="line"><span class="title class_">cls</span>.<span class="title">declaredMemberProperties</span></span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>代码<code>cls.declaredMemberProperties</code>的返回类型为<code>Collection&lt;KProperty1&lt;String, *&gt;&gt;</code></li>
+<li><code>KProperty</code>与<code>KFunction</code>后数字释义：
+<ul>
+<li>如果没有<code>receiver</code>，则是<code>KProperty0</code>与<code>KFunction0</code></li>
+<li>如果有一个<code>receiver</code>，则是<code>KProperty1</code>与<code>KFunction1</code></li>
+<li>如果有两个<code>receiver</code>，则是<code>KProperty2</code>与<code>KFunction2</code></li>
+</ul>
+</li>
+</ol>
+</li>
+<li>
+<p><code>declaredMemberExtensionProperties</code>只能获取 <strong>声明在某个类中</strong>的扩展属性，获取的扩展属性不是该类的扩展属性</p>
+ <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> String.<span class="title">printStar</span><span class="params">()</span></span> &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong> 如上代码所示，在类<code>A</code>中为类<code>String</code>定义了一个扩展函数<code>printStar()</code>，则代码<code>A::class.declaredMemberExtensionFunctions</code>可以获取到扩展函数<code>printStar()</code>，但是<code>String.class.declaredMemberExtensionFunctions</code>获取不到。函数<code>printStar()</code>就有两个<code>receiver</code>：<code>A</code>，<code>String</code></p>
+</li>
+</ul>
+<h3><a href="#4-kcallable" class="header-anchor">#</a><span id="4-kcallable">4. <code>KCallable</code></span></h3>
+<p><code>KCallable</code> 代表了 <code>Kotlin</code> 当中的所有可调用的元素，比如函数、属性、甚至是构造函数。下面是 <code>KCallable</code> 的重要成员：</p>
+<ul>
+<li><code>name</code>，名称，这个很好理解，属性和函数都有名称；</li>
+<li><code>parameters</code>，所有的参数，类型是<code>List&lt;KParameter&gt;</code>，指的是调用这个元素所需的所有参数；</li>
+<li><code>returnType</code>，返回值类型，类型是 <code>KType</code>；</li>
+<li><code>typeParameters</code>，所有的类型参数 (比如泛型)，类型是<code>List&lt;KTypeParameter&gt;</code>；</li>
+<li><code>call()</code>，<code>KCallable</code> 对应的调用方法</li>
+<li><code>visibility</code>，可见性；</li>
+<li><code>isSuspend</code>，是不是挂起函数</li>
+</ul>
+<h3><a href="#5-kparameter" class="header-anchor">#</a><span id="5-kparameter">5. <code>KParameter</code></span></h3>
+<p><code>KParameter</code>，代表了<code>KCallable</code>当中的参数，它的重要成员如下：</p>
+<ul>
+<li><code>index</code>，参数的位置，下标从 0 开始；</li>
+<li><code>name</code>，参数的名称，源码当中参数的名称；</li>
+<li><code>type</code>，参数的类型，类型是 <code>KType</code>；</li>
+<li><code>kind</code>，参数的种类，对应三种情况：<code>INSTANCE</code> 是对象实例、<code>EXTENSION_RECEIVER</code> 是扩展接受者、<code>VALUE</code> 是实际的参数值。</li>
+</ul>
+<h3><a href="#6-ktype" class="header-anchor">#</a><span id="6-ktype">6. <code>KType</code></span></h3>
+<p><code>KType</code>，代表了 <code>Kotlin</code> 当中的类型，它重要的成员如下：</p>
+<ul>
+<li><code>classifier</code>，类型对应的 <code>Kotlin</code> 类，即 <code>KClass</code>，例子： <code>classifier == String::class</code> 来判断是不是 <code>String</code> 类型的；</li>
+<li><code>arguments</code>，类型的类型参数，看起来好像有点绕，其实它就是这个类型的泛型参数；</li>
+<li><code>isMarkedNullable</code>，是否在源代码中标记为可空类型，即这个类型的后面有没有“?”修饰。</li>
+</ul>
+<h3><a href="#7-kclass与ktype区别" class="header-anchor">#</a><span id="7-kclass与ktype区别">7. <code>KClass</code>与<code>KType</code>区别</span></h3>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> mapCls = Map::<span class="keyword">class</span></span><br><span class="line">    <span class="title class_">println</span>(mapCls)</span><br><span class="line">    <span class="keyword">val</span> mapType = typeOf&lt;Map&lt;<span class="keyword">out</span> String, <span class="built_in">Int</span>&gt;&gt;()</span><br><span class="line">    mapType.arguments.forEach &#123;</span><br><span class="line">        println(it)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>打印结果：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">kotlin</span>.collections.Map</span><br><span class="line">out kotlin.String</span><br><span class="line">kotlin.Int</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li><code>Map::class</code>获取的<code>KClass</code>打印出来就只是该类型的<code>class</code></li>
+<li><code>mapType.arguments</code>返回值类型是<code>List&lt;KTypeProjection&gt;</code>，打印每个<code>KTypeProjection</code></li>
+<li><code>KTypeProjection</code>的构造器中有两个参数<code>Kvariance</code><em>(使用处的型变声明)</em>、<code>KType</code><em>(泛型实参类型)</em></li>
+<li>在获取<code>KType</code>时，为<code>Map</code>的第一个泛型<code>String</code>添加了逆变声明<code>out</code>，所以在打印类型时会先打印出参数的型变类型，之后再打印出类型，如果没有定义型变则只显示类型</li>
+</ol>
+<h3><a href="#8-类型擦除" class="header-anchor">#</a><span id="8-类型擦除">8. 类型擦除</span></h3>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span>(<span class="keyword">val</span> name: String, <span class="keyword">val</span> age: String)</span><br><span class="line"></span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">Api</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">getUsers</span><span class="params">()</span></span>: List&lt;Person&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述代码的关键二进制代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">interface</span> <span class="title class_">cn</span>/ltt/projectcollection/kotlin/kotlinreflection/Api &#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="comment">// access flags 0x401</span></span><br><span class="line">  <span class="comment">// signature ()Ljava/util/List&lt;Lcn/ltt/projectcollection/kotlin/kotlinreflection/Person;&gt;;</span></span><br><span class="line">  <span class="comment">// declaration: java.util.List&lt;cn.ltt.projectcollection.kotlin.kotlinreflection.Person&gt; getUsers()</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="title function_">getUsers</span><span class="params">()</span>Ljava/util/List;</span><br><span class="line">  <span class="meta">@Lorg</span>/jetbrains/annotations/NotNull;() <span class="comment">// invisible</span></span><br><span class="line">    LOCALVARIABLE <span class="built_in">this</span> Lcn/ltt/projectcollection/kotlin/kotlinreflection/Api; L0 L1 <span class="number">0</span></span><br><span class="line"></span><br><span class="line">  <span class="meta">@Lkotlin</span>/Metadata;(mv=&#123;<span class="number">1</span>, <span class="number">4</span>, <span class="number">2</span>&#125;, bv=&#123;<span class="number">1</span>, <span class="number">0</span>, <span class="number">3</span>&#125;, k=<span class="number">1</span>, d1=&#123;<span class="string">&quot;\u0000\u0014\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0000\n\u0002\u0010 \n\u0002\u0018\u0002\n\u0000\u0008f\u0018\u00002\u00020\u0001J\u000e\u0010\u0002\u001a\u0008\u0012\u0004\u0012\u00020\u00040\u0003H&amp;\u00a8\u0006\u0005&quot;</span>&#125;, d2=&#123;<span class="string">&quot;Lcn/ltt/projectcollection/kotlin/kotlinreflection/Api;&quot;</span>, <span class="string">&quot;&quot;</span>, <span class="string">&quot;getUsers&quot;</span>, <span class="string">&quot;&quot;</span>, <span class="string">&quot;Lcn/ltt/projectcollection/kotlin/kotlinreflection/Person;&quot;</span>, <span class="string">&quot;app_debug&quot;</span>&#125;)</span><br><span class="line">  <span class="comment">// compiled from: KotlinReflectionLab.kt</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>可以看到在类<code>Api</code>中的<code>getUsers()</code>函数返回结果是<code>Person</code>类型的集合，而编译后该方法返回值是<code>List</code>,将<code>Person</code>擦除了。</li>
+<li>可以通过<code>signature</code>拿到这个类型<code>Person</code>。</li>
+<li>混淆时，<code>proguard</code>会将<code>signature</code>混淆，所以要<code>keep</code>住<code>signature</code>才可以拿到泛型实参。<br>
+<code>Proguard</code>配置：<code>-keepattributes Signature</code></li>
+</ol>
+<h3><a href="#9-总结" class="header-anchor">#</a><span id="9-总结">9. 总结</span></h3>
+<p>反射，其实就是 <code>Kotlin</code> 为我们开发者提供的一个工具，通过这个工具，我们可以让程序在运行的时候“自我反省”。这里的“自我反省”一共有三种情况，其实跟我们的现实生活类似。</p>
+<ul>
+<li>第一种情况，程序在运行的时候，可以通过反射来查看自身的状态。</li>
+<li>第二种情况，程序在运行的时候，可以修改自身的状态。</li>
+<li>第三种情况，程序在运行的时候，可以根据自身的状态调整自身的行为。</li>
+</ul>
+<h1><a href="#三-示例-获取泛型实参" class="header-anchor">#</a><span id="三-示例-获取泛型实参">三、 示例 – 获取泛型实参</span></h1>
+<h2><a href="#1-获取function返回值的类型实参" class="header-anchor">#</a><span id="1-获取function返回值的类型实参">1. 获取<code>Function</code>返回值的类型实参</span></h2>
+<h3><a href="#1-通过kotlin反射获取" class="header-anchor">#</a><span id="1-通过kotlin反射获取">1. 通过<code>Kotlin</code>反射获取</span></h3>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span>(<span class="keyword">val</span> name:String, <span class="keyword">val</span> age: String)</span><br><span class="line"></span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">Api</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">getUsers</span><span class="params">()</span></span>: List&lt;Person&gt;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="comment">//方法一</span></span><br><span class="line">    Api::<span class="keyword">class</span>.declaredMemberFunctions.first &#123; it.name == <span class="string">&quot;getUsers&quot;</span> &#125;</span><br><span class="line">            .returnType.arguments.forEach &#123;</span><br><span class="line">                println(it)</span><br><span class="line">            &#125;</span><br><span class="line">    <span class="comment">//方法二</span></span><br><span class="line">    Api::getUsers.returnType.arguments.forEach &#123; println(it) &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>打印结果：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cn.ltt.projectcollection.kotlin.kotlinreflection.Person</span><br><span class="line">cn.ltt.projectcollection.kotlin.kotlinreflection.Person</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>方法一：通过<code>declaredMemberFunctions</code>方法获取<code>Api</code>类中的<code>KFunction</code>集合，然后通过函数名称过滤得到<code>getUsers()</code>函数的<code>KFunction</code>，之后调用<code>returnType</code>函数返回<code>KFunction</code>中的<code>KType</code>，然后通过<code>KType</code>拿到泛型的实参<code>Person</code></li>
+<li>方法二：直接拿到<code>getUsers()</code>的函数引用<code>KFunction1&lt;Api, List&lt;Person&gt;&gt;</code>，之后调用<code>returnType</code>函数返回<code>KFunction</code>中的<code>KType</code>，然后通过<code>KType</code>拿到泛型的实参<code>Person</code></li>
+<li><code>first</code>函数作用是返回第一个满足条件的对象</li>
+</ol>
+<h3><a href="#2-通过java反射获取" class="header-anchor">#</a><span id="2-通过java反射获取">2. 通过<code>Java</code>反射获取</span></h3>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span>(<span class="keyword">val</span> name:String, <span class="keyword">val</span> age: String)</span><br><span class="line"></span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">Api</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">getUsers</span><span class="params">()</span></span>: List&lt;Person&gt;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    (Api::<span class="keyword">class</span>.java.getDeclaredMethod(<span class="string">&quot;getUsers&quot;</span>)</span><br><span class="line">            .genericReturnType <span class="keyword">as</span> ParameterizedType).actualTypeArguments.forEach &#123; println(it) &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>打印结果：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">cn</span>.ltt.projectcollection.kotlin.kotlinreflection.Person</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>先拿到<code>Java</code>中的<code>class</code>文件，再通过方法<code>getDeclaredMethod()</code>得到函数<code>getUsers()</code>的<code>Method</code>，再调用方法<code>genericReturnType</code>返回<code>getUsers()</code>的<code>Type</code>，之后将<code>Type</code>强转为<code>ParameterizedType</code>,再调用方法<code>actualTypeArguments</code>得到返回参数的列表，然后得到泛型的实参<code>Person</code></li>
+<li><code>ParameterizedType</code>是<code>Type</code>的子接口，代表泛型参数</li>
+</ol>
+<p><strong>优化强转代码：</strong></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    Api::<span class="keyword">class</span>.java.getDeclaredMethod(<span class="string">&quot;getUsers&quot;</span>)</span><br><span class="line">            .genericReturnType.safeAs&lt;ParameterizedType&gt;()?.actualTypeArguments?.forEach &#123; println(it) &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span><span class="type">&lt;T&gt;</span> Any.<span class="title">safeAs</span><span class="params">()</span></span>: T? &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span> <span class="keyword">as</span>? T</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>对任何类型声明了一个安全强转方法<code>safeAs()</code>，如果转换失败返回<code>null</code></li>
+<li>如上代码所示，使用安全强转方法<code>safeAs()</code>就可以在强转时不再添加括号，增强可读性</li>
+</ol>
+<h2><a href="#2-在抽象父类里获取该父类泛型的实参" class="header-anchor">#</a><span id="2-在抽象父类里获取该父类泛型的实参">2. 在抽象父类里获取该父类泛型的实参</span></h2>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">SuperType</span>&lt;<span class="type">T</span>&gt; &#123;</span><br><span class="line">    <span class="keyword">val</span> typeParameter <span class="keyword">by</span> lazy &#123;</span><br><span class="line">        <span class="keyword">this</span>::<span class="keyword">class</span>.supertypes.first().arguments.first().type!!</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">val</span> typeParameterJava <span class="keyword">by</span> lazy &#123;</span><br><span class="line">        <span class="keyword">this</span>.javaClass.genericSuperclass.safeAs&lt;ParameterizedType&gt;()!!.actualTypeArguments.first()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SubType</span> : <span class="type">SuperType</span>&lt;<span class="type">String</span>&gt;()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span><span class="type">&lt;T&gt;</span> Any.<span class="title">safeAs</span><span class="params">()</span></span>: T? &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span> <span class="keyword">as</span>? T</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> subType = SubType()</span><br><span class="line">    subType.typeParameter.let(::println)</span><br><span class="line">    subType.typeParameterJava.let(::println)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>打印结果：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kotlin.String</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">java</span>.lang.String</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>方法一使用<code>Kotlin</code>反射：父类里的<code>this</code>一定是子类的实例，所以<code>this::class</code>获取的是子类<code>SubType</code>的<code>KClass</code>，之后调用<code>supertypes</code>获取继承的父类的集合，再调用<code>first()</code>方法获取在声明子类时第一个继承的父类的<code>KType</code>，之后再调用<code>arguments</code>获取父类的泛型参数列表，调用<code>first()</code>取第一个泛型参数<code>KTypeProjection</code>，最后取他的<code>type</code>属性值</li>
+<li>方法二使用<code>Java</code>反射：调用<code>this.javaClass</code>获取<code>java</code>的<code>class</code>实例，之后调用<code>genericSuperclass</code>获取带有泛型实参的<code>Type!</code>，之后调用<code>safeAs()</code>方法将<code>Type!</code>类型转为<code>ParameterizedType</code>类型，再调用方法<code>actualTypeArguments</code>得到参数的列表，再调用<code>first()</code>取第一个参数</li>
+<li>打印结果一个是<code>Kotlin</code>的<code>String</code>，一个是<code>Java</code>的<code>String</code>。<code>Kotlin</code>的<code>String</code>的编译完成后会编译为<code>Java</code>的<code>String</code>,所以在<code>Java</code>的反射中所有的<code>Kotlin</code>类型都是<code>Java</code>类型</li>
+</ol>
+<h1><a href="#四-示例-为数据类实现deepcopy" class="header-anchor">#</a><span id="四-示例-为数据类实现deepcopy">四、 示例 – 为数据类实现<code>DeepCopy</code></span></h1>
+<p>定义两个数据类<code>Person</code>、<code>Group</code>，<code>Group</code>是<code>Person</code>的一个参数</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">data</span> <span class="keyword">class</span> <span class="title class_">Person</span>(<span class="keyword">val</span> name:String = <span class="string">&quot;Lee&quot;</span>, <span class="keyword">val</span> age:<span class="built_in">Int</span> = <span class="number">18</span>, <span class="keyword">val</span> group: Group)</span><br><span class="line"></span><br><span class="line"><span class="keyword">data</span> <span class="keyword">class</span> <span class="title class_">Group</span>(<span class="keyword">val</span> id:<span class="built_in">Int</span>, <span class="keyword">val</span> name:String, <span class="keyword">val</span> location:String)</span><br></pre></td></tr></table></figure>
+<h2><a href="#1-数据类自带的copy方法只是浅拷贝" class="header-anchor">#</a><span id="1-数据类自带的copy方法只是浅拷贝">1. 数据类自带的<code>copy</code>方法只是浅拷贝</span></h2>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> person = Person(group = Group(<span class="number">1</span>,<span class="string">&quot;student&quot;</span>,<span class="string">&quot;beijing&quot;</span>))</span><br><span class="line">    <span class="keyword">val</span> copiedPerson = person.copy()</span><br><span class="line">    println(person === copiedPerson)</span><br><span class="line">    println(person.name === copiedPerson.name)</span><br><span class="line">    println(person.group === copiedPerson.group)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>打印结果：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="literal">false</span></span><br><span class="line"><span class="literal">true</span></span><br><span class="line"><span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<p><strong><code>Person</code>类反编译<code>class</code>文件后部分代码如下：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">Person</span> &#123;</span><br><span class="line">    ...</span><br><span class="line">   <span class="meta">@NotNull</span></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">final</span> Person <span class="title function_">copy</span><span class="params">(<span class="meta">@NotNull</span> String name, <span class="type">int</span> age, <span class="meta">@NotNull</span> Group group)</span> &#123;</span><br><span class="line">      Intrinsics.checkNotNullParameter(name, <span class="string">&quot;name&quot;</span>);</span><br><span class="line">      Intrinsics.checkNotNullParameter(group, <span class="string">&quot;group&quot;</span>);</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Person</span>(name, age, group);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="comment">// $FF: synthetic method</span></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">static</span> Person copy$<span class="keyword">default</span>(Person var0, String var1, <span class="type">int</span> var2, Group var3, <span class="type">int</span> var4, Object var5) &#123;</span><br><span class="line">      <span class="keyword">if</span> ((var4 &amp; <span class="number">1</span>) != <span class="number">0</span>) &#123;</span><br><span class="line">         var1 = var0.name;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> ((var4 &amp; <span class="number">2</span>) != <span class="number">0</span>) &#123;</span><br><span class="line">         var2 = var0.age;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> ((var4 &amp; <span class="number">4</span>) != <span class="number">0</span>) &#123;</span><br><span class="line">         var3 = var0.group;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">return</span> var0.copy(var1, var2, var3);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li><code>Kotlin</code>中<code>==</code>等价于<code>Java</code>中的<code>equals()</code>方法，而<code>===</code>是比较内存地址</li>
+<li>由反编译后的代码可知，调用<code>Person</code>默认的<code>copy</code>方法时会调用<code>copy$default()</code>，之后调用<code>Person</code>的<code>copy()</code>函数，传入三个参数，这三个参数，就是<code>Person</code>自身的三个值，所以虽然创建了一个新的<code>Person</code>类，但是<code>Person</code>类里的数据类<code>Group</code>的还是一样的</li>
+</ol>
+<h2><a href="#2-为数据类添加深拷贝方法" class="header-anchor">#</a><span id="2-为数据类添加深拷贝方法">2. 为数据类添加深拷贝方法</span></h2>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="type">&lt;T : Any&gt;</span> T.<span class="title">deepCopy</span><span class="params">()</span></span>: T &#123;</span><br><span class="line">    <span class="keyword">if</span>(!<span class="keyword">this</span>::<span class="keyword">class</span>.isData)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>::<span class="keyword">class</span>.primaryConstructor!!.let &#123;</span><br><span class="line">        primaryConstructor -&gt;</span><br><span class="line">        primaryConstructor.parameters.map &#123; parameter -&gt;</span><br><span class="line">            <span class="keyword">val</span> value = (<span class="keyword">this</span>::<span class="keyword">class</span> <span class="title class_">as</span> <span class="title">KClass</span>&lt;<span class="type">T</span>&gt;).<span class="title">memberProperties</span>.<span class="title">first</span> &#123; it.name == parameter.name &#125;</span><br><span class="line">                .<span class="keyword">get</span>(<span class="keyword">this</span>)</span><br><span class="line">            <span class="keyword">if</span>((parameter.type.classifier <span class="keyword">as</span>? KClass&lt;*&gt;)?.isData == <span class="literal">true</span>)&#123;</span><br><span class="line">                parameter to value?.deepCopy()</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                parameter to value</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;.toMap()</span><br><span class="line">            .let(primaryConstructor::callBy)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> deepCopiedPerson = person.deepCopy()</span><br><span class="line">    println(person === deepCopiedPerson)</span><br><span class="line">    println(person.name === deepCopiedPerson.name)</span><br><span class="line">    println(person.group === deepCopiedPerson.group)</span><br><span class="line">    println(deepCopiedPerson)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>打印结果：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="literal">false</span></span><br><span class="line"><span class="literal">true</span></span><br><span class="line"><span class="literal">false</span></span><br><span class="line"><span class="title function_">Person</span><span class="params">(name=Lee, age=<span class="number">18</span>, group=Group(id=<span class="number">1</span>, name=student, location=beijing)</span>)</span><br></pre></td></tr></table></figure>
+<p><strong>数据类扩展函数<code>deepCopy()</code>说明：</strong></p>
+<ol>
+<li>只为数据类添加深拷贝的方法，所在通过语句<code>this::class.isData</code>判断调用该方法的类是不是数据类</li>
+<li>数据类一定有主构造器，可以通过<code>this::class.primaryConstructor</code>获取数据类主构造器</li>
+<li>将<code>primaryConstructor</code>作为参数传入<code>let</code>函数中，再通过<code>parameters</code>获取主构造器中的参数列表</li>
+<li>再调用<code>map</code>函数，将主构造器中的每个参数做一些操作，函数返回的是键值对列表</li>
+<li><code>this::class.memberProperties</code>语句得到某个类的成员属性列表，之后取第一个过滤条件成功的成员属性，过滤条件为该成员属性名字与之前取的参数列表中的参数名称一致</li>
+<li><code>this::class</code>中的返回结果类型是<code>KClass&lt;out T&gt;</code>，其中泛型是协变的，而调用<code>KProperty</code>的<code>get()</code>函数时要将泛型传入，此时泛型要是逆变的，而数据类没有继承关系，所以将<code>this::class</code>强转为<code>KClass&lt;T&gt;</code>，之后就可以通过<code>get()</code>函数将<code>receiver</code>传入，得到该属性的值了</li>
+<li>此时需要判断属性的值若是基本类型，则直接赋值，若是数据类则深拷贝</li>
+<li><code>parameter.type.classifier</code>获取<code>parameter</code>的<code>KClass</code>，再判断<code>KClass</code>如果是数据类则需要进行深拷贝，若是其它的类型则直接赋值</li>
+<li>通过<code>map</code>函数获取了<code>parameter</code>和其对应值的列表后，再调用<code>toMap()</code>函数，将列表转为集合</li>
+<li>将集合作为参数传入<code>let</code>方法中，最后调用构造器的<code>callBy</code>方法创建该类的实例，<code>callBy</code>方法入参即为<code>parameter</code>和其对应值的集合，所以可以使用<code>::</code>代替<code>lambda</code>表达式</li>
+<li>若代码块仅包含以 <code>it</code> 作为参数的单个函数，则可以使用方法引用 <code>::</code> 代替 <code>lambda</code> 表达式</li>
+</ol>
+<p><strong>深拷贝思路：</strong></p>
+<ol>
+<li>先判断如果是数据类再进行深拷贝</li>
+<li>深拷贝就是构造对象，所以先获取数据类的主构造器</li>
+<li>再去获取主构造器的参数，数据类的主构造器的参数同时也是数据类的属性</li>
+<li>根据参数的名字拿到属性名字再拿到属性的值</li>
+<li>再判断属性值的类型：若为基本类型，直接取值；若是数据类，则进行深拷贝 <em>(这里使用了递归的思路)</em></li>
+<li>之后调用主构造器的调用方法，并将主构造器的参数和参数值传入。</li>
+<li>最后获得了一个新的数据类</li>
+</ol>
+<p><strong>打印结果说明：</strong></p>
+<ol>
+<li>通过反射创建新的<code>Person</code>实例，所以两个实例不会相等</li>
+<li>基本数据类型有一个常量共享池，所以基本数据类型的参数相等</li>
+<li>对数据类<code>Person</code>进行深拷贝时，也对它的参数数据类<code>Group</code>进行了深拷贝，而深拷贝使用反射创建新的实例，所以两个<code>Group</code>实例不相等</li>
+<li>打印出深拷贝的<code>Person</code>实例，与一开始创建的<code>Person</code>实例里的基本数据都是一致的</li>
+</ol>
+<h1><a href="#五-示例-model映射" class="header-anchor">#</a><span id="五-示例-model映射">五、 示例 – Model映射</span></h1>
+<blockquote>
+<p>在工程中可能会有数据类之间转换的需要，本章讲述如何通过反射进行类之间快速的转换</p>
+</blockquote>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">data</span> <span class="keyword">class</span> <span class="title class_">Human</span>(<span class="keyword">val</span> name: String, <span class="keyword">val</span> avatarUrl: String)</span><br><span class="line"></span><br><span class="line"><span class="keyword">data</span> <span class="keyword">class</span> <span class="title class_">Person</span>(</span><br><span class="line">        <span class="keyword">var</span> id: <span class="built_in">Int</span>,</span><br><span class="line">        <span class="keyword">var</span> name: String,</span><br><span class="line">        <span class="keyword">var</span> avatarUrl: String,</span><br><span class="line">        <span class="keyword">var</span> smallUrl: String,</span><br><span class="line">        <span class="keyword">var</span> detailUrl: String</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>如上定义两个数据类<code>Human</code>、<code>Person</code></p>
+<h2><a href="#1-通过map转为任意类型" class="header-anchor">#</a><span id="1-通过map转为任意类型">1. 通过<code>Map</code>转为任意类型</span></h2>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> personMap = mapOf(</span><br><span class="line">            <span class="string">&quot;id&quot;</span> to <span class="number">0</span>,</span><br><span class="line">            <span class="string">&quot;login&quot;</span> to <span class="string">&quot;Lee&quot;</span>,</span><br><span class="line">            <span class="string">&quot;avatarUrl&quot;</span> to <span class="string">&quot;https://api.github.com/users/Lee&quot;</span>,</span><br><span class="line">            <span class="string">&quot;detailUrl&quot;</span> to <span class="string">&quot;https://api.github.com/users/Lee&quot;</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> personFromMap: Person = personMap.mapAs()</span><br><span class="line">    println(personFromMap)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;<span class="keyword">reified</span> To : Any&gt;</span> Map<span class="type">&lt;String, Any?&gt;</span>.<span class="title">mapAs</span><span class="params">()</span></span>: To &#123;</span><br><span class="line">    <span class="keyword">return</span> To::<span class="keyword">class</span>.primaryConstructor!!.let &#123;</span><br><span class="line">        it.parameters.map &#123;</span><br><span class="line">            parameter -&gt;</span><br><span class="line">            parameter to (<span class="keyword">this</span>[parameter.name] ?: <span class="keyword">if</span>(parameter.type.isMarkedNullable) <span class="literal">null</span></span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">throw</span> IllegalArgumentException(<span class="string">&quot;<span class="subst">$&#123;parameter.name&#125;</span> is required but missing.&quot;</span>))</span><br><span class="line">        &#125;.toMap()</span><br><span class="line">                .let(it::callBy)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>打印结果：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Person(id=<span class="number">0</span>, name=Lee, avatarUrl=https:<span class="comment">//avatars2.githubusercontent.com/u/30511713?v=4, smallUrl=https://api.github.com/users/Lee, detailUrl=https://puppet16.github.io/)</span></span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>获取要转换成的目标<code>To</code>的<code>KClass</code>实例，之后再获取该类的主构造器</li>
+<li>通过<code>parameters</code>方法获取主构造器的参数列表</li>
+<li>再通过<code>map</code>函数对参数列表里每个参数进行如下操作</li>
+<li>构造参数及参数值的键值对，若参数值为<code>null</code>，则判断若参数类型可以为空，则返回空，否则直接抛异常</li>
+<li>之后通过<code>toMap()</code>函数，将参数及参数值的键值对列表转为集合</li>
+<li>最后调用主构造器的<code>callBy()</code>函数，将之前的参数及参数值键值对集合传入其中</li>
+<li>如此便将<code>map</code>集合转换为了一个任意类型</li>
+<li><strong>注意：</strong> <code>map</code>的<code>key</code>值需要与转换目标的参数名称一致，且转换目标的参数要定义在主构造器中</li>
+</ol>
+<h2><a href="#2-通过任意类型映射为任意类型" class="header-anchor">#</a><span id="2-通过任意类型映射为任意类型">2. 通过任意类型映射为任意类型</span></h2>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> person = Person(</span><br><span class="line">            <span class="number">0</span>,</span><br><span class="line">            <span class="string">&quot;Lee&quot;</span>,</span><br><span class="line">            <span class="string">&quot;https://avatars2.githubusercontent.com/u/30511713?v=4&quot;</span>,</span><br><span class="line">            <span class="string">&quot;https://api.github.com/users/Lee&quot;</span>,</span><br><span class="line">            <span class="string">&quot;https://puppet16.github.io/&quot;</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> human: Person = person.mapAs()</span><br><span class="line">    println(human)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;<span class="keyword">reified</span> From : Any, <span class="keyword">reified</span> To : Any&gt;</span> From.<span class="title">mapAs</span><span class="params">()</span></span>: To &#123;</span><br><span class="line">    <span class="keyword">return</span> From::<span class="keyword">class</span>.memberProperties.map &#123; it.name to it.<span class="keyword">get</span>(<span class="keyword">this</span>) &#125;</span><br><span class="line">            .toMap().mapAs()</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><strong>打印结果：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Person(id=<span class="number">0</span>, name=Lee, avatarUrl=https:<span class="comment">//api.github.com/users/Lee, smallUrl=https://api.github.com/users/Lee, detailUrl=https://api.github.com/users/Lee)</span></span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>获取被转换的类<code>From</code>的成员属性列表，之后将列表转换为集合，集合键为属性名称，值为属性值，最后再调用上一节所讲的<code>Map</code>的转换函数<code>mapAs()</code></li>
+<li><strong>注意：</strong> 两个任意类型中的参数名称要一致，且参数要定义在主构造器中</li>
+</ol>
+<h1><a href="#六-示例-可释放对象引用的不可空类型" class="header-anchor">#</a><span id="六-示例-可释放对象引用的不可空类型">六、 示例 – 可释放对象引用的不可空类型</span></h1>
+<blockquote>
+<p>创建一个引用，该引用持有一个占用较大内存资源的类型对象，在最后不需要该引用时，我们需要将其释放，也就是将引用置为<code>null</code>，<code>Kotlin</code>中只有声明为可空类型才能置为<code>null</code>，但是可空类型属性使用比较繁琐，可以通过<code>属性代理</code>将定义不可空类型引用释放</p>
+</blockquote>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ReleasableNotNull</span>&lt;<span class="type">T: Any</span>&gt;: <span class="type">ReadWriteProperty</span>&lt;<span class="type">Any, T</span>&gt; &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">var</span> value: T? = <span class="literal">null</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">getValue</span><span class="params">(thisRef: <span class="type">Any</span>, property: <span class="type">KProperty</span>&lt;*&gt;)</span></span>: T &#123;</span><br><span class="line">        <span class="keyword">return</span> value ?: <span class="keyword">throw</span> IllegalStateException(<span class="string">&quot;Not initialized or released already.&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">setValue</span><span class="params">(thisRef: <span class="type">Any</span>, property: <span class="type">KProperty</span>&lt;*&gt;, value: <span class="type">T</span>)</span></span> &#123;</span><br><span class="line">        <span class="keyword">this</span>.value = value</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">isInitialized</span><span class="params">()</span></span> = value != <span class="literal">null</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">release</span><span class="params">()</span></span> &#123;</span><br><span class="line">        value = <span class="literal">null</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">inline</span> <span class="keyword">val</span> KProperty0&lt;*&gt;.isInitialized: <span class="built_in">Boolean</span></span><br><span class="line">    <span class="keyword">get</span>() &#123;</span><br><span class="line">        isAccessible = <span class="literal">true</span></span><br><span class="line">        <span class="keyword">return</span> (<span class="keyword">this</span>.getDelegate() <span class="keyword">as</span>? ReleasableNotNull&lt;*&gt;)?.isInitialized()</span><br><span class="line">            ?: <span class="keyword">throw</span> IllegalAccessException(<span class="string">&quot;Delegate is not an instance of ReleasableNotNull or is null.&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> KProperty0<span class="type">&lt;*&gt;</span>.<span class="title">release</span><span class="params">()</span></span> &#123;</span><br><span class="line">    isAccessible = <span class="literal">true</span></span><br><span class="line">    (<span class="keyword">this</span>.getDelegate() <span class="keyword">as</span>? ReleasableNotNull&lt;*&gt;)?.release()</span><br><span class="line">        ?: <span class="keyword">throw</span> IllegalAccessException(<span class="string">&quot;Delegate is not an instance of ReleasableNotNull or is null.&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Bitmap</span>(<span class="keyword">val</span> width: <span class="built_in">Int</span>, <span class="keyword">val</span> height: <span class="built_in">Int</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Activity</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">var</span> bitmap <span class="keyword">by</span> ReleasableNotNull&lt;Bitmap&gt;()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">onCreate</span><span class="params">()</span></span>&#123;</span><br><span class="line">        println(<span class="keyword">this</span>::bitmap.isInitialized)</span><br><span class="line">        bitmap = Bitmap(<span class="number">1920</span>, <span class="number">1080</span>)</span><br><span class="line">        println(::bitmap.isInitialized)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">onDestroy</span><span class="params">()</span></span>&#123;</span><br><span class="line">        println(::bitmap.isInitialized)</span><br><span class="line">        ::bitmap.release()</span><br><span class="line">        println(::bitmap.isInitialized)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> activity = Activity()</span><br><span class="line">    activity.onCreate()</span><br><span class="line">    activity.onDestroy()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>打印结果：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="literal">false</span></span><br><span class="line"><span class="literal">true</span></span><br><span class="line"><span class="literal">true</span></span><br><span class="line"><span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>定义了一个自定义属性代理类<code>ReleasableNotNull</code>，该类接收一个泛型，这个泛型就是可以被释放的引用类型</li>
+<li>自定义属性代理类只需要实现<code>getValue()</code>和<code>setValue</code>方法即可，不一定非要实现<code>ReadWirtProperty</code>接口</li>
+<li>在<code>ReleasableNotNull</code>类中创建了属性<code>value</code>，类型为可空的泛型<code>T</code></li>
+<li>在<code>ReleasableNotNull</code>类中的<code>getValue()</code>方法，如果<code>value</code>为空的话要抛出异常，因为传进来的类型不可能为空，为空的情况也是没有初始化或是手动调用<code>release()</code>方法，将该属性释放了，此时也不能再使用该类获取类型了</li>
+<li><code>isInitialized()</code>方法是判断<code>ReleasableNotNull</code>类是否初始化</li>
+<li><code>release()</code>方法是将传进来的类型释放</li>
+<li>因为<code>isInitialized()</code>和<code>release()</code>方法是定义在属性代理类<code>ReleasableNotNull</code>内的方法，而该类的属性<code>value</code>才是最终要调用这两个方法的<code>receiver</code>，所以要为属性添加两个扩展方法</li>
+<li>根据<code>lateInit</code>中对属性添加扩展方法的样式为自定义属性代理类<code>ReleasableNotNull</code>里的属性添加代理</li>
+<li><code>KProperty0&lt;*&gt;.isInitialized</code>是为所有无<code>receiver</code>的属性添加扩展属性<code>isInitialized</code>，获取该属性值时应该返回自定义属性代理类<code>ReleasableNotNull</code>里的<code>isInitialized</code>方法结果，所以通过<code>getDelegate()</code>方法先获取该属性的代理对象，然后再强转为<code>ReleasableNotNull</code>,若强转失败则抛出异常<code>IllegalAccessException</code>；若强转成功则直接调用<code>isInitialized()</code>方法</li>
+<li><code>KProperty0&lt;*&gt;.release()</code>与<code>KProperty0&lt;*&gt;.isInitialized</code>内部处理基本一致，只是<code>KProperty0&lt;*&gt;.release()</code>是为<code>KProperty0&lt;*&gt;</code>添加了一个扩展函数，<code>KProperty0&lt;*&gt;.isInitialized</code>为<code>KProperty0&lt;*&gt;</code>添加了一个扩展属性</li>
+<li>使用<code>getDelegate()</code>前必须加上<code>isAccessible = true</code>语句给予访问权限，否则会报错:<code>kotlin.reflect.full.IllegalPropertyDelegateAccessException: Cannot obtain the delegate of a non-accessible property</code></li>
+<li>使用如上代码时必须要添加<code>kotlin</code>的反射库</li>
+</ol>
+<h1><a href="#七-插件化加载类" class="header-anchor">#</a><span id="七-插件化加载类">七、 插件化加载类</span></h1>
+<blockquote>
+<p>插件加载运行，并实现插件文件监听及热部署即自动监听<code>jar</code>包的修改，若进行了修改则重新进行加载运行里面的类</p>
+</blockquote>
+<h2><a href="#1-classloader" class="header-anchor">#</a><span id="1-classloader">1. <code>ClassLoader</code></span></h2>
+<p><img src="/2021/03/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%83/reflection_classloader.png" alt></p>
+<p><strong>说明：</strong></p>
+<ol>
+<li><strong>启动类加载器 <em>(BootstrapClassLoader)</em>：</strong> 启动类加载器主要加载的是<code>JVM</code>自身需要的类，这个类加载使用<code>C++</code>语言实现的，是虚拟机自身的一部分，负责加载存放在 <code>JDK\jre\lib</code> <em>(JDK代表JDK的安装目录，下同)</em> 下，或被 <code>-Xbootclasspath</code>参数指定的路径中的，并且能被虚拟机识别的类库 <em>（如rt.jar，所有的java.开头的类均被 BootstrapClassLoader加载）</em>。启动类加载器是无法被<code>Java</code>程序直接引用的。<br>
+<strong>总结：</strong> 启动类加载器加载<code>java</code>运行过程中的核心类库<code>JRE\lib\rt.jar</code>, <code>sunrsasign.jar</code>, <code>charsets.jar</code>, <code>jce.jar</code>, <code>jsse.jar</code>, <code>plugin.jar</code>以及存放在<code>JRE\classes</code>里的类，也就是<code>JDK</code>提供的类等。<em>常见的比如：Object、Stirng、List…</em></li>
+<li><strong>扩展类加载器 <em>(ExtClassLoader)</em>：</strong> 该加载器由 <code>sun.misc.Launcher$ExtClassLoader</code>实现，它负责加载 <code>JDK\jre\lib\ext</code>目录中，或者由 <code>java.ext.dirs</code>系统变量指定的路径中的所有类库 <em>（如javax.开头的类）</em>，开发者可以直接使用扩展类加载器。</li>
+<li><strong>应用程序类加载器 <em>(AppClassLoader)</em>：</strong> 该类加载器由 <code>sun.misc.Launcher$AppClassLoader</code>来实现，会加载 <code>java</code> 环境变量 <code>CLASSPATH</code> 所指定的路径下的类库。而 <code>CLASSPATH</code> 所指定的路径可以通过 <code>System.getProperty(&quot;java.class.path&quot;)</code> 获取；该变量也可以覆盖，可以使用参数 <code>-cp</code>，<em>例如：<code>java -cp</code> 路径（可以指定要执行的 <code>class</code> 目录）</em>；开发者可以直接使用该类加载器，如果应用程序中没有自定义过自己的类加载器，一般情况下这个就是程序中 <strong>默认的类加载器</strong>。<br>
+<strong>总结：</strong> 应用程序类加载器加载<code>CLASSPATH</code>变量指定路径下的类，即指你自已在项目工程中编写的类</li>
+<li><strong>自定义类加载器 <em>(CustomClassLoader)</em>：</strong> 该 <code>ClassLoader</code> 是指我们自定义的 <code>ClassLoader</code>，大部分情况下使用 <code>AppClassLoader</code> 就足够了。</li>
+</ol>
+<h3><a href="#1-classloader的双亲委派机制" class="header-anchor">#</a><span id="1-classloader的双亲委派机制">1. <code>ClassLoader</code>的双亲委派机制</span></h3>
+<p><code>ClassLoader</code>使用的是双亲委托模型来搜索类的，每个<code>ClassLoader</code>实例都有一个父类加载器的引用 <em>（不是继承的关系，是一个包含的关系）</em>，虚拟机内置的类加载器 <em>(Bootstrap ClassLoader)</em> 本身没有父类加载器，但可以用作其它<code>ClassLoader</code>实例的的父类加载器。<br>
+当一个<code>ClassLoader</code>实例需要加载某个类时，它会试图亲自搜索某个类之前，先把这个任务委托给它的父类加载器，这个过程是 <strong>由上至下依次检查</strong>的。</p>
+<p><strong>加载步骤：</strong></p>
+<ol>
+<li>当<code>AppClassLoader</code>加载一个<code>class</code>时，它首先不会自己去尝试加载这个类，而是把类加载请求委派给父类加载器<code>ExtClassLoader</code>去完成</li>
+<li>当<code>ExtClassLoader</code>加载一个<code>class</code>时，它首先也不会自己去尝试加载这个类，而是把类加载请求委派给<code>BootStrapClassLoader</code>去完成</li>
+<li>如果<code>BootStrapClassLoader</code>加载失败 <em>(例如在<code>$JAVA_HOME/jre/lib</code>里未查找到该<code>class</code>）</em>，会使用<code>ExtClassLoader</code>来尝试加载</li>
+<li>若<code>ExtClassLoader</code>也加载失败，则会使用<code>AppClassLoader</code>来加载。</li>
+<li>如果<code>AppClassLoader</code>也加载失败，则返回给委托的发起者，由它到指定的文件系统或网络等URL中加载该类。如果它们都没有加载到这个类时，则抛出<code>ClassNotFoundException</code>异常。否则将这个找到的类生成一个类的定义，并将它加载到内存当中，最后返回这个类在内存中的<code>Class</code>实例对象。</li>
+<li><strong>总结：</strong> 自底向上检查类是否已经加载，自顶向下尝试加载类</li>
+</ol>
+<p><strong>双亲委派机制作用：</strong></p>
+<ol>
+<li>防止重复加载同一个 <code>.class</code>。通过委托去向上面问一问是否加载过了，加载过了就不用再加载一遍</li>
+<li>保证核心 <code>.class</code> 不能被篡改。假如我们自定义了一个<code>java.lang.Integer</code>类，当使用它时，因为双亲委派，会先使用<code>BootStrapClassLoader</code>来进行加载，这样加载的便是<code>jdk</code>的<code>Integer</code>类，而不是自定义的这个，避免因为加载自定义核心类而造成<code>JVM</code>运行错误。</li>
+</ol>
+<p><strong>JVM如何判断两个<code>class</code>是否相同：</strong></p>
+<p><code>JVM</code>在判定两个<code>class</code>是否相同时，不仅要判断两个类名是否相同，而且要判断是否由同一个类加载器实例加载的。只有两者同时满足的情况下，<code>JVM</code>才认为这两个<code>class</code>是相同的。就算两个<code>class</code>是同一份<code>class</code>字节码，如果被两个不同的<code>ClassLoader</code>实例所加载，<code>JVM</code>也会认为它们是两个不同<code>class</code></p>
+<h2><a href="#2-插件化加载类实现" class="header-anchor">#</a><span id="2-插件化加载类实现">2. 插件化加载类实现</span></h2>
+<p>为方便的实现类的加载和卸载必须要自定义<code>ClassLoader</code>。必须保证类和它的<code>ClassLoader</code>都没有被使用的情况下才可以卸载类</p>
+<p><strong>实现思路：</strong> 有一个名为<code>Host</code>的项目，它依赖了一个公共库<code>Common</code>，这个库中定义了一堆的接口，为<code>Host</code>访问插件里的类做入口。如此所有插件的入口类都是<code>Common</code>中定义的接口的实现。如此<code>Host</code>反射取到插件里的入口实现类并将其强转为<code>Common</code>里的接口后就可以访问插件内容了</p>
+<p><img src="/2021/03/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%83/reflection_plugin_struct.png" alt></p>
+<h3><a href="#1-创建plugin接口" class="header-anchor">#</a><span id="1-创建plugin接口">1. 创建<code>plugin</code>接口</span></h3>
+<p>在一个名为<code>plugin_common</code>的单独的<code>Module</code>中创建插件的入口接口</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> <span class="title class_">Plugin</span> &#123;</span><br><span class="line">    <span class="keyword">companion</span> <span class="keyword">object</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> <span class="keyword">val</span> CONFIG = <span class="string">&quot;plugin.config&quot;</span></span><br><span class="line">        <span class="keyword">const</span> <span class="keyword">val</span> KEY = <span class="string">&quot;plugin.impl&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">start</span><span class="params">()</span></span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">stop</span><span class="params">()</span></span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>如上在名为<code>plugin_common</code>的单独的<code>Module</code>中创建一个接口<code>Plugin</code>，其中有两个方法<code>start()</code>、<code>stop()</code>，还</li>
+<li>该接口的伴生对象中创建了两个常量<code>CONFIG</code>、<code>KEY</code>，<code>CONFIG</code>是实现<code>Plugin</code>接口的类的配置文件名；<code>KEY</code>是配置文件中的键值名称</li>
+</ol>
+<h3><a href="#2-创建两个继承plugin接口的类" class="header-anchor">#</a><span id="2-创建两个继承plugin接口的类">2. 创建两个继承<code>plugin</code>接口的类</span></h3>
+<p>在名为<code>plugin_1</code>的单独的<code>Module</code>中创建<code>Plugin</code>接口的实现类<code>PluginImpl1</code>，在名为<code>plugin_2</code>的单独的<code>Module</code>中创建<code>Plugin</code>接口的实现类<code>PluginImpl2</code></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">PluginImpl1</span>: <span class="type">Plugin</span>&#123;</span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">start</span><span class="params">()</span></span> &#123;</span><br><span class="line">        println(<span class="string">&quot;Plugin1: Start&quot;</span>)</span><br><span class="line">        newMethod()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">newMethod</span><span class="params">()</span></span>&#123;</span><br><span class="line">        println(<span class="string">&quot;newMethod called!!&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">stop</span><span class="params">()</span></span> &#123;</span><br><span class="line">        println(<span class="string">&quot;Plugin1: Stop&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">PluginImpl2</span>: <span class="type">Plugin</span>&#123;</span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">start</span><span class="params">()</span></span> &#123;</span><br><span class="line">        println(<span class="string">&quot;Plugin2: Start&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">stop</span><span class="params">()</span></span> &#123;</span><br><span class="line">        println(<span class="string">&quot;Plugin2: Stop&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>如上是两个接口<code>Plugin</code>的实现类<code>PluginImpl1</code>、<code>PluginImpl2</code>，在各自的实现方法中打印一些信息，只是在<code>PluginImpl1</code>中的<code>start()</code>方法多调用了一个方法<code>newMethod()</code>，该方法也是打印信息</li>
+</ol>
+<h3><a href="#3-将实现类所在module打包成jar" class="header-anchor">#</a><span id="3-将实现类所在module打包成jar">3. 将实现类所在<code>Module</code>打包成<code>jar</code></span></h3>
+<p><code>plugin_1</code>、<code>plugin_2</code>的<code>build.gradle</code>文件内容如下：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">plugins &#123;</span><br><span class="line">    id <span class="string">&#x27;java&#x27;</span></span><br><span class="line">    id <span class="string">&#x27;org.jetbrains.kotlin.jvm&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">group <span class="string">&#x27;cn.ltt.kotlin.plugin&#x27;</span></span><br><span class="line">version <span class="string">&#x27;1.0-SNAPSHOT&#x27;</span></span><br><span class="line"></span><br><span class="line">sourceCompatibility = <span class="number">1.8</span></span><br><span class="line"></span><br><span class="line">repositories &#123;</span><br><span class="line">    mavenCentral()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dependencies &#123;</span><br><span class="line">    implementation <span class="string">&quot;org.jetbrains.kotlin:kotlin-stdlib-jdk8&quot;</span></span><br><span class="line"></span><br><span class="line">    implementation project(<span class="string">&quot;:plugin_common&quot;</span>)</span><br><span class="line"></span><br><span class="line">    testCompile(<span class="attr">group:</span> <span class="string">&#x27;junit&#x27;</span>, <span class="attr">name:</span> <span class="string">&#x27;junit&#x27;</span>, <span class="attr">version:</span> <span class="string">&#x27;4.12&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">compileKotlin &#123;</span><br><span class="line">    kotlinOptions.jvmTarget = <span class="string">&quot;1.8&quot;</span></span><br><span class="line">&#125;</span><br><span class="line">compileTestKotlin &#123;</span><br><span class="line">    kotlinOptions.jvmTarget = <span class="string">&quot;1.8&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>点击<code>Gradle</code>窗口中<code>plugin_1\Tasks\build\assemble</code>条目，生成<code>jar</code>包<br>
+<img src="/2021/03/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%83/reflection_project_jar_location.png" alt></li>
+<li><code>jar</code>包位置：<code>plugin_1\build\libs\plugin_1-1.0-SNAPSHOT.jar</code></li>
+</ol>
+<h3><a href="#4-为两个实现接口的类添加配置文件" class="header-anchor">#</a><span id="4-为两个实现接口的类添加配置文件">4. 为两个实现接口的类添加配置文件</span></h3>
+<p>因为实现<code>Plugiin</code>接口的类的名字没有要求，如果想使用反射拿到该类还需要知道类的名字，所以添加一个配置文件，该文件中写出该类的名字</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//plugin_1</span></span><br><span class="line">plugin.impl=cn.ltt.kotlin.plugin1.PluginImpl1</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//plugin_2</span></span><br><span class="line">plugin.impl=cn.ltt.kotlin.plugin1.PluginImpl2</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>该配置文件在各自<code>Module</code>下的<code>resources</code>文件夹内，名为<code>plugin.config</code></li>
+</ol>
+<h3><a href="#5-递归监听文件夹" class="header-anchor">#</a><span id="5-递归监听文件夹">5. 递归监听文件夹</span></h3>
+<p>为了实现热加载插件需要实时监听文件是否有改动</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//FileWatcher.kt</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typealias</span> FileEventListener = (file: File) -&gt; <span class="built_in">Unit</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">val</span> EMPTY: FileEventListener = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@RequiresApi(Build.VERSION_CODES.O)</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">FileWatcher</span>(<span class="keyword">private</span> <span class="keyword">val</span> watchFile: File,</span><br><span class="line">                  <span class="keyword">private</span> <span class="keyword">val</span> recursively: <span class="built_in">Boolean</span> = <span class="literal">true</span>,</span><br><span class="line">                  <span class="keyword">private</span> <span class="keyword">val</span> onCreated: FileEventListener = EMPTY,</span><br><span class="line">                  <span class="keyword">private</span> <span class="keyword">val</span> onModified: FileEventListener = EMPTY,</span><br><span class="line">                  <span class="keyword">private</span> <span class="keyword">val</span> onDeleted: FileEventListener = EMPTY) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">val</span> folderPath <span class="keyword">by</span> lazy &#123;</span><br><span class="line">        Paths.<span class="keyword">get</span>(watchFile.canonicalPath).let &#123;</span><br><span class="line">            <span class="keyword">if</span> (Files.isRegularFile(it)) it.parent <span class="keyword">else</span> it</span><br><span class="line">        &#125; ?: <span class="keyword">throw</span> IllegalArgumentException(<span class="string">&quot;Illegal path: <span class="variable">$watchFile</span>&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Volatile</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">var</span> isWatching = <span class="literal">false</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">fun</span> File.<span class="title">isWatched</span><span class="params">()</span></span> = watchFile.isDirectory || <span class="keyword">this</span>.name == watchFile.name</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">fun</span> Path.<span class="title">register</span><span class="params">(watchService: <span class="type">WatchService</span>, recursively: <span class="type">Boolean</span>, <span class="keyword">vararg</span> events: <span class="type">Kind</span>&lt;<span class="type">Path</span>&gt;)</span></span> &#123;</span><br><span class="line">        <span class="keyword">when</span> (recursively &amp;&amp; watchFile.isDirectory) &#123;</span><br><span class="line">            <span class="literal">true</span> -&gt; <span class="comment">// register all subfolders</span></span><br><span class="line">                Files.walkFileTree(<span class="keyword">this</span>, <span class="keyword">object</span> : SimpleFileVisitor&lt;Path&gt;() &#123;</span><br><span class="line">                    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">preVisitDirectory</span><span class="params">(dir: <span class="type">Path</span>, attrs: <span class="type">BasicFileAttributes</span>)</span></span>: FileVisitResult &#123;</span><br><span class="line">                        dir.register(watchService, *events)</span><br><span class="line">                        <span class="keyword">return</span> FileVisitResult.CONTINUE</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;)</span><br><span class="line">            <span class="literal">false</span> -&gt; register(watchService, *events)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Synchronized</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">start</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(!isWatching)&#123;</span><br><span class="line">            isWatching = <span class="literal">true</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        thread &#123;</span><br><span class="line">            <span class="comment">// We obtain the file system of the Path</span></span><br><span class="line">            <span class="keyword">val</span> fileSystem = folderPath.fileSystem</span><br><span class="line"></span><br><span class="line">            <span class="comment">// We create the new WatchService using the try-with-resources block(in kotlin we use `use` block)</span></span><br><span class="line">            fileSystem.newWatchService().use &#123; service -&gt;</span><br><span class="line">                <span class="comment">// We watch for modification events</span></span><br><span class="line">                folderPath.register(service, recursively,</span><br><span class="line">                    StandardWatchEventKinds.ENTRY_CREATE,</span><br><span class="line">                    StandardWatchEventKinds.ENTRY_DELETE,</span><br><span class="line">                    StandardWatchEventKinds.ENTRY_MODIFY</span><br><span class="line">                )</span><br><span class="line"></span><br><span class="line">                <span class="comment">// Start the infinite polling loop</span></span><br><span class="line">                <span class="keyword">while</span> (isWatching) &#123;</span><br><span class="line">                    <span class="comment">// Wait for the next event</span></span><br><span class="line">                    <span class="keyword">val</span> watchKey = service.take()</span><br><span class="line"></span><br><span class="line">                    watchKey.pollEvents().forEach &#123; watchEvent -&gt;</span><br><span class="line">                        <span class="comment">// Get the type of the event</span></span><br><span class="line">                        Paths.<span class="keyword">get</span>(folderPath.toString(), (watchEvent.context() <span class="keyword">as</span> Path).toString()).toFile()</span><br><span class="line">                            .takeIf &#123;</span><br><span class="line">                                it.isWatched()</span><br><span class="line">                            &#125;</span><br><span class="line">                            ?.let(</span><br><span class="line">                                <span class="keyword">when</span> (watchEvent.kind()) &#123;</span><br><span class="line">                                    StandardWatchEventKinds.ENTRY_CREATE -&gt; &#123;</span><br><span class="line">                                        println(<span class="string">&quot;onCreated&quot;</span>)</span><br><span class="line">                                        onCreated</span><br><span class="line">                                    &#125;</span><br><span class="line">                                    StandardWatchEventKinds.ENTRY_DELETE -&gt; &#123;</span><br><span class="line">                                        println(<span class="string">&quot;onDeleted&quot;</span>)</span><br><span class="line">                                        onDeleted</span><br><span class="line">                                    &#125;</span><br><span class="line">                                    <span class="keyword">else</span> -&gt;&#123;</span><br><span class="line">                                        println(<span class="string">&quot;onModified&quot;</span>)</span><br><span class="line">                                        onModified <span class="comment">// modified.</span></span><br><span class="line">                                    &#125;</span><br><span class="line">                                &#125;</span><br><span class="line">                            )</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">if</span> (!watchKey.reset()) &#123;</span><br><span class="line">                        <span class="comment">// Exit if no longer valid</span></span><br><span class="line">                        <span class="keyword">break</span></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Synchronized</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">stop</span><span class="params">()</span></span>&#123;</span><br><span class="line">        isWatching = <span class="literal">false</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>如上代码功能为递归的监听某个文件夹和文件的修改</li>
+<li>类<code>FileWatcher</code>有三个事件：<code>onCreated</code>创建、<code>onModified</code>修改、<code>onDeleted</code>删除</li>
+<li>这三个事件的类型是<code>FileEventListener</code>，可以看到这只是一个别名，事件只是一个接口<code>File</code>类型参数，不返回结果的函数</li>
+</ol>
+<h3><a href="#6-创建自定义类加载器" class="header-anchor">#</a><span id="6-创建自定义类加载器">6. 创建自定义类加载器</span></h3>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">PluginClassLoader</span>(<span class="keyword">private</span> <span class="keyword">val</span> classPath: String) : URLClassLoader(arrayOf(File(classPath).toURI().toURL())) &#123;</span><br><span class="line">    <span class="keyword">init</span> &#123;</span><br><span class="line">        println(<span class="string">&quot;Classloader init @<span class="subst">$&#123;hashCode()&#125;</span>&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> <span class="function"><span class="keyword">fun</span> <span class="title">finalize</span><span class="params">()</span></span> &#123;</span><br><span class="line">        println(<span class="string">&quot;Classloader will be gc @<span class="subst">$&#123;hashCode()&#125;</span>&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@RequiresApi(Build.VERSION_CODES.O)</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">PluginLoader</span>(<span class="keyword">private</span> <span class="keyword">val</span> classPath: String) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">val</span> watcher = FileWatcher(</span><br><span class="line">        File(classPath),</span><br><span class="line">        onCreated = ::onFileChanged,</span><br><span class="line">        onModified = ::onFileChanged,</span><br><span class="line">        onDeleted = ::onFileChanged</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">var</span> classLoader: PluginClassLoader? = <span class="literal">null</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">var</span> plugin: Plugin? = <span class="literal">null</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">load</span><span class="params">()</span></span> &#123;</span><br><span class="line">        reload()</span><br><span class="line">        watcher.start()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">fun</span> <span class="title">onFileChanged</span><span class="params">(file: <span class="type">File</span>)</span></span> &#123;</span><br><span class="line">        println(<span class="string">&quot;<span class="variable">$file</span> changed, reloading...&quot;</span>)</span><br><span class="line">        reload()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Synchronized</span></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">fun</span> <span class="title">reload</span><span class="params">()</span></span> &#123;</span><br><span class="line">        plugin?.stop()</span><br><span class="line">        <span class="keyword">this</span>.plugin = <span class="literal">null</span></span><br><span class="line">        <span class="keyword">this</span>.classLoader?.close()</span><br><span class="line">        <span class="keyword">this</span>.classLoader = <span class="literal">null</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">val</span> classLoader = PluginClassLoader(classPath)</span><br><span class="line">        <span class="keyword">val</span> properties = classLoader.getResourceAsStream(Plugin.CONFIG)?.use &#123;</span><br><span class="line">            Properties().also &#123; properties -&gt;</span><br><span class="line">                properties.load(it)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; ?: run &#123;</span><br><span class="line">            classLoader.close()</span><br><span class="line">            <span class="keyword">return</span> println(<span class="string">&quot;Cannot find config file for <span class="variable">$classPath</span>&quot;</span>)</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        plugin = properties.getProperty(Plugin.KEY)?.let &#123;</span><br><span class="line">            <span class="keyword">val</span> pluginImplClass = classLoader.loadClass(it) <span class="keyword">as</span>? Class&lt;Plugin&gt;</span><br><span class="line">                ?: run &#123;</span><br><span class="line">                    classLoader.close()</span><br><span class="line">                    <span class="keyword">return</span> println(<span class="string">&quot;Plugin Impl from <span class="variable">$classPath</span>: <span class="variable">$it</span> should be derived from Plugin.&quot;</span>)</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">            pluginImplClass.kotlin.primaryConstructor?.call()</span><br><span class="line">                ?: run &#123;</span><br><span class="line">                    classLoader.close()</span><br><span class="line">                    <span class="keyword">return</span> println(<span class="string">&quot;Illegal! Plugin has no primaryConstructor!&quot;</span>)</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        plugin?.start()</span><br><span class="line">        <span class="keyword">this</span>.classLoader = classLoader</span><br><span class="line"></span><br><span class="line">        System.gc()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@RequiresApi(Build.VERSION_CODES.O)</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    arrayOf(</span><br><span class="line">        <span class="string">&quot;plugin_1/build/libs/plugin_1-1.0-SNAPSHOT.jar&quot;</span>,</span><br><span class="line">        <span class="string">&quot;plugin_2/build/libs/plugin_2-1.0-SNAPSHOT.jar&quot;</span></span><br><span class="line">    ).map &#123;</span><br><span class="line">        PluginLoader(it).apply &#123; load() &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>
+<p>创建一个插件<code>jar</code>包的加载器<code>PluginClassLoader</code>，该类继承自<code>URLClassLoader</code>,<code>URLClassLoader</code>入参为<code>URL</code>类型的数组列表<code>URLClassLoader</code>可以加载<code>jar</code>文件</p>
+</li>
+<li>
+<p><code>PluginClassLoader</code>传入一个<code>jar</code>文件的<code>String</code>类型地址，之后将这个地址转为<code>URL</code>再将其创建为一个数组传入<code>URLClassLoader</code>中，如此就加载了<code>jar</code>文件</p>
+</li>
+<li>
+<p>创建插件加载器<code>PluginLoader</code>，每个插件对应一个<code>PluginLoader</code>对象。该类需要传入插件所在的地址名为<code>classPath</code></p>
+<ol>
+<li>在<code>PluginLoader</code>中创建<code>FileWahter</code>对象<code>watcher</code>，传入插件所在地址、三个对应事件，因为这三个事件都是入参为<code>File</code>不需要返回结果的函数</li>
+<li>定义函数<code>onFileChanged()</code>，入参为<code>File</code>类型，不需要返回结果，则可将该函数放到创建对象<code>FileWathcer</code>语句中，在文件的创建、修改、删除事件都使用函数<code>onFileChanged</code>监听</li>
+<li>如果文件有更改的话，应该重新加载文件，所以<code>onFileChanged()</code>函数中要重新加载文件</li>
+<li>定义函数<code>reload()</code>，在该函数中真正实现加载插件的逻辑</li>
+<li>定义函数<code>load()</code>，该函数用于开始执行文件的监听和插件的加载，是整个加载插件功能的入口</li>
+<li>加载插件需要<code>PluginClassLoader</code>类，及加载的插件，所以要定义变量<code>classLoader</code>，类型为可空的<code>PluginClassLoader</code>；定义变量<code>plugin</code>，类型为可空的<code>Plugin</code></li>
+<li>重新加载时要先将之前的插件关闭，调用<code>plugin</code>的<code>stop</code>方法</li>
+<li>每个<code>plugin</code>对应一个<code>PluginClassLoader</code>，所以在<code>reload</code>方法中去重新创建<code>PluginClassLoader</code>的实例</li>
+<li>加载插件前要先获取该插件的配置定义属性名为<code>properties</code>，使用语句<code>classLoader.getResourceAsStream(Plugin.CONFIG)</code>获取配置文件的<code>InputStream</code></li>
+<li>再创建一个 <code>Properties</code>对象，通过它的<code>load()</code>方法，加载配置文件的输入流</li>
+<li>再通过 <code>elves</code>操作符，判断如果没有拿到<code>Plugin.CONFIG</code>的配置文件，则关闭当前<code>ClassLoader</code>，打印异常信息：不能获取配置文件</li>
+<li>通过语句<code>properties.getProperty(Plugin.KEY)</code>获取配置文件中插件的入口类名</li>
+<li>通过语句 <code>classLoader.loadClass(it) as? Class&lt;Plugin&gt;</code>加载该类，并将该类强转为<code>Plugin</code>类型将其赋值给属性<code>pluginImplClass</code>，如果转换失败则关闭当前<code>ClassLoader</code>，打印异常信息：该类并未实现接口<code>plugin</code></li>
+<li>通过语句<code>pluginImplClass.kotlin.primaryConstructor?.call()</code>创建类实例： <code>classLoader.loadClass</code>语句获取的类是<code>Java</code>中的类，所以要先将<code>pluginImplClass</code>转为<code>kotlin</code>的类，再调用该类的主构造器的创建方法创建该类。<strong>注意：此时默认实现接口<code>Plugin</code>的类都有主构造器</strong>。如果创建失败则关闭当前<code>ClassLoader</code>，打印异常信息：该类没有主构造器</li>
+<li>如此，拿到了<code>plugin</code>类实例，此时可以调用实例的<code>start()</code>方法</li>
+<li>之后重新为<code>classloader</code>对象赋值为之前加载<code>plugin</code>类所用的<code>ClassLoader</code></li>
+<li>因为创建了大量的局部的变量，在最后的时候调用<code>System.gc()</code>，通知系统及时回收</li>
+<li>对于函数来说添加注解<code>@Synchronized</code>来加锁，如此保证函数在多线程下也可以正常使用</li>
+</ol>
+</li>
+<li>
+<p><code>main()</code>方法中操作：</p>
+<ol>
+<li>创建了一个包含两个插件<code>jar</code>包地址的<code>String</code>类型的数组</li>
+<li>通过<code>map</code>函数将数组每个元素都做了如下的操作</li>
+<li>创建<code>PluginLoader</code>类的实例，传入参数即为插件<code>jar</code>包地址，之后再调用该实例的<code>apply</code>方法，如此<code>PluginLoader</code>实例即为<code>apply</code>方法中的<code>receiver</code>，在<code>apply</code>方法中调用<code>PluginLoader</code>类的实例的<code>load</code>方法开始加载插件</li>
+</ol>
+</li>
+<li>
+<p>验证是否为实时监听热更新方法：修改插件里类的某个方法，之后再重新打包</p>
+</li>
+</ol>
+<h1><a href="#八-参考文章" class="header-anchor">#</a><span id="八-参考文章">八、参考文章</span></h1>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/xyang81/article/details/7292380#NetWorkClassLoader">深入分析Java ClassLoader原理</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/94847256">这篇文章绝对让你深刻理解java类的加载以及ClassLoader源码分析</a></li>
+</ol>
+</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2021-03-15</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Kotlin/" title="Kotlin">Kotlin </a><i class="fa fa-tag"></i><a class="tag" href="/tags/反射/" title="反射">反射 </a><span class="leancloud_visitors"></span><span>大约10278个字, 34分钟15秒读完</span></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="" onclick="javascript:join_favorite()" ref="sidebar"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://puppet16.github.io/2021/03/15/kotlin学习系列七/,Puppet,kotlin学习系列七：反射,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2021/03/23/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AB/" title="kotlin 学习系列八：注解">上一篇</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2021/03/08/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AD/" title="kotlin学习系列六：泛型">下一篇</a></li></ul></div><script src="/js/visitors.js"></script><a id="comments"></a><div id="vcomments" style="margin:0 30px;"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//cdn.jsdelivr.net/gh/xcss/valine@latest/dist/Valine.min.js"></script><script>var valine = new Valine({
+  el:'#vcomments',
+  notify:false || false, 
+  verify:false|| false, 
+  app_id:'xpSQCFiXzEQnCBUKrP6EHIUF-gzGzoHsz',
+  app_key:'Ev5N03MrqLzS683mu92hf4RO',
+  placeholder:'行至水穷处，坐看云起时...',
+  path: window.location.pathname,
+  serverURLs: '',
+  visitor:true,
+  recordIP:true,
+  avatar:'mm'
+})</script></div></div></div></div><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/add-bookmark.js"></script><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"debug":false,"model":{"scale":1,"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"left","hOffset":0,"vOffset":20},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"dialog":{"enable":false,"hitokoto":true}});</script></body></html>

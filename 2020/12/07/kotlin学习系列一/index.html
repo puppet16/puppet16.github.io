@@ -1,0 +1,699 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="Ltt"><title>Kotlin学习系列一：内置类型 · Puppet</title><meta name="description" content="一、前言
+二、基本类型
+
+1. Kotlin 与 java 基本类型对比
+2. 变量声明
+3. 类型推导
+4. 无符号类型
+5. 输出语句
+6. 字符串比较
+7. Raw String
+
+
+三、数组
+
+1. 数组创建
+2. 数组长度
+3. 数组读写
+4. 数组遍历
+
+1. java 中的 forea"><meta name="keywords" content="技术博客,Hexo,Android,Linux,HTML,Java"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.webp"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/insight.css"><link rel="stylesheet" href="/css/search.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><script src="/js/jquery.js"></script><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body><div class="page-top animated fadeInDown"><div class="nav"><li> <a href="/">首页</a></li><li> <a href="/archives">归档</a></li><li> <a href="/tags">标签</a></li><li> <a href="/about">关于</a></li></div><div class="information"><div class="nav_right_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"></div></div></div><div class="sidebar animated fadeInDown"><div class="sidebar-top"><div class="logo-title"><div class="title"><img src="/images/logo@2x.webp" style="width:220px;" alt="favicon"><h3 title=""><a href="/">Puppet</a></h3><div class="description"><p>心之所愿，无事不成。<br> Nothing is impossible to a willing heart.</p></div></div><ul class="social-links"><li><a target="_blank" rel="noopener" href="https://github.com/puppet16"><i class="fa fa-github"></i></a></li><li><a href="mailto:mailto:2542469086@qq.com"><i class="fa fa-envelope"></i></a></li><li><a target="_blank" rel="noopener" href="http://sighttp.qq.com/authd?IDKEY=http://sighttp.qq.com/authd?IDKEY="><i class="fa fa-qq"></i></a></li><li><a target="_blank" rel="noopener" href="https://zhihu.com/"><i class="fa fa-mortar-board"></i></a></li></ul></div></div><div class="footer"><div class="p"> <span> 全站CC-BY-SA-3.0 </span><i class="fa fa-star"></i><span> Ltt</span></div><div class="by_farbox"><span>Powered by </span><a href="https://hexo.io/zh-cn/" target="_blank">Hexo </a><span> & </span><span>Anatolo </span></div><div class="beian"></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>Kotlin学习系列一：内置类型</a></h3></div><div class="post-content"><p><div class="toc">
+<!-- toc -->
+<ul>
+<li><a href="#%E4%B8%80-%E5%89%8D%E8%A8%80">一、前言</a></li>
+<li><a href="#%E4%BA%8C-%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B">二、基本类型</a>
+<ul>
+<li><a href="#1-kotlin-%E4%B8%8E-java-%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B%E5%AF%B9%E6%AF%94">1. Kotlin 与 java 基本类型对比</a></li>
+<li><a href="#2-%E5%8F%98%E9%87%8F%E5%A3%B0%E6%98%8E">2. 变量声明</a></li>
+<li><a href="#3-%E7%B1%BB%E5%9E%8B%E6%8E%A8%E5%AF%BC">3. 类型推导</a></li>
+<li><a href="#4-%E6%97%A0%E7%AC%A6%E5%8F%B7%E7%B1%BB%E5%9E%8B">4. 无符号类型</a></li>
+<li><a href="#5-%E8%BE%93%E5%87%BA%E8%AF%AD%E5%8F%A5">5. 输出语句</a></li>
+<li><a href="#6-%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%AF%94%E8%BE%83">6. 字符串比较</a></li>
+<li><a href="#7-raw-string">7. Raw String</a></li>
+</ul>
+</li>
+<li><a href="#%E4%B8%89-%E6%95%B0%E7%BB%84">三、数组</a>
+<ul>
+<li><a href="#1-%E6%95%B0%E7%BB%84%E5%88%9B%E5%BB%BA">1. 数组创建</a></li>
+<li><a href="#2-%E6%95%B0%E7%BB%84%E9%95%BF%E5%BA%A6">2. 数组长度</a></li>
+<li><a href="#3-%E6%95%B0%E7%BB%84%E8%AF%BB%E5%86%99">3. 数组读写</a></li>
+<li><a href="#4-%E6%95%B0%E7%BB%84%E9%81%8D%E5%8E%86">4. 数组遍历</a>
+<ul>
+<li><a href="#1-java-%E4%B8%AD%E7%9A%84-foreach-%E5%BE%AA%E7%8E%AF%E9%81%8D%E5%8E%86">1. java 中的 foreach 循环遍历</a></li>
+</ul>
+</li>
+<li><a href="#5-%E6%95%B0%E7%BB%84%E7%9A%84%E5%8C%85%E5%90%AB%E5%85%B3%E7%B3%BB">5. 数组的包含关系</a></li>
+</ul>
+</li>
+<li><a href="#%E5%9B%9B-%E5%8C%BA%E9%97%B4">四、区间</a>
+<ul>
+<li><a href="#1-%E5%8C%BA%E9%97%B4%E5%88%9B%E5%BB%BA">1. 区间创建</a>
+<ul>
+<li><a href="#1-%E9%97%AD%E5%8C%BA%E9%97%B4">1. 闭区间</a></li>
+<li><a href="#2-%E5%8D%8A%E9%97%AD%E5%8D%8A%E5%BC%80%E5%8C%BA%E9%97%B4">2. 半闭半开区间</a></li>
+<li><a href="#3-%E5%8C%BA%E9%97%B4%E7%9A%84%E6%AD%A5%E9%95%BF">3. 区间的步长</a></li>
+</ul>
+</li>
+<li><a href="#2-%E5%8C%BA%E9%97%B4%E7%9A%84%E8%BF%AD%E4%BB%A3%E4%B8%8E%E5%8C%85%E5%90%AB">2. 区间的迭代与包含</a></li>
+<li><a href="#3-%E5%8C%BA%E9%97%B4%E7%A4%BA%E4%BE%8B">3. 区间示例</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BA%94-%E9%9B%86%E5%90%88">五、集合</a>
+<ul>
+<li><a href="#1-%E9%9B%86%E5%90%88%E7%9A%84%E5%88%9B%E5%BB%BA">1. 集合的创建</a>
+<ul>
+<li><a href="#1-%E6%96%B9%E6%B3%95%E4%B8%80kotlin%E7%89%B9%E6%9C%89%E6%96%B9%E5%BC%8F">1. 方法一：<code>Kotlin</code>特有方式</a></li>
+<li><a href="#2-%E6%96%B9%E6%B3%95%E4%BA%8C%E4%BD%BF%E7%94%A8java%E4%B8%AD%E7%9A%84%E5%AE%9E%E7%8E%B0%E7%B1%BB">2. 方法二：使用<code>Java</code>中的实现类</a></li>
+</ul>
+</li>
+<li><a href="#2-%E9%9B%86%E5%90%88%E5%AE%9E%E7%8E%B0%E7%B1%BB%E5%A4%8D%E7%94%A8%E4%B8%8E%E7%B1%BB%E5%9E%8B%E5%88%AB%E5%90%8D">2. 集合实现类复用与类型别名</a></li>
+<li><a href="#3-%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6%E7%9A%84%E6%93%8D%E4%BD%9C">3. 集合框架的操作</a>
+<ul>
+<li><a href="#1-list%E5%88%97%E8%A1%A8">1. <code>List</code>列表</a></li>
+<li><a href="#2-map">2. <code>Map</code></a></li>
+</ul>
+</li>
+<li><a href="#4-pair%E9%94%AE%E5%80%BC%E5%AF%B9">4. Pair键值对</a>
+<ul>
+<li><a href="#1-%E5%88%9B%E5%BB%BA">1. 创建</a></li>
+<li><a href="#2-%E8%8E%B7%E5%8F%96%E5%AF%B9%E5%BA%94%E5%85%83%E7%B4%A0">2. 获取对应元素</a></li>
+<li><a href="#3-%E8%A7%A3%E6%9E%84">3. 解构</a></li>
+</ul>
+</li>
+<li><a href="#4-triple">4. Triple</a>
+<ul>
+<li><a href="#1-%E5%88%9B%E5%BB%BA-1">1. 创建</a></li>
+<li><a href="#2-%E8%8E%B7%E5%8F%96%E5%AF%B9%E5%BA%94%E5%85%83%E7%B4%A0-1">2. 获取对应元素</a></li>
+<li><a href="#3-%E8%A7%A3%E6%9E%84-1">3. 解构</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E5%85%AD-%E5%87%BD%E6%95%B0%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5">六、函数基本概念</a>
+<ul>
+<li><a href="#1-%E5%87%BD%E6%95%B0%E5%AE%9A%E4%B9%89">1. 函数定义</a></li>
+<li><a href="#2-%E5%87%BD%E6%95%B0%E4%B8%8E%E6%96%B9%E6%B3%95%E5%85%B3%E7%B3%BB">2. 函数与方法关系</a></li>
+<li><a href="#3-%E5%87%BD%E6%95%B0%E7%B1%BB%E5%9E%8B">3. 函数类型</a></li>
+<li><a href="#4-%E5%87%BD%E6%95%B0%E7%9A%84%E5%BC%95%E7%94%A8">4. 函数的引用</a></li>
+<li><a href="#5-%E5%8F%98%E9%95%BF%E5%8F%82%E6%95%B0">5. 变长参数</a></li>
+<li><a href="#6-%E5%A4%9A%E8%BF%94%E5%9B%9E%E5%80%BC">6. 多返回值</a></li>
+<li><a href="#7-%E9%BB%98%E8%AE%A4%E5%8F%82%E6%95%B0">7. 默认参数</a></li>
+<li><a href="#8-%E5%85%B7%E5%90%8D%E5%8F%82%E6%95%B0">8. 具名参数</a></li>
+</ul>
+</li>
+<li><a href="#%E4%B8%83-%E7%A4%BA%E4%BE%8B">七、示例</a></li>
+<li><a href="#%E5%85%AB-%E9%99%84%E5%BD%95">八、附录</a></li>
+</ul>
+<!-- tocstop -->
+</div>
+<h1><a href="#一-前言" class="header-anchor">#</a><span id="一-前言">一、前言</span></h1>
+<ol>
+<li>本文主要讲述<strong>Kotlin 内置类型即本身已被Kotlin集成的类型</strong></li>
+<li><em>本文是对<a target="_blank" rel="noopener" href="https://github.com/enbandari">Bennyhuo老师</a>讲解的<code>Kotlin</code>系列视频的总结笔记</em></li>
+<li><strong>Kotlin英文官网：<a target="_blank" rel="noopener" href="https://kotlinlang.org/">https://kotlinlang.org/</a></strong></li>
+<li><strong>Kotlin中文官网：<a target="_blank" rel="noopener" href="https://www.kotlincn.net/">https://www.kotlincn.net/</a></strong></li>
+<li><strong>Kotlin源码：<a target="_blank" rel="noopener" href="https://github.com/JetBrains/kotlin">https://github.com/JetBrains/kotlin</a></strong></li>
+<li>Kotlin 学习系列文章：
+<ul>
+<li>
+<a href="/2020/12/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%BA%8C/" title="Kotlin学习系列二：类与接口初解">Kotlin学习系列二：类与接口初解</a>
+</li>
+<li>
+<a href="/2021/01/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%89/" title="Kotlin学习系列三：表达式">kotlin学习系列三：表达式</a>
+</li>
+<li>
+<a href="/2021/01/22/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%9B%9B/" title="Kotlin学习系列四：函数进阶">kotlin学习系列四：函数进阶</a>
+</li>
+<li>
+<a href="/2021/02/02/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%BA%94/" title="Kotlin学习系列五：类型进阶">kotlin学习系列五：类型进阶</a>
+</li>
+<li>
+<a href="/2021/03/08/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AD/" title="kotlin学习系列六：泛型">kotlin学习系列六：泛型</a>
+</li>
+<li>
+<a href="/2021/03/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%83/" title="kotlin学习系列七：反射">kotlin学习系列七：反射</a>
+</li>
+<li>
+<a href="/2021/03/23/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AB/" title="kotlin 学习系列八：注解">kotlin学习系列八：注解</a>
+</li>
+<li>
+<a href="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/" title="kotlin学习系列九：协程一">kotlin学习系列九：协程初解</a>
+</li>
+<li>
+<a href="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%8D%81/" title="kotlin学习系列十：协程二">kotlin学习系列十：协程进阶--挂起函数</a>
+</li>
+<li>
+<a href="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%8D%81%E4%B8%80/" title="kotlin学习系列十一：协程三">kotlin学习系列十一：协程应用</a>
+</li>
+</ul>
+</li>
+</ol>
+<h1><a href="#二-基本类型" class="header-anchor">#</a><span id="二-基本类型">二、基本类型</span></h1>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>大小 (bits)</th>
+<th>最小值</th>
+<th>最大值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Byte</td>
+<td>8</td>
+<td>-128</td>
+<td>127</td>
+</tr>
+<tr>
+<td>Short</td>
+<td>16</td>
+<td>-32768</td>
+<td>32767</td>
+</tr>
+<tr>
+<td>Int</td>
+<td>32</td>
+<td>-2,147,483,648 (-2<sup>31</sup>)</td>
+<td>2,147,483,647 (2<sup>31</sup> - 1)</td>
+</tr>
+<tr>
+<td>Long</td>
+<td>64</td>
+<td>-9,223,372,036,854,775,808 (-2<sup>63</sup>)</td>
+<td>9,223,372,036,854,775,807 (2<sup>63</sup> - 1)</td>
+</tr>
+<tr>
+<td>Float</td>
+<td>32</td>
+<td>——</td>
+<td>——</td>
+</tr>
+<tr>
+<td>Double</td>
+<td>64</td>
+<td>——</td>
+<td>——</td>
+</tr>
+<tr>
+<td>Boolean</td>
+<td>——</td>
+<td>——</td>
+<td>——</td>
+</tr>
+</tbody>
+</table>
+<h2><a href="#1-kotlin-与-java-基本类型对比" class="header-anchor">#</a><span id="1-kotlin-与-java-基本类型对比">1. Kotlin 与 java 基本类型对比</span></h2>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>Kotlin</th>
+<th>Java</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>字节</td>
+<td>Byte</td>
+<td>byte/Byte</td>
+</tr>
+<tr>
+<td>整型</td>
+<td>Int &amp; Long</td>
+<td>int/Integer &amp; long/Long</td>
+</tr>
+<tr>
+<td>浮点型</td>
+<td>Float &amp; Double</td>
+<td>float/Float &amp; double/Double</td>
+</tr>
+<tr>
+<td>字符</td>
+<td>Char</td>
+<td>char/Character</td>
+</tr>
+<tr>
+<td>字符串</td>
+<td>String</td>
+<td>String</td>
+</tr>
+</tbody>
+</table>
+<h2><a href="#2-变量声明" class="header-anchor">#</a><span id="2-变量声明">2. 变量声明</span></h2>
+<p><strong>格式：</strong> <font size="5">修饰符 变量名 [: 类型】 = 初始值</font></p>
+<p><img src="/2020/12/07/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%80/kotlin_type_1.png" alt></p>
+<p><strong>修饰符：</strong><br>
+<strong><code>val</code></strong>：声明只读变量，对应 java 里加了<code>final</code>修饰符的变量，只有<code>get</code>方法，没有<code>set</code>方法。<br>
+<strong><code>var</code></strong>：声明可读写变量。</p>
+<p><code>Kotlin</code>里的<code>val a:Int = 2</code>等同于<code>Kotlin</code>里的<code>val a = 2</code>等同于<code>Java</code>里的<code>final int a = 2</code></p>
+<h2><a href="#3-类型推导" class="header-anchor">#</a><span id="3-类型推导">3. 类型推导</span></h2>
+<p>声明变量时可不加类型，<code>Kotlin</code>会根据初始化的值去自动匹配变量对应类型。</p>
+<ol>
+<li>
+<p>整型默认为<strong>Int</strong>，浮点型默认为<strong>Double</strong>。</p>
+</li>
+<li>
+<p>变量声明为<code>Long</code>或<code>Float</code>时，要在初始值后加上<code>L</code>或<code>F</code>表示，其中<code>L</code>在一些字体中易与<code>i</code>混淆，所以<strong>不能用小写的<code>l</code>声明长整型变量</strong>。例如：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> a = <span class="number">32</span><span class="comment">//Int类型</span></span><br><span class="line"><span class="keyword">val</span> b = <span class="number">23.2</span><span class="comment">//Double类型</span></span><br><span class="line"><span class="keyword">val</span> c = <span class="number">32L</span><span class="comment">//Long类型</span></span><br><span class="line"><span class="keyword">val</span> d = <span class="number">23.2F</span><span class="comment">//Float类型</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>数值类型转换时，必须要调用对应类型的转换函数，否则报错。例如</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> e = <span class="number">10</span></span><br><span class="line"><span class="keyword">val</span> f:<span class="built_in">Long</span> = e.toLong()</span><br><span class="line"><span class="keyword">val</span> g:<span class="built_in">Int</span> = f.toInt()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2><a href="#4-无符号类型" class="header-anchor">#</a><span id="4-无符号类型">4. 无符号类型</span></h2>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>有符号类型</th>
+<th>无符号类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>字节</td>
+<td>Byte</td>
+<td>UByte</td>
+</tr>
+<tr>
+<td>短整型</td>
+<td>Short</td>
+<td>UShort</td>
+</tr>
+<tr>
+<td>整型</td>
+<td>Int</td>
+<td>UInt</td>
+</tr>
+<tr>
+<td>长整型</td>
+<td>Long</td>
+<td>ULong</td>
+</tr>
+<tr>
+<td>字符串</td>
+<td>String</td>
+<td>String</td>
+</tr>
+</tbody>
+</table>
+<p><strong>无符号类型的数值范围：有符号类型去掉负数部分，正数部分再乘以 2，即无符号类型变量不能赋值负数</strong></p>
+<h2><a href="#5-输出语句" class="header-anchor">#</a><span id="5-输出语句">5. 输出语句</span></h2>
+<p>除支持<code>java</code>中用加号拼接字符串名，还支持在字符串内直接引用表达式的方式</p>
+<p><strong>格式：</strong> <font size="5">println(“内容 ${表达式}”)</font><br>
+例：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> j = <span class="string">&quot;321&quot;</span></span><br><span class="line">println(<span class="string">&quot;Value of j is <span class="variable">$j</span> , j.length is <span class="subst">$&#123;j.length&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p><code>println</code>等同于<code>java</code>中的<code>System.out.println</code></p>
+<h2><a href="#6-字符串比较" class="header-anchor">#</a><span id="6-字符串比较">6. 字符串比较</span></h2>
+<p><code>==</code>：比较字符串的内容，等同于<code>Java</code>里的<code>equals</code>语句<br>
+<code>===</code>：比较字符串的引用，等同于<code>Java</code>里的<code>==</code></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> a = <span class="string">&quot;32&quot;</span></span><br><span class="line"><span class="keyword">val</span> b = <span class="string">&quot;32&quot;</span></span><br><span class="line">a == b 返回<span class="literal">true</span>, a === b 返回<span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<h2><a href="#7-raw-string" class="header-anchor">#</a><span id="7-raw-string">7. Raw String</span></h2>
+ <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> 变量名 = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">   内容</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span>[.trimIndent()]</span><br></pre></td></tr></table></figure>
+<p><code>trimIndent</code>函数作用：删除多余公共缩进</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> n = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        &lt;html&gt;</span></span><br><span class="line"><span class="string">            &lt;body&gt;</span></span><br><span class="line"><span class="string">                &lt;H1&gt;Hello World&lt;/H1&gt;</span></span><br><span class="line"><span class="string">            &lt;/body&gt;</span></span><br><span class="line"><span class="string">        &lt;/html&gt;</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span>.trimIndent()</span><br></pre></td></tr></table></figure>
+<p>打印结果为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">    &lt;body&gt;</span><br><span class="line">        &lt;H1&gt;Hello World&lt;/H1&gt;</span><br><span class="line">    &lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<p>如果不加函数<code>trimIndent()</code>，则打印结果为：</p>
+<pre><code>    &lt;html&gt;
+        &lt;body&gt;
+            &lt;H1&gt;Hello World&lt;/H1&gt;
+        &lt;/body&gt;
+    &lt;/html&gt;
+</code></pre>
+<h1><a href="#三-数组" class="header-anchor">#</a><span id="三-数组">三、数组</span></h1>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>Kotlin</th>
+<th>Java</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>整型</td>
+<td>IntArray</td>
+<td>int[]</td>
+</tr>
+<tr>
+<td>整型装箱</td>
+<td>Array<int></int></td>
+<td>Integer[]</td>
+</tr>
+<tr>
+<td>字符</td>
+<td>CharArray</td>
+<td>char[]</td>
+</tr>
+<tr>
+<td>字符装箱</td>
+<td>Array<char></char></td>
+<td>Character[]</td>
+</tr>
+<tr>
+<td>字符串</td>
+<td>Array<string></string></td>
+<td>String[]</td>
+</tr>
+</tbody>
+</table>
+<h2><a href="#1-数组创建" class="header-anchor">#</a><span id="1-数组创建">1. 数组创建</span></h2>
+<p><code>Java</code>创建方式：<code>int[] c = new int[]&#123;1,2,3,4,5&#125;</code></p>
+<p><code>Kotlin</code>创建方式：<br>
+1. <code>val c0 = intArrayOf(1,2,3,4,5)</code><br>
+2. <code>val c1 = IntArray(5)&#123;it + 1&#125;</code><br>
+说明：其中 5 表示数组长度，it 表示数组下标。<br>
+3. <code>val c3 = arrayOf(&quot;Hello&quot;, &quot;World&quot;)</code></p>
+<h2><a href="#2-数组长度" class="header-anchor">#</a><span id="2-数组长度">2. 数组长度</span></h2>
+<p>格式：<code>数组名.size</code><br>
+其中数组的函数<code>contentToString()</code>，返回指定数组内容的字符串表示形式。<br>
+例：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> c2 = IntArray(<span class="number">5</span>)&#123;it&#125;</span><br><span class="line">println(c2.size)</span><br><span class="line">println(c2.contentToString())</span><br></pre></td></tr></table></figure>
+<p>打印结果为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">5</span><br><span class="line">[0, 0, 0, 0, 0]</span><br></pre></td></tr></table></figure>
+<h2><a href="#3-数组读写" class="header-anchor">#</a><span id="3-数组读写">3. 数组读写</span></h2>
+<p>与<code>Java</code>一致</p>
+<p>例：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> d = arrayOf(<span class="string">&quot;hello&quot;</span>, <span class="string">&quot;world&quot;</span>)</span><br><span class="line">d[<span class="number">0</span>] = <span class="string">&quot;kotlin&quot;</span></span><br><span class="line">println(<span class="string">&quot;<span class="subst">$&#123;d[<span class="number">0</span>]&#125;</span>, <span class="subst">$&#123;d[<span class="number">1</span>]&#125;</span>&quot;</span>)</span><br><span class="line">println(d.contentToString())</span><br></pre></td></tr></table></figure>
+<p>打印结果为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kotlin, world</span><br><span class="line">[kotlin, world]</span><br></pre></td></tr></table></figure>
+<h2><a href="#4-数组遍历" class="header-anchor">#</a><span id="4-数组遍历">4. 数组遍历</span></h2>
+<h3><a href="#1-java-中的-foreach-循环遍历" class="header-anchor">#</a><span id="1-java-中的-foreach-循环遍历">1. java 中的 foreach 循环遍历</span></h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">float</span>[] e = <span class="keyword">new</span> <span class="title class_">float</span>[] &#123;<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>&#125;;</span><br><span class="line"><span class="keyword">for</span>(<span class="type">float</span> elem : e) &#123;</span><br><span class="line">    System.out.println(elem);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>kotlin 中如下方式：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> e = floatArrayOf(<span class="number">1F</span>,<span class="number">3F</span>,<span class="number">5f</span>,<span class="number">7F</span>);</span><br><span class="line"><span class="keyword">for</span>(elem <span class="keyword">in</span> e) &#123;</span><br><span class="line">    println(elem)</span><br><span class="line">&#125;</span><br><span class="line">e.forEach &#123; elem -&gt;</span><br><span class="line">    println(elem)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2><a href="#5-数组的包含关系" class="header-anchor">#</a><span id="5-数组的包含关系">5. 数组的包含关系</span></h2>
+<p>判断某元素是否在数组中<br>
+格式：<code>元素 [!]in 数组名</code><br>
+说明：判断元素在或不在数组内，返回布尔值<br>
+例：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> e = floatArrayOf(<span class="number">1F</span>,<span class="number">3F</span>,<span class="number">5f</span>,<span class="number">7F</span>);</span><br><span class="line">println(<span class="number">2f</span> <span class="keyword">in</span> e)</span><br><span class="line">println(<span class="number">2f</span> !<span class="keyword">in</span> e)</span><br></pre></td></tr></table></figure>
+<p>打印结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">false</span><br><span class="line">true</span><br></pre></td></tr></table></figure>
+<h1><a href="#四-区间" class="header-anchor">#</a><span id="四-区间">四、区间</span></h1>
+<h2><a href="#1-区间创建" class="header-anchor">#</a><span id="1-区间创建">1. 区间创建</span></h2>
+<h3><a href="#1-闭区间" class="header-anchor">#</a><span id="1-闭区间">1. 闭区间</span></h3>
+<p>格式：<strong>小值 … 大值</strong><br>
+说明：该区间包含起止值，<strong>只能创建升序区间</strong><br>
+例：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> intRange = <span class="number">1</span> .. <span class="number">10</span> <span class="comment">//[1, 10]</span></span><br><span class="line"><span class="keyword">val</span> charRange = <span class="string">&#x27;a&#x27;</span> .. <span class="string">&#x27;z&#x27;</span> <span class="comment">//[&#x27;a&#x27;, &#x27;z&#x27;]</span></span><br><span class="line"><span class="keyword">val</span> longRange = <span class="number">1L</span> .. <span class="number">100L</span> <span class="comment">//[1L, 100L]</span></span><br></pre></td></tr></table></figure>
+<p>格式：<strong>大值 downTo 小值</strong><br>
+说明：该区间为倒序区间，包含起止值。<br>
+例：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> intRangeReverse = <span class="number">10</span> downTo <span class="number">1</span> <span class="comment">//[10, 1]</span></span><br><span class="line"><span class="keyword">val</span> charRangeReverse = <span class="string">&#x27;z&#x27;</span> downTo <span class="string">&#x27;a&#x27;</span> <span class="comment">//[&#x27;z&#x27;, &#x27;a&#x27;]</span></span><br><span class="line"><span class="keyword">val</span> longRangeReverse = <span class="number">100L</span> downTo <span class="number">1L</span> <span class="comment">//[100L, 1L]</span></span><br><span class="line">println(intRangeReverse.joinToString())</span><br></pre></td></tr></table></figure>
+<p>打印：<br>
+<code>10, 9, 8, 7, 6, 5, 4, 3, 2, 1</code></p>
+<h3><a href="#2-半闭半开区间" class="header-anchor">#</a><span id="2-半闭半开区间">2. 半闭半开区间</span></h3>
+<p>格式：<strong>小值 until 大值</strong><br>
+说明：该区间包含起始值，<strong>只能创建升序区间</strong><br>
+例：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> intRangeExclusive = <span class="number">1</span> until <span class="number">10</span> <span class="comment">//[1, 10)</span></span><br><span class="line"><span class="keyword">val</span> charRangeExclusive = <span class="string">&#x27;a&#x27;</span> until <span class="string">&#x27;z&#x27;</span> <span class="comment">//[&#x27;a&#x27;, &#x27;z&#x27;)</span></span><br><span class="line"><span class="keyword">val</span> longRangeExclusive = <span class="number">1L</span> until <span class="number">100L</span> <span class="comment">//[1L, 100L)</span></span><br></pre></td></tr></table></figure>
+<h3><a href="#3-区间的步长" class="header-anchor">#</a><span id="3-区间的步长">3. 区间的步长</span></h3>
+<p>在创建区间的格式再加上<strong>step 数值</strong><br>
+例：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> intRange = <span class="number">1</span> .. <span class="number">10</span> step <span class="number">2</span><span class="comment">//[1, 3, 5, 7, 9]</span></span><br><span class="line"><span class="keyword">val</span> charRange = <span class="string">&#x27;a&#x27;</span> .. <span class="string">&#x27;z&#x27;</span> step <span class="number">2</span><span class="comment">//[&#x27;a&#x27;, &#x27;c&#x27;, &#x27;e&#x27;, ... , &#x27;y&#x27;]</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> intRangeReverse = <span class="number">10</span> downTo <span class="number">1</span> step <span class="number">2</span><span class="comment">//[10, 8, 6, 4, 2]</span></span><br><span class="line"><span class="keyword">val</span> charRangeReverse = <span class="string">&#x27;z&#x27;</span> downTo <span class="string">&#x27;a&#x27;</span> step <span class="number">2</span><span class="comment">//[&#x27;z&#x27;, &#x27;x&#x27;, &#x27;v&#x27;, ... , &#x27;b&#x27;]</span></span><br></pre></td></tr></table></figure>
+<p><strong>整型、字符型、长整型区间是离散，就是一个个的数值，而 Float 类型和 Double 类型区间是连续的，包含区间内的所有数值，所以 Float 类型和 Double 类型不能使用步长</strong></p>
+<h2><a href="#2-区间的迭代与包含" class="header-anchor">#</a><span id="2-区间的迭代与包含">2. 区间的迭代与包含</span></h2>
+<p><strong>只有离散型区间才可以迭代，格式与数组一致</strong><br>
+<strong>所有区间都可以判断包含关系，格式与数组一致</strong></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> intRange = <span class="number">1</span> .. <span class="number">10</span> step <span class="number">2</span></span><br><span class="line"><span class="keyword">val</span> floatRange = <span class="number">1f</span> .. <span class="number">2f</span></span><br><span class="line"><span class="keyword">for</span>(elem <span class="keyword">in</span> intRange) &#123;</span><br><span class="line">    println(elem)</span><br><span class="line">&#125;</span><br><span class="line">intRange.forEach &#123; elem -&gt;</span><br><span class="line">    println(elem)</span><br><span class="line">&#125;</span><br><span class="line">println(<span class="number">1.3235f</span> <span class="keyword">in</span> floatRange)</span><br></pre></td></tr></table></figure>
+<h2><a href="#3-区间示例" class="header-anchor">#</a><span id="3-区间示例">3. 区间示例</span></h2>
+<p>可以使用区间来实现<code>java</code>中<code>fori</code>循环</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> array = intArrayOf(<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>)</span><br><span class="line"><span class="keyword">for</span>(i <span class="keyword">in</span> <span class="number">0</span> until array.size) &#123;</span><br><span class="line">    println(array[i])</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">for</span> (i <span class="keyword">in</span> array.indices) &#123;</span><br><span class="line">    println(<span class="string">&quot;i:<span class="variable">$i</span>, value: <span class="subst">$&#123;array[i]&#125;</span>&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中，数组的属性 <strong><code>indices</code></strong>，表示一个 [0, array.size] 的整型区间<br>
+打印结果为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1</span><br><span class="line">3</span><br><span class="line">5</span><br><span class="line">7</span><br><span class="line">i:0, value: 1</span><br><span class="line">i:1, value: 3</span><br><span class="line">i:2, value: 5</span><br><span class="line">i:3, value: 7</span><br></pre></td></tr></table></figure>
+<h1><a href="#五-集合" class="header-anchor">#</a><span id="五-集合">五、集合</span></h1>
+<ul>
+<li>增加了“不可变”集合框架接口</li>
+<li>复用<code>Java API</code>的所有实现类型</li>
+<li>运算符级别的支持，简化集合框架的访问</li>
+</ul>
+<table>
+    <tr>
+        <td>名称</td>
+        <td>Kotlin</td>
+        <td>Java</td>
+    </tr>
+    <tr>
+        <td>不可变List</td>
+        <td>List&lt;T></td>
+        <td rowspan="2">List&lt;T></td>
+    </tr>
+    <tr>
+        <td>可变List</td>
+        <td>MutableList&lt;T></td>
+    </tr>
+    <tr>
+        <td>不可变Map</td>
+        <td>Map&lt;K,V></td>
+        <td rowspan="2">Map&lt;K,V></td>
+    </tr>
+    <tr>
+        <td>可变Map</td>
+        <td>MutableMap&lt;K,V></td>
+    </tr>
+    <tr>
+        <td>不可变Set</td>
+        <td>Set&lt;T></td>
+        <td rowspan="2">Set&lt;T></td>
+    </tr>
+    <tr>
+        <td>可变Set</td>
+        <td>MutableSet&lt;T></td>
+    </tr>
+</table>
+<h2><a href="#1-集合的创建" class="header-anchor">#</a><span id="1-集合的创建">1. 集合的创建</span></h2>
+<h3><a href="#1-方法一kotlin特有方式" class="header-anchor">#</a><span id="1-方法一kotlin特有方式">1. 方法一：<code>Kotlin</code>特有方式</span></h3>
+<p>格式：<code>val 变量名:List类型 = 对应集合类型的Of方法</code><br>
+例：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> initList:List&lt;<span class="built_in">Int</span>&gt; = listOf(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>);</span><br><span class="line"><span class="keyword">val</span> initList:MutableList&lt;<span class="built_in">Int</span>&gt; = mutableListOf(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> map:Map&lt;String, Any&gt; = mapOf(<span class="string">&quot;name&quot;</span> to <span class="string">&quot;张三&quot;</span>, <span class="string">&quot;age&quot;</span> to <span class="number">32</span>)</span><br><span class="line"><span class="keyword">val</span> map:Map&lt;String, String&gt; = mapOf(<span class="string">&quot;Name&quot;</span> to <span class="string">&quot;张三&quot;</span>, <span class="string">&quot;age&quot;</span> to <span class="string">&quot;32&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>其中：</p>
+<ol>
+<li>语句<code>A值 to B值</code>为<code>pair</code>类型，可以简单理解为<code>Java</code>中的<code>K-V</code>键值对</li>
+<li><code>Any</code>等同于<code>Java</code>中的<code>Object</code>类型</li>
+</ol>
+<h3><a href="#2-方法二使用java中的实现类" class="header-anchor">#</a><span id="2-方法二使用java中的实现类">2. 方法二：使用<code>Java</code>中的实现类</span></h3>
+<p>格式：<code>val strList = 集合实现类</code><br>
+例：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> strList = ArrayList&lt;String&gt;()</span><br></pre></td></tr></table></figure>
+<p>该方法与<code>Java</code>声明集合的只差一个<code>new</code>字段，但是引用的包名不一致。</p>
+<p><code>Java</code>中的<code>ArrayList</code>包名为<code>java.util.ArrayList</code><br>
+<code>Kotlin</code>中的<code>ArrayList</code>包名为<code>kotlin.collections.ArrayList</code><br>
+虽然包名不一致，但引用的是同一个东西。</p>
+<h2><a href="#2-集合实现类复用与类型别名" class="header-anchor">#</a><span id="2-集合实现类复用与类型别名">2. 集合实现类复用与类型别名</span></h2>
+<p><code>kotlin.collections</code>源码如下：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> kotlin.collections</span><br><span class="line"></span><br><span class="line"><span class="meta">@SinceKotlin(<span class="string">&quot;1.1&quot;</span>)</span> <span class="keyword">public</span> <span class="keyword">actual</span> <span class="keyword">typealias</span> RandomAccess = java.util.RandomAccess</span><br><span class="line"><span class="meta">@SinceKotlin(<span class="string">&quot;1.1&quot;</span>)</span> <span class="keyword">public</span> <span class="keyword">actual</span> <span class="keyword">typealias</span> ArrayList&lt;E&gt; = java.util.ArrayList&lt;E&gt;</span><br><span class="line"><span class="meta">@SinceKotlin(<span class="string">&quot;1.1&quot;</span>)</span> <span class="keyword">public</span> <span class="keyword">actual</span> <span class="keyword">typealias</span> LinkedHashMap&lt;K, V&gt; = java.util.LinkedHashMap&lt;K, V&gt;</span><br><span class="line"><span class="meta">@SinceKotlin(<span class="string">&quot;1.1&quot;</span>)</span> <span class="keyword">public</span> <span class="keyword">actual</span> <span class="keyword">typealias</span> HashMap&lt;K, V&gt; = java.util.HashMap&lt;K, V&gt;</span><br><span class="line"><span class="meta">@SinceKotlin(<span class="string">&quot;1.1&quot;</span>)</span> <span class="keyword">public</span> <span class="keyword">actual</span> <span class="keyword">typealias</span> LinkedHashSet&lt;E&gt; = java.util.LinkedHashSet&lt;E&gt;</span><br><span class="line"><span class="meta">@SinceKotlin(<span class="string">&quot;1.1&quot;</span>)</span> <span class="keyword">public</span> <span class="keyword">actual</span> <span class="keyword">typealias</span> HashSet&lt;E&gt; = java.util.HashSet&lt;E&gt;</span><br></pre></td></tr></table></figure>
+<p>通过<strong>类型别名</strong>调用<code>kotlin</code>包内的<code>ArrayList</code>等类型时等同于使用<code>Java</code>中的<code>ArrayList</code>等类型<br>
+<code>使用类型别名</code>是为了方便开发者跨平台开发。</p>
+<h2><a href="#3-集合框架的操作" class="header-anchor">#</a><span id="3-集合框架的操作">3. 集合框架的操作</span></h2>
+<h3><a href="#1-list列表" class="header-anchor">#</a><span id="1-list列表">1. <code>List</code>列表</span></h3>
+<p><strong>+=</strong>等价于<code>add</code><br>
+<strong>-=</strong>等价于<code>remove</code></p>
+<p><code>stringList.add(&quot;aa&quot;)</code>等同于<code>stringList += &quot;aa&quot;</code><br>
+<code>stringList.remove(&quot;aa&quot;)</code>等同于<code>stringList -= &quot;aa&quot;</code></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> listStr = ArrayList&lt;String&gt;()</span><br><span class="line">listStr += <span class="string">&quot;Hello&quot;</span></span><br><span class="line">println(listStr)</span><br><span class="line">listStr[<span class="number">0</span>] = <span class="string">&quot;World&quot;</span></span><br><span class="line">println(listStr)</span><br><span class="line"><span class="keyword">val</span> listZero = listStr[<span class="number">0</span>]</span><br><span class="line">println(listZero)</span><br></pre></td></tr></table></figure>
+<p>打印结果为</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[Hello]</span><br><span class="line">[World]</span><br><span class="line">World</span><br></pre></td></tr></table></figure>
+<h3><a href="#2-map" class="header-anchor">#</a><span id="2-map">2. <code>Map</code></span></h3>
+<p>访问<code>Map</code>时也可以用<strong>方括号</strong>的方式，<code>[]</code>内的值实际上就是<code>key</code></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> map = HashMap&lt;String, Any&gt;()</span><br><span class="line">map[<span class="string">&quot;Hello&quot;</span>] = <span class="number">10</span></span><br><span class="line">println(map[<span class="string">&quot;Hello&quot;</span>])</span><br></pre></td></tr></table></figure>
+<p>打印结果为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">10</span><br></pre></td></tr></table></figure>
+<h2><a href="#4-pair键值对" class="header-anchor">#</a><span id="4-pair键值对">4. Pair键值对</span></h2>
+<h3><a href="#1-创建" class="header-anchor">#</a><span id="1-创建">1. 创建</span></h3>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> pair = <span class="string">&quot;Hello&quot;</span> to <span class="string">&quot;Kotlin&quot;</span></span><br><span class="line"><span class="keyword">val</span> pair2 = Pair(<span class="string">&quot;Hello&quot;</span>, <span class="string">&quot;Kotlin&quot;</span>)</span><br><span class="line"></span><br><span class="line">println(pair)</span><br><span class="line">println(pair2)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>打印结果为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(Hello, Kotlin)</span><br><span class="line">(Hello, Kotlin)</span><br></pre></td></tr></table></figure>
+<h3><a href="#2-获取对应元素" class="header-anchor">#</a><span id="2-获取对应元素">2. 获取对应元素</span></h3>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> first = pair.first</span><br><span class="line"><span class="keyword">val</span> second = pair.second</span><br><span class="line"></span><br><span class="line">println(first)</span><br><span class="line">println(second)</span><br></pre></td></tr></table></figure>
+<p>打印结果为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Hello</span><br><span class="line">Kotlin</span><br></pre></td></tr></table></figure>
+<h3><a href="#3-解构" class="header-anchor">#</a><span id="3-解构">3. 解构</span></h3>
+<p>将<code>Pair</code>拆解成两个变量</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> (x, y) = pair</span><br><span class="line"></span><br><span class="line">println(x)</span><br><span class="line">println(y)</span><br></pre></td></tr></table></figure>
+<p>打印结果为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Hello</span><br><span class="line">Kotlin</span><br></pre></td></tr></table></figure>
+<h2><a href="#4-triple" class="header-anchor">#</a><span id="4-triple">4. Triple</span></h2>
+<h3><a href="#1-创建" class="header-anchor">#</a><span id="1-创建">1. 创建</span></h3>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> triple = Triple(<span class="string">&quot;Hello&quot;</span>, <span class="number">3</span>, <span class="number">4.0</span>)</span><br><span class="line">println(triple)</span><br></pre></td></tr></table></figure>
+<p>打印结果为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(Hello, 3, 4.0)</span><br></pre></td></tr></table></figure>
+<h3><a href="#2-获取对应元素" class="header-anchor">#</a><span id="2-获取对应元素">2. 获取对应元素</span></h3>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">val</span> first = triple.first</span><br><span class="line"><span class="keyword">val</span> second = triple.second</span><br><span class="line"><span class="keyword">val</span> third = triple.third</span><br><span class="line">println(first)</span><br><span class="line">println(second)</span><br><span class="line">println(third)</span><br></pre></td></tr></table></figure>
+<p>打印结果为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Hello</span><br><span class="line">3</span><br><span class="line">4.0</span><br></pre></td></tr></table></figure>
+<h3><a href="#3-解构" class="header-anchor">#</a><span id="3-解构">3. 解构</span></h3>
+<p>将<code>Triple</code>拆解成三个变量</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> (x, y, z) = triple</span><br><span class="line"></span><br><span class="line">println(x)</span><br><span class="line">println(y)</span><br><span class="line">println(z)</span><br></pre></td></tr></table></figure>
+<p>打印结果为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Hello</span><br><span class="line">3</span><br><span class="line">4.0</span><br></pre></td></tr></table></figure>
+<h1><a href="#六-函数基本概念" class="header-anchor">#</a><span id="六-函数基本概念">六、函数基本概念</span></h1>
+<h2><a href="#1-函数定义" class="header-anchor">#</a><span id="1-函数定义">1. 函数定义</span></h2>
+<p>格式：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> 函数名<span class="params">(函数参数列表)</span></span>[:函数返回值] &#123;</span><br><span class="line">    函数代码块</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>例：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">(args: <span class="type">Array</span>&lt;<span class="type">String</span>&gt;)</span></span>: <span class="built_in">Unit</span> &#123;</span><br><span class="line">    println(args.contentToString())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中，<code>Unit</code>等价于<code>Java</code>的<code>void</code>,函数返回值为<code>Unit</code>时可不加，即上面例可写为：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">(args: <span class="type">Array</span>&lt;<span class="type">String</span>&gt;)</span></span> &#123;</span><br><span class="line">    println(args.contentToString())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2><a href="#2-函数与方法关系" class="header-anchor">#</a><span id="2-函数与方法关系">2. 函数与方法关系</span></h2>
+<ul>
+<li><strong>方法</strong>可以认为是函数的一种特殊类型</li>
+<li>从形式上，有<code>receiver</code>的函数即为<code>方法</code></li>
+</ul>
+<p>简单来说<code>Abc.get</code>中的<code>Abc</code>就是<code>receiver</code></p>
+<p>例：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">(args: <span class="type">Array</span>&lt;<span class="type">String</span>&gt;)</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> foo:Foo = Foo() </span><br><span class="line">    <span class="keyword">val</span> result = foo.bar(<span class="string">&quot;Hello,&quot;</span>, <span class="string">&quot;World&quot;</span>)</span><br><span class="line">    println(result)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Foo</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">bar</span><span class="params">(p0:<span class="type">String</span>, p1:<span class="type">String</span>)</span></span>: String &#123;</span><br><span class="line">        <span class="keyword">return</span> p0+p1</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中，<code>Foo</code>类中有函数<code>bar</code>，其功能为拼接传入的两个字符串并返回。<br>
+使用<code>foo.bar</code>来调用<code>bar</code>函数，其中<code>foo</code>即为<code>receiver</code>，<code>bar</code>函数也可称之为方法<br>
+<strong>Kotlin中可以不定义类直接定义函数，这种没有<code>receiver</code>的函数为顶级函数</strong></p>
+<h2><a href="#3-函数类型" class="header-anchor">#</a><span id="3-函数类型">3. 函数类型</span></h2>
+<p>函数的类型具有与函数签名相对应的特殊表示法，即它们的参数和返回值</p>
+<ul>
+<li>所有函数类型都有一个圆括号括起来的参数类型列表以及一个返回类型</li>
+<li>函数类型可以有一个额外的接收者类型，它在表示法中的点之前指定</li>
+</ul>
+<p>函数类型表达</p>
+<table>
+    <tr>
+        <td>函数</td>
+        <td>类型</td>
+    </tr>
+    <tr>
+        <td>fun foo() {}</td>
+        <td>() -> Unit</td>
+    </tr>
+    <tr>
+        <td>fun foo(p0:Int):String{ ... }</td>
+        <td>(Int) -> String</td>
+    </tr>
+    <tr>
+        <td>class Foo { <br>   fun bar(p0:String, p1:String):Any { ... } <br>}</td>
+        <td>Foo.(String,String) -> Any 等价于 <br> (Foo,String,String) -> Any 等价于 <br> Function3&lt;Foo, String, Long, Any></td>
+    </tr>
+</table>
+<p>如果<code>receiver</code>当做函数参数类型列表里第一项，则表明该函数为方法<br>
+参考：<a target="_blank" rel="noopener" href="https://www.kotlincn.net/docs/reference/lambdas.html#%E5%87%BD%E6%95%B0%E7%B1%BB%E5%9E%8B">https://www.kotlincn.net/docs/reference/lambdas.html</a></p>
+<h2><a href="#4-函数的引用" class="header-anchor">#</a><span id="4-函数的引用">4. 函数的引用</span></h2>
+<p><code>::</code>是创建一个成员引用或者一个<a target="_blank" rel="noopener" href="https://www.kotlincn.net/docs/reference/reflection.html#%E7%B1%BB%E5%BC%95%E7%94%A8">类引用</a>的操作符</p>
+<ul>
+<li>
+<p>函数的引用类似C语言中的函数指针，可用于函数传递</p>
+  <table>
+      <tr>
+          <td>函数</td>
+          <td>lamba表达</td>
+      </tr>
+      <tr>
+          <td>fun foo() {}</td>
+          <td>::foo</td>
+      </tr>
+      <tr>
+          <td>fun foo(p0:Int):String{ ... }</td>
+          <td>::foo</td>
+      </tr>
+      <tr>
+          <td>class Foo { <br>   fun bar(p0:String, p1:String):Any { ... } <br>}</td>
+          <td>Foo::bar</td>
+      </tr>
+  </table>
+</li>
+<li>
+<p>声明函数类型的变量</p>
+  <table>
+      <tr>
+          <td>函数</td>
+          <td>声明函数变量</td>
+      </tr>
+      <tr>
+          <td>fun foo() {}</td>
+          <td>val f:() -> Unit = ::foo</td>
+      </tr>
+      <tr>
+          <td>fun foo(p0:Int):String{ ... }</td>
+          <td>val g:(Int) -> String = ::foo</td>
+      </tr>
+      <tr>
+          <td>class Foo { <br>   fun bar(p0:String, p1:String):Any { ... } <br>}</td>
+          <td>val h:(Foo, String, Long) -> Any = Foo::bar</td>
+      </tr>
+  </table>
+<p>可省略函数类型，让编译器去推断</p>
+  <table>
+      <tr>
+          <td>函数</td>
+          <td>声明函数变量</td>
+      </tr>
+      <tr>
+          <td>fun foo() {}</td>
+          <td>val f = ::foo</td>
+      </tr>
+      <tr>
+          <td>fun foo(p0:Int):String{ ... }</td>
+          <td>val g = ::foo</td>
+      </tr>
+      <tr>
+          <td>class Foo { <br>   fun bar(p0:String, p1:String):Any { ... } <br>}</td>
+          <td>val h = Foo::bar</td>
+      </tr>
+  </table>
+</li>
+<li>
+<p>方法的函数引用</p>
+  <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Foo</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">bar</span><span class="params">(p0:<span class="type">String</span>, p1:<span class="type">Long</span>)</span></span> :Any&#123; ... &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">val</span> foo = Foo()</span><br><span class="line"><span class="keyword">val</span> m:(String, <span class="built_in">Long</span>) -&gt; Any = foo.bar</span><br></pre></td></tr></table></figure>
+<p>其中<code>bar</code>函数使用的Foo类的实例化对象<code>foo</code>作为<code>receiver</code>，这种方式称为<strong>绑定receiver的函数引用</strong></p>
+</li>
+</ul>
+<h2><a href="#5-变长参数" class="header-anchor">#</a><span id="5-变长参数">5. 变长参数</span></h2>
+<p>格式：<strong><code>vararg 参数名：参数类型</code></strong><br>
+与<code>java</code>中的<code>void multiParams(String... args)</code>类似<br>
+在调用函数之前参数个数是不确定的，只有在调用的时候才能确定参数的类型和数量。<br>
+则参数是某个类型的数组</p>
+<p>例：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">multiParams</span><span class="params">(<span class="keyword">vararg</span> ints: <span class="type">Int</span>)</span></span> &#123;</span><br><span class="line">    println(ints.contentToString)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>调用：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">multiParams(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>)</span><br></pre></td></tr></table></figure>
+<h2><a href="#6-多返回值" class="header-anchor">#</a><span id="6-多返回值">6. 多返回值</span></h2>
+<p>借助<code>Pair</code>和<code>Triple</code>类型完成多返回值的操作</p>
+<p>例：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">multiReturnValues</span><span class="params">()</span></span> : Triple&lt;<span class="built_in">Int</span>, <span class="built_in">Long</span>, <span class="built_in">Double</span>&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> Triple(<span class="number">1</span>, <span class="number">3L</span>, <span class="number">5.0</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">val</span> (a,b,c) = multiReturnValues()</span><br><span class="line"></span><br><span class="line">println(a)</span><br><span class="line">println(b)</span><br><span class="line">println(c)</span><br></pre></td></tr></table></figure>
+<p>通过解构将<code>Pair</code>和<code>Triple</code>中的值赋给不同变量</p>
+<h2><a href="#7-默认参数" class="header-anchor">#</a><span id="7-默认参数">7. 默认参数</span></h2>
+<p>定义：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">defaultParameter</span><span class="params">(x:<span class="type">Int</span>, y:<span class="type">String</span>, z: <span class="type">Long</span> = <span class="number">0</span>L)</span></span> &#123;</span><br><span class="line">    println(<span class="string">&quot;x:<span class="variable">$x</span>, y:<span class="variable">$y</span>, z: <span class="variable">$z</span>&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>调用：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">defaultParameter(<span class="number">2</span>, <span class="string">&quot;5&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>注意：默认值应该是从参数列表最后一项往前赋值，调用时传递地参数                                                                                                                        按照定义时的参数列表顺序传递参数值</p>
+<h2><a href="#8-具名参数" class="header-anchor">#</a><span id="8-具名参数">8. 具名参数</span></h2>
+<p>定义：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">defaultParameter</span><span class="params">(x:<span class="type">Int</span> = <span class="number">5</span>, y:<span class="type">String</span>, z: <span class="type">Long</span> = <span class="number">0</span>L)</span></span> &#123;</span><br><span class="line">    println(<span class="string">&quot;x:<span class="variable">$x</span>, y:<span class="variable">$y</span>, z: <span class="variable">$z</span>&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>调用：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">defaultParameter(y = <span class="string">&quot;5&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>调用时可使用形参名字来显式接收参数，这样避免了给首尾参数加默认值，调用时无法只传中间参数值的问题</p>
+<h1><a href="#七-示例" class="header-anchor">#</a><span id="七-示例">七、示例</span></h1>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> calculator = Calculator()</span><br><span class="line">    calculator.cal(<span class="string">&quot;3&quot;</span>,<span class="string">&quot;*&quot;</span>,<span class="string">&quot;5&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Calculator</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">cal</span><span class="params">(<span class="keyword">vararg</span> args:<span class="type">String</span>)</span></span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (args.size &lt; <span class="number">3</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> showHelp()</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">val</span> operators = mapOf(</span><br><span class="line">                <span class="string">&quot;+&quot;</span> to ::plus,</span><br><span class="line">                <span class="string">&quot;-&quot;</span> to ::minus,</span><br><span class="line">                <span class="string">&quot;*&quot;</span> to ::times,</span><br><span class="line">                <span class="string">&quot;/&quot;</span> to ::div,</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">        <span class="keyword">val</span> opFun = operators[args[<span class="number">1</span>]]?: <span class="keyword">return</span> showHelp()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            println(<span class="string">&quot;Input:<span class="subst">$&#123;args.joinToString(<span class="string">&quot; &quot;</span>)&#125;</span>&quot;</span>)</span><br><span class="line">            println(<span class="string">&quot;Output:&quot;</span> + opFun(args[<span class="number">0</span>].toInt(), args[<span class="number">2</span>].toInt()))</span><br><span class="line">        &#125; <span class="keyword">catch</span> (e: Exception) &#123;</span><br><span class="line">            println(<span class="string">&quot;Invalid Input&quot;</span>)</span><br><span class="line">            showHelp()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">plus</span><span class="params">(arg0:<span class="type">Int</span>, arg1: <span class="type">Int</span>)</span></span>:<span class="built_in">Int</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> arg0 + arg1</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">minus</span><span class="params">(arg0:<span class="type">Int</span>, arg1: <span class="type">Int</span>)</span></span>:<span class="built_in">Int</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> arg0 - arg1</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">times</span><span class="params">(arg0:<span class="type">Int</span>, arg1: <span class="type">Int</span>)</span></span>:<span class="built_in">Int</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> arg0 * arg1</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">div</span><span class="params">(arg0:<span class="type">Int</span>, arg1: <span class="type">Int</span>)</span></span>:<span class="built_in">Int</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> arg0 / arg1</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">showHelp</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="keyword">val</span> helpStr = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">            Simple Calculator:</span></span><br><span class="line"><span class="string">                Input: 2 * 3</span></span><br><span class="line"><span class="string">                Output: 6</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span>.trimIndent()</span><br><span class="line">        println(helpStr)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>实现简单的四则运算功能</p>
+<h1><a href="#八-附录" class="header-anchor">#</a><span id="八-附录">八、附录</span></h1>
+<p>参考文章：<br>
+<a target="_blank" rel="noopener" href="https://www.kotlincn.net/docs/reference/basic-types.html">https://www.kotlincn.net/docs/reference/basic-types.html</a><br>
+<a target="_blank" rel="noopener" href="https://www.kotlincn.net/docs/reference/functions.html">https://www.kotlincn.net/docs/reference/functions.html</a></p>
+</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2020-12-07</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Kotlin/" title="Kotlin">Kotlin </a><i class="fa fa-tag"></i><a class="tag" href="/tags/类型/" title="类型">类型 </a><span class="leancloud_visitors"></span><span>大约3841个字, 12分钟48秒读完</span></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="" onclick="javascript:join_favorite()" ref="sidebar"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://puppet16.github.io/2020/12/07/kotlin学习系列一/,Puppet,Kotlin学习系列一：内置类型,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2020/12/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%BA%8C/" title="Kotlin学习系列二：类与接口初解">上一篇</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2020/11/27/%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97%E5%9B%9B/" title="源码系列四：事件分发机制">下一篇</a></li></ul></div><script src="/js/visitors.js"></script><a id="comments"></a><div id="vcomments" style="margin:0 30px;"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//cdn.jsdelivr.net/gh/xcss/valine@latest/dist/Valine.min.js"></script><script>var valine = new Valine({
+  el:'#vcomments',
+  notify:false || false, 
+  verify:false|| false, 
+  app_id:'xpSQCFiXzEQnCBUKrP6EHIUF-gzGzoHsz',
+  app_key:'Ev5N03MrqLzS683mu92hf4RO',
+  placeholder:'行至水穷处，坐看云起时...',
+  path: window.location.pathname,
+  serverURLs: '',
+  visitor:true,
+  recordIP:true,
+  avatar:'mm'
+})</script></div></div></div></div><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/add-bookmark.js"></script><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"debug":false,"model":{"scale":1,"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"left","hOffset":0,"vOffset":20},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"dialog":{"enable":false,"hitokoto":true}});</script></body></html>

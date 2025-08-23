@@ -1,0 +1,295 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="Ltt"><title>JNI与FFmpeg基本语法 · Puppet</title><meta name="description" content="一、 基础知识
+
+1.1 编码
+
+
+二、 基本概念与语法
+
+2.1 -&amp;gt; 与 .
+2.2 指针作为判断条件
+2.3 pts 、 dts 、time_base
+
+
+三、方法
+
+3.1 GetStringUTFChars() 与 ReleaseStringUTFChars()
+3.2 avform"><meta name="keywords" content="技术博客,Hexo,Android,Linux,HTML,Java"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.webp"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/insight.css"><link rel="stylesheet" href="/css/search.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><script src="/js/jquery.js"></script><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body><div class="page-top animated fadeInDown"><div class="nav"><li> <a href="/">首页</a></li><li> <a href="/archives">归档</a></li><li> <a href="/tags">标签</a></li><li> <a href="/about">关于</a></li></div><div class="information"><div class="nav_right_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"></div></div></div><div class="sidebar animated fadeInDown"><div class="sidebar-top"><div class="logo-title"><div class="title"><img src="/images/logo@2x.webp" style="width:220px;" alt="favicon"><h3 title=""><a href="/">Puppet</a></h3><div class="description"><p>心之所愿，无事不成。<br> Nothing is impossible to a willing heart.</p></div></div><ul class="social-links"><li><a target="_blank" rel="noopener" href="https://github.com/puppet16"><i class="fa fa-github"></i></a></li><li><a href="mailto:mailto:2542469086@qq.com"><i class="fa fa-envelope"></i></a></li><li><a target="_blank" rel="noopener" href="http://sighttp.qq.com/authd?IDKEY=http://sighttp.qq.com/authd?IDKEY="><i class="fa fa-qq"></i></a></li><li><a target="_blank" rel="noopener" href="https://zhihu.com/"><i class="fa fa-mortar-board"></i></a></li></ul></div></div><div class="footer"><div class="p"> <span> 全站CC-BY-SA-3.0 </span><i class="fa fa-star"></i><span> Ltt</span></div><div class="by_farbox"><span>Powered by </span><a href="https://hexo.io/zh-cn/" target="_blank">Hexo </a><span> & </span><span>Anatolo </span></div><div class="beian"></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>JNI与FFmpeg基本语法</a></h3></div><div class="post-content"><p><div class="toc">
+<!-- toc -->
+<ul>
+<li><a href="#%E4%B8%80-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86">一、 基础知识</a>
+<ul>
+<li><a href="#11-%E7%BC%96%E7%A0%81">1.1 编码</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BA%8C-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E4%B8%8E%E8%AF%AD%E6%B3%95">二、 基本概念与语法</a>
+<ul>
+<li><a href="#21-%E4%B8%8E">2.1 -&gt; 与 .</a></li>
+<li><a href="#22-%E6%8C%87%E9%92%88%E4%BD%9C%E4%B8%BA%E5%88%A4%E6%96%AD%E6%9D%A1%E4%BB%B6">2.2 指针作为判断条件</a></li>
+<li><a href="#23-pts-dts-time_base">2.3 pts 、 dts 、time_base</a></li>
+</ul>
+</li>
+<li><a href="#%E4%B8%89-%E6%96%B9%E6%B3%95">三、方法</a>
+<ul>
+<li><a href="#31-getstringutfchars-%E4%B8%8E-releasestringutfchars">3.1 GetStringUTFChars() 与 ReleaseStringUTFChars()</a></li>
+<li><a href="#32-avformat_alloc_output_context2">3.2 avformat_alloc_output_context2()</a></li>
+<li><a href="#33-avformat_new_stream">3.3 avformat_new_stream()</a></li>
+<li><a href="#35-avrational-%E7%9B%B8%E5%85%B3%E6%96%B9%E6%B3%95">3.5 AVRational 相关方法</a>
+<ul>
+<li><a href="#351-av_q2d">3.5.1 av_q2d()</a></li>
+<li><a href="#352-av_rescale_q">3.5.2 av_rescale_q()</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE">参考文献</a></li>
+</ul>
+<!-- tocstop -->
+</div>
+<h2><a href="#一-基础知识" class="header-anchor">#</a><span id="一-基础知识">一、 基础知识</span></h2>
+<h3><a href="#11-编码" class="header-anchor">#</a><span id="11-编码">1.1 编码</span></h3>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th>结果</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FFmpeg 容器 (“mp4”) + MediaCodec (“audio/mp4a-latm”)</td>
+<td>✅ 可行</td>
+<td>audio/mp4a-latm 是标准 AAC 编码</td>
+</tr>
+<tr>
+<td>FFmpeg 容器 (“mp4”) + MediaCodec (“video/avc”)</td>
+<td>✅ 可行</td>
+<td>H.264 视频流可封装进 MP4</td>
+</tr>
+</tbody>
+</table>
+<h2><a href="#二-基本概念与语法" class="header-anchor">#</a><span id="二-基本概念与语法">二、 基本概念与语法</span></h2>
+<h3><a href="#21-gt-与" class="header-anchor">#</a><span id="21-gt-与">2.1  -&gt; 与 .</span></h3>
+<p><code>C</code> 语言中，<code>「.」</code> 和 <code>「-&gt;」</code> 都是用于访问结构体 <code>（struct）</code> 或联合体 <code>（union）</code> 中成员的操作符。<code>「.」</code> 用于通过结构体实例直接访问其成员、<code>「-&gt;」</code> 用于通过结构体指针访问其指向对象的成员。</p>
+<blockquote>
+<p>在 <code>C</code> 语言中，结构体是一种复合数据类型，它允许将不同或相同类型的数据项组合到一起。每个数据项称为成员 <code>（member）</code>，结构体的实例化后，可以通过使用 <code>「.」</code> 操作符直接访问其成员。</p>
+</blockquote>
+<p>例如:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Point</span> &#123;</span><br><span class="line">    <span class="type">int</span> x;</span><br><span class="line">    <span class="type">int</span> y;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Point</span> p;</span><br><span class="line"></span><br><span class="line">p.x = <span class="number">10</span>;</span><br><span class="line">p.y = <span class="number">20</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Point</span> *ptr = &amp;p;</span><br><span class="line">ptr-&gt;x = <span class="number">30</span>;</span><br><span class="line">ptr-&gt;y = <span class="number">40</span>;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>在上述代码中:</p>
+<ol>
+<li>创建了一个名为 <code>Point</code> 的结构体，并定义了两个整型成员 <code>x</code> 和 <code>y</code>。</li>
+<li><code>p</code> 是 <code>Point</code> 类型的一个变量，称为实例。通过 <code>「.」</code> 操作符，可以直接访问并设置 <code>p</code> 的成员。</li>
+<li><code>ptr</code> 是一个指向 <code>Point</code> 类型实例 <code>p</code> 的指针。通过使用 <code>「-&gt;」</code> 操作符，可通过 <code>ptr</code> 间接访问并修改 <code>p</code> 的成员 <code>x</code> 和 <code>y</code>。</li>
+</ol>
+<p><strong>结论：</strong></p>
+<ol>
+<li>可以使用结构体的指针来动态分配内存或者通过函数传递结构体数据。此时 <code>「-&gt;」</code> 操作符被用来通过指针访问结构体实例的成员。</li>
+<li>使用 <code>「-&gt;」</code> 操作符前提是有一个指向结构体的指针，这是它与 <code>「.」</code> 操作符的最主要区别。</li>
+<li>使用 <code>「.」</code> 和 <code>「-&gt;」</code> 操作符的选择取决于我们手头上拥有的是一个结构体实例还是一个结构体指针。如果我们直接声明了一个结构体类型的变量，我们应该使用 <code>「.」</code> 来访问成员。反之，如果我们有一个指向结构体的指针，我们必须使用 <code>「-&gt;」</code>。</li>
+<li>语法的差异也反映在操作符的优先级上：<code>「.」</code> 操作符的优先级高于<code>「-&gt;」</code>。当结合其他操作或表达式时，可能需要使用括号 <code>()</code> 来保证正确的访问顺序。</li>
+</ol>
+<h3><a href="#22-指针作为判断条件" class="header-anchor">#</a><span id="22-指针作为判断条件">2.2 指针作为判断条件</span></h3>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> AVFormatContext *outFormatContext = <span class="literal">nullptr</span>;</span><br><span class="line"><span class="keyword">if</span> (outFormatContext) &#123; </span><br><span class="line">    <span class="comment">// 说明 outFormatContext **不是空指针**，已经被分配了内存</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (!outFormatContext) &#123; </span><br><span class="line">    <span class="comment">// 说明 outFormatContext **是空指针**，尚未初始化</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>outFormatContext</code> 是一个指向 <code>AVFormatContext</code> 的指针。</li>
+<li>把 <code>!outFormatContext</code> 当做判断条件等价于 `outFormatContext == nullptr。
+<blockquote>
+<p><code>nullptr</code> 代表空指针，即指针当前没有指向任何有效的 <code>AVFormatContext</code> 结构体。</p>
+</blockquote>
+</li>
+<li>把 <code>outFormatContext</code> 当做判断条件等价于 <code>outFormatContext != nullptr</code></li>
+<li>这两种条件都可用于检查 <code>outFormatContext</code> 是否已分配内存</li>
+</ul>
+<h3><a href="#23-pts-dts-time_base" class="header-anchor">#</a><span id="23-pts-dts-time_base">2.3 pts 、 dts 、time_base</span></h3>
+<p><strong>时基 <code>time_base</code></strong></p>
+<blockquote>
+`AVRational` 是 `FFmpeg` 中用于表示有理数 *（分数）* 的数据结构，`FFmpeg` 使用 `AVRational` 来避免浮点数计算的误差，主要用于：
+<ul>
+<li>时间基准 <code>(time_base)</code>： 表示 <code>PTS/DTS</code> 的单位</li>
+<li>帧率 <code>(frame_rate)</code>：表示视频的 <code>FPS</code></li>
+<li>采样率 <code>(sample_rate)</code> : 表示音频的采样单位</li>
+<li>码率 <code>(bitrate)</code>： 表示数据速率</li>
+</ul>
+<p>在 <code>FFmpeg</code> 的 <code>libavutil/rational.h</code> 头文件中，<code>AVRational</code> 结构体被定义如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">AVRational</span> &#123;</span><br><span class="line">    <span class="type">int</span> num; <span class="comment">// 分子 (numerator)</span></span><br><span class="line">    <span class="type">int</span> den; <span class="comment">// 分母 (denominator)</span></span><br><span class="line">&#125; AVRational;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>num</code> <em>（分子）</em>：表示数值的上部分。</li>
+<li><code>den</code> <em>（分母）</em>：表示数值的下部分。</li>
+</ul>
+<p>表示的值等于：<strong><code>AVRational = num/den</code></strong><br>
+​</p></blockquote><p></p>
+<p><code>time_base</code>，是时间刻度单位，类型为 <code>AVRational</code>，其物理意义是将 <strong>1</strong> 秒划分为若干份，每份代表一个时间单位‌。它是用来度量时间的。</p>
+<p>如果把 <em>1</em> 秒分为 <em>25</em> 等份，可以理解为一把尺，那么每一格表示的就是 <em>1/25</em> 秒。此时的 <code>time_base=&#123;1，25&#125;</code>。</p>
+<p>如果把 <em>1</em> 秒分成 <em>90000</em> 份，每一个刻度就是 <em>1/90000</em> 秒，此时的 <code>time_base=&#123;1，90000&#125;</code>。</p>
+<p><font color="AA0000"> 所谓时间基表示的就是每个刻度是多少秒 </font></p>
+<p>通过 <code>av_q2d(time_base)</code> 可计算每个刻度的实际秒数。例如：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">AVRational tb = &#123;<span class="number">1</span>, <span class="number">25</span>&#125;;  </span><br><span class="line"><span class="type">double</span> sec_per_tick = <span class="built_in">av_q2d</span>(tb);  <span class="comment">// 0.04秒/刻度</span></span><br></pre></td></tr></table></figure>
+<p>如上所示，即每个时间刻度是 <em>0.04</em> 秒</p>
+<p><strong>时间戳 <code>PTS</code> 与 <code>DTS</code></strong></p>
+<p><code>PTS</code>：<em>Presentation Time Stamp</em>。<code>PTS</code> 主要用于度量解码后的视频帧什么时候被显示出来。<br>
+<code>DTS</code>：<em>Decode Time Stamp</em>。<code>DTS</code> 主要是标识读入内存中的 <code>bit</code> 流在什么时候开始送入解码器中进行解码。</p>
+<p>也就是 <code>pts</code> 反映帧什么时候开始显示，<code>dts</code>反映数据流什么时候开始解码。</p>
+<p><code>pts</code> 和 <code>dts</code> 的值就是占多少个时间刻度，单位是 <code>time_base</code> 的刻度数。它的单位不是秒，而是 <strong>时间刻度</strong>。只有 它们再加上 <code>time_base</code> 才能表达出时间具体是多少。</p>
+<p>实际显示时刻计算公式：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">display_time = pts * <span class="built_in">av_q2d</span>(time_base)</span><br><span class="line">decode_time = dts * <span class="built_in">av_q2d</span>(time_base)</span><br></pre></td></tr></table></figure>
+<p><strong>时间基转换</strong></p>
+<p>不同阶段 <em>（如封装、编解码、原始数据）</em> 的 <code>time_base</code> 可能不同，需通过 <code>av_rescale_q</code> 函数进行转换以避免溢出。例如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int64_t</span> new_pts = av_rescale_q(old_pts, old_tb, new_tb);  <span class="comment">// 将时间戳从old_tb转换到new_tb</span></span><br></pre></td></tr></table></figure>
+<p>这一过程常用于音视频同步或封装格式转换‌</p>
+<p>‌典型转换场景‌：</p>
+<ul>
+<li>视频帧时间基：通常为帧率的倒数 <em>（如25fps对应{1,25}）</em></li>
+<li>音频时间基：采样率的倒数 <em>（如44100Hz对应{1,44100}）‌</em></li>
+</ul>
+<h2><a href="#三-方法" class="header-anchor">#</a><span id="三-方法">三、方法</span></h2>
+<h3><a href="#31-getstringutfchars-与-releasestringutfchars" class="header-anchor">#</a><span id="31-getstringutfchars-与-releasestringutfchars">3.1 GetStringUTFChars() 与 ReleaseStringUTFChars()</span></h3>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 方法</span></span><br><span class="line"><span class="built_in">GetStringUTFChars</span>(jstring str, jboolean* isCopy)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 实例一</span></span><br><span class="line"><span class="type">const</span> <span class="type">char</span> *outputPath = env-&gt;<span class="built_in">GetStringUTFChars</span>(outputPath_, <span class="literal">nullptr</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 实例二</span></span><br><span class="line">jboolean isCopy;</span><br><span class="line"><span class="type">const</span> <span class="type">char</span> *outputPath = env-&gt;<span class="built_in">GetStringUTFChars</span>(outputPath_, &amp;isCopy);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 释放字符串</span></span><br><span class="line">env-&gt;<span class="built_in">ReleaseStringUTFChars</span>(outputPath_, outputPath);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 实例二补充</span></span><br><span class="line"><span class="keyword">if</span> (outputPath != <span class="literal">nullptr</span>) &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Output Path: %s\n&quot;</span>, outputPath);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (isCopy == JNI_TRUE) &#123;</span><br><span class="line">        <span class="comment">// 只有在 JNI 复制了字符串时才释放</span></span><br><span class="line">        env-&gt;<span class="built_in">ReleaseStringUTFChars</span>(outputPath_, outputPath);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<ol>
+<li>
+<p>参数解析</p>
+<ul>
+<li><code>env</code>：是 <code>JNIEnv*</code> 类型，代表当前 <code>JNI</code> *（Java Native Interface）*环境，提供调用 <code>Java</code> 方法和操作 <code>Java</code> 对象的能力。</li>
+<li><code>outputPath_</code>：是一个 <code>jstring</code> 类型的 <code>Java</code> 字符串，通常是 <code>Java</code> 代码传递给 <code>JNI</code> 的路径或文本。</li>
+<li><code>isCopy</code>：是一个 <code>jboolean*</code> 指针，它用于指示 <code>JNI</code> 是否创建了字符串的副本 <em>（即是否进行了内存分配）</em>。</li>
+<li>如实例一中所示，不关心是否创建了副本，<code>isCopy</code> 参数直接传 <code>nullptr</code>，但是由于不知道 <code>JNI</code> 是否复制了字符串, 必须始终调用 <code>ReleaseStringUTFChars()</code> 释放，以防万一。</li>
+<li>如实例二中所示，<code>isCopy</code> 参数传递了 <code>jboolean</code> 变量的地址。然后 <code>isCopy</code> 的值会被 <code>GetStringUTFChars()</code> 方法填充，可能是：
+<ul>
+<li><code>JNI_TRUE</code> <em>（即 1）</em>：表示 <code>JNI</code> 创建了一个新的字符串副本，需要调用 <code>ReleaseStringUTFChars()</code> 释放。</li>
+<li><code>JNI_FALSE</code> <em>（即 0）</em>：表示 <code>JNI</code> 没有创建新的字符串副本，它直接返回了指向原始字符串数据的指针，不能调用 <code>ReleaseStringUTFChars()</code> 释放。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>方法作用</p>
+<ul>
+<li>作用：从 <code>Java String</code> 对象中提取 <code>UTF-8</code> 编码的 <code>char*</code> 字符串，并返回指针。</li>
+<li>返回值：返回一个 <code>const char*</code>，指向 <code>outputPath_</code> 的 <code>UTF-8</code> 编码 <code>C</code> 字符串数据。</li>
+</ul>
+</li>
+<li>
+<p>注意事项</p>
+<ul>
+<li><code>GetStringUTFChars</code> 可能会分配新的内存，因此在使用完后，应调用 <code>ReleaseStringUTFChars()</code> 释放,否则可能会导致内存泄漏。</li>
+</ul>
+</li>
+</ol>
+<p><strong>为什么需要 isCopy？</strong><br>
+<code>JNI</code> 可能会以不同方式处理字符串：</p>
+<ul>
+<li>如果字符串是 <code>UTF-8</code> 编码的，它可能直接返回 <code>Java</code> 内存中的指针<code>（isCopy = JNI_FALSE）</code>。</li>
+<li>如果字符串需要转换，比如 <code>Java</code> 使用 <code>UTF-16</code> 而 <code>JNI</code> 需要 <code>UTF-8</code>，<code>JNI</code> 可能会创建副本 <em>（isCopy = JNI_TRUE）</em>。<br>
+不同的 <code>JVM</code> 实现可能有不同策略，某些 <code>JVM</code> 可能会优化，避免不必要的复制。</li>
+</ul>
+<p>在调用 env-&gt;GetStringUTFChars(jstring str, jboolean* isCopy) 时，你不需要手动传 JNI_TRUE 或 JNI_FALSE，而是传一个 jboolean 变量的地址（jboolean*），然后 JNI 会在该变量中填充 JNI_TRUE 或 JNI_FALSE，以告知你 JNI 是否创建了新的字符串副本。</p>
+<h3><a href="#32-avformat_alloc_output_context2" class="header-anchor">#</a><span id="32-avformat_alloc_output_context2">3.2 avformat_alloc_output_context2()</span></h3>
+<p>创建并初始化 <code>AVFormatContext</code> ，用于输出某格式的媒体文件，它是 <code>FFmpeg</code> 处理多媒体文件的关键步骤之一。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 原始方法</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">avformat_alloc_output_context2</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    AVFormatContext **ctx, </span></span></span><br><span class="line"><span class="params"><span class="function">    AVOutputFormat *fmt, </span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">const</span> <span class="type">char</span> *format_name, </span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">const</span> <span class="type">char</span> *filename</span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 实例</span></span><br><span class="line"><span class="type">int</span> ret = <span class="built_in">avformat_alloc_output_context2</span>(&amp;outFormatContext, <span class="literal">NULL</span>, <span class="string">&quot;mp4&quot;</span>, outputPath);</span><br><span class="line"><span class="keyword">if</span> (ret &lt; <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;创建输出格式上下文失败: %d\n&quot;</span>, ret);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ctx</td>
+<td>输出参数，指向 <code>AVFormatContext*</code> 的指针，函数调用后会为其分配内存并初始化</td>
+</tr>
+<tr>
+<td>fmt</td>
+<td>指定输出格式的 <code>AVOutputFormat</code>，通常传 <code>NULL</code> 让 <code>FFmpeg</code> 自动选择</td>
+</tr>
+<tr>
+<td>format_name</td>
+<td>输出文件格式 <em>（如 “mp4”、“flv”、“mov”）</em>，如果 <code>fmt</code> 为 <code>NULL</code>，则必须指定</td>
+</tr>
+<tr>
+<td>filename</td>
+<td>输出文件路径，有助于 <code>FFmpeg</code> 根据扩展名自动推断格式</td>
+</tr>
+</tbody>
+</table>
+<p>返回一个 <code>int</code> 值：</p>
+<ul>
+<li>成功：<strong>ret == 0</strong>，<code>outFormatContext</code> 被正确分配。</li>
+<li>失败：<strong>ret &lt; 0</strong>，表示初始化失败，通常是格式不支持或路径错误。</li>
+</ul>
+<h3><a href="#33-avformat_new_stream" class="header-anchor">#</a><span id="33-avformat_new_stream">3.3 avformat_new_stream()</span></h3>
+<p>在 <code>AVFormatContext</code> *（输出文件的格式上下文）*中添加一个新流 <em>（视频、音频等）</em>。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">AVStream *<span class="title">avformat_new_stream</span><span class="params">(AVFormatContext *s, <span class="type">const</span> AVCodec *c)</span></span>;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>成功时返回一个 <code>AVStream*</code> 指针，指向新创建的流；失败时返回 <code>NULL</code>。</li>
+<li>参数说明：
+<ul>
+<li>s：<code>AVFormatContext*</code>，目标格式的上下文 <em>（如 MP4）</em>。</li>
+<li>c：<code>AVCodec*</code>，编码器，通常传 <code>nullptr</code>，不直接指定 <code>AVCodec</code>，让 <code>FFmpeg</code> 自动选择合适的编码器。适用于容器格式 <code>（MP4、FLV 等）</code>，<code>FFmpeg</code> 会在后续步骤指定编码器。</li>
+</ul>
+</li>
+</ol>
+<h3><a href="#35-avrational-相关方法" class="header-anchor">#</a><span id="35-avrational-相关方法">3.5 AVRational 相关方法</span></h3>
+<h4><a href="#351-av_q2d" class="header-anchor">#</a><span id="351-av_q2d">3.5.1 av_q2d()</span></h4>
+<p>转换 <code>AVRational</code> 为 <code>double</code></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// 原始方法</span></span><br><span class="line"><span class="function"><span class="type">double</span> <span class="title">av_q2d</span><span class="params">(AVRational a)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 实例一 转换</span></span><br><span class="line">AVRational time_base = &#123;<span class="number">1</span>, <span class="number">1000</span>&#125;;</span><br><span class="line"><span class="type">double</span> seconds_per_unit = <span class="built_in">av_q2d</span>(time_base); <span class="comment">// 1 / 1000 = 0.001</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 实例二 转换再计算总时长</span></span><br><span class="line"><span class="type">double</span> duration = <span class="number">60000000</span></span><br><span class="line">AVRational time_base = &#123;<span class="number">1</span>, <span class="number">1000000</span>&#125;;</span><br><span class="line"><span class="type">double</span> total_sec = duration * <span class="built_in">av_q2d</span>(time_base);</span><br></pre></td></tr></table></figure>
+<p>如实例二所示，最终计算结果总时长为 <em>60</em> 秒‌</p>
+<h4><a href="#352-av_rescale_q" class="header-anchor">#</a><span id="352-av_rescale_q">3.5.2 av_rescale_q()</span></h4>
+<p><code>av_rescale_q</code> 是 <code>FFmpeg</code> 提供的一个用于 <strong>按不同时间基转换时间戳</strong> 的函数，常用于 <code>PTS/DTS</code> 转换。</p>
+<p>在 <code>FFmpeg</code> <em>(libavutil/mathematics.h)</em> 里，<code>av_rescale_q</code> 的定义如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int64_t</span> <span class="title">av_rescale_q</span><span class="params">(<span class="type">int64_t</span> a, AVRational bq, AVRational cq)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>参数说明：</strong></p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a</td>
+<td>需要转换的值（通常是 PTS 或 DTS）</td>
+</tr>
+<tr>
+<td>bq</td>
+<td>原时间基 (AVRational)</td>
+</tr>
+<tr>
+<td>cq</td>
+<td>目标时间基 (AVRational)</td>
+</tr>
+</tbody>
+</table>
+<p><code>av_rescale_q</code> 计算的数学公式：<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>new_value</mtext><mo>=</mo><mi>a</mi><mo>×</mo><mfrac><mtext>cq.num</mtext><mtext>cq.den</mtext></mfrac><mo>÷</mo><mfrac><mtext>bq.num</mtext><mtext>bq.den</mtext></mfrac></mrow><annotation encoding="application/x-tex">\text{new\_value} = a \times \frac{\text{cq.num}}{\text{cq.den}} \div \frac{\text{bq.num}}{\text{bq.den}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0044em;vertical-align:-0.31em;"></span><span class="mord text"><span class="mord">new_value</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">a</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.2286em;vertical-align:-0.4811em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.7475em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">cq.den</span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.4461em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">cq.num</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.4811em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">÷</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.4133em;vertical-align:-0.4811em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9322em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">bq.den</span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.4461em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">bq.num</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.4811em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span>    ，简化后为：<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>new_value</mtext><mo>=</mo><mi>a</mi><mo>×</mo><mfrac><mrow><mtext>cq.num</mtext><mo>×</mo><mtext>bq.den</mtext></mrow><mrow><mtext>cq.den</mtext><mo>×</mo><mtext>bq.num</mtext></mrow></mfrac></mrow><annotation encoding="application/x-tex">\text{new\_value} = a \times \frac{\text{cq.num} \times \text{bq.den}}{\text{cq.den} \times \text{bq.num}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0044em;vertical-align:-0.31em;"></span><span class="mord text"><span class="mord">new_value</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">a</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.4133em;vertical-align:-0.4811em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9322em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">cq.den</span></span><span class="mbin mtight">×</span><span class="mord text mtight"><span class="mord mtight">bq.num</span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.4461em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">cq.num</span></span><span class="mbin mtight">×</span><span class="mord text mtight"><span class="mord mtight">bq.den</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.4811em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></p>
+<p><strong>示例</strong></p>
+<p>将 <code>PTS</code> 从 <em>1/1000000</em> 秒 <em>（us）</em> 的时间刻度转换为 <em>1/25</em> 秒的时间刻度</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int64_t</span> pts = <span class="number">2000000</span>; <span class="comment">// 原始 pts</span></span><br><span class="line">AVRational src_time_base = &#123;<span class="number">1</span>, <span class="number">1000000</span>&#125;;  <span class="comment">// 原始时间基 1 微秒</span></span><br><span class="line">AVRational dst_time_base = &#123;<span class="number">1</span>, <span class="number">25</span>&#125;;       <span class="comment">// 目标时间基 1/25 秒</span></span><br><span class="line"><span class="type">int64_t</span> new_pts = <span class="built_in">av_rescale_q</span>(pts, src_time_base, dst_time_base);</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;转换后的 PTS: %ld\n&quot;</span>, new_pts);</span><br></pre></td></tr></table></figure>
+<p>其中的计算过程为：<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mn>2</mn><mtext> </mtext><mn>000</mn><mtext> </mtext><mn>000</mn><mo>×</mo><mn>25</mn></mrow><mrow><mn>1</mn><mtext> </mtext><mn>000</mn><mtext> </mtext><mn>000</mn></mrow></mfrac><mo>=</mo><mn>50</mn></mrow><annotation encoding="application/x-tex">\frac{2\,000\,000 \times 25}{1\,000\,000} = 50</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1901em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8451em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span><span class="mspace mtight" style="margin-right:0.1952em;"></span><span class="mord mtight">000</span><span class="mspace mtight" style="margin-right:0.1952em;"></span><span class="mord mtight">000</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span><span class="mspace mtight" style="margin-right:0.1952em;"></span><span class="mord mtight">000</span><span class="mspace mtight" style="margin-right:0.1952em;"></span><span class="mord mtight">000</span><span class="mbin mtight">×</span><span class="mord mtight">25</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">50</span></span></span></span></p>
+<p>也就是说，<code>PTS</code> 在 <em>1</em> 微秒的时基里，其值为 <em>2000000</em>。经过转换，在 <code>0.04</code> 的时基里，其值为 <em>50</em></p>
+<h2><a href="#参考文献" class="header-anchor">#</a><span id="参考文献">参考文献</span></h2>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/554950638">https://zhuanlan.zhihu.com/p/554950638</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/xufuji456/FFmpegAndroid/blob/master/doc/FFmpeg_compile_shell.md">https://github.com/xufuji456/FFmpegAndroid/blob/master/doc/FFmpeg_compile_shell.md</a></li>
+</ul>
+<br>
+<br>
+<br>
+<br>
+<br></p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2025-03-08</span><i class="fa fa-tag"></i><a class="tag" href="/tags/FFmpeg/" title="FFmpeg">FFmpeg </a><i class="fa fa-tag"></i><a class="tag" href="/tags/JNI/" title="JNI">JNI </a><i class="fa fa-tag"></i><a class="tag" href="/tags/C/" title="C">C </a><span class="leancloud_visitors"></span><span>大约3041个字, 10分钟8秒读完</span></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="" onclick="javascript:join_favorite()" ref="sidebar"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://puppet16.github.io/2025/03/08/JNI与FFmpeg基本语法/,Puppet,JNI与FFmpeg基本语法,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="next pagbuttons"><a class="btn" role="navigation" href="/2025/03/04/Android%E4%BD%BF%E7%94%A8FFmpeg%E4%B9%8B%E6%97%85/" title="Android使用FFmpeg之旅">下一篇</a></li></ul></div><script src="/js/visitors.js"></script><a id="comments"></a><div id="vcomments" style="margin:0 30px;"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//cdn.jsdelivr.net/gh/xcss/valine@latest/dist/Valine.min.js"></script><script>var valine = new Valine({
+  el:'#vcomments',
+  notify:false || false, 
+  verify:false|| false, 
+  app_id:'xpSQCFiXzEQnCBUKrP6EHIUF-gzGzoHsz',
+  app_key:'Ev5N03MrqLzS683mu92hf4RO',
+  placeholder:'行至水穷处，坐看云起时...',
+  path: window.location.pathname,
+  serverURLs: '',
+  visitor:true,
+  recordIP:true,
+  avatar:'mm'
+})</script></div></div></div></div><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/add-bookmark.js"></script><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"debug":false,"model":{"scale":1,"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"left","hOffset":0,"vOffset":20},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"dialog":{"enable":false,"hitokoto":true}});</script></body></html>

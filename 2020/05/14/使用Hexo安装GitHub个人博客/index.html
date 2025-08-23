@@ -1,0 +1,652 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="Ltt"><title>使用 Hexo 安装 GitHub 个人博客 · Puppet</title><meta name="description" content="一、前言
+二、Hexo 简介
+三、搭建及发布
+
+1. 安装 Git
+2. 安装 Node.js
+3. 安装 Hexo
+4. GitHub 创建个人仓库
+5. 将 Hexo 部署到 GitHub 上
+6. 设置个人域名
+
+
+四、Hexo 配置
+
+1. hexo 基本配置
+
+网站
+网址
+目录
+Front"><meta name="keywords" content="技术博客,Hexo,Android,Linux,HTML,Java"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.webp"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/insight.css"><link rel="stylesheet" href="/css/search.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><script src="/js/jquery.js"></script><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body><div class="page-top animated fadeInDown"><div class="nav"><li> <a href="/">首页</a></li><li> <a href="/archives">归档</a></li><li> <a href="/tags">标签</a></li><li> <a href="/about">关于</a></li></div><div class="information"><div class="nav_right_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"></div></div></div><div class="sidebar animated fadeInDown"><div class="sidebar-top"><div class="logo-title"><div class="title"><img src="/images/logo@2x.webp" style="width:220px;" alt="favicon"><h3 title=""><a href="/">Puppet</a></h3><div class="description"><p>心之所愿，无事不成。<br> Nothing is impossible to a willing heart.</p></div></div><ul class="social-links"><li><a target="_blank" rel="noopener" href="https://github.com/puppet16"><i class="fa fa-github"></i></a></li><li><a href="mailto:mailto:2542469086@qq.com"><i class="fa fa-envelope"></i></a></li><li><a target="_blank" rel="noopener" href="http://sighttp.qq.com/authd?IDKEY=http://sighttp.qq.com/authd?IDKEY="><i class="fa fa-qq"></i></a></li><li><a target="_blank" rel="noopener" href="https://zhihu.com/"><i class="fa fa-mortar-board"></i></a></li></ul></div></div><div class="footer"><div class="p"> <span> 全站CC-BY-SA-3.0 </span><i class="fa fa-star"></i><span> Ltt</span></div><div class="by_farbox"><span>Powered by </span><a href="https://hexo.io/zh-cn/" target="_blank">Hexo </a><span> & </span><span>Anatolo </span></div><div class="beian"></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>使用 Hexo 安装 GitHub 个人博客</a></h3></div><div class="post-content"><p><div class="toc">
+<!-- toc -->
+<ul>
+<li><a href="#%E4%B8%80-%E5%89%8D%E8%A8%80">一、前言</a></li>
+<li><a href="#%E4%BA%8C-hexo-%E7%AE%80%E4%BB%8B">二、Hexo 简介</a></li>
+<li><a href="#%E4%B8%89-%E6%90%AD%E5%BB%BA%E5%8F%8A%E5%8F%91%E5%B8%83">三、搭建及发布</a>
+<ul>
+<li><a href="#1-%E5%AE%89%E8%A3%85-git">1. 安装 Git</a></li>
+<li><a href="#2-%E5%AE%89%E8%A3%85-nodejs">2. 安装 Node.js</a></li>
+<li><a href="#3-%E5%AE%89%E8%A3%85-hexo">3. 安装 Hexo</a></li>
+<li><a href="#4-github-%E5%88%9B%E5%BB%BA%E4%B8%AA%E4%BA%BA%E4%BB%93%E5%BA%93">4. GitHub 创建个人仓库</a></li>
+<li><a href="#5-%E5%B0%86-hexo-%E9%83%A8%E7%BD%B2%E5%88%B0-github-%E4%B8%8A">5. 将 Hexo 部署到 GitHub 上</a></li>
+<li><a href="#6-%E8%AE%BE%E7%BD%AE%E4%B8%AA%E4%BA%BA%E5%9F%9F%E5%90%8D">6. 设置个人域名</a></li>
+</ul>
+</li>
+<li><a href="#%E5%9B%9B-hexo-%E9%85%8D%E7%BD%AE">四、Hexo 配置</a>
+<ul>
+<li><a href="#1-hexo-%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE">1. hexo 基本配置</a>
+<ul>
+<li><a href="#%E7%BD%91%E7%AB%99">网站</a></li>
+<li><a href="#%E7%BD%91%E5%9D%80">网址</a></li>
+<li><a href="#%E7%9B%AE%E5%BD%95">目录</a></li>
+<li><a href="#front-matter">Front-matter</a></li>
+</ul>
+</li>
+<li><a href="#2-%E6%9B%B4%E6%8D%A2%E4%B8%BB%E9%A2%98">2. 更换主题</a>
+<ul>
+<li><a href="#%E5%AE%89%E8%A3%85">安装</a></li>
+<li><a href="#%E9%85%8D%E7%BD%AE">配置</a></li>
+<li><a href="#%E6%9B%B4%E6%96%B0">更新</a></li>
+</ul>
+</li>
+<li><a href="#3-git-%E5%88%86%E6%94%AF%E5%A4%9A%E7%BB%88%E7%AB%AF%E6%93%8D%E4%BD%9C">3. git 分支多终端操作</a>
+<ul>
+<li><a href="#%E5%8E%9F%E7%90%86">原理</a></li>
+<li><a href="#%E4%B8%8A%E4%BC%A0%E5%88%86%E6%94%AF">上传分支</a></li>
+<li><a href="#%E9%AA%8C%E8%AF%81">验证</a></li>
+</ul>
+</li>
+<li><a href="#4-%E6%B7%BB%E5%8A%A0%E6%9C%AC%E5%9C%B0%E5%9B%BE%E7%89%87">4. 添加本地图片</a></li>
+<li><a href="#5-%E6%9B%B4%E6%8D%A2%E8%BE%85%E5%8A%A9%E8%A7%A3%E6%9E%90-markdown-%E7%9A%84%E5%BA%93">5. 更换辅助解析 markdown 的库</a>
+<ul>
+<li><a href="#%E5%AE%89%E8%A3%85-1">安装</a></li>
+<li><a href="#%E9%85%8D%E7%BD%AE-1">配置</a></li>
+</ul>
+</li>
+<li><a href="#6-markdown-%E6%96%87%E4%BB%B6%E6%B7%BB%E5%8A%A0%E7%9B%AE%E5%BD%95">6. MarkDown 文件添加目录</a>
+<ul>
+<li><a href="#%E5%AE%89%E8%A3%85-2">安装</a></li>
+<li><a href="#%E9%85%8D%E7%BD%AE-2">配置</a></li>
+</ul>
+</li>
+<li><a href="#7-hexo-%E5%BC%95%E7%94%A8%E6%9C%AC%E7%AB%99%E6%96%87%E7%AB%A0">7. Hexo 引用本站文章</a></li>
+<li><a href="#8-hexo-%E6%94%AF%E6%8C%81-mathjax-%E5%85%AC%E5%BC%8F">8. Hexo 支持 MathJax 公式</a>
+<ul>
+<li><a href="#%E5%AE%89%E8%A3%85-3">安装</a></li>
+<li><a href="#%E9%85%8D%E7%BD%AE-3">配置</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E4%BA%94-%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98">五、遇到的问题</a>
+<ul>
+<li><a href="#1-%E9%83%A8%E7%BD%B2%E5%A4%B1%E8%B4%A5">1. 部署失败</a></li>
+<li><a href="#2-%E9%83%A8%E7%BD%B2%E5%A4%B1%E8%B4%A5">2. 部署失败</a></li>
+<li><a href="#3-%E8%A1%A8%E6%A0%BC%E6%98%BE%E7%A4%BA%E9%94%99%E8%AF%AF">3. 表格显示错误</a></li>
+<li><a href="#4-%E8%A1%A8%E6%A0%BC%E6%98%BE%E7%A4%BA%E8%BF%87%E5%A4%9A">4. 表格显示过多</a></li>
+<li><a href="#5-no-layout">5. No Layout</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+</div>
+<h1><a href="#一-前言" class="header-anchor">#</a><span id="一-前言">一、前言</span></h1>
+<p>之前一直使用 CSDN 来着，还有有些限制。后来想自己写 MarkDown 文件放到个人仓库里，之后就开始了自己搭建博客。本文基于 Mac 系统。</p>
+<h1><a href="#二-hexo-简介" class="header-anchor">#</a><span id="二-hexo-简介">二、Hexo 简介</span></h1>
+<p>Hexo 是一款基于 Node.js 的静态博客框架，依赖少易于安装使用，可以方便的生成静态网页托管在 GitHub 上，是搭建博客的首选框架。而且 Hexo 对中文的支持非常好。<br>
+&quot;快速、简洁且高效的博客框架&quot;这是它官网上的标语。<br>
+Hexo官网地址：<a target="_blank" rel="noopener" href="https://hexo.io/">https://hexo.io/</a></p>
+<h1><a href="#三-搭建及发布" class="header-anchor">#</a><span id="三-搭建及发布">三、搭建及发布</span></h1>
+<blockquote>
+<p>安装及发布步骤：</p>
+<ol>
+<li>安装 Git</li>
+<li>安装 Node.js</li>
+<li>安装 Hexo</li>
+<li>GitHub 创建个人仓库</li>
+<li>将 hexo 部署到 GitHub 上</li>
+<li>设置个人域名</li>
+</ol>
+</blockquote>
+<h2><a href="#1-安装-git" class="header-anchor">#</a><span id="1-安装-git">1. 安装 Git</span></h2>
+<p>Mac 系统自带 Git，可以在终端输入<code>git --version</code>看是否已安装，若未安装则在官网上下载安装包安装。<br>
+git官网地址：<a target="_blank" rel="noopener" href="https://git-scm.com/">https://git-scm.com/</a></p>
+<h2><a href="#2-安装-nodejs" class="header-anchor">#</a><span id="2-安装-nodejs">2. 安装 Node.js</span></h2>
+<p>Hexo 是基于 nodeJS 编写的，所以要安装一下 nodeJS 和里面的 npm 工具。<br>
+Nodejs官网：<a target="_blank" rel="noopener" href="https://nodejs.org/en/">https://nodejs.org/en/</a><br>
+从官网上下载安装包安装。之后可用如下命令校验是否安装成功：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">node -v</span><br><span class="line">npm -v</span><br></pre></td></tr></table></figure>
+<h2><a href="#3-安装-hexo" class="header-anchor">#</a><span id="3-安装-hexo">3. 安装 Hexo</span></h2>
+<p>先创建一个文件夹 blog，然后<code>cd</code>到这个文件夹下，再输入如下命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+<p>依旧用<code>hexo -v</code>查看一下版本，至此安装完成。</p>
+<ul>
+<li>
+<p>初始化一下 hexo</p>
+<p>命令：<code>hexo init blogName</code><br>
+blogName 自己随意取名。<br>
+新建完成后，这个<code>blogName</code>文件夹目录下有如下文件目录：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">名称</th>
+<th style="text-align:left">功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">node_modules</td>
+<td style="text-align:left">依赖包</td>
+</tr>
+<tr>
+<td style="text-align:left">public</td>
+<td style="text-align:left">存放生成的页面，最后上传个人仓库的也是这个文件夹下内容</td>
+</tr>
+<tr>
+<td style="text-align:left">scaffolds</td>
+<td style="text-align:left">生成文章的一些模板</td>
+</tr>
+<tr>
+<td style="text-align:left">source</td>
+<td style="text-align:left">用来存放你的文章</td>
+</tr>
+<tr>
+<td style="text-align:left">themes</td>
+<td style="text-align:left">主题</td>
+</tr>
+<tr>
+<td style="text-align:left">_config.yml</td>
+<td style="text-align:left">博客的配置文件</td>
+</tr>
+</tbody>
+</table>
+<p>之后<code> cd bolgName</code>进入这个<code>blogName</code>文件夹。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo generate</span><br><span class="line">hexo server</span><br></pre></td></tr></table></figure>
+<p>最后可以使用如上命令打开 hexo 服务，在浏览器里输入<code>localhost:4000</code>就可以看到生成的博客了。最后使用<code>ctrl+c</code>关闭服务。</p>
+</li>
+</ul>
+<h2><a href="#4-github-创建个人仓库" class="header-anchor">#</a><span id="4-github-创建个人仓库">4. GitHub 创建个人仓库</span></h2>
+<ol>
+<li>首先注册一个 GitHub 账号。</li>
+<li>注册并登录后，点击<code>New respository</code>，新建仓库</li>
+<li>仓库名称为&quot;<code>你的用户名+.github.io</code>&quot;，比如你的用户名为<code>lee</code>，则创建的仓库名为<code>lee.github.io</code></li>
+</ol>
+<h2><a href="#5-将-hexo-部署到-github-上" class="header-anchor">#</a><span id="5-将-hexo-部署到-github-上">5. 将 Hexo 部署到 GitHub 上</span></h2>
+<p>这一步主要是将 hexo 和 Github 关联起来，也就是将 hexo 生成的文章部署到 GitHub 上，打开配置文件<code>_config.yml</code>，滑到最后，个性如下内容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: https://github.com/yourName/yourName.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+<p>之后需要安装<code>deploy-git</code>，也就是 hexo 的部署命令，这样才能用命令将内容部署到 GitHub 上。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+<p>然后</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo deploy</span><br></pre></td></tr></table></figure>
+<p><strong>hexo 基本命令：</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">命令</th>
+<th style="text-align:left">功能</th>
+<th style="text-align:left">参数说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">hexo init [folder]</td>
+<td style="text-align:left">用于初始化本地文件夹为网站的根目录</td>
+<td style="text-align:left">folder 可选参数，不选默认当前目录</td>
+</tr>
+<tr>
+<td style="text-align:left">hexo new [layout] &lt; title&gt;</td>
+<td style="text-align:left">用于新建文章，可以简写为 <code>hexo n</code></td>
+<td style="text-align:left">layout 可选参数，用以指定文章类型，若无指定则默认由配置文件中的 default_layout 选项决定 <br>  title 必填参数，用以指定文章标题，如果参数值中含有空格，则需要使用双引号包围</td>
+</tr>
+<tr>
+<td style="text-align:left">hexo clean</td>
+<td style="text-align:left">清除之前生成的静态文章等</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">hexo generate</td>
+<td style="text-align:left">生成静态文章，可以简写为 <code>hexo g</code></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">hexo deploy</td>
+<td style="text-align:left">部署文章，可以简写为 <code>hexo d</code></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">hexo server</td>
+<td style="text-align:left">命令用于启动本地服务器，可以简写为 <code>hexo s</code></td>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>过一会儿之后就可以<code>https://yourName.github.io</code>这个网站看到你的博客了！</p>
+<h2><a href="#6-设置个人域名" class="header-anchor">#</a><span id="6-设置个人域名">6. 设置个人域名</span></h2>
+<p>去阿里云或腾讯云上去买一个域名，未设置。</p>
+<hr>
+<h1><a href="#四-hexo-配置" class="header-anchor">#</a><span id="四-hexo-配置">四、Hexo 配置</span></h1>
+<h2><a href="#1-hexo-基本配置" class="header-anchor">#</a><span id="1-hexo-基本配置">1. hexo 基本配置</span></h2>
+<p>在文件根目录下的<code>_config.yml</code>就是整个 hexo 框架的配置文件了。可以在里面个性大部分配置。<br>
+详细见官网：<a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/configuration">https://hexo.io/zh-cn/docs/configuration</a></p>
+<ul>
+<li>
+<h3><a href="#网站" class="header-anchor">#</a><span id="网站">网站</span></h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">参数</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">title</td>
+<td style="text-align:left">网站标题</td>
+</tr>
+<tr>
+<td style="text-align:left">subtitle</td>
+<td style="text-align:left">网站副标题</td>
+</tr>
+<tr>
+<td style="text-align:left">description</td>
+<td style="text-align:left">网站描述</td>
+</tr>
+<tr>
+<td style="text-align:left">keywords</td>
+<td style="text-align:left">网站的关键词。使用半角逗号 , 分隔多个关键词。</td>
+</tr>
+<tr>
+<td style="text-align:left">author</td>
+<td style="text-align:left">您的名字</td>
+</tr>
+<tr>
+<td style="text-align:left">language</td>
+<td style="text-align:left">网站使用的语言。对于简体中文用户来说，使用不同的主题可能需要设置成不同的值，请参考你的主题的文档自行设置，常见的有 zh-Hans 和 zh-CN。</td>
+</tr>
+<tr>
+<td style="text-align:left">timezone</td>
+<td style="text-align:left">网站时区。Hexo 默认使用您电脑的时区。请参考 时区列表 进行设置，如 America/New_York, Japan, 和 UTC 。一般的，对于中国大陆地区可以使用 Asia/Shanghai。</td>
+</tr>
+</tbody>
+</table>
+<p>其中，description 主要用于 SEO，告诉搜索引擎一个关于您站点的简单描述，通常建议在其中包含您网站的关键词。author 参数用于主题显示文章的作者。</p>
+</li>
+<li>
+<h3><a href="#网址" class="header-anchor">#</a><span id="网址">网址</span></h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">参数</th>
+<th style="text-align:left">描述</th>
+<th style="text-align:left">默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">url</td>
+<td style="text-align:left">网址</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">root</td>
+<td style="text-align:left">网站根目录</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">permalink</td>
+<td style="text-align:left">文章的<strong>永久链接</strong>格式</td>
+<td style="text-align:left">:year/:month/:day/:title/</td>
+</tr>
+<tr>
+<td style="text-align:left">permalink_defaults</td>
+<td style="text-align:left">永久链接中各部分的默认值</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">pretty_urls</td>
+<td style="text-align:left">改写 permalink 的值来美化 URL</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">pretty_urls.trailing_index</td>
+<td style="text-align:left">是否在永久链接中保留尾部的 index.html，设置为 false 时去除</td>
+<td style="text-align:left">true</td>
+</tr>
+<tr>
+<td style="text-align:left">pretty_urls.trailing_html</td>
+<td style="text-align:left">是否在永久链接中保留尾部的 .html, 设置为 false 时去除 （对尾部的 index.html 无效）</td>
+<td style="text-align:left">true</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>permalink</code></strong>，也就是你生成某个文章时的那个链接格式。<br>
+比如说新建一个文件<code>temp.md</code>，那么这个时候他自动生成的地址就是<code>http://yoursite.com/2020/05/13/temp</code><br>
+详细见官网：<a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/permalinks">https://hexo.io/zh-cn/docs/permalinks</a></p>
+</li>
+<li>
+<h3><a href="#目录" class="header-anchor">#</a><span id="目录">目录</span></h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">参数</th>
+<th style="text-align:left">描述</th>
+<th style="text-align:left">默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">source_dir</td>
+<td style="text-align:left">资源文件夹，这个文件夹用来存放内容。</td>
+<td style="text-align:left">source</td>
+</tr>
+<tr>
+<td style="text-align:left">public_dir</td>
+<td style="text-align:left">公共文件夹，这个文件夹用于存放生成的站点文件。</td>
+<td style="text-align:left">public</td>
+</tr>
+<tr>
+<td style="text-align:left">tag_dir</td>
+<td style="text-align:left">标签文件夹</td>
+<td style="text-align:left">tags</td>
+</tr>
+<tr>
+<td style="text-align:left">archive_dir</td>
+<td style="text-align:left">归档文件夹</td>
+<td style="text-align:left">archives</td>
+</tr>
+<tr>
+<td style="text-align:left">category_dir</td>
+<td style="text-align:left">分类文件夹</td>
+<td style="text-align:left">categories</td>
+</tr>
+<tr>
+<td style="text-align:left">code_dir</td>
+<td style="text-align:left">Include code 文件夹，source_dir 下的子目录</td>
+<td style="text-align:left">downloads/code</td>
+</tr>
+<tr>
+<td style="text-align:left">i18n_dir</td>
+<td style="text-align:left">国际化（i18n）文件夹</td>
+<td style="text-align:left">:lang</td>
+</tr>
+<tr>
+<td style="text-align:left">skip_render</td>
+<td style="text-align:left">跳过指定文件的渲染。匹配到的文件将会被不做改动地复制到 public 目录中。您可使用 glob 表达式来匹配路径。</td>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<h3><a href="#front-matter" class="header-anchor">#</a><span id="front-matter">Front-matter</span></h3>
+<p>Front-matter 是文件最上方以<code>---</code>分隔的区域，用于指定个别文件的变量，举例如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: Hello World</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+<p>以下是预先定义的参数，您可在模板中使用这些参数值并加以利用。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">参数</th>
+<th style="text-align:left">描述</th>
+<th style="text-align:left">默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">layout</td>
+<td style="text-align:left">布局</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">title</td>
+<td style="text-align:left">标题</td>
+<td style="text-align:left">文章的文件名</td>
+</tr>
+<tr>
+<td style="text-align:left">date</td>
+<td style="text-align:left">建立日期</td>
+<td style="text-align:left">文件建立日期</td>
+</tr>
+<tr>
+<td style="text-align:left">updated</td>
+<td style="text-align:left">更新日期</td>
+<td style="text-align:left">文件更新日期</td>
+</tr>
+<tr>
+<td style="text-align:left">comments</td>
+<td style="text-align:left">开启文章的评论功能</td>
+<td style="text-align:left">true</td>
+</tr>
+<tr>
+<td style="text-align:left">tags</td>
+<td style="text-align:left">标签（不适用于分页）</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">categories</td>
+<td style="text-align:left">分类（不适用于分页）</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">permalink</td>
+<td style="text-align:left">覆盖文章网址</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">keywords</td>
+<td style="text-align:left">仅用于 meta 标签和 Open Graph 的关键词（不推荐使用）</td>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>详细见官网：<a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/front-matter">https://hexo.io/zh-cn/docs/front-matter</a></p>
+</li>
+</ul>
+<h2><a href="#2-更换主题" class="header-anchor">#</a><span id="2-更换主题">2. 更换主题</span></h2>
+<p>Hexo 默认主题为<code>landscape</code>，若感觉不好看，可以到官网主题中选择一个喜欢的主题进行修改。官网主题：<a target="_blank" rel="noopener" href="https://hexo.io/themes/">https://hexo.io/themes/</a><br>
+我选择的是：<code>hexo-theme-Anatole-Core</code><br>
+效果如下：<br>
+<img src="/2020/05/14/%E4%BD%BF%E7%94%A8Hexo%E5%AE%89%E8%A3%85GitHub%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/2020-05-14_16-15-03-hexo-01.png" alt></p>
+<p>git地址如下：<a target="_blank" rel="noopener" href="https://github.com/mrcore/hexo-theme-Anatole-Core">https://github.com/mrcore/hexo-theme-Anatole-Core</a><br>
+使用文档：<a target="_blank" rel="noopener" href="https://github.com/Ben02/hexo-theme-Anatole/wiki/Index-Description">https://github.com/Ben02/hexo-theme-Anatole/wiki/Index-Description</a></p>
+<p><strong>更换主题步骤：</strong></p>
+<ul>
+<li>
+<h3><a href="#安装" class="header-anchor">#</a><span id="安装">安装</span></h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/mrcore/hexo-theme-Anatole-Core.git themes/anatole-core</span><br><span class="line"></span><br><span class="line">或者直接下载主题zip包解压至主题目录下，重命名为anatole-core</span><br><span class="line"></span><br><span class="line"># 安装hexo-renderer-pug</span><br><span class="line"></span><br><span class="line">npm install hexo-renderer-pug --save</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<h3><a href="#配置" class="header-anchor">#</a><span id="配置">配置</span></h3>
+<p>修改 hexo 根目录下的<code>_config.yml</code> ： <code>theme: anatole-core</code></p>
+<p>其他需要配置的地方请看<code>themes/anatole-core/_comfig.yml</code></p>
+</li>
+<li>
+<h3><a href="#更新" class="header-anchor">#</a><span id="更新">更新</span></h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd themes/anatole-core</span><br><span class="line">git pull</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2><a href="#3-git-分支多终端操作" class="header-anchor">#</a><span id="3-git-分支多终端操作">3. git 分支多终端操作</span></h2>
+<ul>
+<li>
+<h3><a href="#原理" class="header-anchor">#</a><span id="原理">原理</span></h3>
+<p>由于<code>hexo d</code>上传部署到 github 的其实是 hexo 编译后的文件，是用来生成网页的，不包含源文件。也就是上传的是在本地目录里自动生成的<code>.deploy_git</code>里面，这是个<strong>隐藏文件夹</strong>。<br>
+其他文件 ，包括我们写在<code>source</code>里面的，和配置文件，主题文件，都没有上传到 github<br>
+所以可以利用 git 的分支管理，将源文件上传到 github 的另一个分支即可。</p>
+</li>
+<li>
+<h3><a href="#上传分支" class="header-anchor">#</a><span id="上传分支">上传分支</span></h3>
+<ol>
+<li>
+<p>在 github 上新建一个 hexo 分支</p>
+</li>
+<li>
+<p>将 hexo 分支内容克隆到本地，再把除。git 文件夹外内容全部删除</p>
+</li>
+<li>
+<p>把除了<code>.deploy_git</code>外的所有博客源文件全部复制进来。</p>
+<p><strong>注意：</strong></p>
+<ul>
+<li>
+<p>复制过来的源文件应该有一个<code>.gitignore</code>，用来忽略一些不需要的文件，如果没有的话，自己新建一个，在里面写上如下内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">.DS_Store</span><br><span class="line">Thumbs.db</span><br><span class="line">db.json</span><br><span class="line">*.log</span><br><span class="line">node_modules/</span><br><span class="line">public/</span><br><span class="line">.deploy*/</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>若之前克隆过 theme 中的主题文件，那么应该把主题文件中的<code>.git</code>文件夹删掉，因为 git 不能嵌套上传，最好是显示隐藏文件，检查一下有没有，否则上传的时候会出错，导致你的主题文件无法上传，这样配置在别的电脑上就用不了了。</p>
+</li>
+<li>
+<p><em>tip: Mac 系统显示与隐藏<strong>隐藏文件</strong>快捷键为：<code>shift + command + .</code></em></p>
+</li>
+</ul>
+</li>
+<li>
+<p>之后将新内容提交到 github，可使用如下命令：</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit –m &quot;add hexo&quot;</span><br><span class="line">git push</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>这样就上传完成了，其中<code>node_modules</code>、<code>public</code>、<code>db.json</code>已经被忽略掉了，不需要上传。</p>
+</li>
+<li>
+<h3><a href="#验证" class="header-anchor">#</a><span id="验证">验证</span></h3>
+<p>换台电脑，重走一遍之前的安装流程。之后将代码从 github 上下载下来，重新部署验证。</p>
+</li>
+</ul>
+<h2><a href="#4-添加本地图片" class="header-anchor">#</a><span id="4-添加本地图片">4. 添加本地图片</span></h2>
+<ol>
+<li>
+<p>把主页配置文件<code>_config.yml</code>里的<code>post_asset_folder</code>选项设置为<code>true</code></p>
+</li>
+<li>
+<p>在 hexo 目录下执行<code>npm install hexo-asset-image --save</code>安装一个可以上传本地图片的插件，地址：<a target="_blank" rel="noopener" href="https://github.com/xcodebuild/hexo-asset-image">https://github.com/xcodebuild/hexo-asset-image</a></p>
+</li>
+<li>
+<p>之后运行<code>hexo n mdFileName</code>来生成 md 文件，文件位置为<code>/source/_posts</code>, 文件夹内除了 <a target="_blank" rel="noopener" href="http://mdFileName.md">mdFileName.md</a> 文件还有一个同名的文件夹</p>
+</li>
+<li>
+<p>之后若在 <a target="_blank" rel="noopener" href="http://mdFileName.md">mdFileName.md</a> 中引入图片，要先把图片复制到 mdFileName 这个文件夹中，然后只需要在 <a target="_blank" rel="noopener" href="http://mdFileName.md">mdFileName.md</a> 中按照 markdown 的格式引入图片：<code>![你想输入的替代文字](mdFileName/图片名.jpg)</code></p>
+</li>
+<li>
+<p>最后检查一下，运行<code>hexo g</code>生成页面后，进入 public\ 年、月、日、mdFileName.html 文件中查看相关字段，若 html 标签内的语句是<code>&lt;img src=&quot;年/月/日/mdFileName/图片名.png&quot;&gt;</code>，则网页可以正常加载图片。</p>
+<p><strong>注意：</strong> mdFileName 是这个 md 文件的名字，也是同名文件夹的名字。只需要有文件夹名字即可，不需要绝对路径。</p>
+</li>
+</ol>
+<p><em>参考：<a target="_blank" rel="noopener" href="http://wonder4.me/2017/02/20/Using-Local-Image-in-Hexo/">http://wonder4.me/2017/02/20/Using-Local-Image-in-Hexo/</a></em></p>
+<h2><a href="#5-更换辅助解析-markdown-的库" class="header-anchor">#</a><span id="5-更换辅助解析-markdown-的库">5. 更换辅助解析 markdown 的库</span></h2>
+<p><code>hexo-renderer-markdown-it</code>提供了更丰富的 Markdown 解析和渲染。</p>
+<ul>
+<li>
+<h3><a href="#安装" class="header-anchor">#</a><span id="安装">安装</span></h3>
+<ol>
+<li>
+<p>卸载 Hexo 默认自带的 Markdown 渲染器</p>
+   <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm un hexo-renderer-marked --save</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>安装 hexo-renderer-markdown-it 插件</p>
+   <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i hexo-renderer-markdown-it --save</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+<li>
+<h3><a href="#配置" class="header-anchor">#</a><span id="配置">配置</span></h3>
+<p><code>hexo-renderer-markdown-it</code>的所有配置，均在<code>Hexo</code>的主要配置文件<code>_config.yml</code>中进行配置。<br>
+<code>hexo-renderer-markdown-it</code>提供的高级配置，在<code>Hexo</code>的<code>_config.yml</code>文件中配置以下内容：</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">markdown:</span><br><span class="line">  render:</span><br><span class="line">    html: true</span><br><span class="line">    xhtmlOut: false</span><br><span class="line">    breaks: true</span><br><span class="line">    linkify: true</span><br><span class="line">    typographer: true</span><br><span class="line">    quotes: &#x27;“”‘’&#x27;</span><br><span class="line">  plugins:</span><br><span class="line">    - markdown-it-abbr</span><br><span class="line">    - markdown-it-footnote</span><br><span class="line">    - markdown-it-ins</span><br><span class="line">    - markdown-it-sub</span><br><span class="line">    - markdown-it-sup</span><br><span class="line">  anchors:</span><br><span class="line">    level: 1</span><br><span class="line">    collisionSuffix: &#x27;v&#x27;</span><br><span class="line">    permalink: false</span><br><span class="line">    permalinkClass: header-anchor</span><br><span class="line">    permalinkSymbol: ¶</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p><em><strong>详解见：</strong></em></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/588ab3d22eb8">https://www.jianshu.com/p/588ab3d22eb8</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/markdown-it/markdown-it">https://github.com/markdown-it/markdown-it</a></li>
+</ul>
+</blockquote>
+<h2><a href="#6-markdown-文件添加目录" class="header-anchor">#</a><span id="6-markdown-文件添加目录">6. MarkDown 文件添加目录</span></h2>
+<p>MD 正常语法<code>[TOC]</code>，解析器解析不了，需要下载一个插件<code>hexo-toc</code></p>
+<ul>
+<li>
+<h3><a href="#安装" class="header-anchor">#</a><span id="安装">安装</span></h3>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-toc --save</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<h3><a href="#配置" class="header-anchor">#</a><span id="配置">配置</span></h3>
+<p><code>hexo-toc</code>的所有配置，均在<code>Hexo</code>的主要配置文件<code>_config.yml</code>中进行配置。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 目录插件</span><br><span class="line">toc:</span><br><span class="line">  maxdepth: 3</span><br><span class="line">  class: toc</span><br><span class="line">  slugify: transliteration</span><br><span class="line">  decodeEntities: false</span><br><span class="line">  anchor:</span><br><span class="line">    position: after</span><br><span class="line">    symbol: &#x27;#&#x27;</span><br><span class="line">    style: header-anchor</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>之后，在 md 文件开头添加<code>&lt;！-- toc --&gt;</code>，解析成网页后会自动生成文章目录。</p>
+<blockquote>
+<p><em><strong>详解见：</strong></em> <a target="_blank" rel="noopener" href="https://www.npmjs.com/package/hexo-toc">https://www.npmjs.com/package/hexo-toc</a></p>
+</blockquote>
+<h2><a href="#7-hexo-引用本站文章" class="header-anchor">#</a><span id="7-hexo-引用本站文章">7. Hexo 引用本站文章</span></h2>
+<p>在编写文章的过程中，有时需要引用本站内的其他文章。此时可以通过内置的标签插件<code>post_link</code>来实现引用。<br>
+<strong>语法：</strong> <code>&#123;％ post_link 文章文件名（不需要后缀） 文章标题（可选项） %&#125;</code><br>
+<strong>说明：</strong> 符号都是英文状态下的，文章标题不写默认显示的是文章文件名<br>
+<strong>举例：</strong> 引用文章 ADB常用命令，则语句如下：<br>
+            <code>&#123;％ post_link ADB常用命令 %&#125;</code><br>
+            或者修改显示标题<br>
+            <code>&#123;％ post_link ADB常用命令 ADB %&#125;</code></p>
+<h2><a href="#8-hexo-支持-mathjax-公式" class="header-anchor">#</a><span id="8-hexo-支持-mathjax-公式">8. Hexo 支持 MathJax 公式</span></h2>
+<p>通过插件 <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo-math"><code>hexo-math</code></a> 来实现 <code>hexo</code> 中插入数学公式</p>
+<ul>
+<li>
+<h3><a href="#安装" class="header-anchor">#</a><span id="安装">安装</span></h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-math --save</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<h3><a href="#配置" class="header-anchor">#</a><span id="配置">配置</span></h3>
+<p><code>hexo-math</code>的所有配置，均在<code>Hexo</code>的主要配置文件<code>_config.yml</code>中进行配置。</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># https://github.com/hexojs/hexo-math</span></span><br><span class="line"><span class="attr">math:</span></span><br><span class="line">  <span class="attr">engine:</span> <span class="string">&#x27;mathjax&#x27;</span> </span><br><span class="line">  <span class="attr">katex:</span></span><br><span class="line">    <span class="attr">css:</span> <span class="string">&#x27;https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css&#x27;</span></span><br><span class="line">    <span class="attr">options:</span></span><br><span class="line">      <span class="attr">throwOnError:</span> <span class="literal">false</span></span><br><span class="line">  <span class="attr">mathjax:</span></span><br><span class="line">    <span class="attr">css:</span> <span class="string">&#x27;https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css&#x27;</span></span><br><span class="line">    <span class="attr">options:</span></span><br><span class="line">      <span class="attr">conversion:</span></span><br><span class="line">        <span class="attr">display:</span> <span class="literal">false</span></span><br><span class="line">      <span class="attr">tex:</span></span><br><span class="line">      <span class="attr">svg:</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h1><a href="#五-遇到的问题" class="header-anchor">#</a><span id="五-遇到的问题">五、遇到的问题</span></h1>
+<h2><a href="#1-部署失败" class="header-anchor">#</a><span id="1-部署失败">1. 部署失败</span></h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">FATAL Something&#x27;s wrong. Maybe you can find the solution here: https://hexo.io/docs/troubleshooting.html</span><br><span class="line">TypeError [ERR_INVALID_ARG_TYPE]: The &quot;mode&quot; argument must be integer. Received an instance of Object</span><br></pre></td></tr></table></figure>
+<p><strong>原因：</strong> 之前装的是 node14, node 版本太高了。<br>
+<strong>解决方案：</strong>  换成低版本的 node，比如 node12.14。<br>
+因为是回退版本，所以需要先卸载高版本的 node, 再安装低版本的 node.<br>
+官网下载 node.pkg 安装包的通过如下命令卸载 node</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo rm -rf /usr/local/&#123;bin/&#123;node,npm&#125;,lib/node_modules/npm,lib/node,share/man/*/node.*&#125;</span><br></pre></td></tr></table></figure>
+<p><em>卸载node参考：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/6dcfc0d3ea40">https://www.jianshu.com/p/6dcfc0d3ea40</a></em></p>
+<h2><a href="#2-部署失败" class="header-anchor">#</a><span id="2-部署失败">2. 部署失败</span></h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ERROR Process failed: _posts/使用Hexo安装GitHub个人博客.md</span><br><span class="line">YAMLException: end of the stream or a document separator is expected at line 4, column 1:</span><br><span class="line">    Hexo是一款基于Node.js的静态博客框架，依赖少易于安装使 ...</span><br><span class="line">    ^</span><br><span class="line">    at generateError (/Users/ltt/projects/puppet16.github.io/node_modules/js-yaml/lib/js-yaml/loader.js:167:10)</span><br><span class="line">    at throwError (/Users/ltt/projects/puppet16.github.io/node_modules/js-yaml/lib/js-yaml/loader.js:173:9)</span><br><span class="line">    at readDocument (/Users/ltt/projects/puppet16.github.io/node_modules/js-yaml/lib/js-yaml/loader.js:1539:5)</span><br><span class="line">    at loadDocuments (/Users/ltt/projects/puppet16.github.io/node_modules/js-yaml/lib/js-yaml/loader.js:1575:5)</span><br></pre></td></tr></table></figure>
+<p><strong>原因：</strong> md 文件要加一个 title 和 date 的头<br>
+<strong>解决方案：</strong> 在 md 文件开始位置添加如下代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: Hello World</span><br><span class="line">date: 2013/7/13 20:46:25</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+<h2><a href="#3-表格显示错误" class="header-anchor">#</a><span id="3-表格显示错误">3. 表格显示错误</span></h2>
+<p>显示效果如图：<br>
+<img src="/2020/05/14/%E4%BD%BF%E7%94%A8Hexo%E5%AE%89%E8%A3%85GitHub%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/2020-05-14_16-15-03-hexo-02.png" alt><br>
+<strong>原因：</strong> 未严格按照表格格式书写，没有加对齐方式<br>
+<strong>解决方案：</strong> 添加对齐方式</p>
+<h2><a href="#4-表格显示过多" class="header-anchor">#</a><span id="4-表格显示过多">4. 表格显示过多</span></h2>
+<p><strong>问题：</strong> 表格下一行的文字也算成了表格<br>
+<strong>原因：</strong> 在表格最后一行没有两个空格<br>
+<strong>解决方案：</strong> 在表格最后一行添加两个空格表示换行，再回车加一个空行</p>
+<h2><a href="#5-no-layout" class="header-anchor">#</a><span id="5-no-layout">5. No Layout</span></h2>
+<p><strong>问题：</strong> 在多端操作时执行<code>hexo g</code>时警告：WARN  No layout: index.html</p>
+<p><strong>原因 1：</strong> 缺少必要插件</p>
+<p><strong>解决文案：</strong> 运行命令<code>npm ls --depth 0</code>，以获取相关插件信息，如下图</p>
+<p><img src="/2020/05/14/%E4%BD%BF%E7%94%A8Hexo%E5%AE%89%E8%A3%85GitHub%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/2020-05-14_16-15-03-hexo-03.png" alt></p>
+<p>可以看出缺少图片相关插件，使用相应命令安装上即可。</p>
+<p><strong>原因 2：</strong> 所用的主题文件是空，主题这个 git 仓库和 hexo 博客目录的 Git 仓库产生嵌套的冲突</p>
+<p><strong>解决方案：</strong> 删除冲突的主题文件内的 git 文件夹，重新提交</p>
+<hr>
+<p><em>搭建 Hexo 参考文章：<a target="_blank" rel="noopener" href="https://blog.csdn.net/sinat_37781304/article/details/82729029">https://blog.csdn.net/sinat_37781304/article/details/82729029<br>
+</a></em><br>
+<em>Hexo常用命令参考：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/a2d298e26dcd">https://www.jianshu.com/p/a2d298e26dcd</a></em></p>
+</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2020-05-14</span><i class="fa fa-tag"></i><a class="tag" href="/tags/blog/" title="blog">blog </a><i class="fa fa-tag"></i><a class="tag" href="/tags/Hexo/" title="Hexo">Hexo </a><i class="fa fa-tag"></i><a class="tag" href="/tags/Node/" title="Node">Node </a><span class="leancloud_visitors"></span><span>大约4160个字, 13分钟52秒读完</span></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="" onclick="javascript:join_favorite()" ref="sidebar"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://puppet16.github.io/2020/05/14/使用Hexo安装GitHub个人博客/,Puppet,使用 Hexo 安装 GitHub 个人博客,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2020/05/22/MediaPlayer%E8%AF%A6%E8%A7%A3/" title="MediaPlayer 详解">上一篇</a></li></ul></div><script src="/js/visitors.js"></script><a id="comments"></a><div id="vcomments" style="margin:0 30px;"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//cdn.jsdelivr.net/gh/xcss/valine@latest/dist/Valine.min.js"></script><script>var valine = new Valine({
+  el:'#vcomments',
+  notify:false || false, 
+  verify:false|| false, 
+  app_id:'xpSQCFiXzEQnCBUKrP6EHIUF-gzGzoHsz',
+  app_key:'Ev5N03MrqLzS683mu92hf4RO',
+  placeholder:'行至水穷处，坐看云起时...',
+  path: window.location.pathname,
+  serverURLs: '',
+  visitor:true,
+  recordIP:true,
+  avatar:'mm'
+})</script></div></div></div></div><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/add-bookmark.js"></script><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"debug":false,"model":{"scale":1,"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"left","hOffset":0,"vOffset":20},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"dialog":{"enable":false,"hitokoto":true}});</script></body></html>

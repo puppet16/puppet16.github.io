@@ -1,0 +1,416 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="Ltt"><title>Kotlin编程规范 · Puppet</title><meta name="description" content="Kotlin 编码规范
+
+配置开发环境
+
+应用代码风格指导
+使用代码检查
+
+
+源代码组织
+
+目录
+文件名
+文件组织
+类
+接口实现
+重载方法
+
+
+命名规则
+
+包
+类
+方法
+属性
+幕后属性
+取名的学问
+
+
+格式化
+
+缩进
+空格
+冒号
+类的声明
+修饰符顺序
+注解
+函数
+表达式主体
+属性
+控制流
+方法调用
+"><meta name="keywords" content="技术博客,Hexo,Android,Linux,HTML,Java"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.webp"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/insight.css"><link rel="stylesheet" href="/css/search.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><script src="/js/jquery.js"></script><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body><div class="page-top animated fadeInDown"><div class="nav"><li> <a href="/">首页</a></li><li> <a href="/archives">归档</a></li><li> <a href="/tags">标签</a></li><li> <a href="/about">关于</a></li></div><div class="information"><div class="nav_right_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"></div></div></div><div class="sidebar animated fadeInDown"><div class="sidebar-top"><div class="logo-title"><div class="title"><img src="/images/logo@2x.webp" style="width:220px;" alt="favicon"><h3 title=""><a href="/">Puppet</a></h3><div class="description"><p>心之所愿，无事不成。<br> Nothing is impossible to a willing heart.</p></div></div><ul class="social-links"><li><a target="_blank" rel="noopener" href="https://github.com/puppet16"><i class="fa fa-github"></i></a></li><li><a href="mailto:mailto:2542469086@qq.com"><i class="fa fa-envelope"></i></a></li><li><a target="_blank" rel="noopener" href="http://sighttp.qq.com/authd?IDKEY=http://sighttp.qq.com/authd?IDKEY="><i class="fa fa-qq"></i></a></li><li><a target="_blank" rel="noopener" href="https://zhihu.com/"><i class="fa fa-mortar-board"></i></a></li></ul></div></div><div class="footer"><div class="p"> <span> 全站CC-BY-SA-3.0 </span><i class="fa fa-star"></i><span> Ltt</span></div><div class="by_farbox"><span>Powered by </span><a href="https://hexo.io/zh-cn/" target="_blank">Hexo </a><span> & </span><span>Anatolo </span></div><div class="beian"></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>Kotlin编程规范</a></h3></div><div class="post-content"><p><div class="toc">
+<!-- toc -->
+<ul>
+<li><a href="#kotlin-%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83">Kotlin 编码规范</a>
+<ul>
+<li><a href="#%E9%85%8D%E7%BD%AE%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83">配置开发环境</a>
+<ul>
+<li><a href="#%E5%BA%94%E7%94%A8%E4%BB%A3%E7%A0%81%E9%A3%8E%E6%A0%BC%E6%8C%87%E5%AF%BC">应用代码风格指导</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%A0%81%E6%A3%80%E6%9F%A5">使用代码检查</a></li>
+</ul>
+</li>
+<li><a href="#%E6%BA%90%E4%BB%A3%E7%A0%81%E7%BB%84%E7%BB%87">源代码组织</a>
+<ul>
+<li><a href="#%E7%9B%AE%E5%BD%95">目录</a></li>
+<li><a href="#%E6%96%87%E4%BB%B6%E5%90%8D">文件名</a></li>
+<li><a href="#%E6%96%87%E4%BB%B6%E7%BB%84%E7%BB%87">文件组织</a></li>
+<li><a href="#%E7%B1%BB">类</a></li>
+<li><a href="#%E6%8E%A5%E5%8F%A3%E5%AE%9E%E7%8E%B0">接口实现</a></li>
+<li><a href="#%E9%87%8D%E8%BD%BD%E6%96%B9%E6%B3%95">重载方法</a></li>
+</ul>
+</li>
+<li><a href="#%E5%91%BD%E5%90%8D%E8%A7%84%E5%88%99">命名规则</a>
+<ul>
+<li><a href="#%E5%8C%85">包</a></li>
+<li><a href="#%E7%B1%BB-1">类</a></li>
+<li><a href="#%E6%96%B9%E6%B3%95">方法</a></li>
+<li><a href="#%E5%B1%9E%E6%80%A7">属性</a></li>
+<li><a href="#%E5%B9%95%E5%90%8E%E5%B1%9E%E6%80%A7">幕后属性</a></li>
+<li><a href="#%E5%8F%96%E5%90%8D%E7%9A%84%E5%AD%A6%E9%97%AE">取名的学问</a></li>
+</ul>
+</li>
+<li><a href="#%E6%A0%BC%E5%BC%8F%E5%8C%96">格式化</a>
+<ul>
+<li><a href="#%E7%BC%A9%E8%BF%9B">缩进</a></li>
+<li><a href="#%E7%A9%BA%E6%A0%BC">空格</a></li>
+<li><a href="#%E5%86%92%E5%8F%B7">冒号</a></li>
+<li><a href="#%E7%B1%BB%E7%9A%84%E5%A3%B0%E6%98%8E">类的声明</a></li>
+<li><a href="#%E4%BF%AE%E9%A5%B0%E7%AC%A6%E9%A1%BA%E5%BA%8F">修饰符顺序</a></li>
+<li><a href="#%E6%B3%A8%E8%A7%A3">注解</a></li>
+<li><a href="#%E5%87%BD%E6%95%B0">函数</a></li>
+<li><a href="#%E8%A1%A8%E8%BE%BE%E5%BC%8F%E4%B8%BB%E4%BD%93">表达式主体</a></li>
+<li><a href="#%E5%B1%9E%E6%80%A7-1">属性</a></li>
+<li><a href="#%E6%8E%A7%E5%88%B6%E6%B5%81">控制流</a></li>
+<li><a href="#%E6%96%B9%E6%B3%95%E8%B0%83%E7%94%A8">方法调用</a></li>
+<li><a href="#%E9%93%BE%E5%BC%8F%E6%96%B9%E6%B3%95%E8%B0%83%E7%94%A8">链式方法调用</a></li>
+<li><a href="#lambda">Lambda</a></li>
+<li><a href="#%E5%B0%BE%E9%9A%8F%E9%80%97%E5%8F%B7">尾随逗号</a></li>
+</ul>
+</li>
+<li><a href="#%E6%B3%A8%E9%87%8A%E6%96%87%E6%A1%A3">注释文档</a></li>
+<li><a href="#%E9%81%BF%E5%85%8D%E5%86%97%E4%BD%99%E7%BB%93%E6%9E%84">避免冗余结构</a>
+<ul>
+<li><a href="#unit-%E8%BF%94%E5%9B%9E%E7%B1%BB%E5%9E%8B">Unit 返回类型</a></li>
+<li><a href="#%E5%88%86%E5%8F%B7">分号</a></li>
+<li><a href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%A8%A1%E6%9D%BF">字符串模板</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BD%BF%E7%94%A8%E8%AF%AD%E8%A8%80%E7%89%B9%E6%80%A7">使用语言特性</a>
+<ul>
+<li><a href="#%E4%B8%8D%E5%8F%AF%E5%8F%98%E6%80%A7">不可变性</a></li>
+<li><a href="#%E9%BB%98%E8%AE%A4%E5%80%BC">默认值</a></li>
+<li><a href="#%E7%B1%BB%E5%9E%8B%E5%88%AB%E5%90%8D">类型别名</a></li>
+<li><a href="#lambda-%E7%9A%84%E5%8F%82%E6%95%B0">Lambda 的参数</a></li>
+<li><a href="#lambda-%E7%9A%84%E8%BF%94%E5%9B%9E%E5%80%BC">Lambda 的返回值</a></li>
+<li><a href="#%E5%85%B7%E5%90%8D%E5%8F%82%E6%95%B0">具名参数</a></li>
+<li><a href="#%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5">条件语句</a></li>
+<li><a href="#if-%E5%92%8C-when">if 和 when</a></li>
+<li><a href="#%E5%8F%AF%E7%A9%BA-boolean-%E5%80%BC">可空 Boolean 值</a></li>
+<li><a href="#%E5%BE%AA%E7%8E%AF">循环</a></li>
+<li><a href="#%E5%8C%BA%E9%97%B4%E7%9A%84%E5%BE%AA%E7%8E%AF">区间的循环</a></li>
+<li><a href="#%E5%AD%97%E7%AC%A6%E4%B8%B2">字符串</a></li>
+<li><a href="#%E5%87%BD%E6%95%B0%E4%B8%8E%E5%B1%9E%E6%80%A7">函数与属性</a></li>
+<li><a href="#%E6%89%A9%E5%B1%95%E5%87%BD%E6%95%B0">扩展函数</a></li>
+<li><a href="#%E4%B8%AD%E7%BC%80%E5%87%BD%E6%95%B0">中缀函数</a></li>
+<li><a href="#%E5%B7%A5%E5%8E%82%E5%87%BD%E6%95%B0">工厂函数</a></li>
+<li><a href="#%E5%B9%B3%E5%8F%B0%E7%B1%BB%E5%9E%8B">平台类型</a></li>
+<li><a href="#%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%87%BD%E6%95%B0">作用域函数</a></li>
+</ul>
+</li>
+<li><a href="#%E5%BA%93%E7%9A%84%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83">库的编码规范</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+</div>
+<h1><a href="#kotlin-编码规范" class="header-anchor">#</a><span id="kotlin-编码规范">Kotlin 编码规范</span></h1>
+<h2><a href="#配置开发环境" class="header-anchor">#</a><span id="配置开发环境">配置开发环境</span></h2>
+<p>使用 Android Studio 提供的代码风格支持。</p>
+<h3><a href="#应用代码风格指导" class="header-anchor">#</a><span id="应用代码风格指导">应用代码风格指导</span></h3>
+<ul>
+<li>打开 Settings/Preferences | Editor | Code Style | Kotlin</li>
+<li>点击 Set from…</li>
+<li>选择 Kotlin style guide</li>
+</ul>
+<h3><a href="#使用代码检查" class="header-anchor">#</a><span id="使用代码检查">使用代码检查</span></h3>
+<ul>
+<li>打开 Settings/Preferences | Editor | Inspections | General</li>
+<li>勾选 Incorrect formatting inspection</li>
+</ul>
+<h2><a href="#源代码组织" class="header-anchor">#</a><span id="源代码组织">源代码组织</span></h2>
+<h3><a href="#目录" class="header-anchor">#</a><span id="目录">目录</span></h3>
+<p>在纯 Kotlin 项目中，目录结构遵循省略了公共根包的包结构。例如项目中的所有代码都位于 <code>org.example.kotlin</code> 包及其子包中，那么 <code>org.example.kotlin</code> 包的文件应该直接放在源代码根目录下，而 <code>org.example.kotlin.network.socket</code> 中的文件应该放在源代码根目录下的 <code>network/socket</code> 子目录中。</p>
+<p>在 Java 和 Kotlin 混编项目中，Kotlin 源文件应与 Java 源文件位于同一根目录下，并遵循相同的目录结构：文件应存储在 package 声明对应的目录中。</p>
+<h3><a href="#文件名" class="header-anchor">#</a><span id="文件名">文件名</span></h3>
+<p>如果 Kotlin 文件包含单个类或接口，其文件名应与类名相同，并附加扩展名 <code>.kt</code>。</p>
+<p>如果文件包含多个类，或仅包含顶级声明，请选择一个描述文件包含内容的名称，并相应地命名文件。</p>
+<p>使用首字母大写的驼峰风格（也称为 Pascal 风格），例如 <code>ProcessDeclarations.kt</code>。</p>
+<p>文件名应该描述文件中代码的作用。因此，您应该避免在文件名中使用无意义的词，比如叫 <code>Util</code>。</p>
+<h3><a href="#文件组织" class="header-anchor">#</a><span id="文件组织">文件组织</span></h3>
+<p>在可以文件大小保持合理（不超过几百行）的前提下，鼓励在同一个 Kotlin 源文件中放置<strong>在语义上彼此密切相关的</strong>多个声明（类、顶级函数或属性）。</p>
+<p>当为一个类定义与该类的所有使用者相关的扩展函数时，将这些函数与该类本身放在同一个文件中。在定义仅对特定使用者有意义的扩展函数时，将它们放在该使用者的代码旁边。避免为了声明某个类的所有扩展而创建代码。</p>
+<h3><a href="#类" class="header-anchor">#</a><span id="类">类</span></h3>
+<p>类的内容应按以下顺序进行：</p>
+<ol>
+<li>属性声明和初始化代码块</li>
+<li>次级构造函数</li>
+<li>方法声明</li>
+<li>伴随对象</li>
+</ol>
+<p>不要按字母顺序或者可见性对方法声明排序，也不要将常规方法与扩展方法分开。而是要把相关的东西放在一起，这样从上到下阅读类的人就能够跟进所发生事情的逻辑。选择一个顺序（高级别优先，或者相反）并坚持下去。</p>
+<p>将嵌套类放在紧挨使用这些类的代码之后。如果打算在外部使用嵌套类，而且类中并没有引用这些类，那么把它们放到末尾，在伴生对象之后。</p>
+<h3><a href="#接口实现" class="header-anchor">#</a><span id="接口实现">接口实现</span></h3>
+<p>在实现一个接口时，实现成员的顺序应该与该接口定义的成员顺序相同（如果需要，还要添加用于实现的额外的私有方法）</p>
+<h3><a href="#重载方法" class="header-anchor">#</a><span id="重载方法">重载方法</span></h3>
+<p>在类中总是将重载放在一起。</p>
+<h2><a href="#命名规则" class="header-anchor">#</a><span id="命名规则">命名规则</span></h2>
+<h3><a href="#包" class="header-anchor">#</a><span id="包">包</span></h3>
+<p>包名称始终是小写的，并且不使用下划线 (<code>org.example.project</code>)。</p>
+<p>通常不鼓励使用多词名称，但如果您确实需要使用多个词，可以将它们连接在一起或使用驼峰式 (<code>org.example.myproject</code>, <code>org.example.myProject</code>)。</p>
+<h3><a href="#类" class="header-anchor">#</a><span id="类">类</span></h3>
+<p>类和对象的名称以大写字母开头并使用驼峰风格：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">open</span> <span class="keyword">class</span> <span class="title class_">DeclarationProcessor</span> &#123; <span class="comment">/*……*/</span> &#125;</span><br><span class="line"><span class="keyword">object</span> EmptyDeclarationProcessor : DeclarationProcessor() &#123; <span class="comment">/*……*/</span> &#125;</span><br></pre></td></tr></table></figure>
+<h3><a href="#方法" class="header-anchor">#</a><span id="方法">方法</span></h3>
+<p>函数、属性与局部变量的名称以小写字母开头、使用驼峰风格而不使用下划线：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">processDeclarations</span><span class="params">()</span></span> &#123; <span class="comment">/*...*/</span> &#125;</span><br><span class="line"><span class="keyword">var</span> declarationCount = <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>例外：用于创建类实例的工厂函数可以与抽象返回类型具有相同的名称：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> <span class="title class_">Foo</span> &#123; <span class="comment">/*...*/</span> &#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">FooImpl</span> : <span class="type">Foo</span> &#123; <span class="comment">/*...*/</span> &#125;</span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">Foo</span><span class="params">()</span></span>: Foo &#123; <span class="keyword">return</span> FooImpl() &#125;</span><br></pre></td></tr></table></figure>
+<h3><a href="#属性" class="header-anchor">#</a><span id="属性">属性</span></h3>
+<p>常量名称（标有 <code>const</code> 的属性，或者保存不可变数据的没有自定义 get 函数的顶层/对象 <code>val</code> 属性）应该使用大写、下划线分隔的名称 (蛇形命名法) 命名:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">val</span> MAX_COUNT = <span class="number">8</span></span><br><span class="line"><span class="keyword">val</span> USER_NAME_FIELD = <span class="string">&quot;UserName&quot;</span></span><br></pre></td></tr></table></figure>
+<p>保存具有行为或可变数据的对象的顶级属性或对象属性的名称应使用驼峰命名法：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> mutableCollection: MutableSet&lt;String&gt; = HashSet()</span><br></pre></td></tr></table></figure>
+<p>持有单例对象引用的属性的名称可以使用与 <code>object</code> 声明相同的命名风格：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> PersonComparator: Comparator&lt;Person&gt; = <span class="comment">/*...*/</span></span><br></pre></td></tr></table></figure>
+<p>对于枚举常量，可以使用大写、下划线分隔的名称 (蛇形命名法) ，也可使用首字母大写的常规驼峰名称，具体取决于用途。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum</span> <span class="keyword">class</span> <span class="title class_">Color</span> &#123; RED, GREEN &#125;</span><br></pre></td></tr></table></figure>
+<h3><a href="#幕后属性" class="header-anchor">#</a><span id="幕后属性">幕后属性</span></h3>
+<p>如果一个类有两个概念上相同的属性，一个是公共 API 的一部分，另一个是实现细节，那么使用下划线作为私有属性名称的前缀：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">VM</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">val</span> _count = mutableLiveData&lt;<span class="built_in">Int</span>&gt;()</span><br><span class="line">    <span class="keyword">val</span> count: LiveData&lt;<span class="built_in">Int</span>&gt; <span class="keyword">get</span>() = _count</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3><a href="#取名的学问" class="header-anchor">#</a><span id="取名的学问">取名的学问</span></h3>
+<p>类的名称通常是用来解释类是什么的<strong>名词</strong>或者<strong>名词短语</strong>：<code>List</code>、 <code>PersonReader</code>。</p>
+<p>方法的名称通常是<strong>动词</strong>或<strong>动词短语</strong>，说明该方法做什么：<code>close</code>、 <code>readPersons</code>。<br>
+修改对象或者返回一个新对象的名称也应遵循建议。例如 <code>sort</code> 是对一个集合就地排序，而 <code>sorted</code> 是返回一个排序后的集合副本。</p>
+<p>名称应该表明实体的目的是什么，所以最好避免在名称中使用无意义的单词 （<code>Manager</code>、<code>Wrapper</code> 等）。</p>
+<p>当使用首字母缩写作为名称的一部分时，如果缩写由两个字母组成，就将其大写（<code>IOStream</code>）； 而如果缩写更长一些，就只大写其首字母（<code>XmlFormatter</code>、 <code>HttpInputStream</code>）。</p>
+<h2><a href="#格式化" class="header-anchor">#</a><span id="格式化">格式化</span></h2>
+<h3><a href="#缩进" class="header-anchor">#</a><span id="缩进">缩进</span></h3>
+<p>使用 <strong>4 个空格</strong>缩进。不要使用 <code>tab</code>。</p>
+<p>对于大括号，将左大括号放在结构开始行的末尾，将右大括号放在与结构开始行水平对齐的单独一行上。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (elements != <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="keyword">for</span> (element <span class="keyword">in</span> elements) &#123;</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3><a href="#空格" class="header-anchor">#</a><span id="空格">空格</span></h3>
+<ul>
+<li>在二元运算符周围放置空格 (<code>a + b</code>)。例外：不要在范围运算符周围放置空格 (<code>0..i</code>)。</li>
+<li>不要在一元运算符两边放置空格 (<code>a++</code>)。</li>
+<li>在控制流关键字（<code>if</code>、<code>when</code>、<code>for</code> 和 <code>while</code>）和相应的左括号之间放置空格。</li>
+<li>不要在主构造函数声明、方法声明或方法调用中的左括号前放置空格。  <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">A</span>(<span class="keyword">val</span> x: <span class="built_in">Int</span>)</span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">foo</span><span class="params">(x: <span class="type">Int</span>)</span></span> &#123; ... &#125;</span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">bar</span><span class="params">()</span></span> &#123; foo(<span class="number">1</span>) &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>不要在 <code>(</code>, <code>[</code> 之后或 <code>]</code>, <code>)</code> 之前放置空格。</li>
+<li>不要在 <code>.</code> 或 <code>?.</code> 周围放置空格。  <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">foo.bar().filter &#123; it &gt; <span class="number">2</span> &#125;.joinToString()</span><br><span class="line">foo?.bar()</span><br></pre></td></tr></table></figure>
+</li>
+<li>在 <code>//</code> 之后加一个空格。  <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// This is a comment</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>不要在用于指定泛型的尖括号周围放置空格。  <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Map</span>&lt;<span class="type">K, V</span>&gt; &#123; ... &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>不要在 <code>::</code> 周围放置空格。  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Foo::class</span><br><span class="line">String::length</span><br></pre></td></tr></table></figure>
+</li>
+<li>不要在可空类型标记 <code>?</code> 之前放置空格  <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> text: String? = <span class="literal">null</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>作为一般规则，避免任何类型的水平对齐。将标识符重命名为具有不同长度的名称不应影响声明或任何用法的格式。</p>
+<h3><a href="#冒号" class="header-anchor">#</a><span id="冒号">冒号</span></h3>
+<p>在以下情况的 <code>:</code> 前加一个空格：</p>
+<ul>
+<li>当它用于分隔类型和父类型时。</li>
+<li>委托给父类构造函数或同一类的不同构造函数时</li>
+<li>在匿名内部类 <code>object</code> 关键字之后</li>
+</ul>
+<p>不要在分隔声明及其类型的 <code>:</code> 前放置空格。</p>
+<p>在 <code>:</code> 后面总是放一个空格。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">Foo</span>&lt;<span class="type">out T : Any</span>&gt; : <span class="type">IFoo</span> &#123;</span><br><span class="line">    <span class="keyword">abstract</span> <span class="function"><span class="keyword">fun</span> <span class="title">foo</span><span class="params">(a: <span class="type">Int</span>)</span></span>: T</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">FooImpl</span> : <span class="type">Foo</span>() &#123;</span><br><span class="line">    <span class="keyword">constructor</span>(x: String) : <span class="keyword">this</span>(x) &#123; <span class="comment">/*...*/</span> &#125;</span><br><span class="line">    <span class="keyword">val</span> x = <span class="keyword">object</span> : IFoo &#123; <span class="comment">/*...*/</span> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3><a href="#类的声明" class="header-anchor">#</a><span id="类的声明">类的声明</span></h3>
+<p>主要构造函数参数较少的类可以写在一行中：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span>(id: <span class="built_in">Int</span>, name: String)</span><br></pre></td></tr></table></figure>
+<p>具有较长声明的类应进行格式化，使主要构造函数中的每个参数位于单独的行中并缩进。此外，右括号应该换行。父类构造函数调用或实现接口列表应与右括号位于同一行：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span>(</span><br><span class="line">    id: <span class="built_in">Int</span>,</span><br><span class="line">    name: String,</span><br><span class="line">    surname: String</span><br><span class="line">) : Human(id, name) &#123; <span class="comment">/*...*/</span> &#125;</span><br></pre></td></tr></table></figure>
+<p>对于实现多个接口的类，要首先调用父类构造函数，然后每个接口应该位于不同的行：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span>(</span><br><span class="line">    id: <span class="built_in">Int</span>,</span><br><span class="line">    name: String,</span><br><span class="line">    surname: String</span><br><span class="line">) : Human(id, name),</span><br><span class="line">    KotlinMaker &#123; <span class="comment">/*...*/</span> &#125;</span><br></pre></td></tr></table></figure>
+<p>对于超长父类型列表的类，在冒号后换行并水平对齐所有超类型名称：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyFavouriteVeryLongClassHolder</span> :</span><br><span class="line">    <span class="type">MyLongHolder</span>&lt;<span class="type">MyFavouriteVeryLongClass</span>&gt;(),</span><br><span class="line">    SomeOtherInterface,</span><br><span class="line">    AndAnotherOne &#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">foo</span><span class="params">()</span></span> &#123; <span class="comment">/*...*/</span> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当类头很长时，为了清楚地分开类头和主体，可以在类头后面放一个空行（如上例所示），或者将左花括号放在单独的一行上：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyFavouriteVeryLongClassHolder</span> :</span><br><span class="line">    <span class="type">MyLongHolder</span>&lt;<span class="type">MyFavouriteVeryLongClass</span>&gt;(),</span><br><span class="line">    SomeOtherInterface,</span><br><span class="line">    AndAnotherOne</span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">foo</span><span class="params">()</span></span> &#123; <span class="comment">/*...*/</span> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对构造函数参数使用常规缩进（4 个空格）。这确保在主构造函数中声明的属性与在类主体中声明的属性具有相同的缩进。</p>
+<h3><a href="#修饰符顺序" class="header-anchor">#</a><span id="修饰符顺序">修饰符顺序</span></h3>
+<p>如果声明有多个修饰符，请始终按以下顺序放置它们：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> / <span class="keyword">protected</span> / <span class="keyword">private</span> / <span class="keyword">internal</span></span><br><span class="line"><span class="keyword">expect</span> / <span class="keyword">actual</span></span><br><span class="line"><span class="keyword">final</span> / <span class="keyword">open</span> / <span class="keyword">abstract</span> / <span class="keyword">sealed</span> / <span class="keyword">const</span></span><br><span class="line"><span class="keyword">external</span></span><br><span class="line"><span class="keyword">override</span></span><br><span class="line"><span class="keyword">lateinit</span></span><br><span class="line"><span class="keyword">tailrec</span></span><br><span class="line"><span class="keyword">vararg</span></span><br><span class="line"><span class="keyword">suspend</span></span><br><span class="line"><span class="keyword">inner</span></span><br><span class="line"><span class="keyword">enum</span> / <span class="keyword">annotation</span> / <span class="function"><span class="keyword">fun</span> // 修饰 `<span class="keyword">fun</span> <span class="keyword">interface</span>`</span></span><br><span class="line"><span class="keyword">companion</span></span><br><span class="line"><span class="keyword">inline</span> / value</span><br><span class="line"><span class="keyword">infix</span></span><br><span class="line"><span class="keyword">operator</span></span><br><span class="line"><span class="keyword">data</span></span><br></pre></td></tr></table></figure>
+<p>除非你在编写库，否则请省略多余的修饰符（例如 <code>public</code>）。</p>
+<h3><a href="#注解" class="header-anchor">#</a><span id="注解">注解</span></h3>
+<p>将所有注解放在修饰符前：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Named(<span class="string">&quot;Foo&quot;</span>)</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">val</span> foo: Foo</span><br></pre></td></tr></table></figure>
+<p>将注解放在声明之前的单独行中，并使用相同的缩进：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target(AnnotationTarget.PROPERTY)</span></span><br><span class="line"><span class="keyword">annotation</span> <span class="keyword">class</span> <span class="title class_">JsonExclude</span></span><br></pre></td></tr></table></figure>
+<p>不带参数的注解可以放在同一行：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@JsonExclude</span> <span class="meta">@JvmField</span></span><br><span class="line"><span class="keyword">var</span> x: String</span><br></pre></td></tr></table></figure>
+<p>不带参数的<strong>单个注解</strong>可以与相应的声明放在同一行：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span> <span class="function"><span class="keyword">fun</span> <span class="title">foo</span><span class="params">()</span></span> &#123; <span class="comment">/*...*/</span> &#125;</span><br></pre></td></tr></table></figure>
+<h3><a href="#函数" class="header-anchor">#</a><span id="函数">函数</span></h3>
+<p>如果函数签名不适合一行，请使用以下语法：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">longMethodName</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    argument: <span class="type">ArgumentType</span> = defaultValue,</span></span></span><br><span class="line"><span class="params"><span class="function">    argument2: <span class="type">AnotherArgumentType</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span>: ReturnType &#123;</span><br><span class="line">    <span class="comment">// body</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对函数参数使用常规缩进（4 个空格），格式与构造函数参数一致。</p>
+<p>对于主体由单个表达式组成的函数，建议使用表达式主体。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">foo</span><span class="params">()</span></span>: <span class="built_in">Int</span> &#123; <span class="comment">// 不好</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">foo</span><span class="params">()</span></span> = <span class="number">1</span> <span class="comment">// 很好</span></span><br></pre></td></tr></table></figure>
+<h3><a href="#表达式主体" class="header-anchor">#</a><span id="表达式主体">表达式主体</span></h3>
+<p>如果函数的表达式主体与函数声明不在同一行，请将 <code>=</code> 放在第一行并将表达式主体缩进 4 个空格。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">f</span><span class="params">(x: <span class="type">String</span>, y: <span class="type">String</span>, z: <span class="type">String</span>)</span></span> =</span><br><span class="line">    veryLongFunctionCallWithManyWords(andLongParametersToo(), x, y, z)</span><br></pre></td></tr></table></figure>
+<h3><a href="#属性" class="header-anchor">#</a><span id="属性">属性</span></h3>
+<p>对于非常简单的只读属性，请考虑单行格式化：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> isEmpty: <span class="built_in">Boolean</span> <span class="keyword">get</span>() = size == <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<p>对于更复杂的属性，始终将 <code>get</code> 和 <code>set</code> 关键字放在不同的行中并缩进 4 个空格：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> foo: String</span><br><span class="line">    <span class="keyword">get</span>() &#123; <span class="comment">/*...*/</span> &#125;</span><br></pre></td></tr></table></figure>
+<p>对于带有初始化的属性，如果初始化代码很长，则在 <code>=</code> 符号后换行并将初始化缩进 4 个空格：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">val</span> defaultCharset: Charset? =</span><br><span class="line">    EncodingRegistry.getInstance().getDefaultCha</span><br></pre></td></tr></table></figure>
+<h3><a href="#控制流" class="header-anchor">#</a><span id="控制流">控制流</span></h3>
+<p>如果 <code>if</code> 或者 <code>when</code> 的条件语句是多行的，请始终使用 <code>()</code> 包围条件语句。条件语句的每个后续行相对语句开始缩进 4 个空格。将条件语句的右括号与左花括号放在单独的一行中，这有助于对齐条件和主体。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (!component.isSyncing &amp;&amp;</span><br><span class="line">    !hasAnyKotlinRuntimeInScope(module)</span><br><span class="line">) &#123;</span><br><span class="line">    <span class="keyword">return</span> createKotlinNotConfiguredPanel(module)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>将 <code>else</code>, <code>catch</code>, <code>finally</code> 关键字以及 do-while 循环的 <code>while</code> 关键字放在与前面的大括号相同的行上：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (condition) &#123;</span><br><span class="line">    <span class="comment">// body</span></span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// else part</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">// body</span></span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    <span class="comment">// cleanup</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在一个 <code>when</code> 语句中，如果一个分支不止一行，请考虑用空行将它与相邻的 case 块分开：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">fun</span> <span class="title">parsePropertyValue</span><span class="params">(propName: <span class="type">String</span>, token: <span class="type">Token</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">when</span> (token) &#123;</span><br><span class="line">        <span class="keyword">is</span> Token.ValueToken -&gt;</span><br><span class="line">            callback.visitValue(propName, token.value)</span><br><span class="line"></span><br><span class="line">        Token.LBRACE -&gt; &#123; <span class="comment">// ...</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>将短分支与条件放在同一行，不带大括号。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">when</span> (foo) &#123;</span><br><span class="line">    <span class="literal">true</span> -&gt; bar() <span class="comment">// 很好</span></span><br><span class="line">    <span class="literal">false</span> -&gt; &#123; baz() &#125; <span class="comment">// 不好</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3><a href="#方法调用" class="header-anchor">#</a><span id="方法调用">方法调用</span></h3>
+<p>在长参数列表中，在左括号后换行。将参数缩进 4 个空格。将多个<strong>密切相关</strong>的参数分组在同一行中。在分隔参数名称和值的 <code>=</code> 周围放置空格。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">drawSquare(</span><br><span class="line">    x = <span class="number">10</span>, y = <span class="number">10</span>,</span><br><span class="line">    width = <span class="number">100</span>, height = <span class="number">100</span>,</span><br><span class="line">    fill = <span class="literal">true</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h3><a href="#链式方法调用" class="header-anchor">#</a><span id="链式方法调用">链式方法调用</span></h3>
+<p>使用链式调用时，将 <code>.</code> 或 <code>?.</code> 运算符放在一行的起始，并缩进 4 个空格：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> anchor = owner</span><br><span class="line">    ?.firstChild!!</span><br><span class="line">    .siblings(forward = <span class="literal">true</span>)</span><br><span class="line">    .dropWhile &#123; it <span class="keyword">is</span> PsiComment || it <span class="keyword">is</span> PsiWhiteSpace &#125;</span><br></pre></td></tr></table></figure>
+<p>通常应该在链中的第一个调用之前换行，但如果不换行更有意义，也可以省略。</p>
+<h3><a href="#lambda" class="header-anchor">#</a><span id="lambda">Lambda</span></h3>
+<p>在 lambda 表达式中，应该在花括号左右以及分隔参数与代码体的箭头左右留空格。 如果一个调用接受单个 lambda 表达式，应该尽可能使用大括号。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">list.filter &#123; it &gt; <span class="number">10</span> &#125;</span><br></pre></td></tr></table></figure>
+<p>如果为 lambda 分配标签，请不要在标签和左花括号之间放置空格：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">foo</span><span class="params">()</span></span> &#123;</span><br><span class="line">    ints.forEach <span class="symbol">lit@</span>&#123;</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在多行的 lambda 中声明参数名称时，将名称和箭头放在第一行，然后换行：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">appendCommaSeparated(properties) &#123; prop -&gt;</span><br><span class="line">    <span class="keyword">val</span> propertyValue = prop.<span class="keyword">get</span>(obj)  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果参数列表太长而无法放在一行中，请将箭头放在单独的一行中：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">foo &#123;</span><br><span class="line">   context: Context,</span><br><span class="line">   environment: Env</span><br><span class="line">   -&gt;</span><br><span class="line">   context.configureEnv(environment)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3><a href="#尾随逗号" class="header-anchor">#</a><span id="尾随逗号">尾随逗号</span></h3>
+<p>尾随逗号是一系列元素的最后一项之后的逗号符号：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span>(</span><br><span class="line">    <span class="keyword">val</span> firstName: String,</span><br><span class="line">    <span class="keyword">val</span> lastName: String,</span><br><span class="line">    <span class="keyword">val</span> age: <span class="built_in">Int</span>, <span class="comment">// 尾随逗号</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>使用尾随逗号有几个好处：</p>
+<ul>
+<li>版本控制差异更清晰 — 因为所有的焦点都集中在更改的值上。</li>
+<li>添加和重新排序元素变得容易 - 如果您操作元素，则无需添加或删除逗号。</li>
+<li>简化代码生成。例如，对象初始值代码最后一个元素也可以有一个逗号。</li>
+</ul>
+<p>尾随逗号完全是可选的 - 没有它们你的代码仍然可以工作。建议声明时使用尾随逗号，使用方自行决定是否使用。</p>
+<h2><a href="#注释文档" class="header-anchor">#</a><span id="注释文档">注释文档</span></h2>
+<p>对于较长的文档注释，请将开头 <code>/**</code> 放在单独的行上，并以 <code>*</code> 开始后续的每一行：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 这是一条多行</span></span><br><span class="line"><span class="comment"> * 文档注释。</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+<p>简短的注释可以放在一行中：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** 这是一条简短文档注释。 */</span></span><br></pre></td></tr></table></figure>
+<p>避免使用 <code>@param</code> 和 <code>@return</code> 标签。将参数和返回值的描述直接合并到注释中，并在提及参数的任何地方添加指向参数的链接。仅当不适合流程的冗长描述时才使用<code>@param</code> 和 <code>@return</code></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 不要:</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 返回给定值的绝对值。</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> 需要返回绝对值的数值。</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> 绝对值。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">abs</span><span class="params">(number: <span class="type">Int</span>)</span></span>: <span class="built_in">Int</span> &#123; <span class="comment">/*...*/</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 要这样：</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 返回给定值 [number] 的绝对值</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">abs</span><span class="params">(number: <span class="type">Int</span>)</span></span>: <span class="built_in">Int</span> &#123; <span class="comment">/*...*/</span> &#125;</span><br></pre></td></tr></table></figure>
+<h2><a href="#避免冗余结构" class="header-anchor">#</a><span id="避免冗余结构">避免冗余结构</span></h2>
+<p>一般来说，如果 Kotlin 中的某个语法结构是可选的并且被 IDE 高亮提示为冗余，那么您应该在代码中省略它。不要为了 “清晰” 而在代码中留下不必要的句法元素。</p>
+<h3><a href="#unit-返回类型" class="header-anchor">#</a><span id="unit-返回类型">Unit 返回类型</span></h3>
+<p>如果函数返回 Unit，则应省略返回类型：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">foo</span><span class="params">()</span></span> &#123; <span class="comment">// 这里不需要 &quot;: Unit&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3><a href="#分号" class="header-anchor">#</a><span id="分号">分号</span></h3>
+<p>尽可能省略分号。</p>
+<h3><a href="#字符串模板" class="header-anchor">#</a><span id="字符串模板">字符串模板</span></h3>
+<p>将简单变量插入字符串模板时不要使用大括号。仅对较长的表达式使用大括号。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">println(<span class="string">&quot;<span class="variable">$name</span> has <span class="subst">$&#123;children.size&#125;</span> children&quot;</span>)</span><br></pre></td></tr></table></figure>
+<h2><a href="#使用语言特性" class="header-anchor">#</a><span id="使用语言特性">使用语言特性</span></h2>
+<h3><a href="#不可变性" class="header-anchor">#</a><span id="不可变性">不可变性</span></h3>
+<p>优先使用不可变数据，而不是可变数据。初始化后不需要修改的局部变量与属性，总是将其声明为 <code>val</code> 而不是 <code>var</code>。</p>
+<p>总是使用不可变集合接口（<code>Collection</code>, <code>List</code>, <code>Set</code>, <code>Map</code>）来声明无需改变的集合。使用工厂函数创建集合实例时，尽可能返回不可变集合类型的函数：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 不好：使用可变集合类型作为无需改变的值</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">validateValue</span><span class="params">(actualValue: <span class="type">String</span>, allowedValues: <span class="type">HashSet</span>&lt;<span class="type">String</span>&gt;)</span></span> &#123; ... &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 很好：使用不可变集合类型</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">validateValue</span><span class="params">(actualValue: <span class="type">String</span>, allowedValues: <span class="type">Set</span>&lt;<span class="type">String</span>&gt;)</span></span> &#123; ... &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 不好：arrayListOf() 返回 ArrayList&lt;T&gt;，这是一个可变集合类型</span></span><br><span class="line"><span class="keyword">val</span> allowedValues = arrayListOf(<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;c&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 很好：listOf() 返回 List&lt;T&gt;</span></span><br><span class="line"><span class="keyword">val</span> allowedValues = listOf(<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;c&quot;</span>)</span><br></pre></td></tr></table></figure>
+<h3><a href="#默认值" class="header-anchor">#</a><span id="默认值">默认值</span></h3>
+<p>优先声明带有默认参数的函数而不是声明重载函数。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 不好</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">foo</span><span class="params">()</span></span> = foo(<span class="string">&quot;a&quot;</span>)</span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">foo</span><span class="params">(a: <span class="type">String</span>)</span></span> &#123; <span class="comment">/*...*/</span> &#125;</span><br><span class="line">​</span><br><span class="line"><span class="comment">// 很好</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">foo</span><span class="params">(a: <span class="type">String</span> = <span class="string">&quot;a&quot;</span>)</span></span> &#123; <span class="comment">/*...*/</span> &#125;</span><br></pre></td></tr></table></figure>
+<h3><a href="#类型别名" class="header-anchor">#</a><span id="类型别名">类型别名</span></h3>
+<p>如果有一个在代码中多次用到的函数类型或者带有类型参数的类型，那么最好为它定义一个类型别名：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typealias</span> MouseClickHandler = (Any, MouseEvent) -&gt; <span class="built_in">Unit</span></span><br><span class="line"><span class="keyword">typealias</span> PersonIndex = Map&lt;String, Person&gt;</span><br></pre></td></tr></table></figure>
+<p>不要使用私有类型别名避免名称冲突，请使用 <code>import ... as ...</code>。</p>
+<h3><a href="#lambda-的参数" class="header-anchor">#</a><span id="lambda-的参数">Lambda 的参数</span></h3>
+<p>在简短，非嵌套的 lambda 中，建议使用 <code>it</code> 约定而不是显式声明参数。在带参数的嵌套 lambda 中，始终显式声明参数。</p>
+<h3><a href="#lambda-的返回值" class="header-anchor">#</a><span id="lambda-的返回值">Lambda 的返回值</span></h3>
+<p>避免在 lambda 表达式中使用多个返回到标签。请考虑重新组织这样的 lambda 表达式使其只有单一退出点。 如果这无法做到或者不够清晰，请考虑将 lambda 表达式转换为匿名函数。</p>
+<p>不要在 lambda 表达式的最后一条语句中使用返回到标签。</p>
+<h3><a href="#具名参数" class="header-anchor">#</a><span id="具名参数">具名参数</span></h3>
+<p>当一个方法接受多个相同的原生类型参数或者 Boolean 类型参数时，请使用具名参数语法，除非在上下文中的所有参数的含义都已绝对清楚。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">drawSquare(x = <span class="number">10</span>, y = <span class="number">10</span>, width = <span class="number">100</span>, height = <span class="number">100</span>, fill = <span class="literal">true</span>)</span><br></pre></td></tr></table></figure>
+<h3><a href="#条件语句" class="header-anchor">#</a><span id="条件语句">条件语句</span></h3>
+<p>优先使用 <code>try</code>, <code>if</code> 和 <code>when</code> 的表达式形式。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 不好</span></span><br><span class="line"><span class="keyword">if</span> (x)</span><br><span class="line">    <span class="keyword">return</span> foo()</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="keyword">return</span> bar()</span><br><span class="line"></span><br><span class="line"><span class="keyword">when</span>(x) &#123;</span><br><span class="line">    <span class="number">0</span> -&gt; <span class="keyword">return</span> <span class="string">&quot;zero&quot;</span></span><br><span class="line">    <span class="number">1</span> -&gt; <span class="keyword">return</span> <span class="string">&quot;one</span></span><br><span class="line"><span class="string">    else -&gt; return &quot;</span>others<span class="string">&quot;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">// 很好</span></span><br><span class="line"><span class="string">return if (x) foo() else bar()</span></span><br><span class="line"><span class="string">return when(x) &#123;</span></span><br><span class="line"><span class="string">    0 -&gt; &quot;</span>zero<span class="string">&quot;</span></span><br><span class="line"><span class="string">    1 -&gt; &quot;</span>one<span class="string">&quot;</span></span><br><span class="line"><span class="string">    else -&gt; &quot;</span>others<span class="string">&quot;</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>以上优于：</p>
+<p>if (x) return foo() else return bar()<br>
+when(x) { 0 -&gt; return “zero” else -&gt; return “nonzero” }</p>
+<h3><a href="#if-和-when" class="header-anchor">#</a><span id="if-和-when">if 和 when</span></h3>
+<p>对于二元判断优先使用 <code>if</code> 而不是 <code>when</code>。如果有三个或更多选项，请优先使用 <code>when</code>。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用 if</span></span><br><span class="line"><span class="keyword">if</span> (x == <span class="literal">null</span>) ... <span class="keyword">else</span> ...</span><br><span class="line"></span><br><span class="line"><span class="comment">// 而不是 when</span></span><br><span class="line"><span class="keyword">when</span> (x) &#123;</span><br><span class="line">    <span class="literal">null</span> -&gt; <span class="comment">// ...</span></span><br><span class="line">    <span class="keyword">else</span> -&gt; <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3><a href="#可空-boolean-值" class="header-anchor">#</a><span id="可空-boolean-值">可空 Boolean 值</span></h3>
+<p>如果需要在条件语句中用到可空的 <code>Boolean</code>, 使用 <code>if (value == true)</code> 或 <code>if (value == false)</code> 检查。</p>
+<h3><a href="#循环" class="header-anchor">#</a><span id="循环">循环</span></h3>
+<p>优先使用高阶函数（<code>filter</code>、<code>map</code> 等）而不是循环。例外：<code>forEach</code>（优先使用常规的 for 循环， 除非 <code>forEach</code> 的接收者是可空的或者 <code>forEach</code> 用做长调用链的一部分。）</p>
+<p>当在使用多个高阶函数的复杂表达式与循环之间进行选择时，请了解每种情况下所执行操作的开销并且记得考虑性能因素。</p>
+<h3><a href="#区间的循环" class="header-anchor">#</a><span id="区间的循环">区间的循环</span></h3>
+<p>使用 <code>until</code> 函数在一个开区间上循环：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (i <span class="keyword">in</span> <span class="number">0.</span>.n - <span class="number">1</span>) &#123; <span class="comment">/*...*/</span> &#125;  <span class="comment">// 不好</span></span><br><span class="line"><span class="keyword">for</span> (i <span class="keyword">in</span> <span class="number">0</span> until n) &#123; <span class="comment">/*...*/</span> &#125;  <span class="comment">// 很好</span></span><br></pre></td></tr></table></figure>
+<h3><a href="#字符串" class="header-anchor">#</a><span id="字符串">字符串</span></h3>
+<p>优先使用字符串模板而不是字符串拼接。</p>
+<p>优先使用多行字符串而不是将 <code>\n</code> 转义序列嵌入到常规字符串字面值中。</p>
+<p>如需在多行字符串中维护缩进，当生成的字符串不需要任何内部缩进时使用 <code>trimIndent</code>，而需要内部缩进时使用 <code>trimMargin</code>：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">println(<span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    Not</span></span><br><span class="line"><span class="string">    trimmed</span></span><br><span class="line"><span class="string">    text</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">       )</span><br><span class="line"></span><br><span class="line">println(<span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    Trimmed</span></span><br><span class="line"><span class="string">    text</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span>.trimIndent()</span><br><span class="line">       )</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> a = <span class="string">&quot;&quot;&quot;Trimmed to margin text:</span></span><br><span class="line"><span class="string">          |if(a &gt; 1) &#123;</span></span><br><span class="line"><span class="string">          |    return a</span></span><br><span class="line"><span class="string">          |&#125;&quot;&quot;&quot;</span>.trimMargin()</span><br><span class="line">println(a)</span><br></pre></td></tr></table></figure>
+<h3><a href="#函数与属性" class="header-anchor">#</a><span id="函数与属性">函数与属性</span></h3>
+<p>在某些情况下，不带参数的函数可与只读属性互换。 虽然语义相似，但是在某种程度上有一些风格上的约定。</p>
+<p>以下情况优先使用属性而不是函数：</p>
+<ul>
+<li>不会抛异常</li>
+<li>计算开销小（或者在首次运行时缓存）</li>
+<li>如果对象状态没有改变，那么多次调用都会返回相同结果</li>
+</ul>
+<h3><a href="#扩展函数" class="header-anchor">#</a><span id="扩展函数">扩展函数</span></h3>
+<p>自由使用扩展函数。每当你有一个主要用于某个对象的函数时，可以考虑使其成为一个以该对象为接收者的扩展函数。为了尽量减少 API 污染，尽可能地限制扩展函数的可见性。根据需要，使用局部扩展函数、成员扩展函数或者具有私有可视性的顶层扩展函数。</p>
+<h3><a href="#中缀函数" class="header-anchor">#</a><span id="中缀函数">中缀函数</span></h3>
+<p>一个函数只有用于两个角色类似的对象时才将其声明为中缀函数。比如：<code>and</code>、<code>to</code>、<code>zip</code>。 不良示例如：<code>add</code>。</p>
+<p>如果一个方法会改动其接收者，那么不要声明为中缀形式。</p>
+<h3><a href="#工厂函数" class="header-anchor">#</a><span id="工厂函数">工厂函数</span></h3>
+<p>如果为一个类声明一个工厂函数，那么不要让它与类自身同名。优先使用独特的名称，该名称能表明为何该工厂函数的行为与众不同。只有当确实没有特殊的语义时，才可以使用与该类相同的名称。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Point</span>(<span class="keyword">val</span> x: <span class="built_in">Double</span>, <span class="keyword">val</span> y: <span class="built_in">Double</span>) &#123;</span><br><span class="line">    <span class="keyword">companion</span> <span class="keyword">object</span> &#123;</span><br><span class="line">        <span class="function"><span class="keyword">fun</span> <span class="title">fromPolar</span><span class="params">(angle: <span class="type">Double</span>, radius: <span class="type">Double</span>)</span></span> = Point(...)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果一个对象有多个重载的构造函数，它们并非调用不同的超类构造函数，并且不能简化为具有默认参数值的单个构造函数，那么优先用工厂函数取代这些重载的构造函数。</p>
+<h3><a href="#平台类型" class="header-anchor">#</a><span id="平台类型">平台类型</span></h3>
+<p>返回平台类型表达式的公有函数/方法必须显式声明其 Kotlin 类型：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">apiCall</span><span class="params">()</span></span>: String = MyJavaApi.getProperty(<span class="string">&quot;name&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>任何使用平台类型表达式初始化的属性（包级别或类级别）必须显式声明其 Kotlin 类型：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span> &#123;</span><br><span class="line">    <span class="keyword">val</span> name: String = MyJavaApi.getProperty(<span class="string">&quot;name&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用平台类型表达式初始化的局部值可以有也可以没有类型声明：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> name = MyJavaApi.getProperty(<span class="string">&quot;name&quot;</span>)</span><br><span class="line">    println(name)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3><a href="#作用域函数" class="header-anchor">#</a><span id="作用域函数">作用域函数</span></h3>
+<p>Kotlin 提供了一系列用来在给定对象上下文中执行代码块的函数：<code>let</code>、<code>run</code>、<code>with</code>、<code>apply</code> 以及 <code>also</code>。 关于不同情况下选择正确作用域函数的准则，请参考作用域函数。</p>
+<h2><a href="#库的编码规范" class="header-anchor">#</a><span id="库的编码规范">库的编码规范</span></h2>
+<p>在编写库时，建议遵循一组额外的规则以确保 API 的稳定性：</p>
+<ul>
+<li>总是显式指定成员的可见性（以避免将声明意外暴露为公有 API ）</li>
+<li>总是显式指定函数返回类型以及属性类型（以避免当实现改变时意外更改返回类型）</li>
+<li>为所有公有成员提供 KDoc 注释，不需要任何新文档的覆盖成员除外 （以支持为该库生成文档）</li>
+</ul>
+</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2023-05-16</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Kotlin/" title="Kotlin">Kotlin </a><i class="fa fa-tag"></i><a class="tag" href="/tags/编程规范/" title="编程规范">编程规范 </a><span class="leancloud_visitors"></span><span>大约5956个字, 19分钟51秒读完</span></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="" onclick="javascript:join_favorite()" ref="sidebar"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://puppet16.github.io/2023/05/16/Kotlin编程规范/,Puppet,Kotlin编程规范,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2023/05/25/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%8D%81%E4%BA%8C/" title="kotlin学习系列十二：协程四">上一篇</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2023/05/16/Java%E7%BC%96%E7%A8%8B%E8%A7%84%E8%8C%83/" title="Java编程规范">下一篇</a></li></ul></div><script src="/js/visitors.js"></script><a id="comments"></a><div id="vcomments" style="margin:0 30px;"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//cdn.jsdelivr.net/gh/xcss/valine@latest/dist/Valine.min.js"></script><script>var valine = new Valine({
+  el:'#vcomments',
+  notify:false || false, 
+  verify:false|| false, 
+  app_id:'xpSQCFiXzEQnCBUKrP6EHIUF-gzGzoHsz',
+  app_key:'Ev5N03MrqLzS683mu92hf4RO',
+  placeholder:'行至水穷处，坐看云起时...',
+  path: window.location.pathname,
+  serverURLs: '',
+  visitor:true,
+  recordIP:true,
+  avatar:'mm'
+})</script></div></div></div></div><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/add-bookmark.js"></script><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"debug":false,"model":{"scale":1,"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"left","hOffset":0,"vOffset":20},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"dialog":{"enable":false,"hitokoto":true}});</script></body></html>
