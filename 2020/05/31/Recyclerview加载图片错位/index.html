@@ -1,0 +1,120 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="Ltt"><title>Recyclerview加载图片错位 · Puppet</title><meta name="description" content="前言
+问题产生原因
+解决方案
+
+一、设置占位图
+
+1、直接在链式请求中加.placeholder()：
+2、添加监听，在回调方法中设置：
+
+
+二、设置TAG
+三、在onViewRecycled方法中重置item的ImageView并取消网络请求
+
+流程：在onBindViewHolder中发起加载请"><meta name="keywords" content="技术博客,Hexo,Android,Linux,HTML,Java"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.webp"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/insight.css"><link rel="stylesheet" href="/css/search.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><script src="/js/jquery.js"></script><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body><div class="page-top animated fadeInDown"><div class="nav"><li> <a href="/">首页</a></li><li> <a href="/archives">归档</a></li><li> <a href="/tags">标签</a></li><li> <a href="/about">关于</a></li></div><div class="information"><div class="nav_right_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"></div></div></div><div class="sidebar animated fadeInDown"><div class="sidebar-top"><div class="logo-title"><div class="title"><img src="/images/logo@2x.webp" style="width:220px;" alt="favicon"><h3 title=""><a href="/">Puppet</a></h3><div class="description"><p>心之所愿，无事不成。<br> Nothing is impossible to a willing heart.</p></div></div><ul class="social-links"><li><a target="_blank" rel="noopener" href="https://github.com/puppet16"><i class="fa fa-github"></i></a></li><li><a href="mailto:mailto:2542469086@qq.com"><i class="fa fa-envelope"></i></a></li><li><a target="_blank" rel="noopener" href="http://sighttp.qq.com/authd?IDKEY=http://sighttp.qq.com/authd?IDKEY="><i class="fa fa-qq"></i></a></li><li><a target="_blank" rel="noopener" href="https://zhihu.com/"><i class="fa fa-mortar-board"></i></a></li></ul></div></div><div class="footer"><div class="p"> <span> 全站CC-BY-SA-3.0 </span><i class="fa fa-star"></i><span> Ltt</span></div><div class="by_farbox"><span>Powered by </span><a href="https://hexo.io/zh-cn/" target="_blank">Hexo </a><span> & </span><span>Anatolo </span></div><div class="beian"></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>Recyclerview加载图片错位</a></h3></div><div class="post-content"><p><div class="toc">
+<!-- toc -->
+<ul>
+<li><a href="#%E5%89%8D%E8%A8%80">前言</a></li>
+<li><a href="#%E9%97%AE%E9%A2%98%E4%BA%A7%E7%94%9F%E5%8E%9F%E5%9B%A0">问题产生原因</a></li>
+<li><a href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88">解决方案</a>
+<ul>
+<li><a href="#%E4%B8%80-%E8%AE%BE%E7%BD%AE%E5%8D%A0%E4%BD%8D%E5%9B%BE">一、设置占位图</a>
+<ul>
+<li><a href="#1-%E7%9B%B4%E6%8E%A5%E5%9C%A8%E9%93%BE%E5%BC%8F%E8%AF%B7%E6%B1%82%E4%B8%AD%E5%8A%A0placeholder">1、直接在链式请求中加<code>.placeholder()</code>：</a></li>
+<li><a href="#2-%E6%B7%BB%E5%8A%A0%E7%9B%91%E5%90%AC%E5%9C%A8%E5%9B%9E%E8%B0%83%E6%96%B9%E6%B3%95%E4%B8%AD%E8%AE%BE%E7%BD%AE">2、添加监听，在回调方法中设置：</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BA%8C-%E8%AE%BE%E7%BD%AEtag">二、设置TAG</a></li>
+<li><a href="#%E4%B8%89-%E5%9C%A8onviewrecycled%E6%96%B9%E6%B3%95%E4%B8%AD%E9%87%8D%E7%BD%AEitem%E7%9A%84imageview%E5%B9%B6%E5%8F%96%E6%B6%88%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82">三、在onViewRecycled方法中重置item的ImageView并取消网络请求</a>
+<ul>
+<li><a href="#%E6%B5%81%E7%A8%8B%E5%9C%A8onbindviewholder%E4%B8%AD%E5%8F%91%E8%B5%B7%E5%8A%A0%E8%BD%BD%E8%AF%B7%E6%B1%82%E7%84%B6%E5%90%8E%E5%9C%A8view%E8%A2%AB%E5%9B%9E%E6%94%B6%E6%97%B6%E5%8F%96%E6%B6%88%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82">流程：在onBindViewHolder中发起加载请求，然后在view被回收时取消网络请求</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+</div>
+<h1><a href="#前言" class="header-anchor">#</a><span id="前言">前言</span></h1>
+<p>使用recyclerView时遇到了图片错位的问题，这个问题网上已经讨论的很成熟，谨以此文章做个总结。</p>
+<h1><a href="#问题产生原因" class="header-anchor">#</a><span id="问题产生原因">问题产生原因</span></h1>
+<p><strong>根本原因：</strong> 因为有ViewHolder的重用机制，每一个item在移出屏幕后都会被重新使用以节省资源，避免滑动卡顿。</p>
+<p><strong>场景A:</strong></p>
+<ol>
+<li>第一次进入页面，RecyclerView载入，不做任何触摸操作</li>
+<li>Adapter经过onCreateViewHolder()创建当前显示给用户的N个ViewHolder对象，并且在onBind时启动了N条线程加载图片</li>
+<li>N张图片全部加载完毕，并且显示到对应的ImageView上</li>
+<li>控制屏幕向下滑动，前K个item离开屏幕可视区域，后K个item进入屏幕可视区域</li>
+<li>前K个item被回收，重用到后K个item。后K个item显示的图片是前K个item的图片</li>
+<li>开启了K条线程，加载后K张图片。等待几秒，后K个item显示的图片突然变成了正确的图片</li>
+</ol>
+<p>经过细化分析可以看出：如果当前网络速度很快，第6个步骤的加载速度在1秒甚至0.5秒内，就会造成人眼看到的图片闪烁问题，后K个item的图片闪了一下变成了正确的图片。</p>
+<p><strong>场景B:</strong></p>
+<ol>
+<li>第一次进入页面，RecyclerView载入，不做任何触摸操作</li>
+<li>Adapter经过onCreateViewHolder()创建当前显示给用户的N个ViewHolder对象，并且在onBind时启动了N条线程加载图片</li>
+<li>结果N张图片全部加载完毕，并且显示到对应的ImageView上，但还有1张未加载完(假设是第一张图片未加载完)</li>
+<li>控制屏幕向下滑动动，前K个item离开屏幕可视区域，后K个item进入屏幕可视区域</li>
+<li>前K个item被回收，重用到后K个item。<strong>场景A</strong>的问题不再说，后K张图片加载完毕(看上去一切正常)</li>
+<li>等待几秒，第一张图片终于加载完成，后K个item中的某一个突然从正确的图片(当前positon应<br>
+该显示的图片)变成不正确的图片(第一个item的图片)</li>
+</ol>
+<p>以上过程是场景B，问题出在加载第一张图片的线程T，持有了item1的ImageView对象引用，而这张图片加载速度非常慢，直到item1已经被重用到后面item后，过了一段时间，线程T才把图片一加载出来，并设置到item1的ImageView上，然而线程T并不知道item1已经不存在且已复用成其他item，于是，图片发生错乱了。</p>
+<p><strong>场景C:</strong></p>
+<ol>
+<li>第一次进入页面，RecyclerView载入，不做任何触摸操作</li>
+<li>Adapter经过onCreateViewHolder()创建当前显示给用户的N个ViewHolder对象，并且在onBind时启动了N条线程加载图片</li>
+<li>忽略图片加载情况，直接向下滚动，再向上滚动，再向下滚动，来回操作</li>
+<li>由于离开了屏幕的item是随机被回收并重用的，所以向下滚动时我们假设item1、item3被回收重用到item9、item10，item2、item4被回收重用到item11、item12</li>
+<li>向上滚动时，item9、item12被回收重用到item1、item2，item10、item11被回收重用到item3、item4</li>
+<li>多次上下滚动后，停下，最后发现某一个item的图片在不停变化，最后还不一定是正确的图片</li>
+</ol>
+<p>以上过程是场景C，问题出现在ViewHolder的回收重用顺序是随机的，回收时会从离开屏幕范围的item中随机回收，并分配给新的item，来回操作数次，就会造成有多条加载不同图片的线程，持有同一个item的ImageView对象，造成最后在同一个item上图片变来变去，错乱更加严重。</p>
+<h1><a href="#解决方案" class="header-anchor">#</a><span id="解决方案">解决方案</span></h1>
+<h2><a href="#一-设置占位图" class="header-anchor">#</a><span id="一-设置占位图">一、设置占位图</span></h2>
+<p><strong>Glide有两种方法设置占位图</strong></p>
+<h3><a href="#1-直接在链式请求中加placeholder" class="header-anchor">#</a><span id="1-直接在链式请求中加placeholder">1、直接在链式请求中加<code>.placeholder()</code>：</span></h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Glide.with(this)</span><br><span class="line">        .load(picUrl)</span><br><span class="line">        .placeholder(R.drawable.ic_loading)</span><br><span class="line">        .into(holder.ivThumb)</span><br></pre></td></tr></table></figure>
+<h3><a href="#2-添加监听在回调方法中设置" class="header-anchor">#</a><span id="2-添加监听在回调方法中设置">2、添加监听，在回调方法中设置：</span></h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Glide.with(mContext)</span><br><span class="line">    .load(picUrl)</span><br><span class="line">    .error(R.drawable.ic_loading)</span><br><span class="line">    .into(new SimpleTarget&lt;GlideDrawable&gt;() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void onResourceReady(GlideDrawable glideDrawable, GlideAnimation&lt;? super  GlideDrawable&gt; glideAnimation) &#123;</span><br><span class="line">                    holder.ivThumb.setImageDrawable(glideDrawable);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void onStart() &#123;</span><br><span class="line">            super.onStart();</span><br><span class="line">            holder.ivThumb.setImageResource(R.drawable.ic_loading);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
+<h2><a href="#二-设置tag" class="header-anchor">#</a><span id="二-设置tag">二、设置TAG</span></h2>
+<p>使用setTag（）方式。但是，Glide图片加载也是使用这个方法，所以需要使用setTag（key，value）方式进行设置，这种方式是不错的一种解决方式，注意取值的时候应该是getTag（key）这个方法，当异步请求回来的时候对比下tag是否一样，再判断是否显示图片,我使用的是position设置tag.</p>
+<p><strong>时间及事件梳理</strong><br>
+开始-&gt;当前item1给ImageView打tag<br>
+-&gt;当前item1发起网络请求<br>
+-&gt;异步处理网络请求<br>
+-&gt;当前item1滑出屏幕<br>
+-&gt;划出屏幕的item重用并滑进屏幕命名为item2<br>
+-&gt;item2重新给ImageView打上tag<br>
+-&gt;item1的图片下载完成，因为重用的原因，图片将要加载给item2<br>
+-&gt;用原先传入的item1设置的tag和新覆盖的tag比较，发现不相同<br>
+-&gt;不给当前item2设置图片，避免了图片错位</p>
+<p><strong>代码</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">public void onBindViewHolder(final VideoViewHolder holder, final int position) &#123;</span><br><span class="line">    holder.thumbView.setTag(R.id.tag_dynamic_list_thumb, position);</span><br><span class="line">    Glide.with(mContext)</span><br><span class="line">        .load(picUrl)</span><br><span class="line">        .error(R.drawable.video_thumb_loading)</span><br><span class="line">        .into(new SimpleTarget&lt;GlideDrawable&gt;() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void onResourceReady(GlideDrawable glideDrawable, GlideAnimation&lt;? super GlideDrawable&gt; glideAnimation &#123;</span><br><span class="line">                if (position != (Integer) holder.thumbView.getTag(R.id.tag_dynamic_list_thumb))</span><br><span class="line">                    return;</span><br><span class="line">                    holder.thumbView.setImageDrawable(glideDrawable);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public void onStart() &#123;</span><br><span class="line">                super.onStart();</span><br><span class="line">                holder.thumbView.setImageResource(R.drawable.ic_loading);</span><br><span class="line">            &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2><a href="#三-在onviewrecycled方法中重置item的imageview并取消网络请求" class="header-anchor">#</a><span id="三-在onviewrecycled方法中重置item的imageview并取消网络请求">三、在onViewRecycled方法中重置item的ImageView并取消网络请求</span></h2>
+<h3><a href="#流程在onbindviewholder中发起加载请求然后在view被回收时取消网络请求" class="header-anchor">#</a><span id="流程在onbindviewholder中发起加载请求然后在view被回收时取消网络请求">流程：在onBindViewHolder中发起加载请求，然后在view被回收时取消网络请求</span></h3>
+<p><strong>代码</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">public void onBindViewHolder(VideoViewHolder holder, int position) &#123;</span><br><span class="line">    String istrurl = mImgList.get(position).getImageUrl();</span><br><span class="line">    if (null == holder || null == istrurl || istrurl.equals(&quot;&quot;)) &#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    Glide.with(mContext)</span><br><span class="line">        .load(picUrl)</span><br><span class="line">        .placeholder(R.drawable.ic_loading)</span><br><span class="line">        .into(holder.thumbView);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@Override</span><br><span class="line">public void onViewRecycled(VideoViewHolder holder) &#123;</span><br><span class="line">    if (holder != null) &#123;</span><br><span class="line">        Glide.clear(holder.thumbView);</span><br><span class="line">        holder.thumbView.setImageResource(R.drawable.ic_loading);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    super.onViewRecycled(holder);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>参考文章：<br>
+<a target="_blank" rel="noopener" href="https://blog.csdn.net/lililijunwhy/article/details/79869491">https://blog.csdn.net/lililijunwhy/article/details/79869491</a><br>
+<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_33808060/article/details/59116624">https://blog.csdn.net/qq_33808060/article/details/59116624</a><br>
+<a target="_blank" rel="noopener" href="https://blog.csdn.net/life90/article/details/78884618">https://blog.csdn.net/life90/article/details/78884618</a></p>
+</blockquote>
+</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2020-05-31</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Android/" title="Android">Android </a><i class="fa fa-tag"></i><a class="tag" href="/tags/RecyclerView/" title="RecyclerView">RecyclerView </a><span class="leancloud_visitors"></span><span>大约1730个字, 5分钟46秒读完</span></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="" onclick="javascript:join_favorite()" ref="sidebar"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://puppet16.github.io/2020/05/31/Recyclerview加载图片错位/,Puppet,Recyclerview加载图片错位,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2020/05/31/fitSystemWindow%E6%B2%89%E6%B5%B8%E7%8A%B6%E6%80%81%E6%A0%8F%E4%B8%8E%E9%94%AE%E7%9B%98%E5%86%B2%E7%AA%81%E9%97%AE%E9%A2%98/" title="fitSystemWindow沉浸状态栏与键盘冲突问题">上一篇</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2020/05/31/Java%E6%88%90%E5%91%98%E6%96%B9%E6%B3%95%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F/" title="Java成员方法执行顺序">下一篇</a></li></ul></div><script src="/js/visitors.js"></script><a id="comments"></a><div id="vcomments" style="margin:0 30px;"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//cdn.jsdelivr.net/gh/xcss/valine@latest/dist/Valine.min.js"></script><script>var valine = new Valine({
+  el:'#vcomments',
+  notify:false || false, 
+  verify:false|| false, 
+  app_id:'xpSQCFiXzEQnCBUKrP6EHIUF-gzGzoHsz',
+  app_key:'Ev5N03MrqLzS683mu92hf4RO',
+  placeholder:'行至水穷处，坐看云起时...',
+  path: window.location.pathname,
+  serverURLs: '',
+  visitor:true,
+  recordIP:true,
+  avatar:'mm'
+})</script></div></div></div></div><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/add-bookmark.js"></script><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"debug":false,"model":{"scale":1,"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"left","hOffset":0,"vOffset":20},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"dialog":{"enable":false,"hitokoto":true}});</script></body></html>
