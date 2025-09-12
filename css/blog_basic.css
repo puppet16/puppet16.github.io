@@ -605,3 +605,29 @@ tt {
 .leancloud-visitors-count {
   margin-left: 5px;
 }
+/* Table styles - enforce bordered tables inside post content */
+.post-content table {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 1em 0;
+  width: 100%;
+  max-width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #e5e5e5;
+  background-color: transparent;
+}
+.post-content th,
+.post-content td {
+  padding: 8px 12px;
+  border: 1px solid #e5e5e5;
+  font-size: 1rem;
+}
+.post-content th {
+  color: #666;
+  background-color: #fdfdfd;
+  text-align: left;
+}
+.post-content tbody > tr:nth-child(odd) > td,
+.post-content tbody > tr:nth-child(odd) > th {
+  background-color: #f9f9f9;
+}

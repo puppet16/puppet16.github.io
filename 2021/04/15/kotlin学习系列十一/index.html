@@ -148,7 +148,7 @@
 <ul>
 <li><code>UNLIMITED</code>，代表了无限容量；</li>
 <li><code>CONFLATED</code>，代表了容量为 <em>1</em>，新的数据会替代旧的数据；</li>
-<li><code>BUFFERED</code>，代表了具备一定的缓存容量，默认情况下是 <code>64</code>，具体容量由这个 <code>VM</code> 参数决定 &quot;<code>kotlinx.coroutines.channels.defaultBuffer</code>&quot;。</li>
+<li><code>BUFFERED</code>，代表了具备一定的缓存容量，默认情况下是 <code>64</code>，具体容量由这个 <code>VM</code> 参数决定 “<code>kotlinx.coroutines.channels.defaultBuffer</code>”。</li>
 </ul>
 <p>第二个参数，<strong><code>onBufferOverflow</code></strong>，也就是指当指定了 <code>capacity</code> 的容量，等管道的容量满了时，<code>Channel</code> 的应对策略是怎么样的。这里，它主要有三种做法：</p>
 <ul>

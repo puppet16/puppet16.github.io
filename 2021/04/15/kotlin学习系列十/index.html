@@ -359,7 +359,7 @@
 </li>
 <li><code>invoke()</code>方法需要实现功能是 根据url拼接参数、使用<code>okHttpClient</code>进行网络请求、使用<code>gson</code>进行<code>JSON</code>解析、返回结果
 <ul>
-<li>在 <em>注释①</em> 处，<code>method.parameterAnnotations</code>，它的作用是取出方法参数当中的所有注解，在这个案例当中，<code>repos()</code> 这个方法当中涉及到两个注解，它们分别是@Field(&quot;q&quot;)、@Field(&quot;sort&quot;)。</li>
+<li>在 <em>注释①</em> 处，<code>method.parameterAnnotations</code>，它的作用是取出方法参数当中的所有注解，在这个案例当中，<code>repos()</code> 这个方法当中涉及到两个注解，它们分别是@Field(“q”)、@Field(“sort”)。</li>
 <li>在 <em>注释②</em> 处，由于方法当中可能存在其他注解，因此要筛选出想要的 <code>Field</code> 注解。</li>
 <li>在 <em>注释③</em> 处，这里是取出注解当中的值<code>q</code>，以及参数当中对应的值<code>stars:&gt;=10000 language:kotlin</code>进行拼接，<code>URL</code> 第一次拼接参数的时候，要用“<strong>?</strong>”分隔。</li>
 <li>在 <em>注释④</em> 处，这里是取出注解当中的值<code>sort</code>，以及参数当中对应的值<code>stars</code>进行拼接，后面的参数拼接格式，是用“<strong>&amp;</strong>”分隔。</li>
