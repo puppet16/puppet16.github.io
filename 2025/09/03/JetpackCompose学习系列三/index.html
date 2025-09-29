@@ -32,7 +32,12 @@ rememberCoroutineScope
 <li><a href="#1-%E7%8A%B6%E6%80%81%E8%BD%AC%E7%A7%BB%E5%9E%8B%E5%8A%A8%E7%94%BB-animateasstate">1. 状态转移型动画 animate*AsState</a></li>
 <li><a href="#2-%E6%B5%81%E7%A8%8B%E5%AE%9A%E5%88%B6%E5%9E%8B%E5%8A%A8%E7%94%BB-animatable">2. 流程定制型动画 animatable</a></li>
 <li><a href="#3-animateasstate-vs-animatable%E5%AF%B9%E6%AF%94%E8%A1%A8">3. animate*AsState vs Animatable（对比表）</a></li>
-<li><a href="#4-animationspace">4. AnimationSpace</a></li>
+<li><a href="#4-animationspace">4. AnimationSpace</a>
+<ul>
+<li><a href="#1-tweenspec-%E8%A1%A5%E9%97%B4%E5%8A%A8%E7%94%BB">1. TweenSpec – 补间动画</a></li>
+<li><a href="#2-snapspec">2. SnapSpec</a></li>
+</ul>
+</li>
 <li><a href="#%E5%8A%A8%E7%94%BB-api-%E9%80%89%E6%8B%A9">动画 API 选择</a></li>
 </ul>
 </li>
@@ -281,10 +286,103 @@ rememberCoroutineScope
 <li>需串行/并行/中断/等待完成/手势物理 → 使用 Animatable</li>
 </ul>
 <h3><a href="#4-animationspace" class="header-anchor">#</a><span id="4-animationspace">4. AnimationSpace</span></h3>
-<h3><a href="#动画-api-选择" class="header-anchor">#</a><span id="动画-api-选择">动画 API 选择</span></h3>
-<pre class="mermaid">
+<p><strong><code>AnimationSpace</code></strong> 定义动画“怎么动”——时间到进度的映射与动力学模型 <em>（时长、节奏曲线、弹性、重复等）</em>。是一个接口。</p>
+<pre class="mermaid">classDiagram-v2
+direction TB
 
-graph TB
+AnimationSpec &lt;|-- FiniteAnimationSpec
+AnimationSpec &lt;|-- InfiniteRepeatableSpec
+AnimationSpec &lt;|-- StartDelayAnimationSpec
+AnimationSpec &lt;|-- FloatAnimationSpec
+
+FiniteAnimationSpec &lt;|-- SpringSpec
+FiniteAnimationSpec &lt;|-- DurationBasedAnimationSpec
+FiniteAnimationSpec &lt;|-- RepeatableSpec
+
+DurationBasedAnimationSpec &lt;|-- KeyframesWithSplineSpec
+DurationBasedAnimationSpec &lt;|-- ArcAnimationSpec
+DurationBasedAnimationSpec &lt;|-- KeyframesSpec
+DurationBasedAnimationSpec &lt;|-- SnapSpec
+DurationBasedAnimationSpec &lt;|-- TweenSpec
+
+FloatAnimationSpec &lt;|-- FloatSpringSpec
+FloatAnimationSpec &lt;|-- FloatTweenSpec</pre>
+<h4><a href="#1-tweenspec-补间动画" class="header-anchor">#</a><span id="1-tweenspec-补间动画">1. TweenSpec – 补间动画</span></h4>
+<p>它的作用是定义一段 <strong>补间动画</strong> <em>(tween animation)</em> 的时长、延迟和缓动曲线。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// androidx.compose.animation.core.TweenSpec</span></span><br><span class="line"><span class="meta">@Immutable</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TweenSpec</span>&lt;<span class="type">T</span>&gt;(</span><br><span class="line">    <span class="keyword">val</span> durationMillis: <span class="built_in">Int</span> = DefaultDurationMillis,</span><br><span class="line">    <span class="keyword">val</span> delay: <span class="built_in">Int</span> = <span class="number">0</span>,</span><br><span class="line">    <span class="keyword">val</span> easing: Easing = FastOutSlowInEasing</span><br><span class="line">) : DurationBasedAnimationSpec&lt;T&gt; &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;V : AnimationVector&gt;</span> <span class="title">vectorize</span><span class="params">(converter: <span class="type">TwoWayConverter</span>&lt;<span class="type">T</span>, V&gt;)</span></span> =</span><br><span class="line">        VectorizedTweenSpec&lt;V&gt;(durationMillis, delay, easing)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">equals</span><span class="params">(other: <span class="type">Any</span>?)</span></span>: <span class="built_in">Boolean</span> =</span><br><span class="line">        <span class="keyword">if</span> (other <span class="keyword">is</span> TweenSpec&lt;*&gt;) &#123;</span><br><span class="line">            other.durationMillis == <span class="keyword">this</span>.durationMillis &amp;&amp;</span><br><span class="line">                other.delay == <span class="keyword">this</span>.delay &amp;&amp;</span><br><span class="line">                other.easing == <span class="keyword">this</span>.easing</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="literal">false</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">hashCode</span><span class="params">()</span></span>: <span class="built_in">Int</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> (durationMillis * <span class="number">31</span> + easing.hashCode()) * <span class="number">31</span> + delay</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面是 <code>TweenSpce</code> 的源码，可以看到它有三个入参：</p>
+<ul>
+<li>durationMillis，动画时长，默认 300 毫秒。</li>
+<li>delay，动画启动延时，默认为 0 不延时。</li>
+<li>easing，是动画曲线，是规划动画如何进行渐变运动的。</li>
+</ul>
+<p>可以通过自定义 <code>Easing</code> 来进行自定义曲线传入的是 0 到 1 的浮点型的动画完成度，返回经过自定义的动画实现完成度。下面列举了一些 <code>easing</code> 的常用类型:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// androidx.compose.animation.core.Easing</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> FastOutSlowInEasing: Easing = CubicBezierEasing(<span class="number">0.4f</span>, <span class="number">0.0f</span>, <span class="number">0.2f</span>, <span class="number">1.0f</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> LinearOutSlowInEasing: Easing = CubicBezierEasing(<span class="number">0.0f</span>, <span class="number">0.0f</span>, <span class="number">0.2f</span>, <span class="number">1.0f</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> FastOutLinearInEasing: Easing = CubicBezierEasing(<span class="number">0.4f</span>, <span class="number">0.0f</span>, <span class="number">1.0f</span>, <span class="number">1.0f</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> LinearEasing: Easing = Easing &#123; fraction -&gt; fraction &#125;</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>easing 常用类型</th>
+<th>描述</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LinearEasing</td>
+<td>匀速动画，速度恒定</td>
+<td>进度条、持续匀速滚动</td>
+</tr>
+<tr>
+<td>FastOutSlowInEasing</td>
+<td>快出慢入，开始快结束慢，符合 Material Design 的默认曲线</td>
+<td>交互动效默认曲线、按钮过渡、控件从 A 状态变更为 B 状态</td>
+</tr>
+<tr>
+<td>LinearOutSlowInEasing</td>
+<td>开始匀速，结束慢</td>
+<td>卡片落位、内容收尾减速、控件入场 <em>(从无变有)</em></td>
+</tr>
+<tr>
+<td>FastOutLinearInEasing</td>
+<td>开始快，结束匀速</td>
+<td>弹出进入、强调快速启动、控件出场 <em>(从有变无)</em></td>
+</tr>
+<tr>
+<td>CubicBezierEasing</td>
+<td>自定义三次贝塞尔曲线</td>
+<td>定制品牌动效曲线</td>
+</tr>
+<tr>
+<td>EaseIn</td>
+<td>缓入，动画从慢到快</td>
+<td>启动阶段需加速的元素</td>
+</tr>
+<tr>
+<td>EaseOut</td>
+<td>缓出，动画从快到慢</td>
+<td>结束阶段需减速的元素</td>
+</tr>
+<tr>
+<td>EaseInOut</td>
+<td>缓入缓出，动画先慢后快再慢</td>
+<td>需要自然过渡的位移/淡入淡出</td>
+</tr>
+</tbody>
+</table>
+<p>常用 <code>easing</code> 的使用示例：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">LinearProgressDemo</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> progress <span class="keyword">by</span> remember &#123; mutableStateOf(<span class="number">0f</span>) &#125;</span><br><span class="line">    <span class="keyword">val</span> animated <span class="keyword">by</span> animateFloatAsState(</span><br><span class="line">        targetValue = progress,</span><br><span class="line">        animationSpec = tween(durationMillis = <span class="number">600</span>, easing = LinearEasing),</span><br><span class="line">        label = <span class="string">&quot;progress&quot;</span></span><br><span class="line">    )</span><br><span class="line">    Column(modifier = Modifier.fillMaxWidth()) &#123;</span><br><span class="line">        LinearProgressIndicator(progress = animated, modifier = Modifier.fillMaxWidth())</span><br><span class="line">        Spacer(Modifier.height(<span class="number">12.</span>dp))</span><br><span class="line">        Row &#123;</span><br><span class="line">            Button(onClick = &#123; progress = <span class="number">0f</span> &#125;) &#123; Text(<span class="string">&quot;重置&quot;</span>) &#125;</span><br><span class="line">            Spacer(Modifier.width(<span class="number">12.</span>dp))</span><br><span class="line">            Button(onClick = &#123; progress = <span class="number">1f</span> &#125;) &#123; Text(<span class="string">&quot;满&quot;</span>) &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">FastOutSlowInStateChangeDemo</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> on <span class="keyword">by</span> remember &#123; mutableStateOf(<span class="literal">false</span>) &#125;</span><br><span class="line">    <span class="keyword">val</span> size <span class="keyword">by</span> animateDpAsState(</span><br><span class="line">        targetValue = <span class="keyword">if</span> (on) <span class="number">120.</span>dp <span class="keyword">else</span> <span class="number">60.</span>dp,</span><br><span class="line">        animationSpec = tween(<span class="number">300</span>, easing = FastOutSlowInEasing),</span><br><span class="line">        label = <span class="string">&quot;size&quot;</span></span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">val</span> color <span class="keyword">by</span> animateColorAsState(</span><br><span class="line">        targetValue = <span class="keyword">if</span> (on) Color(<span class="number">0xFF3F51B5</span>) <span class="keyword">else</span> Color(<span class="number">0xFFE91E63</span>),</span><br><span class="line">        animationSpec = tween(<span class="number">300</span>, easing = FastOutSlowInEasing),</span><br><span class="line">        label = <span class="string">&quot;color&quot;</span></span><br><span class="line">    )</span><br><span class="line">    Box(</span><br><span class="line">        modifier = Modifier</span><br><span class="line">            .size(size)</span><br><span class="line">            .clip(RoundedCornerShape(<span class="number">16.</span>dp))</span><br><span class="line">            .background(color)</span><br><span class="line">            .clickable &#123; on = !on &#125;</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">LinearOutSlowInEnterDemo</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> visible <span class="keyword">by</span> remember &#123; mutableStateOf(<span class="literal">false</span>) &#125;</span><br><span class="line">    <span class="keyword">val</span> alpha <span class="keyword">by</span> animateFloatAsState(</span><br><span class="line">        targetValue = <span class="keyword">if</span> (visible) <span class="number">1f</span> <span class="keyword">else</span> <span class="number">0f</span>,</span><br><span class="line">        animationSpec = tween(<span class="number">400</span>, easing = LinearOutSlowInEasing),</span><br><span class="line">        label = <span class="string">&quot;alpha&quot;</span></span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">val</span> offsetY <span class="keyword">by</span> animateDpAsState(</span><br><span class="line">        targetValue = <span class="keyword">if</span> (visible) <span class="number">0.</span>dp <span class="keyword">else</span> <span class="number">24.</span>dp,</span><br><span class="line">        animationSpec = tween(<span class="number">400</span>, easing = LinearOutSlowInEasing),</span><br><span class="line">        label = <span class="string">&quot;offsetY&quot;</span></span><br><span class="line">    )</span><br><span class="line">    Column &#123;</span><br><span class="line">        Button(onClick = &#123; visible = !visible &#125;) &#123; Text(<span class="keyword">if</span> (visible) <span class="string">&quot;隐藏&quot;</span> <span class="keyword">else</span> <span class="string">&quot;显示&quot;</span>) &#125;</span><br><span class="line">        Spacer(Modifier.height(<span class="number">12.</span>dp))</span><br><span class="line">        Box(</span><br><span class="line">            modifier = Modifier</span><br><span class="line">                .offset(y = offsetY)</span><br><span class="line">                .alpha(alpha)</span><br><span class="line">                .size(<span class="number">120.</span>dp)</span><br><span class="line">                .background(Color(<span class="number">0xFF4CAF50</span>))</span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">FastOutLinearInExitDemo</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> visible <span class="keyword">by</span> remember &#123; mutableStateOf(<span class="literal">true</span>) &#125;</span><br><span class="line">    <span class="keyword">val</span> alpha <span class="keyword">by</span> animateFloatAsState(</span><br><span class="line">        targetValue = <span class="keyword">if</span> (visible) <span class="number">1f</span> <span class="keyword">else</span> <span class="number">0f</span>,</span><br><span class="line">        animationSpec = tween(<span class="number">300</span>, easing = FastOutLinearInEasing),</span><br><span class="line">        label = <span class="string">&quot;alpha&quot;</span></span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">val</span> scale <span class="keyword">by</span> animateFloatAsState(</span><br><span class="line">        targetValue = <span class="keyword">if</span> (visible) <span class="number">1f</span> <span class="keyword">else</span> <span class="number">0.8f</span>,</span><br><span class="line">        animationSpec = tween(<span class="number">300</span>, easing = FastOutLinearInEasing),</span><br><span class="line">        label = <span class="string">&quot;scale&quot;</span></span><br><span class="line">    )</span><br><span class="line">    Column &#123;</span><br><span class="line">        Button(onClick = &#123; visible = !visible &#125;) &#123; Text(<span class="keyword">if</span> (visible) <span class="string">&quot;出场&quot;</span> <span class="keyword">else</span> <span class="string">&quot;重置&quot;</span>) &#125;</span><br><span class="line">        Spacer(Modifier.height(<span class="number">12.</span>dp))</span><br><span class="line">        Box(</span><br><span class="line">            modifier = Modifier</span><br><span class="line">                .graphicsLayer &#123; <span class="keyword">this</span>.alpha = alpha; <span class="keyword">this</span>.scaleX = scale; <span class="keyword">this</span>.scaleY = scale &#125;</span><br><span class="line">                .size(<span class="number">120.</span>dp)</span><br><span class="line">                .background(Color(<span class="number">0xFF03A9F4</span>))</span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>CubicBezierEasing</strong></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Immutable</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CubicBezierEasing</span>(</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">val</span> a: <span class="built_in">Float</span>,</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">val</span> b: <span class="built_in">Float</span>,</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">val</span> c: <span class="built_in">Float</span>,</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">val</span> d: <span class="built_in">Float</span></span><br><span class="line">) : Easing &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>三阶贝塞尔缓动曲线，用于定制动画完成度与实现完成度之间关系的。三阶贝塞尔曲线由 4 个点进行定位，但是通过上面的源码可以看到，只传入了两个点的坐标。另外两个点固定在了 <strong>(0，0)</strong>、<strong>(1,1)</strong>。<br>
+定制曲线可以使用网站：<a target="_blank" rel="noopener" href="https://cubic-bezier.com/">https://cubic-bezier.com/</a></p>
+<p><img src="/2025/09/03/JetpackCompose%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%89/icon_cubic_bezier_net.png" alt="attar"></p>
+<p>如上图所示，固定了两个点，可以拖动红蓝两个点进行曲线的定制，横坐标是时间完成度，纵坐标是动画完成度。曲线的斜度就是每一时刻动画的速度，所以越陡峭的位置动画越快</p>
+<h4><a href="#2-snapspec" class="header-anchor">#</a><span id="2-snapspec">2. SnapSpec</span></h4>
+<h3><a href="#动画-api-选择" class="header-anchor">#</a><span id="动画-api-选择">动画 API 选择</span></h3>
+<pre class="mermaid">graph TB
   A[开始] --> B{动画更像艺术作品吗，包含很多视觉元素，比如 SVG 或图片}
   B -->|是| C{是否是简单的 SVG，比如带微动效的图标}
   C -->|是| D[AnimatedVectorDrawable]
@@ -426,7 +524,7 @@ graph TB
 </ul>
 </li>
 </ul>
-</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2025-09-03</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Android/" title="Android">Android </a><i class="fa fa-tag"></i><a class="tag" href="/tags/Jetpack-Compose/" title="Jetpack Compose">Jetpack Compose </a><i class="fa fa-tag"></i><a class="tag" href="/tags/Effect/" title="Effect">Effect </a><i class="fa fa-tag"></i><a class="tag" href="/tags/Animation/" title="Animation">Animation </a><span class="leancloud_visitors"></span><span>大约4509个字, 15分钟1秒读完</span></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="" onclick="javascript:join_favorite()" ref="sidebar"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://puppet16.github.io/2025/09/03/JetpackCompose学习系列三/,Puppet,JetpackCompose学习系列三： 副作用与动画,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2025/09/12/JetpackCompose%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%9B%9B/" title="JetpackCompose学习系列四：与传统 View 系统的交互 和 自定义 View">上一篇</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2025/09/03/JetpackCompose%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%BA%8C/" title="JetpackCompose学习系列二： 状态订阅与自动更新">下一篇</a></li></ul></div><script src="/js/visitors.js"></script><a id="comments"></a><div id="vcomments" style="margin:0 30px;"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//cdn.jsdelivr.net/gh/xcss/valine@latest/dist/Valine.min.js"></script><script>var valine = new Valine({
+</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2025-09-03</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Android/" title="Android">Android </a><i class="fa fa-tag"></i><a class="tag" href="/tags/Jetpack-Compose/" title="Jetpack Compose">Jetpack Compose </a><i class="fa fa-tag"></i><a class="tag" href="/tags/Effect/" title="Effect">Effect </a><i class="fa fa-tag"></i><a class="tag" href="/tags/Animation/" title="Animation">Animation </a><span class="leancloud_visitors"></span><span>大约5609个字, 18分钟41秒读完</span></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="" onclick="javascript:join_favorite()" ref="sidebar"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://puppet16.github.io/2025/09/03/JetpackCompose学习系列三/,Puppet,JetpackCompose学习系列三： 副作用与动画,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2025/09/12/JetpackCompose%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%9B%9B/" title="JetpackCompose学习系列四：与传统 View 系统的交互 和 自定义 View">上一篇</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2025/09/03/JetpackCompose%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%BA%8C/" title="JetpackCompose学习系列二： 状态订阅与自动更新">下一篇</a></li></ul></div><script src="/js/visitors.js"></script><a id="comments"></a><div id="vcomments" style="margin:0 30px;"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//cdn.jsdelivr.net/gh/xcss/valine@latest/dist/Valine.min.js"></script><script>var valine = new Valine({
   el:'#vcomments',
   notify:false || false, 
   verify:false|| false, 
@@ -443,6 +541,14 @@ graph TB
     startOnLoad: true,
     securityLevel: 'loose',
     flowchart: { htmlLabels: true, useMaxWidth: true },
-    theme: 'default'
+    classDiagram: {
+      layout: 'elk',
+      elk: {
+        'elk.spacing.nodeNodeBetweenLayers': 200,
+        'elk.spacing.nodeNode': 80
+      }
+    },
+    theme: 'default',
+    logLevel: 1
   });
 }</script><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"debug":false,"model":{"scale":1,"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"left","hOffset":0,"vOffset":20},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"dialog":{"enable":false,"hitokoto":true}});</script></body></html>
