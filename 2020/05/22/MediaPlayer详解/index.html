@@ -530,7 +530,7 @@
 </table>
 <h1><a href="#三-状态转换" class="header-anchor">#</a><span id="三-状态转换">三、 状态转换</span></h1>
 <br>  
-<p><img src="/2020/05/22/MediaPlayer%E8%AF%A6%E8%A7%A3/mediaplayer.gif" alt></p>
+<p><img src="/2020/05/22/MediaPlayer%E8%AF%A6%E8%A7%A3/mediaplayer.gif" alt="mediaPlayer生命周期"></p>
 <p>上面这张状态转换图清晰的列举了主要的方法的调用时序，每种方法只能在一些特定的状态下使用，如果MediaPlayer的状态不正确则会引发<code>IllegalStateException</code>异常。</p>
 <p><font size="5"> <strong>Idle状态：</strong></font><br>
 当使用<code>new()</code>方法创建一个MediaPlayer对象或者调用了其<code>reset()</code>方法时，该MediaPlayer对象就会处于<code>idle</code>状态。在处于<code>Idle</code>状态时，调用<code>getCurrentPosition()</code>, <code>getDuration()</code>, <code>getVideoHeight()</code>,<code>getVideoWidth()</code>,<code>setAudioStreamType(int)</code>, <code>setLooping(boolean)</code>, <code>setVolume(float, float)</code>, <code>pause()</code>, <code>start()</code>, <code>stop()</code>, <code>seekTo(int)</code>, <code>prepare()</code>或者 <code>prepareAsync()</code>方法都会出现相应错误。<em>因为没有装裁资源嘛。</em><br>
@@ -642,4 +642,19 @@ MediaPlayer调用<code>setDataSource()</code>方法成功就进入Initialized状
   visitor:true,
   recordIP:true,
   avatar:'mm'
-})</script></div></div></div></div><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/add-bookmark.js"></script><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"debug":false,"model":{"scale":1,"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"left","hOffset":0,"vOffset":20},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"dialog":{"enable":false,"hitokoto":true}});</script></body></html>
+})</script></div></div></div></div><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/add-bookmark.js"></script><!-- Mermaid diagrams support--><script src="https://unpkg.com/mermaid@10.9.1/dist/mermaid.min.js"></script><script>if (window.mermaid) {
+  mermaid.initialize({
+    startOnLoad: true,
+    securityLevel: 'loose',
+    flowchart: { htmlLabels: true, useMaxWidth: true },
+    classDiagram: {
+      layout: 'elk',
+      elk: {
+        'elk.spacing.nodeNodeBetweenLayers': 200,
+        'elk.spacing.nodeNode': 80
+      }
+    },
+    theme: 'default',
+    logLevel: 1
+  });
+}</script><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"debug":false,"model":{"scale":1,"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"left","hOffset":0,"vOffset":20},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"dialog":{"enable":false,"hitokoto":true}});</script></body></html>

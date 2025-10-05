@@ -122,9 +122,9 @@
 <h3><a href="#1-协程-vm-参数" class="header-anchor">#</a><span id="1-协程-vm-参数">1. 协程 <code>VM</code> 参数</span></h3>
 <p>只需要将 <code>VM</code> 参数设置成 <strong><code>-Dkotlinx.coroutines.debug</code></strong>，当我们在 <code>log</code> 当中打印“<code>Thread.currentThread().name</code>”的时候，如果当前代码是运行在协程当中的，则打印信息就会携带协程的相关信息</p>
 <p>设置方法如下图所示，先打开<code>Run/Debug Configuration</code>窗口</p>
-<p><img src="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/kotlin_continuation_vm_params_set1.png" alt></p>
+<p><img src="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/kotlin_continuation_vm_params_set1.png" alt="Run/Debug Configuration窗口"></p>
 <p>然后在该窗口中的<code>VM</code>框中添加<code>-Dkotlinx.coroutines.debug</code>即可。</p>
-<p><img src="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/kotlin_continuation_vm_params_set2.png" alt></p>
+<p><img src="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/kotlin_continuation_vm_params_set2.png" alt="attar"></p>
 <p>添加成功后，示例代码如下：</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// 不必关心代码逻辑，关心输出结果即可</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    GlobalScope.launch(Dispatchers.IO) &#123;</span><br><span class="line">        println(<span class="string">&quot;Coroutine started:<span class="subst">$&#123;Thread.currentThread().name&#125;</span>&quot;</span>)</span><br><span class="line">        delay(<span class="number">1000L</span>)</span><br><span class="line">        println(<span class="string">&quot;Hello World!&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    println(<span class="string">&quot;After launch:<span class="subst">$&#123;Thread.currentThread().name&#125;</span>&quot;</span>)</span><br><span class="line">    Thread.sleep(<span class="number">2000L</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">输出结果：</span></span><br><span class="line"><span class="comment">After launch:main</span></span><br><span class="line"><span class="comment">Coroutine started:DefaultDispatcher-worker-1 @coroutine#1</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
 <p>当代码处于协程当中的时候，“<code>Thread.currentThread().name</code>”是会带上协程相关的信息的，这里的“<code>@coroutine#1</code>”就代表了 <code>launch</code> 创建的协程。</p>
@@ -132,13 +132,13 @@
 <p>除了设置 <code>VM</code> 参数之外，还可以直接使用 <code>IDE</code> 的调试功能，直接以打断点的形式来调试协程。具体来说，主要以下几个注意事项：<br>
 第一步，将 <code>Android Studio</code> 升级到最新版本，目前我使用的版本是 <code>Android Studio Dolphin | 2021.3.1 Patch 1</code> 版本。<br>
 第二步，确保 <code>IDE</code> 自带的 <code>Kotlin</code> 编译器插件版本号大于 <em>1.4</em> ，目前我使用的是 <em>1.7.20</em> 。</p>
-<p><img src="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/kotlin_continuation_debug_info_pre.png" alt></p>
+<p><img src="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/kotlin_continuation_debug_info_pre.png" alt="attar"></p>
 <p>第三步，为协程代码打断点，并且右击断点处，勾选 <code>suspend</code>、<code>All</code>，这代表了断点将会对协程生效。</p>
-<p><img src="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/kotlin_continuation_debug_info_point.png" alt></p>
+<p><img src="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/kotlin_continuation_debug_info_point.png" alt="attar"></p>
 <p>第四步，直接进行调试，当程序停留到断点处以后，就需要确保协程调试窗口已经被开启了，如下图所示，选择对应选项打开协程调试窗口</p>
-<p><img src="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/kotlin_continuation_debug_info_window.png" alt></p>
+<p><img src="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/kotlin_continuation_debug_info_window.png" alt="attar"></p>
 <p>最后是协程调试窗口：</p>
-<p><img src="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/kotlin_continuation_debug_info_final.png" alt></p>
+<p><img src="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/kotlin_continuation_debug_info_final.png" alt="attar"></p>
 <p>在这个专属的协程调试窗口当中，可以看到很多有用的协程信息，包括：</p>
 <ul>
 <li>当前协程的名字，这里是“<code>coroutine#1</code>”；</li>
@@ -227,7 +227,7 @@
 <li>另外一个不同点在返回值上，前者返回值类型是 <code>Job</code>，后者返回值类型是 <code>Deferred</code>。而 <code>async</code> 可以返回协程执行结果的原因也在于此</li>
 </ol>
 <p>这里，借用朱涛老师的动图，来演示程序整体的执行流程：</p>
-<p><img src="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/kotlin_continuation_flow.gif" alt></p>
+<p><img src="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/kotlin_continuation_flow.gif" alt="attar"></p>
 <h1><a href="#五-挂起函数kotlin协程的核心" class="header-anchor">#</a><span id="五-挂起函数kotlin协程的核心">五、挂起函数–Kotlin协程的核心</span></h1>
 <p><code>Kotlin</code> 协程最大的优势，就在于它的<strong>挂起函数</strong>。虽然很多编程语言都有协程的特性，但目前为止，只有 <code>Kotlin</code> 独树一帜，引入了“挂起函数”的概念。另外尽管有些语言的协程底层，也存在“挂起恢复”的概念，但是将这一概念直接暴露给开发者，直接用于修饰一个函数的，<code>Kotlin</code> 算是做了一种创新。</p>
 <h2><a href="#1-挂起函数优势" class="header-anchor">#</a><span id="1-挂起函数优势">1. 挂起函数优势</span></h2>
@@ -244,7 +244,7 @@
 <li>代码中的 <code>withContext(Dispatchers.IO)</code>，作用是控制协程执行的线程池</li>
 </ol>
 <p>实际上，挂起函数最神奇的地方，就在于它的挂起和恢复功能。从字面上看，<code>suspend</code> 这个词就是“挂起”的意思，而它既然能被挂起，自然就还可以被恢复。它们两个一般是成对出现的。</p>
-<p><img src="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/kotlin_con_user_flow.png" alt></p>
+<p><img src="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/kotlin_con_user_flow.png" alt="avar"></p>
 <p>如上图所示，描述了挂起函数整体的执行流程。</p>
 <p><strong>说明：</strong></p>
 <ul>
@@ -273,7 +273,7 @@
 <p>由以上代码可知，同样是 <code>Int</code> 作为参数，<code>Double</code> 作为返回值，有没有 <code>suspend</code> 修饰，它们两者的函数类型是不一样的。“<code>suspend (Int) -&gt; Double</code>”与“<code>(Int) -&gt; Double</code>”并不能互相赋值。因此，<code>Kotlin</code> 的函数类型，除了跟参数、返回值、接收者相关，还跟 <code>suspend</code> 相关。</p>
 <p><em>小<code>tips</code>： <code>Compose</code>中的 <code>@Composable</code> 跟 <code>suspend</code> 一样，也可以改变一个函数的类型</em></p>
 <p>那么，<code>suspend</code> 修饰的函数，到底会变成什么类型？将挂起函数与前面“回调地狱的代码”放在一起对比<br>
-<img src="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/kotlin_con_flow_1.webp" alt></p>
+<img src="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/kotlin_con_flow_1.webp" alt="avar"></p>
 <p>其实，<strong>挂起函数的本质，就是 <code>Callback</code></strong>。</p>
 <p>虽然写出来的挂起函数并没有任何 <code>Callback</code> 的逻辑，但是，当 <code>Kotlin</code> 编译器检测到 <code>suspend</code> 关键字修饰的函数以后，就会自动将挂起函数转换成带有 <code>CallBack</code> 的函数。</p>
 <p>将上面的挂起函数反编译成 <code>Java</code>代码如下：</p>
@@ -282,20 +282,20 @@
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// 代码段7</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Continuation</span>&lt;<span class="type">in T</span>&gt; &#123;</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//      相当于 CallBack的onSuccess   结果   </span></span><br><span class="line"><span class="comment">//                 ↓                 ↓</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">fun</span> <span class="title">resumeWith</span><span class="params">(result: <span class="type">Result</span>&lt;<span class="type">T</span>&gt;)</span></span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">CallBack</span> &#123;</span><br><span class="line">    void onSuccess(String response);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>根据以上定义，<code>Continuation</code> 本质上也就是一个带有泛型参数的 <code>CallBack</code>。这个“从挂起函数转换成 <code>CallBack</code> 函数”的过程，被叫做是 <code>CPS</code> 转换*（Continuation-Passing-Style Transformation）*。<code>Kotlin</code> 官方要将 <code>CallBack</code> 命名为 <code>Continuation</code> 的原因：<code>Continuation</code> 道出了它的实现原理。<br>
 以下动画用来演示一下挂起函数在 <code>CPS</code> 转换过程中，函数签名的变化：</p>
-<p><img src="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/kotlin_con_flow_2.gif" alt></p>
+<p><img src="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/kotlin_con_flow_2.gif" alt="avar"></p>
 <p>在上面 <code>CPS</code> 转换的过程中，函数的类型发生了变化：“<code>suspend ()-&gt;String</code>” 变成了 “<code>(Continuation)-&gt; Any?</code>”。<br>
 而这就意味着，如果在 <code>Java</code> 中访问一个 <code>Kotlin</code> 挂起函数 <code>getUserInfo()</code>，会看到 <code>Java</code> 里的 <code>getUserInfo()</code> 的类型是“<code>(Continuation)-&gt; Object</code>” <em>（即接收 <code>Continuation</code> 为参数，返回值是 <code>Object</code>）</em>。</p>
-<p><img src="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/kotlin_con_flow_5.png" alt></p>
+<p><img src="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/kotlin_con_flow_5.png" alt="avar"></p>
 <p><strong>那么 <code>Continuation</code> 到底是什么？</strong> 只需要把握住 <code>Continuation</code> 的词源 <code>Continue</code> 即可。<code>Continue</code> 是“继续”的意思，<code>Continuation</code> 则是“接下来要做的事情”。放到程序中，<code>Continuation</code> 就代表了，“程序继续运行下去需要执行的代码”，“接下来要执行的代码”，或者是“剩下的代码”。</p>
 <p>就以上面的代码为例，当程序运行 <code>getUserInfo()</code> 这个挂起函数的时候，它的“<code>Continuation</code>”则是下图红框的代码：</p>
-<p><img src="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/kotlin_con_flow_6.webp" alt></p>
+<p><img src="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/kotlin_con_flow_6.webp" alt="avar"></p>
 <p>这样理解了 <code>Continuation</code> 以后，<code>CPS</code> 也就容易理解了，它其实就是<strong>将程序接下来要执行的代码进行传递的一种模式</strong>。<br>
 <strong>而 <code>CPS</code> 转换，就是将原本的同步挂起函数转换成 <code>CallBack</code> 异步代码的过程</strong>。这个转换是编译器在背后做的，程序员对此并无感知。</p>
-<p><img src="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/kotlin_con_flow_3.gif" alt></p>
+<p><img src="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/kotlin_con_flow_3.gif" alt="avar"></p>
 <p>根据这个动图，可以看到当程序执行到 <code>getUserInfo() </code>的时候，剩下的未执行代码都被一起打包了起来，以 <code>Continuation</code> 的形式，传递给了 <code>getUserInfo()</code> 的 <code>Callback</code> 回调当中。当然，这种方式其实只是大致模拟了挂起函数的 <code>CPS</code> 转换过程，实际细节要远比这个复杂。</p>
 <p>以上就是 <code>Kotlin</code> 挂起函数的核心原理，它的挂起和恢复，其实也是通过 <code>CPS</code> 转换来实现的。</p>
 <p>再来看看之前的协程思维模型：</p>
-<p><img src="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/kotlin_con_flow_4.gif" alt></p>
+<p><img src="/2021/04/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%9D/kotlin_con_flow_4.gif" alt="avar"></p>
 <p>所以，协程之所以是非阻塞，是因为它支持“挂起和恢复”；<br>
 而挂起和恢复的能力，主要是源自于“挂起函数”；<br>
 而挂起函数是由 <code>CPS</code> 实现的，其中的 <code>Continuation</code>，本质上就是 <code>Callback</code>。</p>
@@ -323,4 +323,19 @@
   visitor:true,
   recordIP:true,
   avatar:'mm'
-})</script></div></div></div></div><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/add-bookmark.js"></script><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"debug":false,"model":{"scale":1,"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"left","hOffset":0,"vOffset":20},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"dialog":{"enable":false,"hitokoto":true}});</script></body></html>
+})</script></div></div></div></div><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/add-bookmark.js"></script><!-- Mermaid diagrams support--><script src="https://unpkg.com/mermaid@10.9.1/dist/mermaid.min.js"></script><script>if (window.mermaid) {
+  mermaid.initialize({
+    startOnLoad: true,
+    securityLevel: 'loose',
+    flowchart: { htmlLabels: true, useMaxWidth: true },
+    classDiagram: {
+      layout: 'elk',
+      elk: {
+        'elk.spacing.nodeNodeBetweenLayers': 200,
+        'elk.spacing.nodeNode': 80
+      }
+    },
+    theme: 'default',
+    logLevel: 1
+  });
+}</script><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"debug":false,"model":{"scale":1,"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"left","hOffset":0,"vOffset":20},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"dialog":{"enable":false,"hitokoto":true}});</script></body></html>

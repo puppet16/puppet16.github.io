@@ -74,7 +74,7 @@
 </ol>
 <h1><a href="#二-launcher解析" class="header-anchor">#</a><span id="二-launcher解析">二、 Launcher解析</span></h1>
 <p>Android手机开机解锁后会进入到桌面，而桌面也是一个App，名为<code>Launcher</code>，用户平常使用的应用都是通过点击这里面的图标打开的。源码位于：<strong><code>/ packages/apps/</code></strong>，该目录下存放一些系统应用，如电话、蓝牙、图库、日历等。如下图：<br>
-<img src="/2020/06/16/%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97%E4%B8%80/package_app.png" alt><br>
+<img src="/2020/06/16/%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97%E4%B8%80/package_app.png" alt="/packages/apps/"><br>
 可以看到Launcher程序有两个：<code>Launcher2</code>和<code>Launcher3</code>。</p>
 <table>
 <thead>
@@ -207,7 +207,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.android.server.am;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ActivityManagerService</span> <span class="keyword">extends</span> <span class="title class_">IActivityManager</span>.Stub</span><br><span class="line">        <span class="keyword">implements</span> <span class="title class_">Watchdog</span>.Monitor, BatteryStatsImpl.BatteryCallback &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title function_">startProcessLocked</span><span class="params">(...)</span> &#123;</span><br><span class="line">        ...</span><br><span class="line">        <span class="keyword">if</span> (entryPoint == <span class="literal">null</span>) entryPoint = <span class="string">&quot;android.app.ActivityThread&quot;</span>;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>由此可见<code>Zygote</code>孵化完成之后，会 <strong>invoke <code>ActivityThread#main</code></strong> 方法。接下来进程创建完毕，就该是我们APP的初始化了。</p>
 <p>总结其流程如下图：<br>
-<img src="/2020/06/16/%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97%E4%B8%80/Lanuch%E5%90%AF%E5%8A%A8%E6%97%B6%E5%BA%8F%E5%9B%BE.png" alt></p>
+<img src="/2020/06/16/%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97%E4%B8%80/Lanuch%E5%90%AF%E5%8A%A8%E6%97%B6%E5%BA%8F%E5%9B%BE.png" alt="Launcher启动流程"></p>
 <p><em>参考文章：</em><br>
 <em>1. <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/6885b4558ba2">https://www.jianshu.com/p/6885b4558ba2</a></em><br>
 <em>2. <a target="_blank" rel="noopener" href="https://juejin.im/post/5c6d0161f265da2dbc598603#heading-4">https://juejin.im/post/5c6d0161f265da2dbc598603#heading-4</a></em></p>
@@ -243,4 +243,19 @@
   visitor:true,
   recordIP:true,
   avatar:'mm'
-})</script></div></div></div></div><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/add-bookmark.js"></script><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"debug":false,"model":{"scale":1,"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"left","hOffset":0,"vOffset":20},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"dialog":{"enable":false,"hitokoto":true}});</script></body></html>
+})</script></div></div></div></div><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/add-bookmark.js"></script><!-- Mermaid diagrams support--><script src="https://unpkg.com/mermaid@10.9.1/dist/mermaid.min.js"></script><script>if (window.mermaid) {
+  mermaid.initialize({
+    startOnLoad: true,
+    securityLevel: 'loose',
+    flowchart: { htmlLabels: true, useMaxWidth: true },
+    classDiagram: {
+      layout: 'elk',
+      elk: {
+        'elk.spacing.nodeNodeBetweenLayers': 200,
+        'elk.spacing.nodeNode': 80
+      }
+    },
+    theme: 'default',
+    logLevel: 1
+  });
+}</script><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"debug":false,"model":{"scale":1,"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"left","hOffset":0,"vOffset":20},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"dialog":{"enable":false,"hitokoto":true}});</script></body></html>

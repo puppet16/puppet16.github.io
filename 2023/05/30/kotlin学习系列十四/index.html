@@ -135,7 +135,7 @@
 <h2><a href="#1-cps-转换背后的细节" class="header-anchor">#</a><span id="1-cps-转换背后的细节">1. CPS 转换背后的细节</span></h2>
 <p>在前面的章节里初步介绍过挂起函数的用法：挂起函数，只是比普通的函数多了 <code>suspend</code> 关键字。有了这个 <code>suspend</code> 关键字以后，<code>Kotlin</code> 编译器就会特殊对待这个函数，将其转换成一个带有 <code>Callback</code> 的函数，这里的 <code>Callback</code> 就是 <code>Continuation</code> 接口。</p>
 <p>而这个过程，称之为 <code>CPS</code> 转换：</p>
-<p><img src="/2023/05/30/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%8D%81%E5%9B%9B/suspend_1.gif" alt></p>
+<p><img src="/2023/05/30/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%8D%81%E5%9B%9B/suspend_1.gif" alt="image"></p>
 <p>以上的 <code>CPS</code> 转换过程中，函数的类型发生了变化：<code>suspend ()-&gt;String</code> 变成了 <code>(Continuation)-&gt; Any?</code>。这意味着，如果在 <code>Java</code> 里访问一个 <code>Kotlin</code> 挂起函数 <code>getUserInfo()</code>，会看到 <code>getUserInfo()</code> 的类型是 <code>(Continuation)-&gt; Object</code>，也就是：接收 <code>Continuation</code> 为参数，返回值是 <code>Object</code>。</p>
 <p>而在这里，函数签名的变化可以分为两个部分：<strong>函数参数</strong> 的变化和<strong>函数返回值</strong> 的变化。</p>
 <h3><a href="#1-cps-参数变化" class="header-anchor">#</a><span id="1-cps-参数变化">1. CPS 参数变化</span></h3>
@@ -151,10 +151,10 @@
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// 代码段3</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">suspend</span> <span class="function"><span class="keyword">fun</span> <span class="title">getUserInfo</span><span class="params">()</span></span>: String &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//                                  变化在这里</span></span><br><span class="line"><span class="comment">//                                     ↓</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">getUserInfo</span><span class="params">(cont: <span class="type">Continuation</span>)</span></span>: Any? &#123;&#125;</span><br></pre></td></tr></table></figure>
 <p>从上面的代码里，可以看到 <code>getUserInfo()</code> 的返回值类型从 <code>String</code> 变成“<code>Any?</code>”。<code>Kotlin</code> 官方之所以要弄这一套 <code>CPS</code> 转换规则，它必然是“<strong>等价转换</strong>”。也就是说，<code>String</code> 这个原本的返回值类型肯定不会消失，而是会换一种形式存在。</p>
 <p>只是 <code>String</code> 存在的形式，经过 <code>Kotlin</code> <strong>反编译成 <code>Java</code> 之后会丢失</strong>。如果直接在 <code>Java</code> 当中调用 <code>getUserInfo()</code> 的话，就会发现 <code>String</code> 这个返回值类型成为了 <code>Continuation</code> 的泛型类型。</p>
-<p><img src="/2023/05/30/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%8D%81%E5%9B%9B/suspend_2.jpeg" alt></p>
+<p><img src="/2023/05/30/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%8D%81%E5%9B%9B/suspend_2.jpeg" alt="image"></p>
 <p>所以，对于 <code>getUserInfo()</code> 这个方法，经过 <code>CPS</code> 转换后，它完整的函数签名应该是这样的：</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// 代码段4</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">suspend</span> <span class="function"><span class="keyword">fun</span> <span class="title">getUserInfo</span><span class="params">()</span></span>: String &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//                                变化在这里</span></span><br><span class="line"><span class="comment">//                                    ↓</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">getUserInfo</span><span class="params">(cont: <span class="type">Continuation</span>&lt;<span class="type">String</span>&gt;)</span></span>: Any? &#123;&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="/2023/05/30/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%8D%81%E5%9B%9B/suspend_3.gif" alt></p>
+<p><img src="/2023/05/30/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%8D%81%E5%9B%9B/suspend_3.gif" alt="image"></p>
 <p>挂起函数原本的返回值类型 <code>String</code> 只是挪了个地方，所以，<code>Kotlin</code> 编译器的 <code>CPS</code> 转换仍然是等价的转换。也就是：<code>suspend () -&gt; String</code> 转换成 <code>(Continuation) -&gt; Any?</code>。不过，<strong>这里的“<code>Any?</code>”又是干什么的呢？</strong></p>
 <p>其实，挂起函数经过 <code>CPS</code> 转换后，它的返回值有一个重要作用：<strong>标志该挂起函数有没有被挂起</strong>。这听起来有点绕：挂起函数，就是可以被挂起的函数，它还能不被挂起吗？<br>
 是的，挂起函数也能不被挂起。</p>
@@ -163,10 +163,10 @@
 <p>当 <code>getUserInfo()</code> 执行到 <code>withContext&#123;&#125;</code> 的时候，就会返回 <code>CoroutineSingletons.COROUTINE_SUSPENDED</code> 表示函数被挂起了。</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// 代码段6</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// suspend 修饰</span></span><br><span class="line"><span class="comment">// ↓</span></span><br><span class="line"><span class="keyword">suspend</span> <span class="function"><span class="keyword">fun</span> <span class="title">noSuspendFriendList</span><span class="params">(user: <span class="type">String</span>)</span></span>: String&#123;</span><br><span class="line">    <span class="comment">// 函数体跟普通函数一样</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;Tom, Jack&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>这个方法，它的方法体跟普通函数一样。它跟一般的挂起函数有个区别：在执行的时候，它并不会被挂起，因为它就是个普通函数。当写出以下这样的代码后，<code>IDE</code> 也会提示，<code>suspend</code> 是多余的：</p>
-<p><img src="/2023/05/30/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%8D%81%E5%9B%9B/suspend_4.jpeg" alt></p>
+<p><img src="/2023/05/30/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%8D%81%E5%9B%9B/suspend_4.jpeg" alt="image"></p>
 <p>也就是，当调用 <code>noSuspendFriendList()</code> 这个挂起函数的时候，它不会真正挂起，而是会直接返回 <code>String</code> 类型：“<code>no suspend</code>”。针对这样的挂起函数，你可以把它看作是<strong>伪挂起函数</strong> 。</p>
 <p>所以到这里，挂起函数经过 <code>CPS</code> 转换后，返回值变成“<code>Any?</code>”的原因也就清晰了：由于 <code>suspend</code> 修饰的函数，既可能返回 <code>CoroutineSingletons.COROUTINE_SUSPENDED</code>，也可能返回实际结果 “<code>no suspend</code>”，甚至可能返回 <code>null</code>，为了适配所有的可能性，<code>CPS</code> 转换后的函数返回值类型就只能是 <code>Any?</code> 了。</p>
-<p><img src="/2023/05/30/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%8D%81%E5%9B%9B/suspend_5.gif" alt></p>
+<p><img src="/2023/05/30/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%8D%81%E5%9B%9B/suspend_5.gif" alt="image"></p>
 <h2><a href="#2-挂起函数的反编译" class="header-anchor">#</a><span id="2-挂起函数的反编译">2. 挂起函数的反编译</span></h2>
 <p>通过查看 <code>Kotlin</code> 反编译后的字节码，可以帮助理解 <code>Kotlin</code> 的底层原理。</p>
 <p>不过，下面不会直接贴反编译后的代码，因为它的逻辑比较复杂。为了方便理解，接下来贴出的代码是用 <code>Kotlin</code> 翻译后大致等价的代码，改善了可读性，抹掉了不必要的细节。</p>
@@ -280,7 +280,7 @@
 <p><strong>方法二：</strong> 在<code>Java</code>中的<code>getContext()</code>中可考虑传入<code>EmptyCoroutineContext.INSTANCE</code></p>
 <h1><a href="#三-深入理解协程基础元素" class="header-anchor">#</a><span id="三-深入理解协程基础元素">三、深入理解协程基础元素</span></h1>
 <p><code>Kotlin</code> 协程的基础元素大致有这些：<code>Continuation</code>、<code>SafeContinuation</code>、<code>CoroutineContext</code>、<code>CombinedContext</code>、<code>CancellationException</code>、<code>intrinsics</code>。</p>
-<p><img src="/2023/05/30/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%8D%81%E5%9B%9B/coroutine_base_1.jpeg" alt></p>
+<p><img src="/2023/05/30/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%8D%81%E5%9B%9B/coroutine_base_1.jpeg" alt="image"></p>
 <p>其中的 <code>CoroutineContext</code>、<code>CancellationException</code> 前面已介绍过，另外的 <code>CombinedContext</code>，就是 <code>CoroutineContext</code> 的一个实现类，而 <code>SafeContinuation</code> 则是 <code>Continuation</code> 的实现类。<br>
 所以，在整个协程基础元素当中，最需要关心的，其实就是 <code>Continuation</code> 和 <code>intrinsics</code>。在 <code>intrinsics</code> 里，有一个重要的高阶函数 <code>suspendCoroutineUninterceptedOrReturn&#123;&#125;</code>。</p>
 <h2><a href="#1-continuation-的两种用法" class="header-anchor">#</a><span id="1-continuation-的两种用法">1. Continuation 的两种用法</span></h2>
@@ -453,4 +453,19 @@
   visitor:true,
   recordIP:true,
   avatar:'mm'
-})</script></div></div></div></div><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/add-bookmark.js"></script><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"debug":false,"model":{"scale":1,"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"left","hOffset":0,"vOffset":20},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"dialog":{"enable":false,"hitokoto":true}});</script></body></html>
+})</script></div></div></div></div><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/add-bookmark.js"></script><!-- Mermaid diagrams support--><script src="https://unpkg.com/mermaid@10.9.1/dist/mermaid.min.js"></script><script>if (window.mermaid) {
+  mermaid.initialize({
+    startOnLoad: true,
+    securityLevel: 'loose',
+    flowchart: { htmlLabels: true, useMaxWidth: true },
+    classDiagram: {
+      layout: 'elk',
+      elk: {
+        'elk.spacing.nodeNodeBetweenLayers': 200,
+        'elk.spacing.nodeNode': 80
+      }
+    },
+    theme: 'default',
+    logLevel: 1
+  });
+}</script><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"debug":false,"model":{"scale":1,"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"left","hOffset":0,"vOffset":20},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"dialog":{"enable":false,"hitokoto":true}});</script></body></html>

@@ -1,0 +1,554 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="Ltt"><title>JetpackCompose学习系列三： 副作用与动画 · Puppet</title><meta name="description" content="一、Effect 副作用和一些状态
+
+LaunchedEffect
+rememberUpdatedState
+SideEffect
+DisposableEffect
+produceState
+snapshotFlow
+rememberCoroutineScope
+
+
+二、Animation – an"><meta name="keywords" content="技术博客,Hexo,Android,Linux,HTML,Java"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.webp"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/insight.css"><link rel="stylesheet" href="/css/search.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><script src="/js/jquery.js"></script><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body><div class="page-top animated fadeInDown"><div class="nav"><li> <a href="/">首页</a></li><li> <a href="/archives">归档</a></li><li> <a href="/tags">标签</a></li><li> <a href="/about">关于</a></li></div><div class="information"><div class="nav_right_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"></div></div></div><div class="sidebar animated fadeInDown"><div class="sidebar-top"><div class="logo-title"><div class="title"><img src="/images/logo@2x.webp" style="width:220px;" alt="favicon"><h3 title=""><a href="/">Puppet</a></h3><div class="description"><p>心之所愿，无事不成。<br> Nothing is impossible to a willing heart.</p></div></div><ul class="social-links"><li><a target="_blank" rel="noopener" href="https://github.com/puppet16"><i class="fa fa-github"></i></a></li><li><a href="mailto:mailto:2542469086@qq.com"><i class="fa fa-envelope"></i></a></li><li><a target="_blank" rel="noopener" href="http://sighttp.qq.com/authd?IDKEY=http://sighttp.qq.com/authd?IDKEY="><i class="fa fa-qq"></i></a></li><li><a target="_blank" rel="noopener" href="https://zhihu.com/"><i class="fa fa-mortar-board"></i></a></li></ul></div></div><div class="footer"><div class="p"> <span> 全站CC-BY-SA-3.0 </span><i class="fa fa-star"></i><span> Ltt</span></div><div class="by_farbox"><span>Powered by </span><a href="https://hexo.io/zh-cn/" target="_blank">Hexo </a><span> & </span><span>Anatolo </span></div><div class="beian"></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>JetpackCompose学习系列三： 副作用与动画</a></h3></div><div class="post-content"><p><div class="toc">
+<!-- toc -->
+<ul>
+<li><a href="#%E4%B8%80-effect-%E5%89%AF%E4%BD%9C%E7%94%A8%E5%92%8C%E4%B8%80%E4%BA%9B%E7%8A%B6%E6%80%81">一、Effect 副作用和一些状态</a>
+<ul>
+<li><a href="#launchedeffect">LaunchedEffect</a></li>
+<li><a href="#rememberupdatedstate">rememberUpdatedState</a></li>
+<li><a href="#sideeffect">SideEffect</a></li>
+<li><a href="#disposableeffect">DisposableEffect</a></li>
+<li><a href="#producestate">produceState</a></li>
+<li><a href="#snapshotflow">snapshotFlow</a></li>
+<li><a href="#remembercoroutinescope">rememberCoroutineScope</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BA%8C-animation-animatable">二、Animation – animatable</a>
+<ul>
+<li><a href="#1-%E7%8A%B6%E6%80%81%E8%BD%AC%E7%A7%BB%E5%9E%8B%E5%8A%A8%E7%94%BB-animateasstate">1. 状态转移型动画 animate*AsState</a></li>
+<li><a href="#2-%E6%B5%81%E7%A8%8B%E5%AE%9A%E5%88%B6%E5%9E%8B%E5%8A%A8%E7%94%BB-animatable">2. 流程定制型动画 animatable</a></li>
+<li><a href="#3-animateasstate-vs-animatable%E5%AF%B9%E6%AF%94%E8%A1%A8">3. animate*AsState vs Animatable（对比表）</a></li>
+<li><a href="#4-animationspace">4. AnimationSpace</a>
+<ul>
+<li><a href="#1-tweenspec-%E8%A1%A5%E9%97%B4%E5%8A%A8%E7%94%BB">1. TweenSpec – 补间动画</a></li>
+<li><a href="#2-snapspec">2. SnapSpec</a></li>
+</ul>
+</li>
+<li><a href="#%E5%8A%A8%E7%94%BB-api-%E9%80%89%E6%8B%A9">动画 API 选择</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+</div>
+<h2><a href="#一-effect-副作用和一些状态" class="header-anchor">#</a><span id="一-effect-副作用和一些状态">一、Effect 副作用和一些状态</span></h2>
+<p>在 <code>Compose</code> 中，理想的可组合函数应该是“纯函数”：相同输入必然产生相同 UI，无外部可观察影响。然而实际业务中常需要做“UI 之外”的事：网络请求、注册/反注册监听、更新系统栏、埋点、导航等，这些就是“副作用”。</p>
+<h3><a href="#launchedeffect" class="header-anchor">#</a><span id="launchedeffect">LaunchedEffect</span></h3>
+<ul>
+<li>定义：
+<ul>
+<li>在组合中启动一个受生命周期管理的协程。</li>
+<li><code>key</code> 变化会取消旧协程并重启。</li>
+<li>当组合退出，协程会自动取消，不需要手动管理。</li>
+</ul>
+</li>
+<li>场景：
+<ul>
+<li>页面首次加载/参数变化时重新进行计算；</li>
+<li>收集 <code>Flow</code>，<code>Flow</code> 需要在协程内调用，而 <code>LaunchedEffect</code> 内的作用域就是协程。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">LaunchedEffect(<span class="built_in">Unit</span>) &#123;</span><br><span class="line">    <span class="comment">// 页面首次进入时，执行一次</span></span><br><span class="line">    viewModel.loadData()</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">UserScreen</span><span class="params">(userId: <span class="type">String</span>, repo: <span class="type">UserRepository</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> user <span class="keyword">by</span> remember &#123; mutableStateOf&lt;User?&gt;(<span class="literal">null</span>) &#125;</span><br><span class="line">    LaunchedEffect(userId) &#123;</span><br><span class="line">        user = repo.loadUser(userId) <span class="comment">// key 变化时自动取消并重启</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* ... 渲染 user ... */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>配合 <code>rememberUpdatedState</code>，避免为仅回调变化而重启协程：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">Timer</span><span class="params">(onTick: (<span class="type">Int</span>) -&gt; <span class="type">Unit</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> latestOnTick <span class="keyword">by</span> rememberUpdatedState(onTick)</span><br><span class="line">    LaunchedEffect(<span class="built_in">Unit</span>) &#123;</span><br><span class="line">        <span class="keyword">var</span> seconds = <span class="number">0</span></span><br><span class="line">        <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">            delay(<span class="number">1000</span>)</span><br><span class="line">            latestOnTick(++seconds) <span class="comment">// 始终拿到最新回调</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3><a href="#rememberupdatedstate" class="header-anchor">#</a><span id="rememberupdatedstate">rememberUpdatedState</span></h3>
+<ul>
+<li>定义：它会始终保存并暴露最新的值 <em>（state/回调）</em>，但是不会因为值变化而触发重新组合。</li>
+<li>典型用法：与 <code>LaunchedEffect</code>、<code>DisposableEffect</code> 搭配，避免过度重启或引用过期回调。</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">Player</span><span class="params">(onProgress: (<span class="type">Long</span>) -&gt; <span class="type">Unit</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> latest <span class="keyword">by</span> rememberUpdatedState(onProgress)</span><br><span class="line">    LaunchedEffect(<span class="built_in">Unit</span>) &#123;</span><br><span class="line">        <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">            delay(<span class="number">500</span>)</span><br><span class="line">            latest(SystemClock.elapsedRealtime())</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的代码中，使用 <code>rememberUpdatedState</code>，确保协程内部始终调用“最新”的 <code>onProgress</code>，避免陈旧闭包或为回调变化重启协程。</p>
+<p>下面是两个错误示例：</p>
+<p><strong>错误示例1：不使用 remember</strong></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">Player</span><span class="params">(onProgress: (<span class="type">Long</span>) -&gt; <span class="type">Unit</span>)</span></span> &#123;</span><br><span class="line">    LaunchedEffect(<span class="built_in">Unit</span>) &#123;</span><br><span class="line">        <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">            delay(<span class="number">500</span>)</span><br><span class="line">            onProgress(SystemClock.elapsedRealtime())</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的错误示例中，<code>LaunchedEffect(Unit)</code> 协程只会执行一次，<code>onProgress</code> 是捕获组合时的旧引用。如果父组件重组传入了新的回调，<code>Player</code> 会进行重组，但是 <code>LaunchedEffect</code> 使用的 <code>Unit</code> 作为 <code>Key</code> 所以不会重启，这也就导致即使 <code>onProgress</code> 变更，取的回调还是旧的。</p>
+<p><strong>错误示例2：使用普通 remember</strong></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">Player</span><span class="params">(onProgress: (<span class="type">Long</span>) -&gt; <span class="type">Unit</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> callback <span class="keyword">by</span> remember &#123; mutableStateOf(onProgress) &#125;</span><br><span class="line">    callback = onProgress <span class="comment">// 每次重组更新</span></span><br><span class="line"></span><br><span class="line">    LaunchedEffect(<span class="built_in">Unit</span>) &#123;</span><br><span class="line">        <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">            delay(<span class="number">500</span>)</span><br><span class="line">            callback(SystemClock.elapsedRealtime())</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>上面的代码中，<code>mutableStateOf</code> 一旦赋值就触发重组。这里每次重组都会 <code>callback = onProgress</code>，这会导致无意义的重组。但是虽然协程不会重启，但是使用的 <code>callback</code> 每次重组时都会更新到最新的 <code>onProgress</code>。</p>
+<p><strong>错误示例3： LaunchedEffect 的 key 使用传入的值</strong></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">PlayerB</span><span class="params">(onProgress: (<span class="type">Long</span>) -&gt; <span class="type">Unit</span>)</span></span> &#123;</span><br><span class="line">    LaunchedEffect(onProgress) &#123; <span class="comment">// key = onProgress</span></span><br><span class="line">        <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">            delay(<span class="number">500</span>)</span><br><span class="line">            onProgress(SystemClock.elapsedRealtime()) <span class="comment">// 每次重启后捕获最新 onProgress</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>行为：当父传入新的 onProgress（不同引用）时，旧协程会被取消，新的协程会重启并捕获新的回调。</p>
+<p><strong>四种操作的对比</strong></p>
+<table>
+<thead>
+<tr>
+<th>写法</th>
+<th style="text-align:right">能拿到最新回调？</th>
+<th style="text-align:right">是否会触发额外重组？</th>
+<th style="text-align:right">协程是否重启？</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>直接在 <code>LaunchedEffect(Unit)</code> 内直接调用 <code>onProgress</code></td>
+<td style="text-align:right"><strong>否</strong>（协程捕获启动时的引用）</td>
+<td style="text-align:right">否（但父改变参数仍会重组Composable本身）</td>
+<td style="text-align:right"><strong>否</strong>（key 未变，Effect 不重启，除非组合退出再进）</td>
+</tr>
+<tr>
+<td><code>LaunchedEffect(onProgress)</code></td>
+<td style="text-align:right"><strong>是</strong>（重启后捕获新引用）</td>
+<td style="text-align:right">否（不会因为保存回调本身触发）</td>
+<td style="text-align:right"><strong>是</strong>（key 变化时取消并重启）</td>
+</tr>
+<tr>
+<td><code>remember &#123; mutableStateOf &#125;</code> 且每次赋值</td>
+<td style="text-align:right"><strong>是</strong></td>
+<td style="text-align:right"><strong>会</strong>（赋值会触发 state 改变 -&gt; 重组）</td>
+<td style="text-align:right">否（Effect key 若为 Unit 则不重启）</td>
+</tr>
+<tr>
+<td><code>rememberUpdatedState(onProgress)</code> + <code>LaunchedEffect(Unit)</code></td>
+<td style="text-align:right"><strong>是</strong>（始终取到最新）</td>
+<td style="text-align:right"><strong>否</strong>（不会因值更新而触发重组）</td>
+<td style="text-align:right"><strong>否</strong>（协程只启动一次）</td>
+</tr>
+</tbody>
+</table>
+<p>所以，像这种只取值不需要重组的逻辑使用 <code>rememberUpdatedState </code> —— 它只更新值，不触发重组。</p>
+<h3><a href="#sideeffect" class="header-anchor">#</a><span id="sideeffect">SideEffect</span></h3>
+<ul>
+<li>定义：每次成功重组后在主线程执行的回调，适合把最新的 <code>Compose</code> 状态推送给非 <code>Compose</code> 内容 <em>（例如 ViewModel、日志、外部 SDK）</em>。</li>
+<li>场景：更新系统栏、与第三方非声明式控件交互的轻量状态同步。</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">SystemBars</span><span class="params">(color: <span class="type">Color</span>)</span></span> &#123;</span><br><span class="line">    SideEffect &#123;</span><br><span class="line">        <span class="comment">// 每次重组后把最新颜色同步到系统栏</span></span><br><span class="line">        setSystemBarsColor(color)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意：</p>
+<ol>
+<li><code>SideEffect</code> 不适合耗时操作，也不应做会触发再次重组的写入。</li>
+<li><code>SideEffect</code> 每次重组都会执行，而直接在 <code>Compose</code> 函数里写的代码也会每次在重组时执行，它们的不同点在于执行时机：
+<ul>
+<li>直接写代码会在每次组合时调用。</li>
+<li><code>SideEffect</code> 是在成功应用组合 <em>（Composition → Layout → Draw）</em> 之后的下一帧执行。换句话说：只有当 UI 确认更新到屏幕上之后，<code>Compose</code> 才会触发 <code>SideEffect</code> 回调。</li>
+</ul>
+</li>
+</ol>
+<h3><a href="#disposableeffect" class="header-anchor">#</a><span id="disposableeffect">DisposableEffect</span></h3>
+<ul>
+<li>定义：
+<ul>
+<li>在组合中执行一个副作用，并在 <em>退出组合 / key</em> 变化时自动清理。</li>
+<li>执行流程为：进入组合 → 执行副作用；key 变化或退出组合 → 调用 <code>onDispose</code> → 若是 key 变化，还会使用新 <code>key</code> 执行副作用</li>
+<li>key 变化：先调用旧 onDispose → 再执行新副作用</li>
+</ul>
+</li>
+<li>场景：注册 <code>BroadcastReceiver</code>、<code>Callback</code>、监听器等。</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">BatteryReceiver</span><span class="params">(context: <span class="type">Context</span>, onChanged: (<span class="type">Int</span>) -&gt; <span class="type">Unit</span>)</span></span> &#123;</span><br><span class="line">    DisposableEffect(<span class="built_in">Unit</span>) &#123;</span><br><span class="line">        <span class="keyword">val</span> receiver = <span class="keyword">object</span> : BroadcastReceiver() &#123;</span><br><span class="line">            <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onReceive</span><span class="params">(c: <span class="type">Context</span>, i: <span class="type">Intent</span>)</span></span> &#123;</span><br><span class="line">                onChanged(i.getIntExtra(BatteryManager.EXTRA_LEVEL, -<span class="number">1</span>))</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        context.registerReceiver(receiver, IntentFilter(Intent.ACTION_BATTERY_CHANGED))</span><br><span class="line">        onDispose &#123; context.unregisterReceiver(receiver) &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3><a href="#producestate" class="header-anchor">#</a><span id="producestate">produceState</span></h3>
+<ul>
+<li>定义：
+<ul>
+<li>在组合中开启协程生产一个 <code>State</code>，用于把挂起/回调结果转为 <code>Compose</code> 状态。</li>
+<li>进入组合时启动，在其退出组合时取消。</li>
+</ul>
+</li>
+<li>场景：一次性异步获取、轮询，或从 <code>callback</code> 适配到状态。</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">weather</span><span class="params">(city: <span class="type">String</span>, repo: <span class="type">WeatherRepo</span>)</span></span>: State&lt;Result&lt;Weather&gt;&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> produceState&lt;Result&lt;Weather&gt;&gt;(initialValue = Result.loading(), city) &#123;</span><br><span class="line">        value = runCatching &#123; repo.fetch(city) &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// androidx.compose.runtime.ProduceStateScope</span></span><br><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="type">&lt;T&gt;</span> <span class="title">produceState</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    initialValue: <span class="type">T</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">    key1: <span class="type">Any</span>?,</span></span></span><br><span class="line"><span class="params"><span class="function">    key2: <span class="type">Any</span>?,</span></span></span><br><span class="line"><span class="params"><span class="function">    key3: <span class="type">Any</span>?,</span></span></span><br><span class="line"><span class="params"><span class="function">    producer: <span class="type">suspend</span> <span class="type">ProduceStateScope</span>&lt;<span class="type">T</span>&gt;.() -&gt; <span class="type">Unit</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span>: State&lt;T&gt; &#123;</span><br><span class="line">    <span class="keyword">val</span> result = remember &#123; mutableStateOf(initialValue) &#125;</span><br><span class="line">    LaunchedEffect(key1, key2, key3) &#123;</span><br><span class="line">        ProduceStateScopeImpl(result, coroutineContext).producer()</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面代码为 <code>produceState</code> 某个重载函数的源码，可以看到，它其实就是 <code>rememeber</code> 、<code>mutableStateOf</code> 和 <code>LaunchedEffect</code> 有组合使用。</p>
+<h3><a href="#snapshotflow" class="header-anchor">#</a><span id="snapshotflow">snapshotFlow</span></h3>
+<ul>
+<li>定义：把对 <code>Compose</code> 状态的读取转换为冷 <code>Flow</code>；仅当读取到的值变化时发射，并与快照系统对齐。</li>
+<li>场景：对输入做防抖、节流，与 <code>Flow</code> 运算符协同。</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">DebouncedSearch</span><span class="params">(query: <span class="type">String</span>, onSearch: (<span class="type">String</span>) -&gt; <span class="type">Unit</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> latestOnSearch <span class="keyword">by</span> rememberUpdatedState(onSearch)</span><br><span class="line">    LaunchedEffect(<span class="built_in">Unit</span>) &#123;</span><br><span class="line">        snapshotFlow &#123; query &#125;</span><br><span class="line">            <span class="comment">// 防抖，尾触发，静默一段时间(ms) 后发一次</span></span><br><span class="line">            .debounce(<span class="number">300</span>)</span><br><span class="line">            <span class="comment">// 去重，只与上一次的值进行比较</span></span><br><span class="line">            .distinctUntilChanged()</span><br><span class="line">            .collect &#123; latestOnSearch(it) &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的代码：对搜索输入做“防抖+去重”，把 <code>Compose</code> 状态 <code>query</code> 转成 <code>Flow</code>，用户停止输入 <em>300ms</em> 且内容变化时才调用 <code>onSearch</code>，避免频繁请求。</p>
+<h3><a href="#remembercoroutinescope" class="header-anchor">#</a><span id="remembercoroutinescope">rememberCoroutineScope</span></h3>
+<ul>
+<li>定义：返回一个与当前组合生命周期绑定的 CoroutineScope。</li>
+<li>场景：点击事件、手势回调中按需启动协程，而不是依赖重组。</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">SaveButton</span><span class="params">(repo: <span class="type">Repo</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> scope = rememberCoroutineScope()</span><br><span class="line">    Button(onClick = &#123;</span><br><span class="line">        scope.launch(Dispatchers.IO) &#123; repo.save() &#125;</span><br><span class="line">    &#125;) &#123; Text(<span class="string">&quot;保存&quot;</span>) &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2><a href="#二-animation-animatable" class="header-anchor">#</a><span id="二-animation-animatable">二、Animation – animatable</span></h2>
+<h3><a href="#1-状态转移型动画-animateasstate" class="header-anchor">#</a><span id="1-状态转移型动画-animateasstate">1. 状态转移型动画 animate*AsState</span></h3>
+<p><code>animate*AsState</code> 类型的动画有很多，比如 <code>animateDpAsState</code> 、<code>animateColorAsState</code>、<code>animateOffsetAsState</code>、<code>animateFloatAsState</code> 、<code>animateIntAsState</code> 等。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 基本尺寸切换：animateDpAsState</span></span><br><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">SizeAnimDemo</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> big <span class="keyword">by</span> remember &#123; mutableStateOf(<span class="literal">false</span>) &#125;</span><br><span class="line">    <span class="keyword">val</span> size <span class="keyword">by</span> animateDpAsState(</span><br><span class="line">        targetValue = <span class="keyword">if</span> (big) <span class="number">120.</span>dp <span class="keyword">else</span> <span class="number">60.</span>dp,</span><br><span class="line">        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow),</span><br><span class="line">        label = <span class="string">&quot;size&quot;</span></span><br><span class="line">    )</span><br><span class="line">    Box(</span><br><span class="line">        modifier = Modifier</span><br><span class="line">            .size(size)</span><br><span class="line">            .background(Color(<span class="number">0xFF4CAF50</span>))</span><br><span class="line">            .clickable &#123; big = !big &#125;</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 颜色切换：animateColorAsState</span></span><br><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">ColorAnimDemo</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> on <span class="keyword">by</span> remember &#123; mutableStateOf(<span class="literal">false</span>) &#125;</span><br><span class="line">    <span class="keyword">val</span> bg <span class="keyword">by</span> animateColorAsState(</span><br><span class="line">        targetValue = <span class="keyword">if</span> (on) Color(<span class="number">0xFF3F51B5</span>) <span class="keyword">else</span> Color(<span class="number">0xFFE91E63</span>),</span><br><span class="line">        animationSpec = tween(<span class="number">600</span>, easing = FastOutSlowInEasing),</span><br><span class="line">        label = <span class="string">&quot;bg&quot;</span></span><br><span class="line">    )</span><br><span class="line">    Box(</span><br><span class="line">        modifier = Modifier</span><br><span class="line">            .size(<span class="number">120.</span>dp)</span><br><span class="line">            .background(bg)</span><br><span class="line">            .clickable &#123; on = !on &#125;</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 透明度与旋转：animateFloatAsState</span></span><br><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">AlphaRotateDemo</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> visible <span class="keyword">by</span> remember &#123; mutableStateOf(<span class="literal">true</span>) &#125;</span><br><span class="line">    <span class="keyword">val</span> alpha <span class="keyword">by</span> animateFloatAsState(</span><br><span class="line">        targetValue = <span class="keyword">if</span> (visible) <span class="number">1f</span> <span class="keyword">else</span> <span class="number">0f</span>,</span><br><span class="line">        animationSpec = tween(<span class="number">400</span>),</span><br><span class="line">        label = <span class="string">&quot;alpha&quot;</span></span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">val</span> rotation <span class="keyword">by</span> animateFloatAsState(</span><br><span class="line">        targetValue = <span class="keyword">if</span> (visible) <span class="number">0f</span> <span class="keyword">else</span> <span class="number">180f</span>,</span><br><span class="line">        animationSpec = spring(stiffness = Spring.StiffnessMedium),</span><br><span class="line">        label = <span class="string">&quot;rotation&quot;</span></span><br><span class="line">    )</span><br><span class="line">    Box(</span><br><span class="line">        modifier = Modifier</span><br><span class="line">            .size(<span class="number">100.</span>dp)</span><br><span class="line">            .graphicsLayer &#123; <span class="keyword">this</span>.alpha = alpha; <span class="keyword">this</span>.rotationZ = rotation &#125;</span><br><span class="line">            .background(Color(<span class="number">0xFFFFC107</span>))</span><br><span class="line">            .clickable &#123; visible = !visible &#125;</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 位移动画：animateOffsetAsState</span></span><br><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">OffsetAnimDemo</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> moved <span class="keyword">by</span> remember &#123; mutableStateOf(<span class="literal">false</span>) &#125;</span><br><span class="line">    <span class="keyword">val</span> offset <span class="keyword">by</span> animateOffsetAsState(</span><br><span class="line">        targetValue = <span class="keyword">if</span> (moved) Offset(<span class="number">120f</span>, <span class="number">120f</span>) <span class="keyword">else</span> Offset.Zero,</span><br><span class="line">        animationSpec = tween(<span class="number">700</span>),</span><br><span class="line">        label = <span class="string">&quot;offset&quot;</span></span><br><span class="line">    )</span><br><span class="line">    Box(</span><br><span class="line">        modifier = Modifier</span><br><span class="line">            .size(<span class="number">160.</span>dp)</span><br><span class="line">            .background(Color(<span class="number">0xFFEEEEEE</span>))</span><br><span class="line">            .clickable &#123; moved = !moved &#125;</span><br><span class="line">    ) &#123;</span><br><span class="line">        Box(</span><br><span class="line">            modifier = Modifier</span><br><span class="line">                .offset &#123; IntOffset(offset.x.roundToInt(), offset.y.roundToInt()) &#125;</span><br><span class="line">                .size(<span class="number">50.</span>dp)</span><br><span class="line">                .background(Color.Red, CircleShape)</span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 数字平滑过渡：animateIntAsState</span></span><br><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">CountAnimDemo</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> count <span class="keyword">by</span> remember &#123; mutableStateOf(<span class="number">0</span>) &#125;</span><br><span class="line">    <span class="keyword">val</span> displayCount <span class="keyword">by</span> animateIntAsState(</span><br><span class="line">        targetValue = count,</span><br><span class="line">        animationSpec = tween(<span class="number">300</span>),</span><br><span class="line">        label = <span class="string">&quot;count&quot;</span></span><br><span class="line">    )</span><br><span class="line">    Row(verticalAlignment = Alignment.CenterVertically) &#123;</span><br><span class="line">        Button(onClick = &#123; count++ &#125;) &#123; Text(<span class="string">&quot;加&quot;</span>) &#125;</span><br><span class="line">        Spacer(Modifier.width(<span class="number">12.</span>dp))</span><br><span class="line">        Text(text = <span class="string">&quot;<span class="variable">$displayCount</span>&quot;</span>, fontSize = <span class="number">32.</span>sp)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>上面的一些例子中使用了一些 <code>animate*AsState</code> 类型动画的具体方法，以 <code>animateDpAsState</code> 举例。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// androidx.compose.animation.core.AnimateAsStateKt</span></span><br><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">animateDpAsState</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    targetValue: <span class="type">Dp</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">    animationSpec: <span class="type">AnimationSpec</span>&lt;<span class="type">Dp</span>&gt; = dpDefaultSpring,</span></span></span><br><span class="line"><span class="params"><span class="function">    label: <span class="type">String</span> = <span class="string">&quot;DpAnimation&quot;</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">    finishedListener: ((<span class="type">Dp</span>) -&gt; <span class="type">Unit</span>)? = <span class="literal">null</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span>: State&lt;Dp&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> animateValueAsState(</span><br><span class="line">        targetValue,</span><br><span class="line">        Dp.VectorConverter,</span><br><span class="line">        animationSpec,</span><br><span class="line">        label = label,</span><br><span class="line">        finishedListener = finishedListener</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="type">&lt;T, V : AnimationVector&gt;</span> <span class="title">animateValueAsState</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    targetValue: <span class="type">T</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">    typeConverter: <span class="type">TwoWayConverter</span>&lt;<span class="type">T</span>, V&gt;,</span></span></span><br><span class="line"><span class="params"><span class="function">    animationSpec: <span class="type">AnimationSpec</span>&lt;<span class="type">T</span>&gt; = remember &#123; spring()</span></span> &#125;,</span><br><span class="line">    visibilityThreshold: T? = <span class="literal">null</span>,</span><br><span class="line">    label: String = <span class="string">&quot;ValueAnimation&quot;</span>,</span><br><span class="line">    finishedListener: ((T) -&gt; <span class="built_in">Unit</span>)? = <span class="literal">null</span></span><br><span class="line">): State&lt;T&gt; &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> toolingOverride = remember &#123; mutableStateOf&lt;State&lt;T&gt;?&gt;(<span class="literal">null</span>) &#125;</span><br><span class="line">    <span class="keyword">val</span> animatable = remember &#123; Animatable(targetValue, typeConverter, visibilityThreshold, label) &#125;</span><br><span class="line">    <span class="keyword">val</span> listener <span class="keyword">by</span> rememberUpdatedState(finishedListener)</span><br><span class="line">    <span class="keyword">val</span> animSpec: AnimationSpec&lt;T&gt; <span class="keyword">by</span> rememberUpdatedState(</span><br><span class="line">        animationSpec.run &#123;</span><br><span class="line">            <span class="keyword">if</span> (visibilityThreshold != <span class="literal">null</span> &amp;&amp; <span class="keyword">this</span> <span class="keyword">is</span> SpringSpec &amp;&amp;</span><br><span class="line">                <span class="keyword">this</span>.visibilityThreshold != visibilityThreshold</span><br><span class="line">            ) &#123;</span><br><span class="line">                spring(dampingRatio, stiffness, visibilityThreshold)</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">this</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">val</span> channel = remember &#123; Channel&lt;T&gt;(Channel.CONFLATED) &#125;</span><br><span class="line">    <span class="comment">// ....</span></span><br><span class="line">    <span class="keyword">return</span> toolingOverride.value ?: animatable.asState()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从上面的源码可以看到，该方法就是将传入的 <code>targetValue</code> 使用 <code>State</code> 进行封装，而 <code>animateValueAsState</code> 里使用了 <code>remember</code> 进行了缓存。也就是说，<code>animate*AsState</code> 类型的动画有如下特性：</p>
+<ul>
+<li>不需要使用 <code>mutableStateOf</code> 进行封装，已自行进行 <code>State</code> 的封装</li>
+<li>不需要使用 <code>remember</code> 进行缓存，内部已使用 <code>remember</code> 确保不会在重组时重新初始化</li>
+<li>返回结果是 <code>State</code> 类型，因此不能被 <code>var</code> 声明</li>
+</ul>
+<p><code>animate*AsState</code> 会在 <code>targetValue</code> 变化时启动过渡，它本身不改变值，必须由“外部状态”驱动 <code>targetValue</code> 的新值 <em>（触发重组）</em>。<br>
+<strong><code>targetValue</code>即设置了初始状态下的初始值，也设置了动画过程中的目标值。</strong> 只有当新旧 <code>targetValue</code> 不相等时才会启动动画。<br>
+结论，<code>animateAsState</code> 适合“值变化即过渡”的声明式场景。</p>
+<h3><a href="#2-流程定制型动画-animatable" class="header-anchor">#</a><span id="2-流程定制型动画-animatable">2. 流程定制型动画 animatable</span></h3>
+<p>由上面 <code>animateValueAsState</code> 的源码可以看到，<code>animate*AsState</code> 是对 <code>animatable</code> 的封装，用于提供值变化即过渡场景的动画实现，调用简单。</p>
+<p><code>animatable</code> 传入的值，默认是 <code>float</code> 类型，若想传入其它类型，比如颜色值、<code>Dp</code> 等，需要往里传入一个转换器，用于告诉 <code>animatable</code> 如何将传入的值与 <code>float</code> 互相转换，该转换器实现接口 <code>TwoWayConverter</code>。官方已提供一部分的转换器：<code>Dp.VectorConverter</code>、<code>Color.VectorConverter</code> 等。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// androidx.compose.animation.core.TwoWayConverter</span></span><br><span class="line"><span class="keyword">val</span> Dp.Companion.VectorConverter: TwoWayConverter&lt;Dp, AnimationVector1D&gt;</span><br><span class="line">    <span class="keyword">get</span>() = DpToVector</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> Size.Companion.VectorConverter: TwoWayConverter&lt;Size, AnimationVector2D&gt;</span><br><span class="line">    <span class="keyword">get</span>() = SizeToVector</span><br><span class="line"></span><br><span class="line"><span class="comment">// androidx.compose.animation.ColorVectorConverterKt</span></span><br><span class="line"><span class="keyword">val</span> Color.Companion.VectorConverter:</span><br><span class="line">        (colorSpace: ColorSpace) -&gt; TwoWayConverter&lt;Color, AnimationVector4D&gt;</span><br><span class="line">    <span class="keyword">get</span>() = ColorToVector</span><br></pre></td></tr></table></figure>
+<p>通过上面部分源码可见，转换器转换的是某个类型和 <code>AnimationVector1D</code>、<code>AnimationVector4D</code> 等的转换，其中 <code>AnimationVector</code> 后面的 <code>1D</code>、<code>2D</code>、<code>3D</code>、<code>4D</code> 等是维度的意思，代表几维。其中 <code>Dp</code> 只是一维，<code>Size</code> 是二维的，而颜色是四维的。最高就提供四维。 <code>AnimationVector</code> 里的内部还是使用的 <code>float</code> 存储的值。</p>
+<p><code>animatable</code> 动画其实就是操纵传入的起始值的渐变过程。该过程通过<code>animateTo()</code> 函数实现。该函数是协程函数。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">ColorAnim</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> scope = rememberCoroutineScope()</span><br><span class="line">    <span class="keyword">val</span> color = remember &#123; Animatable(Color(<span class="number">0xFF4CAF50</span>)) &#125;</span><br><span class="line">    Box(</span><br><span class="line">        Modifier</span><br><span class="line">            .size(<span class="number">80.</span>dp)</span><br><span class="line">            .background(color.value)</span><br><span class="line">            .clickable &#123;</span><br><span class="line">                scope.launch &#123;</span><br><span class="line">                    <span class="keyword">val</span> target = <span class="keyword">if</span> (color.value == Color(<span class="number">0xFF4CAF50</span>)) Color(<span class="number">0xFF3F51B5</span>) <span class="keyword">else</span> Color(<span class="number">0xFF4CAF50</span>)</span><br><span class="line">                    color.animateTo(target, animationSpec = tween(<span class="number">600</span>))</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的示例功能为，点击方块时，在 <em>600ms</em> 内执行一次两种颜色之间的补间切换。</p>
+<p><code>animatable</code> 动画另一个设置目标值的方法为 <code>snapTo()</code>，它的调用与 <code>animateTo()</code> 完全一致，只是 <code>snapTo()</code> 是没有动画过度的，直接变为设置的目标值。</p>
+<h3><a href="#3-animateasstate-vs-animatable对比表" class="header-anchor">#</a><span id="3-animateasstate-vs-animatable对比表">3. animate*AsState vs Animatable（对比表）</span></h3>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>animate*AsState</th>
+<th>Animatable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>定位/范式</td>
+<td>声明式：值变即过渡</td>
+<td>命令式：主动发起/编排动画</td>
+</tr>
+<tr>
+<td>触发条件</td>
+<td>targetValue 变化自动启动</td>
+<td>调用 <code>animateTo</code>/<code>animateDecay</code>/<code>snapTo</code>/<code>stop</code></td>
+</tr>
+<tr>
+<td>返回类型</td>
+<td><code>State&lt;T&gt;</code>（值变更触发重组）</td>
+<td><code>Animatable&lt;T, V&gt;</code>，读 <code>anim.value</code></td>
+</tr>
+<tr>
+<td>控制能力</td>
+<td>低；不可暂停/恢复/等待</td>
+<td>高；可暂停、停止、打断、限界、编排</td>
+</tr>
+<tr>
+<td>串行/并行动画</td>
+<td>不支持显式编排</td>
+<td>协程中自然编排，支持 <code>await</code> 完成</td>
+</tr>
+<tr>
+<td>中断行为</td>
+<td>新 target 覆盖旧动画继续过渡</td>
+<td><code>stop()</code>/<code>snapTo()</code> 精确控制</td>
+</tr>
+<tr>
+<td>与手势/物理</td>
+<td>不擅长</td>
+<td>强：衰减、弹簧、速度、边界、回弹</td>
+</tr>
+<tr>
+<td>初始化</td>
+<td>由 <code>targetValue</code> 推导</td>
+<td><code>Animatable(initial)</code> 或 <code>snapTo()</code></td>
+</tr>
+<tr>
+<td>类型支持</td>
+<td><code>Float/Int/Dp/Color/Offset/...</code></td>
+<td>自定义类型配 <code>TwoWayConverter</code></td>
+</tr>
+<tr>
+<td>使用复杂度</td>
+<td>低</td>
+<td>较高（需协程/时序）</td>
+</tr>
+<tr>
+<td>典型场景</td>
+<td>颜色/尺寸/透明度等简单过渡</td>
+<td>拖拽惯性、回弹、按钮弹跳、序列动画</td>
+</tr>
+<tr>
+<td>不适合</td>
+<td>需要流程控制/手势物理</td>
+<td>仅做极简过渡（代码啰嗦）</td>
+</tr>
+<tr>
+<td>常用 API</td>
+<td><code>animateFloatAsState</code> 等</td>
+<td><code>animateTo</code>、<code>animateDecay</code>、<code>snapTo</code>、<code>stop</code>、<code>updateBounds</code></td>
+</tr>
+<tr>
+<td>重组特性</td>
+<td>每帧更新触发使用处重组</td>
+<td>读 <code>anim.value</code> 的 Composable 重组</td>
+</tr>
+</tbody>
+</table>
+<p><strong>简要选型</strong></p>
+<ul>
+<li>仅需“值变即过渡”→ 使用 animate*AsState</li>
+<li>需串行/并行/中断/等待完成/手势物理 → 使用 Animatable</li>
+</ul>
+<h3><a href="#4-animationspace" class="header-anchor">#</a><span id="4-animationspace">4. AnimationSpace</span></h3>
+<p><strong><code>AnimationSpace</code></strong> 定义动画“怎么动”——时间到进度的映射与动力学模型 <em>（时长、节奏曲线、弹性、重复等）</em>。是一个接口。</p>
+<pre class="mermaid">classDiagram-v2
+direction TB
+
+AnimationSpec &lt;|-- FiniteAnimationSpec
+AnimationSpec &lt;|-- InfiniteRepeatableSpec
+AnimationSpec &lt;|-- StartDelayAnimationSpec
+AnimationSpec &lt;|-- FloatAnimationSpec
+
+FiniteAnimationSpec &lt;|-- SpringSpec
+FiniteAnimationSpec &lt;|-- DurationBasedAnimationSpec
+FiniteAnimationSpec &lt;|-- RepeatableSpec
+
+DurationBasedAnimationSpec &lt;|-- KeyframesWithSplineSpec
+DurationBasedAnimationSpec &lt;|-- ArcAnimationSpec
+DurationBasedAnimationSpec &lt;|-- KeyframesSpec
+DurationBasedAnimationSpec &lt;|-- SnapSpec
+DurationBasedAnimationSpec &lt;|-- TweenSpec
+
+FloatAnimationSpec &lt;|-- FloatSpringSpec
+FloatAnimationSpec &lt;|-- FloatTweenSpec</pre>
+<h4><a href="#1-tweenspec-补间动画" class="header-anchor">#</a><span id="1-tweenspec-补间动画">1. TweenSpec – 补间动画</span></h4>
+<p>它的作用是定义一段 <strong>补间动画</strong> <em>(tween animation)</em> 的时长、延迟和缓动曲线。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// androidx.compose.animation.core.TweenSpec</span></span><br><span class="line"><span class="meta">@Immutable</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TweenSpec</span>&lt;<span class="type">T</span>&gt;(</span><br><span class="line">    <span class="keyword">val</span> durationMillis: <span class="built_in">Int</span> = DefaultDurationMillis,</span><br><span class="line">    <span class="keyword">val</span> delay: <span class="built_in">Int</span> = <span class="number">0</span>,</span><br><span class="line">    <span class="keyword">val</span> easing: Easing = FastOutSlowInEasing</span><br><span class="line">) : DurationBasedAnimationSpec&lt;T&gt; &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;V : AnimationVector&gt;</span> <span class="title">vectorize</span><span class="params">(converter: <span class="type">TwoWayConverter</span>&lt;<span class="type">T</span>, V&gt;)</span></span> =</span><br><span class="line">        VectorizedTweenSpec&lt;V&gt;(durationMillis, delay, easing)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">equals</span><span class="params">(other: <span class="type">Any</span>?)</span></span>: <span class="built_in">Boolean</span> =</span><br><span class="line">        <span class="keyword">if</span> (other <span class="keyword">is</span> TweenSpec&lt;*&gt;) &#123;</span><br><span class="line">            other.durationMillis == <span class="keyword">this</span>.durationMillis &amp;&amp;</span><br><span class="line">                other.delay == <span class="keyword">this</span>.delay &amp;&amp;</span><br><span class="line">                other.easing == <span class="keyword">this</span>.easing</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="literal">false</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">hashCode</span><span class="params">()</span></span>: <span class="built_in">Int</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> (durationMillis * <span class="number">31</span> + easing.hashCode()) * <span class="number">31</span> + delay</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面是 <code>TweenSpce</code> 的源码，可以看到它有三个入参：</p>
+<ul>
+<li>durationMillis，动画时长，默认 300 毫秒。</li>
+<li>delay，动画启动延时，默认为 0 不延时。</li>
+<li>easing，是动画曲线，是规划动画如何进行渐变运动的。</li>
+</ul>
+<p>可以通过自定义 <code>Easing</code> 来进行自定义曲线传入的是 0 到 1 的浮点型的动画完成度，返回经过自定义的动画实现完成度。下面列举了一些 <code>easing</code> 的常用类型:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// androidx.compose.animation.core.Easing</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> FastOutSlowInEasing: Easing = CubicBezierEasing(<span class="number">0.4f</span>, <span class="number">0.0f</span>, <span class="number">0.2f</span>, <span class="number">1.0f</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> LinearOutSlowInEasing: Easing = CubicBezierEasing(<span class="number">0.0f</span>, <span class="number">0.0f</span>, <span class="number">0.2f</span>, <span class="number">1.0f</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> FastOutLinearInEasing: Easing = CubicBezierEasing(<span class="number">0.4f</span>, <span class="number">0.0f</span>, <span class="number">1.0f</span>, <span class="number">1.0f</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> LinearEasing: Easing = Easing &#123; fraction -&gt; fraction &#125;</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>easing 常用类型</th>
+<th>描述</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LinearEasing</td>
+<td>匀速动画，速度恒定</td>
+<td>进度条、持续匀速滚动</td>
+</tr>
+<tr>
+<td>FastOutSlowInEasing</td>
+<td>快出慢入，开始快结束慢，符合 Material Design 的默认曲线</td>
+<td>交互动效默认曲线、按钮过渡、控件从 A 状态变更为 B 状态</td>
+</tr>
+<tr>
+<td>LinearOutSlowInEasing</td>
+<td>开始匀速，结束慢</td>
+<td>卡片落位、内容收尾减速、控件入场 <em>(从无变有)</em></td>
+</tr>
+<tr>
+<td>FastOutLinearInEasing</td>
+<td>开始快，结束匀速</td>
+<td>弹出进入、强调快速启动、控件出场 <em>(从有变无)</em></td>
+</tr>
+<tr>
+<td>CubicBezierEasing</td>
+<td>自定义三次贝塞尔曲线</td>
+<td>定制品牌动效曲线</td>
+</tr>
+<tr>
+<td>EaseIn</td>
+<td>缓入，动画从慢到快</td>
+<td>启动阶段需加速的元素</td>
+</tr>
+<tr>
+<td>EaseOut</td>
+<td>缓出，动画从快到慢</td>
+<td>结束阶段需减速的元素</td>
+</tr>
+<tr>
+<td>EaseInOut</td>
+<td>缓入缓出，动画先慢后快再慢</td>
+<td>需要自然过渡的位移/淡入淡出</td>
+</tr>
+</tbody>
+</table>
+<p>常用 <code>easing</code> 的使用示例：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">LinearProgressDemo</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> progress <span class="keyword">by</span> remember &#123; mutableStateOf(<span class="number">0f</span>) &#125;</span><br><span class="line">    <span class="keyword">val</span> animated <span class="keyword">by</span> animateFloatAsState(</span><br><span class="line">        targetValue = progress,</span><br><span class="line">        animationSpec = tween(durationMillis = <span class="number">600</span>, easing = LinearEasing),</span><br><span class="line">        label = <span class="string">&quot;progress&quot;</span></span><br><span class="line">    )</span><br><span class="line">    Column(modifier = Modifier.fillMaxWidth()) &#123;</span><br><span class="line">        LinearProgressIndicator(progress = animated, modifier = Modifier.fillMaxWidth())</span><br><span class="line">        Spacer(Modifier.height(<span class="number">12.</span>dp))</span><br><span class="line">        Row &#123;</span><br><span class="line">            Button(onClick = &#123; progress = <span class="number">0f</span> &#125;) &#123; Text(<span class="string">&quot;重置&quot;</span>) &#125;</span><br><span class="line">            Spacer(Modifier.width(<span class="number">12.</span>dp))</span><br><span class="line">            Button(onClick = &#123; progress = <span class="number">1f</span> &#125;) &#123; Text(<span class="string">&quot;满&quot;</span>) &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">FastOutSlowInStateChangeDemo</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> on <span class="keyword">by</span> remember &#123; mutableStateOf(<span class="literal">false</span>) &#125;</span><br><span class="line">    <span class="keyword">val</span> size <span class="keyword">by</span> animateDpAsState(</span><br><span class="line">        targetValue = <span class="keyword">if</span> (on) <span class="number">120.</span>dp <span class="keyword">else</span> <span class="number">60.</span>dp,</span><br><span class="line">        animationSpec = tween(<span class="number">300</span>, easing = FastOutSlowInEasing),</span><br><span class="line">        label = <span class="string">&quot;size&quot;</span></span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">val</span> color <span class="keyword">by</span> animateColorAsState(</span><br><span class="line">        targetValue = <span class="keyword">if</span> (on) Color(<span class="number">0xFF3F51B5</span>) <span class="keyword">else</span> Color(<span class="number">0xFFE91E63</span>),</span><br><span class="line">        animationSpec = tween(<span class="number">300</span>, easing = FastOutSlowInEasing),</span><br><span class="line">        label = <span class="string">&quot;color&quot;</span></span><br><span class="line">    )</span><br><span class="line">    Box(</span><br><span class="line">        modifier = Modifier</span><br><span class="line">            .size(size)</span><br><span class="line">            .clip(RoundedCornerShape(<span class="number">16.</span>dp))</span><br><span class="line">            .background(color)</span><br><span class="line">            .clickable &#123; on = !on &#125;</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">LinearOutSlowInEnterDemo</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> visible <span class="keyword">by</span> remember &#123; mutableStateOf(<span class="literal">false</span>) &#125;</span><br><span class="line">    <span class="keyword">val</span> alpha <span class="keyword">by</span> animateFloatAsState(</span><br><span class="line">        targetValue = <span class="keyword">if</span> (visible) <span class="number">1f</span> <span class="keyword">else</span> <span class="number">0f</span>,</span><br><span class="line">        animationSpec = tween(<span class="number">400</span>, easing = LinearOutSlowInEasing),</span><br><span class="line">        label = <span class="string">&quot;alpha&quot;</span></span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">val</span> offsetY <span class="keyword">by</span> animateDpAsState(</span><br><span class="line">        targetValue = <span class="keyword">if</span> (visible) <span class="number">0.</span>dp <span class="keyword">else</span> <span class="number">24.</span>dp,</span><br><span class="line">        animationSpec = tween(<span class="number">400</span>, easing = LinearOutSlowInEasing),</span><br><span class="line">        label = <span class="string">&quot;offsetY&quot;</span></span><br><span class="line">    )</span><br><span class="line">    Column &#123;</span><br><span class="line">        Button(onClick = &#123; visible = !visible &#125;) &#123; Text(<span class="keyword">if</span> (visible) <span class="string">&quot;隐藏&quot;</span> <span class="keyword">else</span> <span class="string">&quot;显示&quot;</span>) &#125;</span><br><span class="line">        Spacer(Modifier.height(<span class="number">12.</span>dp))</span><br><span class="line">        Box(</span><br><span class="line">            modifier = Modifier</span><br><span class="line">                .offset(y = offsetY)</span><br><span class="line">                .alpha(alpha)</span><br><span class="line">                .size(<span class="number">120.</span>dp)</span><br><span class="line">                .background(Color(<span class="number">0xFF4CAF50</span>))</span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">FastOutLinearInExitDemo</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> visible <span class="keyword">by</span> remember &#123; mutableStateOf(<span class="literal">true</span>) &#125;</span><br><span class="line">    <span class="keyword">val</span> alpha <span class="keyword">by</span> animateFloatAsState(</span><br><span class="line">        targetValue = <span class="keyword">if</span> (visible) <span class="number">1f</span> <span class="keyword">else</span> <span class="number">0f</span>,</span><br><span class="line">        animationSpec = tween(<span class="number">300</span>, easing = FastOutLinearInEasing),</span><br><span class="line">        label = <span class="string">&quot;alpha&quot;</span></span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">val</span> scale <span class="keyword">by</span> animateFloatAsState(</span><br><span class="line">        targetValue = <span class="keyword">if</span> (visible) <span class="number">1f</span> <span class="keyword">else</span> <span class="number">0.8f</span>,</span><br><span class="line">        animationSpec = tween(<span class="number">300</span>, easing = FastOutLinearInEasing),</span><br><span class="line">        label = <span class="string">&quot;scale&quot;</span></span><br><span class="line">    )</span><br><span class="line">    Column &#123;</span><br><span class="line">        Button(onClick = &#123; visible = !visible &#125;) &#123; Text(<span class="keyword">if</span> (visible) <span class="string">&quot;出场&quot;</span> <span class="keyword">else</span> <span class="string">&quot;重置&quot;</span>) &#125;</span><br><span class="line">        Spacer(Modifier.height(<span class="number">12.</span>dp))</span><br><span class="line">        Box(</span><br><span class="line">            modifier = Modifier</span><br><span class="line">                .graphicsLayer &#123; <span class="keyword">this</span>.alpha = alpha; <span class="keyword">this</span>.scaleX = scale; <span class="keyword">this</span>.scaleY = scale &#125;</span><br><span class="line">                .size(<span class="number">120.</span>dp)</span><br><span class="line">                .background(Color(<span class="number">0xFF03A9F4</span>))</span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>CubicBezierEasing</strong></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Immutable</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CubicBezierEasing</span>(</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">val</span> a: <span class="built_in">Float</span>,</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">val</span> b: <span class="built_in">Float</span>,</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">val</span> c: <span class="built_in">Float</span>,</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">val</span> d: <span class="built_in">Float</span></span><br><span class="line">) : Easing &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>三阶贝塞尔缓动曲线，用于定制动画完成度与实现完成度之间关系的。三阶贝塞尔曲线由 4 个点进行定位，但是通过上面的源码可以看到，只传入了两个点的坐标。另外两个点固定在了 <strong>(0，0)</strong>、<strong>(1,1)</strong>。<br>
+定制曲线可以使用网站：<a target="_blank" rel="noopener" href="https://cubic-bezier.com/">https://cubic-bezier.com/</a></p>
+<p><img src="/2025/09/03/JetpackCompose%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%89/icon_cubic_bezier_net.png" alt="attar"></p>
+<p>如上图所示，固定了两个点，可以拖动红蓝两个点进行曲线的定制，横坐标是时间完成度，纵坐标是动画完成度。曲线的斜度就是每一时刻动画的速度，所以越陡峭的位置动画越快</p>
+<h4><a href="#2-snapspec" class="header-anchor">#</a><span id="2-snapspec">2. SnapSpec</span></h4>
+<h3><a href="#动画-api-选择" class="header-anchor">#</a><span id="动画-api-选择">动画 API 选择</span></h3>
+<pre class="mermaid">graph TB
+  A[开始] --> B{动画更像艺术作品吗，包含很多视觉元素，比如 SVG 或图片}
+  B -->|是| C{是否是简单的 SVG，比如带微动效的图标}
+  C -->|是| D[AnimatedVectorDrawable]
+  C -->|否| E[动画框架，例如 Lottie]
+  B -->|否| F{是否需要永远重复}
+  F -->|是| G[rememberInfiniteTransition]
+  F -->|否| H{这是布局动画吗}
+  H -->|是| I{是否在不同内容的可组合项之间切换}
+  I -->|是| J{是否使用 navigation compose}
+  J -->|是| K[enterTransition 与 exitTransition]
+  J -->|否| L[AnimatedContent 或 CrossFade 或 Pager]
+  I -->|否| M{是否为出现或消失的过渡}
+  M -->|是| N[AnimatedVisibility，或 animateFloatAsState 配合 Modifier.alpha]
+  M -->|否| O{是否是尺寸变化}
+  O -->|是| P[animateContentSize]
+  O -->|否| Q{其他布局属性需要动画，例如 offset，padding 等}
+  Q -->|是| R{是列表项动画吗}
+  R -->|是| S[animateItemPlacement，支持重排与删除]
+  R -->|否| T[Animatable 配合 animateTo 或 snapTo]
+  Q -->|否| U[AnimationState 或 animate，一次性无状态管理]
+  H -->|否| V{是否需要同时为多个参数做动画}
+  V -->|否| W{动画是否具有一组预定义的目标值}
+  W -->|是| X[animate*AsState，文本使用 TextMotion.Animated]
+  W -->|否| U
+  V -->|是| Y{这些属性是否彼此完全独立}
+  Y -->|是| Z{是否需要同时开始}
+  Z -->|是| AA[updateTransition，配合 AnimatedVisibility，animateFloat，animateInt 等]
+  Z -->|否| AB[多个 Animatable，使用不同的时序调用 animateTo]
+  Y -->|否| AC{是否是手势驱动，并且动画是唯一的真值来源}
+  AC -->|是| T
+  AC -->|否| AA
+
+  %% 样式定义
+  classDef start fill:#C8E6C9,stroke:#2E7D32,stroke-width:2px,color:#1B5E20;
+  classDef decision fill:#A5D6A7,stroke:#2E7D32,stroke-width:2px,color:#1B5E20;
+  classDef action fill:#E3F2FD,stroke:#1E88E5,stroke-width:2px,color:#0D47A1;
+
+  %% 节点分类
+  class A start;
+  class B,C,F,H,I,J,M,O,Q,R,V,W,Y,Z,AC decision;
+  class D,E,G,K,L,N,P,S,T,U,X,AA,AB action;
+
+  %% 绿色为“是”分支（默认），红色为“否”分支（按索引）
+  linkStyle default stroke:#66BB6A,stroke-width:2px,color:#000000
+  %% 否分支索引: 3,4,6,10,11,13,15,18,19,20,21,23,27,28,30 （从0开始计）
+  linkStyle 3 stroke:#E57373,stroke-width:2px,color:#C62828
+  linkStyle 4 stroke:#E57373,stroke-width:2px,color:#C62828
+  linkStyle 6 stroke:#E57373,stroke-width:2px,color:#C62828
+  linkStyle 10 stroke:#E57373,stroke-width:2px,color:#C62828
+  linkStyle 11 stroke:#E57373,stroke-width:2px,color:#C62828
+  linkStyle 13 stroke:#E57373,stroke-width:2px,color:#C62828
+  linkStyle 15 stroke:#E57373,stroke-width:2px,color:#C62828
+  linkStyle 18 stroke:#E57373,stroke-width:2px,color:#C62828
+  linkStyle 19 stroke:#E57373,stroke-width:2px,color:#C62828
+  linkStyle 20 stroke:#E57373,stroke-width:2px,color:#C62828
+  linkStyle 21 stroke:#E57373,stroke-width:2px,color:#C62828
+  linkStyle 23 stroke:#E57373,stroke-width:2px,color:#C62828
+  linkStyle 27 stroke:#E57373,stroke-width:2px,color:#C62828
+  linkStyle 28 stroke:#E57373,stroke-width:2px,color:#C62828
+  linkStyle 30 stroke:#E57373,stroke-width:2px,color:#C62828</pre>
+<ul>
+<li>动画是基于美术的（即 SVG 或图片）吗？
+<ul>
+<li>是：它是否使用简单的 SVG（即带有微动画的图标）？
+<ul>
+<li>有：AnimatedVectorDrawable。</li>
+<li>否：第三方动画框架，例如 Lottie。</li>
+</ul>
+</li>
+<li>否：动画是否需要无限循环播放？
+<ul>
+<li>有：rememberInfiniteTransition。</li>
+<li>否：您是否正在为布局添加动画？
+<ul>
+<li>是：您是否在具有不同内容的可组合项之间切换？
+<ul>
+<li>是：您是否在使用 Navigation-Compose？
+<ul>
+<li>可以：使用 composable()，并设置 enterTransition 和 exitTransition。</li>
+<li>否：AnimatedContent、Crossfade 或 Pager。</li>
+</ul>
+</li>
+<li>否：您是否要为内容的出现或消失添加动画效果？
+<ul>
+<li>可以：AnimatedVisibility 或 animateFloatAsState 与 Modifier.alpha() 搭配使用。</li>
+<li>否：您是否要为大小变化添加动画效果？
+<ul>
+<li>有：Modifier.animateContentSize。</li>
+<li>否：您是否正在为其他布局属性（例如偏移或内边距）添加动画效果？
+<ul>
+<li>是：请参阅“这些属性是否完全彼此独立？”。</li>
+<li>否：您是否要为列表项添加动画效果？
+<ul>
+<li>有：animateItem()。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>否：您是否要为多个属性添加动画效果？
+<ul>
+<li>是：属性是否完全相互独立？
+<ul>
+<li>有：animate*AsState。对于文本，请使用 TextMotion.Animated。</li>
+<li>否：它们是否需要同时开始？
+<ul>
+<li>可以：updateTransition，包含 AnimatedVisibility、animateFloat、animateInt 等。</li>
+<li>否：Animatable 与 animateTo 搭配使用，使用挂起函数以不同时间调用。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>否：动画是否具有预定义的目标值？
+<ul>
+<li>有：animate*AsState。对于文本，请使用 TextMotion.Animated。</li>
+<li>否：动画是否由手势驱动，并且是唯一可信来源？
+<ul>
+<li>是：Animatable，带有 animateTo / snapTo。</li>
+<li>否：是否为不含状态管理的一次性动画？
+<ul>
+<li>是：AnimationState 或 animate。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2025-09-03</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Android/" title="Android">Android </a><i class="fa fa-tag"></i><a class="tag" href="/tags/Jetpack-Compose/" title="Jetpack Compose">Jetpack Compose </a><i class="fa fa-tag"></i><a class="tag" href="/tags/Effect/" title="Effect">Effect </a><i class="fa fa-tag"></i><a class="tag" href="/tags/Animation/" title="Animation">Animation </a><span class="leancloud_visitors"></span><span>大约5609个字, 18分钟41秒读完</span></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="" onclick="javascript:join_favorite()" ref="sidebar"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://puppet16.github.io/2025/09/03/JetpackCompose学习系列三/,Puppet,JetpackCompose学习系列三： 副作用与动画,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2025/09/12/JetpackCompose%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%9B%9B/" title="JetpackCompose学习系列四：与传统 View 系统的交互 和 自定义 View">上一篇</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2025/09/03/JetpackCompose%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%BA%8C/" title="JetpackCompose学习系列二： 状态订阅与自动更新">下一篇</a></li></ul></div><script src="/js/visitors.js"></script><a id="comments"></a><div id="vcomments" style="margin:0 30px;"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//cdn.jsdelivr.net/gh/xcss/valine@latest/dist/Valine.min.js"></script><script>var valine = new Valine({
+  el:'#vcomments',
+  notify:false || false, 
+  verify:false|| false, 
+  app_id:'xpSQCFiXzEQnCBUKrP6EHIUF-gzGzoHsz',
+  app_key:'Ev5N03MrqLzS683mu92hf4RO',
+  placeholder:'行至水穷处，坐看云起时...',
+  path: window.location.pathname,
+  serverURLs: '',
+  visitor:true,
+  recordIP:true,
+  avatar:'mm'
+})</script></div></div></div></div><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/add-bookmark.js"></script><!-- Mermaid diagrams support--><script src="https://unpkg.com/mermaid@10.9.1/dist/mermaid.min.js"></script><script>if (window.mermaid) {
+  mermaid.initialize({
+    startOnLoad: true,
+    securityLevel: 'loose',
+    flowchart: { htmlLabels: true, useMaxWidth: true },
+    classDiagram: {
+      layout: 'elk',
+      elk: {
+        'elk.spacing.nodeNodeBetweenLayers': 200,
+        'elk.spacing.nodeNode': 80
+      }
+    },
+    theme: 'default',
+    logLevel: 1
+  });
+}</script><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"debug":false,"model":{"scale":1,"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"left","hOffset":0,"vOffset":20},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"dialog":{"enable":false,"hitokoto":true}});</script></body></html>

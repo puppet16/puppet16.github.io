@@ -156,7 +156,7 @@
 <li>根据程序的状态，<strong>调整</strong>自身的决策行为。</li>
 </ul>
 <h2><a href="#2-反射的依赖" class="header-anchor">#</a><span id="2-反射的依赖">2. 反射的依赖</span></h2>
-<p><img src="/2021/03/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%83/kotlin_reflection_dependences.png" alt></p>
+<p><img src="/2021/03/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%83/kotlin_reflection_dependences.png" alt="kotlin反射依赖"></p>
 <p><strong>说明：</strong></p>
 <ol>
 <li><code>Java</code>中有反射的概念，<code>Java</code>的<code>JDK</code>中包含了<code>Java</code>的反射<code>API</code></li>
@@ -211,7 +211,7 @@
 <li>属性包括<code>backing-field</code>、<code>getter</code>、<code>setter</code>，<code>KProperty</code>有对应属性可以获取到<code>getter</code>、<code>setter</code></li>
 </ol>
 <h3><a href="#2-kotlin与java的反射数据结构对比" class="header-anchor">#</a><span id="2-kotlin与java的反射数据结构对比">2. kotlin与java的反射数据结构对比</span></h3>
-<p><img src="/2021/03/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%83/reflection_compare.png" alt></p>
+<p><img src="/2021/03/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%83/reflection_compare.png" alt="kotlin与java的反射数据结构对比"></p>
 <p><strong>说明：</strong></p>
 <ol>
 <li><code>KType</code>基本对应<code>Java</code>中的<code>Type</code>，使用场景也类似</li>
@@ -518,7 +518,7 @@
 <p>插件加载运行，并实现插件文件监听及热部署即自动监听<code>jar</code>包的修改，若进行了修改则重新进行加载运行里面的类</p>
 </blockquote>
 <h2><a href="#1-classloader" class="header-anchor">#</a><span id="1-classloader">1. <code>ClassLoader</code></span></h2>
-<p><img src="/2021/03/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%83/reflection_classloader.png" alt></p>
+<p><img src="/2021/03/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%83/reflection_classloader.png" alt="classLoader"></p>
 <p><strong>说明：</strong></p>
 <ol>
 <li><strong>启动类加载器 <em>(BootstrapClassLoader)</em>：</strong> 启动类加载器主要加载的是<code>JVM</code>自身需要的类，这个类加载使用<code>C++</code>语言实现的，是虚拟机自身的一部分，负责加载存放在 <code>JDK\jre\lib</code> <em>(JDK代表JDK的安装目录，下同)</em> 下，或被 <code>-Xbootclasspath</code>参数指定的路径中的，并且能被虚拟机识别的类库 <em>（如rt.jar，所有的java.开头的类均被 BootstrapClassLoader加载）</em>。启动类加载器是无法被<code>Java</code>程序直接引用的。<br>
@@ -550,7 +550,7 @@
 <h2><a href="#2-插件化加载类实现" class="header-anchor">#</a><span id="2-插件化加载类实现">2. 插件化加载类实现</span></h2>
 <p>为方便的实现类的加载和卸载必须要自定义<code>ClassLoader</code>。必须保证类和它的<code>ClassLoader</code>都没有被使用的情况下才可以卸载类</p>
 <p><strong>实现思路：</strong> 有一个名为<code>Host</code>的项目，它依赖了一个公共库<code>Common</code>，这个库中定义了一堆的接口，为<code>Host</code>访问插件里的类做入口。如此所有插件的入口类都是<code>Common</code>中定义的接口的实现。如此<code>Host</code>反射取到插件里的入口实现类并将其强转为<code>Common</code>里的接口后就可以访问插件内容了</p>
-<p><img src="/2021/03/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%83/reflection_plugin_struct.png" alt></p>
+<p><img src="/2021/03/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%83/reflection_plugin_struct.png" alt="project_struct"></p>
 <h3><a href="#1-创建plugin接口" class="header-anchor">#</a><span id="1-创建plugin接口">1. 创建<code>plugin</code>接口</span></h3>
 <p>在一个名为<code>plugin_common</code>的单独的<code>Module</code>中创建插件的入口接口</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> <span class="title class_">Plugin</span> &#123;</span><br><span class="line">    <span class="keyword">companion</span> <span class="keyword">object</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> <span class="keyword">val</span> CONFIG = <span class="string">&quot;plugin.config&quot;</span></span><br><span class="line">        <span class="keyword">const</span> <span class="keyword">val</span> KEY = <span class="string">&quot;plugin.impl&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">start</span><span class="params">()</span></span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">stop</span><span class="params">()</span></span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -573,7 +573,7 @@
 <p><strong>说明：</strong></p>
 <ol>
 <li>点击<code>Gradle</code>窗口中<code>plugin_1\Tasks\build\assemble</code>条目，生成<code>jar</code>包<br>
-<img src="/2021/03/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%83/reflection_project_jar_location.png" alt></li>
+<img src="/2021/03/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%83/reflection_project_jar_location.png" alt="attar"></li>
 <li><code>jar</code>包位置：<code>plugin_1\build\libs\plugin_1-1.0-SNAPSHOT.jar</code></li>
 </ol>
 <h3><a href="#4-为两个实现接口的类添加配置文件" class="header-anchor">#</a><span id="4-为两个实现接口的类添加配置文件">4. 为两个实现接口的类添加配置文件</span></h3>
@@ -655,4 +655,19 @@
   visitor:true,
   recordIP:true,
   avatar:'mm'
-})</script></div></div></div></div><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/add-bookmark.js"></script><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"debug":false,"model":{"scale":1,"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"left","hOffset":0,"vOffset":20},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"dialog":{"enable":false,"hitokoto":true}});</script></body></html>
+})</script></div></div></div></div><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/add-bookmark.js"></script><!-- Mermaid diagrams support--><script src="https://unpkg.com/mermaid@10.9.1/dist/mermaid.min.js"></script><script>if (window.mermaid) {
+  mermaid.initialize({
+    startOnLoad: true,
+    securityLevel: 'loose',
+    flowchart: { htmlLabels: true, useMaxWidth: true },
+    classDiagram: {
+      layout: 'elk',
+      elk: {
+        'elk.spacing.nodeNodeBetweenLayers': 200,
+        'elk.spacing.nodeNode': 80
+      }
+    },
+    theme: 'default',
+    logLevel: 1
+  });
+}</script><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"debug":false,"model":{"scale":1,"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"left","hOffset":0,"vOffset":20},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"dialog":{"enable":false,"hitokoto":true}});</script></body></html>

@@ -688,7 +688,7 @@
 <li>符号表管理：合理组织符号，便于各阶段查找\填写等。</li>
 <li>出错处理</li>
 </ol>
-<p><img src="/2021/03/23/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AB/java_complier_process.png" alt></p>
+<p><img src="/2021/03/23/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AB/java_complier_process.png" alt="attar"></p>
 <p><strong>说明：</strong></p>
 <ol>
 <li>抽象语法树 <em>(Abstract Syntax Tree, AST)</em> 是源代码语法结构的一种抽象表示。它以树状的形式表现编程语言的结构。</li>
@@ -772,7 +772,7 @@
 </ol>
 </li>
 <li>上述代码生成的文件<code>KotlinPoetTest.kt</code>地址：module名称/build/generated/source/kapt/debug/cn/lee/kotlin<br>
-<img src="/2021/03/23/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AB/apt_file_generate.png" alt></li>
+<img src="/2021/03/23/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AB/apt_file_generate.png" alt="attar"></li>
 </ol>
 <h2><a href="#3-注解处理器abstractprocessor" class="header-anchor">#</a><span id="3-注解处理器abstractprocessor">3. 注解处理器<code>AbstractProcessor</code></span></h2>
 <h3><a href="#1-自定义注解处理器" class="header-anchor">#</a><span id="1-自定义注解处理器">1. 自定义注解处理器</span></h3>
@@ -808,7 +808,7 @@
 <code>element</code>是<code>java-apt</code> <em>(编译时注解处理器)</em> 技术的基础<br>
 可以将<code>element</code>看作是<code>java</code>编译过程中语法分析后得出的语法树，每个类都是一个树，一个类是最外层的根节点，类变量和实例变量是根节点下的一个子节点，方法是另一个根节点，而方法中的变量又可以看成这个方法的子节点，依次类推下去。通过面向对象的方法我们将这个节点抽象出一个<code>element</code>类，这个类就提取出变量节点或者方法节点的一些相同的属性，<strong><code>Element</code>就作为一个顶级的父类</strong>。</p>
 <p>各种<code>element</code>所代表的元素类型如下图所示：<br>
-<img src="/2021/03/23/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AB/element_type_description.png" alt></p>
+<img src="/2021/03/23/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AB/element_type_description.png" alt="attar"></p>
 <p><strong>说明：</strong></p>
 <ol>
 <li><code>PackageElement</code> 代表包的接口</li>
@@ -821,7 +821,7 @@
 <h2><a href="#5-实现注解处理器版-model-映射" class="header-anchor">#</a><span id="5-实现注解处理器版-model-映射">5. 实现注解处理器版 <code>Model</code> 映射</span></h2>
 <h3><a href="#1-创建注解" class="header-anchor">#</a><span id="1-创建注解">1. 创建注解</span></h3>
 <p>在自己创建的目录<code>apt</code>下创建 名为<code>annotations</code>的<code>module</code></p>
-<p><img src="/2021/03/23/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AB/apt_annotations.png" alt></p>
+<p><img src="/2021/03/23/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AB/apt_annotations.png" alt="attar"></p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//build.gradle</span></span><br><span class="line"></span><br><span class="line">plugins &#123;</span><br><span class="line">    id <span class="string">&#x27;java&#x27;</span></span><br><span class="line">    id <span class="string">&#x27;org.jetbrains.kotlin.jvm&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">group <span class="string">&#x27;cn.lee.kotlin&#x27;</span></span><br><span class="line">version <span class="string">&#x27;1.0-SNAPSHOT&#x27;</span></span><br><span class="line"></span><br><span class="line">sourceCompatibility = <span class="number">1.8</span></span><br><span class="line"></span><br><span class="line">repositories &#123;</span><br><span class="line">    mavenCentral()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dependencies &#123;</span><br><span class="line">    implementation <span class="string">&quot;org.jetbrains.kotlin:kotlin-stdlib-jdk8&quot;</span></span><br><span class="line">    testImplementation group: <span class="string">&#x27;junit&#x27;</span>, name: <span class="string">&#x27;junit&#x27;</span>, version: <span class="string">&#x27;4.12&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">compileKotlin &#123;</span><br><span class="line">    kotlinOptions.jvmTarget = <span class="string">&quot;1.8&quot;</span></span><br><span class="line">&#125;</span><br><span class="line">compileTestKotlin &#123;</span><br><span class="line">    kotlinOptions.jvmTarget = <span class="string">&quot;1.8&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//ModeMap.kt</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">package</span> cn.lee.kotlin.annotations.apt</span><br><span class="line"></span><br><span class="line"><span class="meta">@Retention(AnnotationRetention.BINARY)</span></span><br><span class="line"><span class="meta">@Target(AnnotationTarget.CLASS)</span></span><br><span class="line"><span class="keyword">annotation</span> <span class="keyword">class</span> <span class="title class_">ModelMap</span></span><br></pre></td></tr></table></figure>
 <p><strong>说明：</strong></p>
@@ -832,7 +832,7 @@
 <h3><a href="#2-创建注解处理器" class="header-anchor">#</a><span id="2-创建注解处理器">2. 创建注解处理器</span></h3>
 <h4><a href="#1-添加依赖包" class="header-anchor">#</a><span id="1-添加依赖包">1. 添加依赖包</span></h4>
 <p>在自己创建的目录<code>apt</code>下创建 名为<code>compiler</code>的<code>module</code></p>
-<p><img src="/2021/03/23/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AB/apt_compiler.png" alt></p>
+<p><img src="/2021/03/23/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AB/apt_compiler.png" alt="attar"></p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//build.gradle</span></span><br><span class="line"></span><br><span class="line">plugins &#123;</span><br><span class="line">    id <span class="string">&#x27;java&#x27;</span></span><br><span class="line">    id <span class="string">&#x27;org.jetbrains.kotlin.jvm&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">group <span class="string">&#x27;cn.lee.kotlin&#x27;</span></span><br><span class="line">version <span class="string">&#x27;1.0-SNAPSHOT&#x27;</span></span><br><span class="line"></span><br><span class="line">sourceCompatibility = <span class="number">1.8</span></span><br><span class="line"></span><br><span class="line">repositories &#123;</span><br><span class="line">    jcenter()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dependencies &#123;</span><br><span class="line">    implementation <span class="string">&quot;org.jetbrains.kotlin:kotlin-stdlib-jdk8&quot;</span></span><br><span class="line"></span><br><span class="line">    implementation <span class="string">&quot;com.squareup:kotlinpoet:1.4.3&quot;</span></span><br><span class="line">    implementation <span class="string">&quot;com.bennyhuo.aptutils:aptutils:1.7.1&quot;</span></span><br><span class="line">    implementation project(<span class="string">&quot;:apt:annotations&quot;</span>)</span><br><span class="line"></span><br><span class="line">    testImplementation group: <span class="string">&#x27;junit&#x27;</span>, name: <span class="string">&#x27;junit&#x27;</span>, version: <span class="string">&#x27;4.12&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">compileKotlin &#123;</span><br><span class="line">    kotlinOptions.jvmTarget = <span class="string">&quot;1.8&quot;</span></span><br><span class="line">&#125;</span><br><span class="line">compileTestKotlin &#123;</span><br><span class="line">    kotlinOptions.jvmTarget = <span class="string">&quot;1.8&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>说明：</strong></p>
 <ol>
@@ -881,7 +881,7 @@
 </ol>
 <h4><a href="#3-添加处理器声明" class="header-anchor">#</a><span id="3-添加处理器声明">3. 添加处理器声明</span></h4>
 <p>创建好注解处理器后，我们需要告诉编译器在编译的时候使用哪个注解处理器<br>
-<img src="/2021/03/23/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AB/apt_compiler.png" alt></p>
+<img src="/2021/03/23/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AB/apt_compiler.png" alt="attar"></p>
 <p><strong>说明：</strong></p>
 <ol>
 <li>在<code>javax.annotation.processing.Processor</code>文件中写入自定义注解处理器的类全称：<code>cn.lee.kotlin.annotations.apt.compiler.ModelMapProcessor</code></li>
@@ -906,7 +906,7 @@
 <ol>
 <li>
 <p>创建两个数据类<code>Human</code>、<code>Person</code>，为这两个类添加注解<code>@ModelMap</code>，如此对应生成的文件名为<code>Human$$ModelMap.kt</code>、<code>Person$$ModelMap.kt</code>,地址如下：<br>
-<img src="/2021/03/23/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AB/apt_file_generate2.png" alt></p>
+<img src="/2021/03/23/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AB/apt_file_generate2.png" alt="attar"></p>
 </li>
 <li>
 <p>在<code>main()</code>函数中创建<code>Person</code>对象<code>person</code>，再将<code>person</code>转为<code>Map</code>,再将<code>Map</code>转为了<code>Human</code></p>
@@ -964,7 +964,7 @@
 <li><code>invokeInitializers</code>设置为了<code>false</code>，所以<code>IntelliJ</code>反编译<code>Kotlin</code>看不到<code>invokeInitializers</code>为<code>true</code>的效果</li>
 </ol>
 <h2><a href="#4-其它实用插件" class="header-anchor">#</a><span id="4-其它实用插件">4. 其它实用插件</span></h2>
-<p><img src="/2021/03/23/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AB/compiler_plugin_count.png" alt></p>
+<p><img src="/2021/03/23/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AB/compiler_plugin_count.png" alt="attar"></p>
 <table>
 <thead>
 <tr>
@@ -1051,4 +1051,19 @@
   visitor:true,
   recordIP:true,
   avatar:'mm'
-})</script></div></div></div></div><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/add-bookmark.js"></script><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"debug":false,"model":{"scale":1,"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"left","hOffset":0,"vOffset":20},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"dialog":{"enable":false,"hitokoto":true}});</script></body></html>
+})</script></div></div></div></div><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/add-bookmark.js"></script><!-- Mermaid diagrams support--><script src="https://unpkg.com/mermaid@10.9.1/dist/mermaid.min.js"></script><script>if (window.mermaid) {
+  mermaid.initialize({
+    startOnLoad: true,
+    securityLevel: 'loose',
+    flowchart: { htmlLabels: true, useMaxWidth: true },
+    classDiagram: {
+      layout: 'elk',
+      elk: {
+        'elk.spacing.nodeNodeBetweenLayers': 200,
+        'elk.spacing.nodeNode': 80
+      }
+    },
+    theme: 'default',
+    logLevel: 1
+  });
+}</script><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"debug":false,"model":{"scale":1,"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"left","hOffset":0,"vOffset":20},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"dialog":{"enable":false,"hitokoto":true}});</script></body></html>

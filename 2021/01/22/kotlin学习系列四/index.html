@@ -387,7 +387,7 @@
 </table>
 <h3><a href="#1-filter-操作" class="header-anchor">#</a><span id="1-filter-操作">1. filter 操作</span></h3>
 <p><strong>功能：</strong> 将集合 a 内所有满足条件的元素生成一个新集合 b</p>
-<p><img src="/2021/01/22/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%9B%9B/kotlin_filter.png" alt></p>
+<p><img src="/2021/01/22/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%9B%9B/kotlin_filter.png" alt="filter操作图"></p>
 <p>示例如下：</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> list = arrayListOf&lt;<span class="built_in">Int</span>&gt;(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>)</span><br><span class="line"><span class="keyword">val</span> list2 = list.filter &#123; it % <span class="number">2</span> == <span class="number">0</span> &#125;</span><br><span class="line">println(list.joinToString())</span><br><span class="line">println(list2.joinToString())</span><br></pre></td></tr></table></figure>
 <p>打印结果为：</p>
@@ -416,7 +416,7 @@
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T&gt;</span> Iterable<span class="type">&lt;T&gt;</span>.<span class="title">filter</span><span class="params">(predicate: (<span class="type">T</span>) -&gt; <span class="type">Boolean</span>)</span></span>: List&lt;T&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> filterTo(ArrayList&lt;T&gt;(), predicate)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T, C : MutableCollection&lt;in T&gt;</span>&gt; Iterable<span class="type">&lt;T&gt;</span>.<span class="title">filterTo</span><span class="params">(destination: <span class="type">C</span>, predicate: (<span class="type">T</span>) -&gt; <span class="type">Boolean</span>)</span></span>: C &#123;</span><br><span class="line">    <span class="keyword">for</span> (element <span class="keyword">in</span> <span class="keyword">this</span>) <span class="keyword">if</span> (predicate(element)) destination.add(element)</span><br><span class="line">    <span class="keyword">return</span> destination</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2><a href="#3-map-操作" class="header-anchor">#</a><span id="3-map-操作">3. map 操作</span></h2>
 <p><strong>功能：</strong> 将集合 a 内的所有元素进行一个操作得到新的元素集合</p>
-<p><img src="/2021/01/22/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%9B%9B/kotlin_map.png" alt></p>
+<p><img src="/2021/01/22/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%9B%9B/kotlin_map.png" alt="map操作示意图"></p>
 <p>示例如下：</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> list = arrayListOf&lt;<span class="built_in">Int</span>&gt;(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>)</span><br><span class="line"><span class="keyword">val</span> list2 = list.map &#123; it * <span class="number">2</span> &#125;</span><br><span class="line">println(list.joinToString())</span><br><span class="line">println(list2.joinToString())</span><br></pre></td></tr></table></figure>
 <p>打印结果：</p>
@@ -473,7 +473,7 @@
 </ol>
 <h2><a href="#3-flatmap-变换" class="header-anchor">#</a><span id="3-flatmap-变换">3. flatMap 变换</span></h2>
 <p><strong>功能：</strong> 将一个集合 a 内的每个元素通过某个操作得到一个集合，最后将每个元素映射的集合拼接成一个新集合</p>
-<p><img src="/2021/01/22/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%9B%9B/kotlin_flatmap.png" alt></p>
+<p><img src="/2021/01/22/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%9B%9B/kotlin_flatmap.png" alt="flatMap操作示意图"></p>
 <p>如图所示：转换操作是创建一个长度为原集合对应元素值大小的<code>Int</code>数组，该数组元素由<code>index * 2</code>构成</p>
 <p>示例如下：</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">list.flatMap &#123;</span><br><span class="line">        <span class="number">0</span> until it</span><br><span class="line">    &#125;.joinToString().let(::println)</span><br></pre></td></tr></table></figure>
@@ -516,7 +516,7 @@
 </ol>
 <h3><a href="#1-fold-操作" class="header-anchor">#</a><span id="1-fold-操作">1. fold 操作</span></h3>
 <p><strong>功能：</strong> 给定一个初始值，将元素进行某个操作，返回一个和初始值相同类型的结果</p>
-<p><img src="/2021/01/22/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%9B%9B/kotlin_fold.png" alt></p>
+<p><img src="/2021/01/22/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%9B%9B/kotlin_fold.png" alt="fold操作示意图"></p>
 <p>如上图所示，<code>fold</code>里的操作是初始值都与元素相加，<strong>而每次操作时的初始值都是上次的操作结果。</strong></p>
 <p>示例如下：</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> list = arrayListOf&lt;<span class="built_in">Int</span>&gt;(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)</span><br><span class="line">println(list.fold(<span class="number">2</span>) &#123;</span><br><span class="line">    acc, i -&gt;</span><br><span class="line">    println(<span class="string">&quot;acc:<span class="variable">$acc</span>, i:<span class="variable">$i</span>&quot;</span>)</span><br><span class="line">    acc + i</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
@@ -531,7 +531,7 @@
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T, R&gt;</span> Iterable<span class="type">&lt;T&gt;</span>.<span class="title">fold</span><span class="params">(initial: <span class="type">R</span>, operation: (<span class="type">acc</span>: <span class="type">R</span>, <span class="type">T</span>) -&gt; <span class="type">R</span>)</span></span>: R &#123;</span><br><span class="line">    <span class="keyword">var</span> accumulator = initial</span><br><span class="line">    <span class="keyword">for</span> (element <span class="keyword">in</span> <span class="keyword">this</span>) accumulator = operation(accumulator, element)</span><br><span class="line">    <span class="keyword">return</span> accumulator</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3><a href="#2-zip-操作" class="header-anchor">#</a><span id="2-zip-操作">2. zip 操作</span></h3>
 <p><strong>功能：</strong> 将两个集合中对应下标的元素进行某个操作返回操作结果，最后将操作结果拼接成一个新集合</p>
-<p><img src="/2021/01/22/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%9B%9B/kotlin_zip.png" alt></p>
+<p><img src="/2021/01/22/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%9B%9B/kotlin_zip.png" alt="zip操作示意图"></p>
 <p>示例如下：</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> array = arrayListOf&lt;String&gt;(<span class="string">&quot;x&quot;</span>, <span class="string">&quot;y&quot;</span>)</span><br><span class="line">list.zip(array)&#123;</span><br><span class="line">    a, b -&gt;</span><br><span class="line">    println(<span class="string">&quot;a:<span class="variable">$a</span>, b:<span class="variable">$b</span>&quot;</span>)</span><br><span class="line">    arrayListOf(a, b)</span><br><span class="line">&#125;.joinToString().let(::println)</span><br></pre></td></tr></table></figure>
 <p>打印结果为：</p>
@@ -693,25 +693,25 @@
 <p>在编辑器中添加如下代码：</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//region + 演示折叠效果</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    println(<span class="string">&quot;hello&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//endregion</span></span><br></pre></td></tr></table></figure>
 <p>显示如下图：</p>
-<p><img src="/2021/01/22/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%9B%9B/kotlin3.png" alt></p>
+<p><img src="/2021/01/22/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%9B%9B/kotlin3.png" alt="折叠前效果显示"></p>
 <p>再使用快捷键<code>ctrl  -</code>，显示效果如下图：<br>
-<img src="/2021/01/22/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%9B%9B/kotlin_2.png" alt></p>
+<img src="/2021/01/22/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%9B%9B/kotlin_2.png" alt="折叠效果显示"></p>
 <h2><a href="#2-查看kotlin编译后的源码" class="header-anchor">#</a><span id="2-查看kotlin编译后的源码">2. 查看<code>kotlin</code>编译后的源码</span></h2>
 <h3><a href="#1-直接在android-studio中查看" class="header-anchor">#</a><span id="1-直接在android-studio中查看">1. 直接在<code>Android Studio</code>中查看</span></h3>
 <p>步骤：</p>
 <ol>
 <li>
 <p>选择要查看的<code>kotlin</code>文件，然后点击<strong>Tools–&gt;Kotlin–&gt;Show Kotlin Bytecode</strong>, 如下图所示：</p>
-<p><img src="/2021/01/22/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%9B%9B/kotlin_loopup_class.png" alt></p>
+<p><img src="/2021/01/22/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%9B%9B/kotlin_loopup_class.png" alt="按钮位置"></p>
  <br>
 <p>此时会打开<code>Kotlin Bytecode</code>窗口，如下所示：</p>
  <br>
-<p><img src="/2021/01/22/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%9B%9B/kotlin_loopup_class2.png" alt></p>
+<p><img src="/2021/01/22/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%9B%9B/kotlin_loopup_class2.png" alt="Kotlin Bytecode"></p>
  <br>
 </li>
 <li>
 <p>点击<code>Kotlin Bytecode</code>窗口内左上角的 <strong><code>DECOMPILE</code></strong> 按钮就会打开一个新窗口显示出反编译后的的<code>class</code>源码，如下所示：</p>
-<p><img src="/2021/01/22/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%9B%9B/kotlin_loopup_class3.png" alt></p>
+<p><img src="/2021/01/22/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%9B%9B/kotlin_loopup_class3.png" alt="源码文件"></p>
 </li>
 </ol>
 <h3><a href="#2-使用命令javap反编译" class="header-anchor">#</a><span id="2-使用命令javap反编译">2. 使用命令<code>javap</code>反编译</span></h3>
@@ -720,12 +720,12 @@
 <li>
 <p>先在目录 <strong>app–&gt;build–&gt;tmp–&gt;kotlin-classes–&gt;debug–&gt;自己的包名 --&gt;kotlin</strong>下找到<code>class</code>源文件，如下图所示：</p>
 <br>
-<p><img src="/2021/01/22/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%9B%9B/kotlin_lookup_class4.png" alt></p>
+<p><img src="/2021/01/22/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%9B%9B/kotlin_lookup_class4.png" alt="class文件目录"></p>
 </li>
 <li>
 <p>在命令行中进入到源文件所在目录，之后输入<code>javap</code>命令，结果如下所示：</p>
  <br>
-<p><img src="/2021/01/22/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%9B%9B/kotlin_lookup_class5.png" alt></p>
+<p><img src="/2021/01/22/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%9B%9B/kotlin_lookup_class5.png" alt="class文件"></p>
 </li>
 </ol>
 </p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2021-01-22</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Kotlin/" title="Kotlin">Kotlin </a><i class="fa fa-tag"></i><a class="tag" href="/tags/函数/" title="函数">函数 </a><span class="leancloud_visitors"></span><span>大约8348个字, 27分钟49秒读完</span></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="" onclick="javascript:join_favorite()" ref="sidebar"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://puppet16.github.io/2021/01/22/kotlin学习系列四/,Puppet,Kotlin学习系列四：函数进阶,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2021/02/02/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%BA%94/" title="Kotlin学习系列五：类型进阶">上一篇</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2021/01/15/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%89/" title="Kotlin学习系列三：表达式">下一篇</a></li></ul></div><script src="/js/visitors.js"></script><a id="comments"></a><div id="vcomments" style="margin:0 30px;"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//cdn.jsdelivr.net/gh/xcss/valine@latest/dist/Valine.min.js"></script><script>var valine = new Valine({
@@ -740,4 +740,19 @@
   visitor:true,
   recordIP:true,
   avatar:'mm'
-})</script></div></div></div></div><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/add-bookmark.js"></script><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"debug":false,"model":{"scale":1,"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"left","hOffset":0,"vOffset":20},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"dialog":{"enable":false,"hitokoto":true}});</script></body></html>
+})</script></div></div></div></div><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/add-bookmark.js"></script><!-- Mermaid diagrams support--><script src="https://unpkg.com/mermaid@10.9.1/dist/mermaid.min.js"></script><script>if (window.mermaid) {
+  mermaid.initialize({
+    startOnLoad: true,
+    securityLevel: 'loose',
+    flowchart: { htmlLabels: true, useMaxWidth: true },
+    classDiagram: {
+      layout: 'elk',
+      elk: {
+        'elk.spacing.nodeNodeBetweenLayers': 200,
+        'elk.spacing.nodeNode': 80
+      }
+    },
+    theme: 'default',
+    logLevel: 1
+  });
+}</script><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"debug":false,"model":{"scale":1,"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"left","hOffset":0,"vOffset":20},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"dialog":{"enable":false,"hitokoto":true}});</script></body></html>

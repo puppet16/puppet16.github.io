@@ -197,7 +197,7 @@
 <p>声明泛型时只是声明了泛型形参，而调用时传递进去一个具体类型的实参</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> max = maxOf(<span class="string">&quot;Hello&quot;</span>, <span class="string">&quot;World&quot;</span>)</span><br><span class="line">println(max)</span><br><span class="line"><span class="comment">//val list = List.Cons&lt;Double&gt;(1.0, List.Nil)</span></span><br></pre></td></tr></table></figure>
 <h3><a href="#4-nothing" class="header-anchor">#</a><span id="4-nothing">4. Nothing</span></h3>
-<p><img src="/2021/03/08/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AD/kotlin_type_construct.png" alt></p>
+<p><img src="/2021/03/08/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AD/kotlin_type_construct.png" alt="kotlin类型结构图"></p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> kotlin</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Nothing</span> <span class="keyword">private</span> <span class="keyword">constructor</span>()</span><br></pre></td></tr></table></figure>
 <p><strong>说明：</strong></p>
 <ol>
@@ -280,7 +280,7 @@
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">BookStore</span>&lt;<span class="type">out T</span>&gt; &#123;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">getBook</span><span class="params">()</span></span>: T &#123;</span><br><span class="line">        TODO()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>说明：</strong><br>
 在做完以上任意一种修改以后，代码就可以通过编译了。这也就意味着，在这种情况下，我们可以使用<code>BookStore&lt;EduBook&gt;</code>替代<code>BookStore&lt;Book&gt;</code>，也就意味着<code>BookStore&lt;EduBook&gt;</code>可以看作是<code>BookStore&lt;Book&gt;</code>的子类。</p>
-<p><img src="/2021/03/08/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AD/kotlin_covariation_relation.png" alt></p>
+<p><img src="/2021/03/08/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AD/kotlin_covariation_relation.png" alt="协变中父类及子类对比图"></p>
 <p>由上图可知，图书与书店它们之间的父子关系一致了。这种现象，我们称之为 <strong>“泛型的协变”</strong> 。也可以说两个具有相同的基础类型的泛型协变类型，如果类型实参具有子类型化关系，那么这个泛型类型具有一致方向的子类型化关系。上面两种修改的方式，就分别叫做 <strong>使用处协变</strong> 和 <strong>声明处协变</strong> 。<code>kotlin</code>中泛型的协变<code>out</code>对应<code>Java</code>中的<code>? extend </code>操作</p>
 <h3><a href="#2-协变点" class="header-anchor">#</a><span id="2-协变点">2. 协变点</span></h3>
 <p><code>Kotlin</code> 中规定一个泛型协变类，在泛型形参前面加上<code>out</code>修饰后，那么修饰这个泛型形参在函数内部使用范围将受到限制只能作为函数的返回值或者修饰只读权限的属性。</p>
@@ -310,7 +310,7 @@
 <p>第二种做法，是修改 <code>Controller</code> 的源代码，这叫<strong>声明处型变</strong>。具体做法就是，在泛型形参 <code>T</code> 的前面增加一个关键字 <code>in</code>：</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">//            变化在这里</span></span><br><span class="line"><span class="comment">//               ↓</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Controller</span>&lt;<span class="type">in T</span>&gt; &#123;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">turnOn</span><span class="params">(tv: <span class="type">T</span>)</span></span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>我们使用以上任意一种方式修改后，代码就能够通过 <code>Kotlin</code> 编译了。这样修改之后，我们就可以使用<code>Controller&lt;TV&gt;</code>来替代<code>Controller&lt;HuaWeiTV&gt;</code>，也就是说，<code>Controller&lt;TV&gt;</code>是<code>Controller&lt;HuaWeiTV&gt;</code>的子类。</p>
-<p><img src="/2021/03/08/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AD/kotlin_contravariant_relation.png" alt></p>
+<p><img src="/2021/03/08/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AD/kotlin_contravariant_relation.png" alt="逆变中父类及子类对比图"></p>
 <p>在这个场景下，遥控器与电视机之间的父子关系颠倒了。“华为电视”是“电视”的子类，但是，“万能遥控”成了“华为遥控”的子类。这种父子关系颠倒的现象，我们就叫做 <strong>“泛型的逆变”</strong>。也可以说两个具有相同的基础类型的泛型逆变类型，如果类型实参具有子类型化关系，那么这个泛型类型具有相反方向的子类型化关系。上面这两种修改方式，就分别叫做<strong>使用处逆变</strong>和<strong>声明处逆变</strong>。</p>
 <h3><a href="#2-逆变点" class="header-anchor">#</a><span id="2-逆变点">2. 逆变点</span></h3>
 <p><code>Kotlin</code>中规定一个泛型协变类，在泛型形参前面加上<code>out</code>修饰后，那么修饰这个泛型形参在函数内部使用范围将受到限制只能作为函数的返回值或者修饰只读权限的属性。</p>
@@ -479,7 +479,7 @@
 <li><strong>伪泛型：</strong> 编译时擦除类型，运行时无实际类型生成。如<code>Java</code>、<code>Kotlin</code></li>
 <li><strong>真泛型：</strong> 编译时生成真实类型，运行时也存在该类。如<code>C#</code>、<code>C++</code></li>
 </ul>
-<p><img src="/2021/03/08/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AD/kotlin_genericity_comparison.png" alt></p>
+<p><img src="/2021/03/08/kotlin%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E5%85%AD/kotlin_genericity_comparison.png" alt="泛型实现对比图"></p>
 <p><strong>说明：</strong></p>
 <ol>
 <li>在<code>C#</code>语言中，基本类型可以直接作为泛型参数，而在<code>Java</code>中不可以，只能使用基本类型的装箱类型</li>
@@ -628,4 +628,19 @@
   visitor:true,
   recordIP:true,
   avatar:'mm'
-})</script></div></div></div></div><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/add-bookmark.js"></script><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"debug":false,"model":{"scale":1,"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"left","hOffset":0,"vOffset":20},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"dialog":{"enable":false,"hitokoto":true}});</script></body></html>
+})</script></div></div></div></div><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/add-bookmark.js"></script><!-- Mermaid diagrams support--><script src="https://unpkg.com/mermaid@10.9.1/dist/mermaid.min.js"></script><script>if (window.mermaid) {
+  mermaid.initialize({
+    startOnLoad: true,
+    securityLevel: 'loose',
+    flowchart: { htmlLabels: true, useMaxWidth: true },
+    classDiagram: {
+      layout: 'elk',
+      elk: {
+        'elk.spacing.nodeNodeBetweenLayers': 200,
+        'elk.spacing.nodeNode': 80
+      }
+    },
+    theme: 'default',
+    logLevel: 1
+  });
+}</script><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"debug":false,"model":{"scale":1,"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"left","hOffset":0,"vOffset":20},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"dialog":{"enable":false,"hitokoto":true}});</script></body></html>
